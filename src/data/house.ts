@@ -86,8 +86,8 @@ export const walls: Wall[] = [
       { id: 'master-window', kind: 'window', offset: 71.5, width: 170, sill: 90, height: 150, label: '主臥窗' },
     ],
   },
-  // 冷氣平台外側格柵：不高過主臥窗，頂端與窗頂齊高（窗台 90 + 窗高 150）
-  { id: 'ac-louver', x1: -286.5, y1: 685, x2: -15, y2: 700, height: 240, style: 'louver' },
+  // 冷氣平台外側格柵：明顯低於窗戶，與陽台女兒牆同高（仍擋得住 60 公分高的室外機）
+  { id: 'ac-louver', x1: -286.5, y1: 685, x2: -15, y2: 700, height: 110, style: 'louver' },
 
   // ── 客餐廳下方外牆（廚房旁的窗） ──
   {

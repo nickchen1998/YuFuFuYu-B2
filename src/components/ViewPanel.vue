@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DoorOpen, Keyboard, Layers, Magnet, Map as MapIcon, Tag } from '@lucide/vue'
+import { DoorClosed, DoorOpen, Keyboard, Layers, Magnet, Map as MapIcon, Tag } from '@lucide/vue'
 import { design, ui } from '../store'
 
 const cuts = [
@@ -48,8 +48,12 @@ const keys: { k: string[]; t: string }[] = [
       <input v-model="ui.showLabels" type="checkbox" class="switch" />
     </label>
     <label class="switch-row">
-      <span><DoorOpen />門打開</span>
+      <span><DoorOpen />室內門打開</span>
       <input v-model="ui.doorsOpen" type="checkbox" class="switch" />
+    </label>
+    <label class="switch-row">
+      <span><DoorClosed />大門打開</span>
+      <input v-model="ui.mainDoorOpen" type="checkbox" class="switch" />
     </label>
     <label class="switch-row">
       <span><MapIcon />疊上原始平面圖</span>

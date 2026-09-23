@@ -8,7 +8,10 @@ import { mat, glassMat } from './mats'
 export interface WallBuildOptions {
   ceiling: number
   cut: number
+  /** 室內門（含陽台門、拉門）是否打開 */
   doorsOpen: boolean
+  /** 走廊大門是否打開（預設關上） */
+  mainDoorOpen: boolean
   paint: Record<string, string>
 }
 
@@ -214,7 +217,7 @@ export function buildWalls(opts: WallBuildOptions): THREE.Group {
     }
 
     for (const o of w.openings ?? []) {
-      if (o.kind === 'door') buildDoor(group, w, o, T, opts.cut, opts.doorsOpen)
+      if (o.kind === 'door') buildDoor(group, w, o, T, opts.cut, o.id === 'main-door' ? opts.mainDoorOpen : opts.doorsOpen)
       else if (o.kind === 'pocket') buildPocketDoor(group, w, o, T, opts.cut, opts.doorsOpen)
       else buildWindow(group, w, o, T, opts.cut)
     }

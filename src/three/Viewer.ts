@@ -258,7 +258,13 @@ export class Viewer {
     }
     const H = this.design.ceilingHeight
     const cut = this.ui.mode === 'walk' ? H : Math.min(this.ui.wallCut, H)
-    this.wallsGroup = buildWalls({ ceiling: H, cut, doorsOpen: this.ui.doorsOpen, paint: this.design.wallPaint })
+    this.wallsGroup = buildWalls({
+      ceiling: H,
+      cut,
+      doorsOpen: this.ui.doorsOpen,
+      mainDoorOpen: this.ui.mainDoorOpen,
+      paint: this.design.wallPaint,
+    })
     this.world.add(this.wallsGroup)
     this.collide = blockingRects(H)
     for (const c of this.ceilings.children) c.position.y = H + ((c.userData.offset as number | undefined) ?? 0)

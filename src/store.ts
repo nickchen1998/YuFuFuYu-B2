@@ -93,6 +93,7 @@ export const ui = reactive({
   showOverlay: false,
   overlayOpacity: 0.8,
   doorsOpen: true,
+  mainDoorOpen: false,
   snap: 5,
   selectedId: null as string | null,
   paintColor: '#a7bac9',

@@ -132,7 +132,7 @@ onMounted(() => {
   if (import.meta.env.DEV) Object.assign(window, { __viewer: v, __design: design, __ui: ui })
   watch(() => design.furniture, () => v.syncFurniture(), { deep: true })
   watch(
-    () => [ui.wallCut, ui.doorsOpen, design.ceilingHeight, JSON.stringify(design.wallPaint)],
+    () => [ui.wallCut, ui.doorsOpen, ui.mainDoorOpen, design.ceilingHeight, JSON.stringify(design.wallPaint)],
     () => v.rebuildWalls(),
   )
   watch(() => JSON.stringify(design.roomFloors), () => v.updateFloors())
@@ -254,7 +254,7 @@ onBeforeUnmount(() => {
       <button
         class="rail-btn toggle tip tip-right"
         :class="{ on: ui.doorsOpen }"
-        data-tip="打開／關上所有門"
+        data-tip="打開／關上室內的門（大門在「顯示」分頁）"
         @click="ui.doorsOpen = !ui.doorsOpen"
       >
         <DoorOpen />

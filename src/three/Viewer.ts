@@ -10,6 +10,7 @@ import { buildWalls } from './walls'
 import { buildFurniture, furnitureSignature } from './furniture'
 import { floorTexture, loadPlanOverlay, TEX_CM } from './textures'
 import { mat } from './mats'
+import { pauseHistory, resumeHistory } from '../history'
 
 type UI = typeof UIState
 
@@ -483,6 +484,7 @@ export class Viewer {
     const p = this.floorPoint(e)
     if (!p) return
     this.drag = { id, dx: it.x - p.x, dy: it.y - p.y }
+    pauseHistory()
     this.orbit.enabled = false
     this.topCtl.enabled = false
     this.renderer.domElement.style.cursor = 'grabbing'
@@ -542,6 +544,7 @@ export class Viewer {
     }
     if (this.drag) {
       this.drag = null
+      resumeHistory()
       this.orbit.enabled = this.ui.mode === 'orbit'
       this.topCtl.enabled = this.ui.mode === 'top'
       this.renderer.domElement.style.cursor = 'grab'

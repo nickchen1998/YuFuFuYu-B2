@@ -60,6 +60,8 @@ import { viewerRef } from '../viewerRef'
       <dt>方向鍵</dt><dd>微調 1 cm（Shift 10 cm）</dd>
       <dt>Delete</dt><dd>刪除家具</dd>
       <dt>Esc</dt><dd>取消選取／清除量尺</dd>
+      <dt>⌘/Ctrl + Z</dt><dd>上一步</dd>
+      <dt>⌘/Ctrl + Shift + Z</dt><dd>下一步</dd>
       <dt>滑鼠左鍵拖空白處</dt><dd>旋轉視角</dd>
       <dt>右鍵拖曳 / 滾輪</dt><dd>平移 / 縮放</dd>
     </dl>

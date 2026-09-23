@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { Viewer } from './three/Viewer'
 import { defaultDesign, design, replaceDesign, ui } from './store'
 import { viewerRef } from './viewerRef'
+import { history, redo, undo } from './history'
 import FurniturePanel from './components/FurniturePanel.vue'
 import RoomsPanel from './components/RoomsPanel.vue'
 import ViewPanel from './components/ViewPanel.vue'
@@ -80,14 +81,63 @@ function setMirrored(v: boolean) {
   flash(v ? '已切換為 A6・B6（A2・B2 上下翻轉）' : '已切換為 A2・B2')
 }
 
-function reset() {
-  if (!confirm('要把家具、地板、油漆全部恢復成預設嗎？（建議先匯出備份）')) return
-  replaceDesign(defaultDesign())
-  ui.selectedId = null
-  flash('已恢復預設')
+function clearMissingSelection() {
+  if (ui.selectedId && !design.furniture.some((f) => f.id === ui.selectedId)) ui.selectedId = null
+}
+
+function doUndo() {
+  if (undo()) {
+    clearMissingSelection()
+    flash('已回到上一步')
+  }
+}
+
+function doRedo() {
+  if (redo()) {
+    clearMissingSelection()
+    flash('已重做下一步')
+  }
+}
+
+type ResetKind = 'all' | 'furniture' | 'finish'
+const resetOpen = ref(false)
+
+/** 還原預設（可以用「上一步」復原，所以不再跳確認視窗）；戶別設定保留 */
+function resetDesign(kind: ResetKind) {
+  resetOpen.value = false
+  const base = defaultDesign()
+  if (kind === 'all') {
+    replaceDesign({ ...base, mirrored: design.mirrored })
+    ui.selectedId = null
+    flash('已全部還原預設，按「上一步」可以復原')
+  } else if (kind === 'furniture') {
+    design.furniture = base.furniture
+    ui.selectedId = null
+    flash('已還原家具擺設，按「上一步」可以復原')
+  } else {
+    design.wallPaint = {}
+    design.roomFloors = base.roomFloors
+    flash('已還原牆色與地板，按「上一步」可以復原')
+  }
+}
+
+function onShortcut(e: KeyboardEvent) {
+  const t = e.target as HTMLElement | null
+  // 輸入框裡的 ⌘Z 交給瀏覽器處理（復原打字內容）
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA')) return
+  if (!(e.metaKey || e.ctrlKey) || e.altKey) return
+  if (e.code === 'KeyZ') {
+    e.preventDefault()
+    if (e.shiftKey) doRedo()
+    else doUndo()
+  } else if (e.code === 'KeyY') {
+    e.preventDefault()
+    doRedo()
+  }
 }
 
 onMounted(() => {
+  window.addEventListener('keydown', onShortcut)
   const v = new Viewer(host.value!, design, ui)
   viewerRef.current = v
   if (import.meta.env.DEV) Object.assign(window, { __viewer: v, __design: design, __ui: ui })
@@ -106,6 +156,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onShortcut)
   viewerRef.current?.dispose()
   viewerRef.current = null
 })
@@ -136,13 +187,26 @@ onBeforeUnmount(() => {
           🧱 {{ ui.wallCut < design.ceilingHeight ? `牆高切在 ${ui.wallCut}` : '完整牆高' }}
         </button>
       </div>
+      <div class="seg">
+        <button :disabled="!history.canUndo" title="上一步（⌘/Ctrl + Z）" @click="doUndo">↶ 上一步</button>
+        <button :disabled="!history.canRedo" title="下一步（⌘/Ctrl + Shift + Z）" @click="doRedo">↷ 下一步</button>
+      </div>
       <div class="spacer"></div>
       <div class="actions">
         <button title="重設視角" @click="viewerRef.current?.resetCamera()">⟲ 視角</button>
         <button @click="screenshot">📷 截圖</button>
         <button @click="exportJson">⬇ 匯出</button>
         <button @click="fileInput?.click()">⬆ 匯入</button>
-        <button @click="reset">重設</button>
+        <div class="menu">
+          <button :class="{ on: resetOpen }" @click="resetOpen = !resetOpen">還原預設 ▾</button>
+          <div v-if="resetOpen" class="menu-backdrop" @click="resetOpen = false"></div>
+          <div v-if="resetOpen" class="menu-list">
+            <button @click="resetDesign('all')"><b>全部還原</b><small>家具、牆色、地板、天花板高度</small></button>
+            <button @click="resetDesign('furniture')"><b>只還原家具擺設</b><small>保留牆色與地板</small></button>
+            <button @click="resetDesign('finish')"><b>只還原牆色與地板</b><small>保留家具擺設</small></button>
+            <p>還原後可以按「上一步」復原</p>
+          </div>
+        </div>
         <input ref="fileInput" type="file" accept="application/json,.json" hidden @change="importJson" />
       </div>
     </header>

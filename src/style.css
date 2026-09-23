@@ -153,6 +153,52 @@ input[type='color'] {
   flex: 1;
 }
 
+/* 還原預設選單 */
+.menu {
+  position: relative;
+}
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+.menu-list {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 11;
+  width: 250px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.actions .menu-list button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  text-align: left;
+  white-space: normal;
+  padding: 8px 10px;
+}
+.actions .menu-list button:hover {
+  background: #f3f5f8;
+}
+.menu-list small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.menu-list p {
+  margin: 4px 10px 4px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
 /* ── 右側面板 ── */
 .panel {
   position: absolute;

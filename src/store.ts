@@ -10,6 +10,7 @@ export function defaultDesign(): Design {
   return {
     version: 1,
     rev: REV,
+    mirrored: false,
     ceilingHeight: CEILING_DEFAULT,
     furniture: defaultFurniture(),
     roomFloors: Object.fromEntries(rooms.map((r) => [r.id, r.floor])),
@@ -75,6 +76,7 @@ export function replaceDesign(next: unknown): boolean {
   const base = defaultDesign()
   design.rev = REV
   design.ceilingHeight = next.ceilingHeight
+  design.mirrored = !!next.mirrored
   design.furniture = next.furniture
   design.roomFloors = { ...base.roomFloors, ...(next.roomFloors ?? {}) }
   design.wallPaint = { ...(next.wallPaint ?? {}) }

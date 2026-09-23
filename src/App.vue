@@ -74,6 +74,12 @@ async function importJson(e: Event) {
   ;(e.target as HTMLInputElement).value = ''
 }
 
+function setMirrored(v: boolean) {
+  if (design.mirrored === v) return
+  design.mirrored = v
+  flash(v ? '已切換為 A6・B6（A2・B2 上下翻轉）' : '已切換為 A2・B2')
+}
+
 function reset() {
   if (!confirm('要把家具、地板、油漆全部恢復成預設嗎？（建議先匯出備份）')) return
   replaceDesign(defaultDesign())
@@ -96,6 +102,7 @@ onMounted(() => {
   watch(() => ui.showLabels, () => v.setLabels())
   watch(() => ui.selectedId, () => v.updateSelection())
   watch(() => ui.tool, () => v.clearMeasure())
+  watch(() => design.mirrored, () => v.applyMirror())
 })
 
 onBeforeUnmount(() => {
@@ -110,8 +117,13 @@ onBeforeUnmount(() => {
 
     <header class="topbar">
       <div class="brand">
-        <b>有富富玉 B2</b>
+        <b>有富富玉 {{ design.mirrored ? 'A6・B6' : 'A2・B2' }}</b>
         <span>3D 格局・僅供住戶設計參考</span>
+      </div>
+      <div class="seg" title="A6、B6 的格局和 A2、B2 相同，只是上下翻轉">
+        <span class="seg-label">戶別</span>
+        <button :class="{ on: !design.mirrored }" @click="setMirrored(false)">A2・B2</button>
+        <button :class="{ on: design.mirrored }" @click="setMirrored(true)">A6・B6</button>
       </div>
       <div class="seg">
         <button v-for="m in modes" :key="m.id" :class="{ on: ui.mode === m.id }" @click="ui.mode = m.id">{{ m.name }}</button>

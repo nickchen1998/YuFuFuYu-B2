@@ -34,6 +34,7 @@ function label(html: string, cls: string) {
 
 export class Viewer {
   private renderer: THREE.WebGLRenderer
+  private sun = new THREE.DirectionalLight('#fff4e5', 2.4)
   private labelRenderer: CSS2DRenderer
   private scene = new THREE.Scene()
   private world = new THREE.Group()
@@ -90,7 +91,6 @@ export class Viewer {
     host.appendChild(this.labelRenderer.domElement)
 
     this.scene.background = new THREE.Color('#e9ebee')
-    this.world.scale.setScalar(CM)
     this.scene.add(this.world)
 
     // 相機
@@ -112,6 +112,7 @@ export class Viewer {
 
     this.setupLights()
     this.setupStatic()
+    this.applyMirror(false)
     this.world.add(this.furnitureGroup, this.ceilings, this.roomLabels, this.measureGroup)
 
     this.rebuildWalls()
@@ -138,10 +139,7 @@ export class Viewer {
   private setupLights() {
     const hemi = new THREE.HemisphereLight('#ffffff', '#b9ae9f', 1.6)
     this.scene.add(hemi)
-    const sun = new THREE.DirectionalLight('#fff4e5', 2.4)
-    const c = new THREE.Vector3(CENTER.x * CM, 0, CENTER.y * CM)
-    sun.position.set(c.x - 4, 9, c.z + 6)
-    sun.target.position.copy(c)
+    const sun = this.sun
     sun.castShadow = true
     sun.shadow.mapSize.set(2048, 2048)
     const sc = sun.shadow.camera
@@ -365,8 +363,33 @@ export class Viewer {
     ;(this.overlayMesh.material as THREE.MeshBasicMaterial).opacity = this.ui.overlayOpacity
   }
 
+  /** 平面 y 在 3D 世界中的方向：A2・B2 = 1，A6・B6（上下翻轉）= -1 */
+  private get sy() {
+    return this.design.mirrored ? -1 : 1
+  }
+
+  /**
+   * 切換 A2・B2 / A6・B6：資料維持 A2・B2 的座標，只把整個世界沿平面 y 軸鏡像。
+   * Three.js 會自動處理負縮放的面方向、陰影與點選。
+   */
+  applyMirror(resetView = true) {
+    this.world.scale.set(CM, CM, CM * this.sy)
+    const c = new THREE.Vector3(CENTER.x * CM, 0, CENTER.y * CM * this.sy)
+    this.sun.position.set(c.x - 4, 9, c.z + 6)
+    this.sun.target.position.copy(c)
+    // 漫遊回到大門口、面向屋內
+    this.walk.x = 91
+    this.walk.y = 70
+    this.walk.yaw = this.sy > 0 ? 0 : Math.PI
+    this.walk.pitch = -0.05
+    if (resetView) {
+      this.clearMeasure()
+      this.resetCamera()
+    }
+  }
+
   resetCamera() {
-    const c = new THREE.Vector3(CENTER.x * CM, 0.4, (CENTER.y + 20) * CM)
+    const c = new THREE.Vector3(CENTER.x * CM, 0.4, (CENTER.y + 20) * CM * this.sy)
     this.orbit.target.copy(c)
     // 視窗越窄，相機拉越遠，確保整戶都在畫面內
     const aspect = this.host.clientWidth / Math.max(1, this.host.clientHeight)
@@ -377,7 +400,7 @@ export class Viewer {
   }
 
   private frameTop() {
-    const c = new THREE.Vector3(CENTER.x * CM, 0, (CENTER.y - 40) * CM)
+    const c = new THREE.Vector3(CENTER.x * CM, 0, (CENTER.y - 40) * CM * this.sy)
     this.ortho.position.set(c.x, 30, c.z)
     this.ortho.up.set(0, 0, -1)
     this.ortho.lookAt(c)
@@ -439,7 +462,7 @@ export class Viewer {
     this.raycaster.setFromCamera(this.ndc(e), this.camera)
     const p = new THREE.Vector3()
     if (!this.raycaster.ray.intersectPlane(this.floorPlane, p)) return null
-    return new THREE.Vector2(p.x / CM, p.z / CM)
+    return new THREE.Vector2(p.x / CM, (p.z / CM) * this.sy)
   }
 
   private onPointerDown = (e: PointerEvent) => {
@@ -670,15 +693,18 @@ export class Viewer {
     }
     if (it.locked) return
     const step = e.shiftKey ? 10 : 1
+    // 翻轉戶別時畫面上下顛倒，上下鍵與旋轉方向要反過來，操作起來才跟畫面一致
+    const sy = this.sy
+    const turn = (deg: number) => (it.rot = (((it.rot + deg * sy) % 360) + 360) % 360)
     switch (e.code) {
       case 'KeyR':
-        it.rot = (((it.rot + (e.shiftKey ? -90 : 90)) % 360) + 360) % 360
+        turn(e.shiftKey ? -90 : 90)
         break
       case 'KeyQ':
-        it.rot = (((it.rot - 15) % 360) + 360) % 360
+        turn(-15)
         break
       case 'KeyE':
-        it.rot = (it.rot + 15) % 360
+        turn(15)
         break
       case 'ArrowLeft':
         it.x -= step
@@ -687,10 +713,10 @@ export class Viewer {
         it.x += step
         break
       case 'ArrowUp':
-        it.y -= step
+        it.y -= step * sy
         break
       case 'ArrowDown':
-        it.y += step
+        it.y += step * sy
         break
       default:
         return
@@ -718,14 +744,14 @@ export class Viewer {
     if (f || s) {
       const speed = (k.has('ShiftLeft') || k.has('ShiftRight') ? 260 : 140) * dt
       const yaw = this.walk.yaw
-      // 前方 = (sin yaw, cos yaw)，右方 = (-cos yaw, sin yaw)
+      // 3D 世界中：前方 = (sin yaw, cos yaw)，右方 = (-cos yaw, sin yaw)；平面 y = 世界 z × sy
       const mx = (Math.sin(yaw) * f - Math.cos(yaw) * s) * speed
-      const my = (Math.cos(yaw) * f + Math.sin(yaw) * s) * speed
+      const my = (Math.cos(yaw) * f + Math.sin(yaw) * s) * speed * this.sy
       if (!this.blocked(this.walk.x + mx, this.walk.y)) this.walk.x += mx
       if (!this.blocked(this.walk.x, this.walk.y + my)) this.walk.y += my
     }
     const { x, y, yaw, pitch } = this.walk
-    this.walkCam.position.set(x * CM, EYE * CM, y * CM)
+    this.walkCam.position.set(x * CM, EYE * CM, y * CM * this.sy)
     const dir = new THREE.Vector3(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch))
     this.walkCam.lookAt(this.walkCam.position.clone().add(dir))
   }

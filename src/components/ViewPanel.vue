@@ -38,7 +38,10 @@ import { viewerRef } from '../viewerRef'
       <span>透明度</span>
       <input v-model.number="ui.overlayOpacity" type="range" min="0.1" max="1" step="0.05" />
     </label>
-    <p class="hint">用「平面俯視」＋疊圖可以檢查模型和原圖是否對得上。</p>
+    <p class="hint">
+      用「平面俯視」＋疊圖可以檢查模型和原圖是否對得上。
+      <template v-if="design.mirrored">A6・B6 模式下疊圖是 B2 平面圖上下翻轉，圖上的字會是反的。</template>
+    </p>
   </section>
 
   <section class="card">

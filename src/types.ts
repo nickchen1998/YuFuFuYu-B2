@@ -71,6 +71,8 @@ export interface Design {
   version: 1
   /** 平面資料修訂版本，舊存檔載入時用來轉換 id */
   rev?: number
+  /** 戶別：false = A2・B2（資料原始方向），true = A6・B6（上下翻轉） */
+  mirrored?: boolean
   ceilingHeight: number
   furniture: FurnitureItem[]
   roomFloors: Record<string, string>

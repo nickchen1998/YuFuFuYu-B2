@@ -50,10 +50,12 @@ function add(c: CatalogEntry) {
   ui.tool = 'select'
 }
 
+/** deg > 0 = 畫面上逆時針；翻轉戶別時畫面上下顛倒，資料的角度方向要反過來 */
 function rotate(deg: number) {
   const it = selected.value
   if (!it) return
-  it.rot = (((it.rot + deg) % 360) + 360) % 360
+  const d = design.mirrored ? -deg : deg
+  it.rot = (((it.rot + d) % 360) + 360) % 360
 }
 
 function duplicate() {
@@ -93,9 +95,9 @@ function remove() {
     </div>
     <div class="row">
       <span class="lbl">方向</span>
-      <button :disabled="selected.locked" @click="rotate(-90)">↺ 90°</button>
+      <button :disabled="selected.locked" @click="rotate(90)">↺ 90°</button>
       <input v-model.number="selected.rot" type="number" step="15" class="rot" :disabled="selected.locked" />
-      <button :disabled="selected.locked" @click="rotate(90)">↻ 90°</button>
+      <button :disabled="selected.locked" @click="rotate(-90)">↻ 90°</button>
     </div>
     <div class="row">
       <span class="lbl">顏色</span>
@@ -106,7 +108,10 @@ function remove() {
       <button @click="duplicate">複製</button>
       <button class="danger" :disabled="selected.locked" @click="remove">刪除</button>
     </div>
-    <p class="hint">單位：公分。拖曳移動，R 轉 90°，方向鍵微調（Shift ×10）</p>
+    <p class="hint">
+      單位：公分。拖曳移動，R 轉 90°，方向鍵微調（Shift ×10）
+      <template v-if="design.mirrored"><br />X、Y 座標以 A2・B2 方向為準，所以 Y 會跟畫面上下相反。</template>
+    </p>
   </section>
 
   <section class="card">

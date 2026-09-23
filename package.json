@@ -1,0 +1,28 @@
+{
+  "name": "my-house",
+  "private": true,
+  "version": "0.1.0",
+  "description": "新北有富富玉 B2 3D 格局 — 住戶室內設計概念工具（非商業用途）",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.186.0",
+    "vue": "^3.5.43"
+  },
+  "devDependencies": {
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-vue": "^6.0.9",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.0",
+    "vue-tsc": "^3.3.11"
+  }
+}

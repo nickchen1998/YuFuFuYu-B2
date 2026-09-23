@@ -6,8 +6,6 @@
 
 用 Vue 3 + Three.js 把 B2 戶的平面圖轉成可以互動的 3D 模型，在瀏覽器裡就能規劃家具擺設、地板材質和牆面顏色。
 
-- **線上預覽**：<https://nickchen1998.github.io/YuFuFuYu-B2/>（需先啟用 GitHub Pages，見[部署方式](#部署方式)）
-
 ## 功能
 
 | 功能 | 說明 |
@@ -21,18 +19,57 @@
 | 量尺寸 | 點兩點量距離，會吸附牆面、自動拉成水平或垂直 |
 | 存檔 | 自動存在瀏覽器裡；也可以匯出、匯入 JSON，或截圖存成 PNG |
 
-## 開啟方式（本機）
+## 在自己電腦上開啟
 
-需要 [Node.js](https://nodejs.org/) 20.19 以上（建議用 LTS 版本）。
+不需要架站，也不需要寫程式，照下面步驟做就能在自己的電腦上打開。
+
+### 1. 安裝 Node.js（只要做一次）
+
+到 <https://nodejs.org/> 下載 **LTS** 版本並安裝（需要 20.19 以上）。
+
+裝好後打開終端機，輸入下面的指令，有出現版本號就代表安裝成功：
+
+```bash
+node -v
+```
+
+> 終端機在哪裡？macOS 按 `⌘ + 空白鍵` 搜尋「終端機」（Terminal）；Windows 在開始選單搜尋「PowerShell」。
+
+### 2. 下載這個專案
+
+**方法 A：用 git（推薦，之後比較好更新）**
 
 ```bash
 git clone https://github.com/nickchen1998/YuFuFuYu-B2.git
 cd YuFuFuYu-B2
+```
+
+**方法 B：直接下載壓縮檔**
+
+在 GitHub 頁面按綠色的 **Code** 按鈕，選 **Download ZIP**，解壓縮後在終端機切換到那個資料夾（以放在「下載」資料夾為例）：
+
+```bash
+cd ~/Downloads/YuFuFuYu-B2-main
+```
+
+> 小技巧：先輸入 `cd `（後面有空格），再把資料夾從 Finder 或檔案總管拖進終端機，路徑就會自動填好。
+
+### 3. 安裝套件（第一次才需要）
+
+```bash
 npm install
+```
+
+### 4. 啟動
+
+```bash
 npm run dev
 ```
 
-然後用瀏覽器打開 <http://localhost:5180>。
+看到 `Local: http://localhost:5180/` 之後，用瀏覽器（建議 Chrome、Edge 或 Safari）打開 <http://localhost:5180> 就可以開始設計了。
+
+- **關閉**：回到終端機按 `Ctrl + C`
+- **下次再開**：切換到專案資料夾後，執行 `npm run dev` 就好
 
 ### 操作快捷鍵
 
@@ -46,42 +83,21 @@ npm run dev
 | `Esc` | 取消選取、清除量尺 |
 | `W` `A` `S` `D` | 室內漫遊時走動（按住 Shift 加速） |
 
-## 部署方式
+### 保存與分享設計
 
-這是純前端的靜態網站，執行 `npm run build` 後會把檔案輸出到 `dist/`，放到任何靜態主機都能用。
+- 設計會**自動存在目前這個瀏覽器**裡，關掉再開還在
+- 換瀏覽器、換電腦或清除瀏覽資料後設計就不見了，記得用上方的 **⬇ 匯出** 備份成 JSON 檔
+- 想給鄰居參考，把匯出的 JSON 傳給對方，對方按 **⬆ 匯入** 就能看到一樣的擺設
+- **📷 截圖** 可以把目前畫面存成圖片
 
-### GitHub Pages（已經設定好自動部署）
+### 常見問題
 
-repo 裡已經有 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)，推送到 `main` 分支就會自動建置並部署。
-
-第一次使用要先啟用 Pages：
-
-1. 到 repo 的 **Settings → Pages**
-2. **Source** 選 **GitHub Actions**
-3. 到 **Actions** 分頁，手動執行一次 **Deploy to GitHub Pages**（之後每次推送都會自動部署）
-
-部署完成後，網址是 `https://<帳號>.github.io/<repo 名稱>/`。
-
-### 其他靜態主機（Zeabur、Vercel、Netlify、Cloudflare Pages 等）
-
-| 設定 | 值 |
+| 狀況 | 解法 |
 | --- | --- |
-| 建置指令 | `npm run build` |
-| 輸出資料夾 | `dist` |
-| Node 版本 | 20.19 以上 |
-
-如果網站不是放在網域根目錄，而是放在子路徑（例如 `https://example.com/house/`），建置時要指定子路徑：
-
-```bash
-npm run build -- --base=/house/
-```
-
-### 本機預覽正式版
-
-```bash
-npm run build
-npm run preview
-```
+| 出現 `command not found: npm` 或「無法辨識 npm」 | Node.js 沒裝好，重新安裝後**關掉終端機再開一次** |
+| 出現 `Port 5180 is already in use` | 已經有另一個視窗在跑，先關掉它；或改用別的埠號：`npm run dev -- --port 5181` |
+| 畫面一片空白 | 換用最新版的 Chrome、Edge 或 Safari，並確認瀏覽器有開啟硬體加速（WebGL） |
+| 想取得最新版 | 用 git 下載的，在專案資料夾執行 `git pull`，接著執行 `npm install` |
 
 ## 修改格局資料
 

@@ -439,11 +439,6 @@ export class Viewer {
     this.ortho.updateProjectionMatrix()
   }
 
-  screenshot(): string {
-    this.renderer.render(this.scene, this.camera)
-    return this.renderer.domElement.toDataURL('image/png')
-  }
-
   // ───────────────────────── 滑鼠互動 ─────────────────────────
 
   private ndc(e: PointerEvent) {
@@ -473,17 +468,13 @@ export class Viewer {
       this.renderer.domElement.style.cursor = 'grabbing'
       return
     }
-    if (e.button !== 0 || this.ui.tool !== 'select') return
-    const h = this.hit(e)
-    const id = h?.object.userData.itemId as string | undefined
-    if (!id) return
-    const it = this.design.furniture.find((f) => f.id === id)
-    if (!it) return
-    this.ui.selectedId = id
-    if (it.locked) return
+    // 「選取」工具不會拖動家具；「移動」工具只拖得動已選取的那一件，避免移錯
+    if (e.button !== 0 || this.ui.tool !== 'move') return
+    const it = this.selected()
+    if (!it || it.locked || !this.pointerOnItem(e, it.id)) return
     const p = this.floorPoint(e)
     if (!p) return
-    this.drag = { id, dx: it.x - p.x, dy: it.y - p.y }
+    this.drag = { id: it.id, dx: it.x - p.x, dy: it.y - p.y }
     pauseHistory()
     this.orbit.enabled = false
     this.topCtl.enabled = false
@@ -525,9 +516,10 @@ export class Viewer {
     }
     if (this.ui.tool === 'select') {
       const h = this.hit(e)
-      const id = h?.object.userData.itemId as string | undefined
-      const it = id ? this.design.furniture.find((f) => f.id === id) : undefined
-      this.renderer.domElement.style.cursor = it ? (it.locked ? 'pointer' : 'grab') : ''
+      this.renderer.domElement.style.cursor = h?.object.userData.itemId ? 'pointer' : ''
+    } else if (this.ui.tool === 'move') {
+      const it = this.selected()
+      this.renderer.domElement.style.cursor = it && !it.locked && this.pointerOnItem(e, it.id) ? 'grab' : ''
     } else if (this.ui.tool === 'paint') {
       const h = this.hit(e)
       this.renderer.domElement.style.cursor = h?.object.userData.kind === 'wall' ? 'crosshair' : ''
@@ -553,7 +545,7 @@ export class Viewer {
     if (!wasClick || e.target !== this.renderer.domElement) return
     if (this.ui.tool === 'select') {
       const h = this.hit(e)
-      if (!h?.object.userData.itemId) this.ui.selectedId = null
+      this.ui.selectedId = (h?.object.userData.itemId as string | undefined) ?? null
     } else if (this.ui.tool === 'paint') {
       this.paintAt(e)
     } else if (this.ui.tool === 'measure') {
@@ -570,6 +562,14 @@ export class Viewer {
       }
       this.drawMeasure()
     }
+  }
+
+  /** 滑鼠是否指在某件家具上（即使前面被別的家具擋住也算，例如茶几下的地毯） */
+  private pointerOnItem(e: PointerEvent, id: string) {
+    const entry = this.items.get(id)
+    if (!entry) return false
+    this.raycaster.setFromCamera(this.ndc(e), this.camera)
+    return this.raycaster.intersectObject(entry.obj, true).length > 0
   }
 
   private paintAt(e: PointerEvent) {

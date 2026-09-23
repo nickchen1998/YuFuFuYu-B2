@@ -55,6 +55,7 @@ import { viewerRef } from '../viewerRef'
   <section class="card keys">
     <header><h3>快捷鍵</h3></header>
     <dl>
+      <dt>V / M</dt><dd>切換「選取」／「移動」工具</dd>
       <dt>R / Shift+R</dt><dd>旋轉 ±90°</dd>
       <dt>Q / E</dt><dd>微轉 15°</dd>
       <dt>方向鍵</dt><dd>微調 1 cm（Shift 10 cm）</dd>

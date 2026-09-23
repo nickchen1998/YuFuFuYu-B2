@@ -10,7 +10,6 @@ import ViewPanel from './components/ViewPanel.vue'
 import type { Tool, ViewMode } from './types'
 
 const host = ref<HTMLElement>()
-const fileInput = ref<HTMLInputElement>()
 const toast = ref('')
 let toastTimer: number | undefined
 
@@ -20,7 +19,8 @@ const modes: { id: ViewMode; name: string }[] = [
   { id: 'walk', name: '室內漫遊' },
 ]
 const tools: { id: Tool; name: string }[] = [
-  { id: 'select', name: '✋ 選取／移動' },
+  { id: 'select', name: '👆 選取' },
+  { id: 'move', name: '✥ 移動' },
   { id: 'paint', name: '🖌 刷油漆' },
   { id: 'measure', name: '📏 量尺寸' },
 ]
@@ -29,50 +29,19 @@ const hint = computed(() => {
   if (ui.mode === 'walk') return 'W A S D／方向鍵移動 · 拖曳滑鼠轉頭 · Shift 加速'
   if (ui.tool === 'paint') return '點牆面刷上目前顏色 · Alt + 點牆面恢復原色 · 顏色在「空間材質」分頁挑'
   if (ui.tool === 'measure') return '點兩下量距離（會吸附牆面、自動拉直）· 再點一下重新開始 · Esc 清除'
-  return '點家具選取 · 拖曳家具移動（靠牆自動貼齊）· R 旋轉 · Delete 刪除 · 拖曳空白處轉視角、右鍵平移、滾輪縮放'
+  if (ui.tool === 'move') {
+    const it = design.furniture.find((f) => f.id === ui.selectedId)
+    if (!it) return '移動只會拖動「已選取」的家具 · 請先按 V 切到「選取」點一件家具'
+    if (it.locked) return `「${it.name}」已鎖定，要先在右側面板取消鎖定才能移動`
+    return `拖曳「${it.name}」移動（靠牆自動貼齊，按住 Alt 自由移動）· 其他家具不會被選到 · 拖曳空白處轉視角`
+  }
+  return '點家具選取（拖曳畫面不會動到家具）· 按 M 切到「移動」拖動已選取的家具 · R 旋轉 · Delete 刪除'
 })
 
 function flash(msg: string) {
   toast.value = msg
   clearTimeout(toastTimer)
   toastTimer = window.setTimeout(() => (toast.value = ''), 2200)
-}
-
-function download(name: string, href: string) {
-  const a = document.createElement('a')
-  a.href = href
-  a.download = name
-  a.click()
-}
-
-function stamp() {
-  const d = new Date()
-  const p = (n: number) => String(n).padStart(2, '0')
-  return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}`
-}
-
-function screenshot() {
-  const url = viewerRef.current?.screenshot()
-  if (url) download(`my-house-${stamp()}.png`, url)
-}
-
-function exportJson() {
-  const blob = new Blob([JSON.stringify(design, null, 2)], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
-  download(`my-house-design-${stamp()}.json`, url)
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
-}
-
-async function importJson(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
-  try {
-    const ok = replaceDesign(JSON.parse(await file.text()))
-    flash(ok ? '已匯入設計' : '檔案格式不對')
-  } catch {
-    flash('檔案讀取失敗')
-  }
-  ;(e.target as HTMLInputElement).value = ''
 }
 
 function setMirrored(v: boolean) {
@@ -125,15 +94,21 @@ function onShortcut(e: KeyboardEvent) {
   const t = e.target as HTMLElement | null
   // 輸入框裡的 ⌘Z 交給瀏覽器處理（復原打字內容）
   if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA')) return
-  if (!(e.metaKey || e.ctrlKey) || e.altKey) return
-  if (e.code === 'KeyZ') {
-    e.preventDefault()
-    if (e.shiftKey) doRedo()
-    else doUndo()
-  } else if (e.code === 'KeyY') {
-    e.preventDefault()
-    doRedo()
+  if (e.metaKey || e.ctrlKey) {
+    if (e.altKey) return
+    if (e.code === 'KeyZ') {
+      e.preventDefault()
+      if (e.shiftKey) doRedo()
+      else doUndo()
+    } else if (e.code === 'KeyY') {
+      e.preventDefault()
+      doRedo()
+    }
+    return
   }
+  if (e.altKey || e.shiftKey || ui.mode === 'walk') return
+  if (e.code === 'KeyV') ui.tool = 'select'
+  else if (e.code === 'KeyM') ui.tool = 'move'
 }
 
 onMounted(() => {
@@ -193,10 +168,6 @@ onBeforeUnmount(() => {
       </div>
       <div class="spacer"></div>
       <div class="actions">
-        <button title="重設視角" @click="viewerRef.current?.resetCamera()">⟲ 視角</button>
-        <button @click="screenshot">📷 截圖</button>
-        <button @click="exportJson">⬇ 匯出</button>
-        <button @click="fileInput?.click()">⬆ 匯入</button>
         <div class="menu">
           <button :class="{ on: resetOpen }" @click="resetOpen = !resetOpen">還原預設 ▾</button>
           <div v-if="resetOpen" class="menu-backdrop" @click="resetOpen = false"></div>
@@ -207,7 +178,6 @@ onBeforeUnmount(() => {
             <p>還原後可以按「上一步」復原</p>
           </div>
         </div>
-        <input ref="fileInput" type="file" accept="application/json,.json" hidden @change="importJson" />
       </div>
     </header>
 

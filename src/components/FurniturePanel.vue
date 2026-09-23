@@ -47,7 +47,8 @@ function add(c: CatalogEntry) {
   }
   design.furniture.push(it)
   ui.selectedId = it.id
-  ui.tool = 'select'
+  // 新增後直接進入移動，方便馬上拖到想要的位置
+  ui.tool = 'move'
 }
 
 /** deg > 0 = 畫面上逆時針；翻轉戶別時畫面上下顛倒，資料的角度方向要反過來 */
@@ -105,11 +106,19 @@ function remove() {
       <label class="check"><input v-model="selected.locked" type="checkbox" /> 鎖定位置</label>
     </div>
     <div class="row actions">
+      <button
+        :class="{ primary: ui.tool === 'move' }"
+        :disabled="selected.locked"
+        title="切到「移動」工具（M）"
+        @click="ui.tool = ui.tool === 'move' ? 'select' : 'move'"
+      >
+        ✥ {{ ui.tool === 'move' ? '移動中' : '移動' }}
+      </button>
       <button @click="duplicate">複製</button>
       <button class="danger" :disabled="selected.locked" @click="remove">刪除</button>
     </div>
     <p class="hint">
-      單位：公分。拖曳移動，R 轉 90°，方向鍵微調（Shift ×10）
+      單位：公分。按「✥ 移動」後拖曳，R 轉 90°，方向鍵微調（Shift ×10）
       <template v-if="design.mirrored"><br />X、Y 座標以 A2・B2 方向為準，所以 Y 會跟畫面上下相反。</template>
     </p>
   </section>

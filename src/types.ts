@@ -81,4 +81,4 @@ export interface Design {
 }
 
 export type ViewMode = 'orbit' | 'top' | 'walk'
-export type Tool = 'select' | 'paint' | 'measure'
+export type Tool = 'select' | 'move' | 'paint' | 'measure'

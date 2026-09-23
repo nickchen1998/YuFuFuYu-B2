@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import {
+  BedDouble, ChevronRight, Copy, Lock, MapPin, MousePointer2, Move, Package, Plus, RotateCcw, RotateCw, Rows3,
+  Sofa, Trash, TriangleAlert, Utensils, X,
+} from '@lucide/vue'
 import { design, ui } from '../store'
 import { catalog, categories, newId, type CatalogEntry } from '../data/catalog'
 import { rooms } from '../data/house'
 import { blockingRects, footprint, rectsOverlap, roomAt } from '../geometry'
 import type { FurnitureItem } from '../types'
+import { furnitureIcon } from './icons'
+
+const categoryIcons = { 臥室: BedDouble, 客廳: Sofa, 餐廚: Utensils, 其他: Package } as const
 
 const cat = ref(categories[0])
 const target = ref('living')
@@ -29,6 +36,9 @@ const grouped = computed(() => {
   }
   return out.filter((g) => g.items.length)
 })
+
+/** 目錄卡片的底色：家具預設色調淡 */
+const tint = (c: string) => `color-mix(in srgb, ${c} 28%, #fffdfa)`
 
 function add(c: CatalogEntry) {
   const r = rooms.find((x) => x.id === target.value) ?? rooms[0]
@@ -76,91 +86,148 @@ function remove() {
 </script>
 
 <template>
-  <section v-if="selected" class="card editor">
-    <header>
-      <input v-model="selected.name" class="name" />
-      <button class="icon" title="取消選取（Esc）" @click="ui.selectedId = null">✕</button>
-    </header>
-    <p class="sub">
-      位於 {{ selectedRoom }}
-      <span v-if="selected.locked" class="tag">🔒 固定設備</span>
-    </p>
-    <p v-if="hitsWall" class="warn">⚠ 這件家具卡到牆了</p>
-    <div class="grid3">
-      <label>寬<input v-model.number="selected.w" type="number" min="1" step="1" /></label>
-      <label>深<input v-model.number="selected.d" type="number" min="1" step="1" /></label>
-      <label>高<input v-model.number="selected.h" type="number" min="1" step="1" /></label>
-      <label>X<input v-model.number="selected.x" type="number" step="1" :disabled="selected.locked" /></label>
-      <label>Y<input v-model.number="selected.y" type="number" step="1" :disabled="selected.locked" /></label>
-      <label>離地<input v-model.number="selected.elev" type="number" min="0" step="1" /></label>
+  <!-- 選取中的家具 -->
+  <section v-if="selected" class="item-card">
+    <div class="item-head">
+      <input v-model="selected.color" type="color" title="顏色" />
+      <input v-model="selected.name" class="item-name" title="名稱（點一下可以改）" />
+      <button class="icon-btn" title="取消選取（Esc）" @click="ui.selectedId = null"><X /></button>
     </div>
-    <div class="row">
-      <span class="lbl">方向</span>
-      <button :disabled="selected.locked" @click="rotate(90)">↺ 90°</button>
-      <input v-model.number="selected.rot" type="number" step="15" class="rot" :disabled="selected.locked" />
-      <button :disabled="selected.locked" @click="rotate(-90)">↻ 90°</button>
+    <div class="item-meta">
+      <span class="badge"><MapPin />{{ selectedRoom }}</span>
+      <span v-if="selected.locked" class="badge warn"><Lock />位置已鎖定</span>
     </div>
-    <div class="row">
-      <span class="lbl">顏色</span>
-      <input v-model="selected.color" type="color" />
-      <label class="check"><input v-model="selected.locked" type="checkbox" /> 鎖定位置</label>
+    <div v-if="hitsWall" class="alert"><TriangleAlert />這件家具卡到牆了</div>
+
+    <p class="sublabel">尺寸</p>
+    <div class="grid-3">
+      <label class="field">
+        <span>寬</span>
+        <div class="unit"><input v-model.number="selected.w" class="input" type="number" min="1" /><em>cm</em></div>
+      </label>
+      <label class="field">
+        <span>深</span>
+        <div class="unit"><input v-model.number="selected.d" class="input" type="number" min="1" /><em>cm</em></div>
+      </label>
+      <label class="field">
+        <span>高</span>
+        <div class="unit"><input v-model.number="selected.h" class="input" type="number" min="1" /><em>cm</em></div>
+      </label>
     </div>
-    <div class="row actions">
+
+    <p class="sublabel">位置</p>
+    <div class="grid-3">
+      <label class="field">
+        <span>X</span>
+        <div class="unit">
+          <input v-model.number="selected.x" class="input" type="number" :disabled="selected.locked" /><em>cm</em>
+        </div>
+      </label>
+      <label class="field">
+        <span>Y</span>
+        <div class="unit">
+          <input v-model.number="selected.y" class="input" type="number" :disabled="selected.locked" /><em>cm</em>
+        </div>
+      </label>
+      <label class="field">
+        <span>離地</span>
+        <div class="unit"><input v-model.number="selected.elev" class="input" type="number" min="0" /><em>cm</em></div>
+      </label>
+    </div>
+
+    <p class="sublabel">方向</p>
+    <div class="rot-row">
+      <button class="btn" title="逆時針轉 90°" :disabled="selected.locked" @click="rotate(90)"><RotateCcw /></button>
+      <div class="unit">
+        <input v-model.number="selected.rot" class="input" type="number" step="15" :disabled="selected.locked" /><em>°</em>
+      </div>
+      <button class="btn" title="順時針轉 90°" :disabled="selected.locked" @click="rotate(-90)"><RotateCw /></button>
+    </div>
+
+    <label class="switch-row">
+      <span><Lock />鎖定位置</span>
+      <input v-model="selected.locked" type="checkbox" class="switch" />
+    </label>
+
+    <div class="item-actions">
       <button
-        :class="{ primary: ui.tool === 'move' }"
+        class="btn"
+        :class="ui.tool === 'move' ? 'primary' : 'soft'"
         :disabled="selected.locked"
         title="切到「移動」工具（M）"
         @click="ui.tool = ui.tool === 'move' ? 'select' : 'move'"
       >
-        ✥ {{ ui.tool === 'move' ? '移動中' : '移動' }}
+        <Move />{{ ui.tool === 'move' ? '移動中' : '移動' }}
       </button>
-      <button @click="duplicate">複製</button>
-      <button class="danger" :disabled="selected.locked" @click="remove">刪除</button>
+      <button class="btn" @click="duplicate"><Copy />複製</button>
+      <button class="btn danger" :disabled="selected.locked" @click="remove"><Trash />刪除</button>
     </div>
-    <p class="hint">
-      單位：公分。按「✥ 移動」後拖曳，R 轉 90°，方向鍵微調（Shift ×10）
-      <template v-if="design.mirrored"><br />X、Y 座標以 A2・B2 方向為準，所以 Y 會跟畫面上下相反。</template>
-    </p>
+    <p v-if="design.mirrored" class="muted">X、Y 以 A2・B2 方向為準，所以 Y 會和畫面上下相反。</p>
   </section>
 
-  <section class="card">
-    <header>
-      <h3>新增家具</h3>
-      <label class="inline">
+  <section v-else class="empty">
+    <div class="empty-icon"><MousePointer2 /></div>
+    <div>
+      <b>還沒有選取家具</b>
+      <small>用左側「選取」點畫面上的家具，或從下方新增</small>
+    </div>
+  </section>
+
+  <!-- 新增家具 -->
+  <section class="section">
+    <div class="section-head">
+      <h3><Plus />新增家具</h3>
+      <label class="aside">
         放到
-        <select v-model="target">
+        <select v-model="target" class="input">
           <option v-for="r in rooms" :key="r.id" :value="r.id">{{ r.name }}</option>
         </select>
       </label>
-    </header>
-    <div class="chips">
-      <button v-for="c in categories" :key="c" :class="{ on: cat === c }" @click="cat = c">{{ c }}</button>
+    </div>
+    <div class="row wrap">
+      <button v-for="c in categories" :key="c" class="chip" :class="{ on: cat === c }" @click="cat = c">
+        <component :is="categoryIcons[c as keyof typeof categoryIcons]" />{{ c }}
+      </button>
     </div>
     <div class="catalog">
-      <button v-for="c in catalog.filter((x) => x.category === cat)" :key="c.name" @click="add(c)">
-        <i :style="{ background: c.color }"></i>
+      <button
+        v-for="c in catalog.filter((x) => x.category === cat)"
+        :key="c.name"
+        class="cat-card"
+        :title="`新增${c.name}`"
+        @click="add(c)"
+      >
+        <span class="cat-icon" :style="{ background: tint(c.color) }"><component :is="furnitureIcon(c.type)" /></span>
         <b>{{ c.name }}</b>
-        <small>{{ c.w }}×{{ c.d }}×{{ c.h }}</small>
+        <small>{{ c.w }} × {{ c.d }} × {{ c.h }}</small>
       </button>
     </div>
   </section>
 
-  <section class="card">
-    <header><h3>已擺放（{{ design.furniture.length }}）</h3></header>
-    <div v-for="g in grouped" :key="g.room" class="group">
-      <h4>{{ g.room }}</h4>
+  <!-- 已擺放 -->
+  <section class="section">
+    <div class="section-head">
+      <h3><Rows3 />已擺放</h3>
+      <span class="badge">{{ design.furniture.length }} 件</span>
+    </div>
+    <details v-for="g in grouped" :key="g.room" class="group" open>
+      <summary>
+        <ChevronRight class="chev" />{{ g.room }}
+        <span class="badge">{{ g.items.length }}</span>
+      </summary>
       <button
         v-for="it in g.items"
         :key="it.id"
-        class="item"
+        class="list-item"
         :class="{ on: it.id === ui.selectedId }"
         @click="ui.selectedId = it.id"
       >
-        <i :style="{ background: it.color }"></i>
+        <component :is="furnitureIcon(it.type)" />
         <span>{{ it.name }}</span>
         <small>{{ it.w }}×{{ it.d }}</small>
-        <em v-if="it.locked">🔒</em>
+        <i class="swatch-dot" :style="{ background: it.color }"></i>
+        <Lock v-if="it.locked" class="lock" />
       </button>
-    </div>
+    </details>
   </section>
 </template>

@@ -91,7 +91,7 @@ export class Viewer {
     Object.assign(this.labelRenderer.domElement.style, { position: 'absolute', inset: '0', pointerEvents: 'none' })
     host.appendChild(this.labelRenderer.domElement)
 
-    this.scene.background = new THREE.Color('#e9ebee')
+    this.scene.background = new THREE.Color('#efebe5')
     this.scene.add(this.world)
 
     // 相機
@@ -157,7 +157,7 @@ export class Viewer {
 
   private setupStatic() {
     // 地面
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(6000, 6000), mat('#dfe1e3', 1))
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(6000, 6000), mat('#e8e3dc', 1))
     ground.rotation.x = -Math.PI / 2
     ground.position.y = -3
     ground.receiveShadow = true
@@ -165,7 +165,7 @@ export class Viewer {
 
     // 樓板
     const b = unitBounds
-    const slab = new THREE.Mesh(new THREE.BoxGeometry(b.x2 - b.x1, 3, b.y2 - b.y1), mat('#cdc8c0', 0.9))
+    const slab = new THREE.Mesh(new THREE.BoxGeometry(b.x2 - b.x1, 3, b.y2 - b.y1), mat('#d6cfc4', 0.9))
     slab.position.set((b.x1 + b.x2) / 2, -1.5, (b.y1 + b.y2) / 2)
     slab.receiveShadow = true
     this.world.add(slab)
@@ -173,7 +173,7 @@ export class Viewer {
     // 公共走廊
     const cw = corridor.x2 - corridor.x1
     const cd = corridor.y2 - corridor.y1
-    const cor = new THREE.Mesh(new THREE.PlaneGeometry(cw, cd), mat('#d4d1cb', 0.9))
+    const cor = new THREE.Mesh(new THREE.PlaneGeometry(cw, cd), mat('#ddd7ce', 0.9))
     cor.rotation.x = -Math.PI / 2
     cor.position.set((corridor.x1 + corridor.x2) / 2, 0.2, (corridor.y1 + corridor.y2) / 2)
     cor.receiveShadow = true
@@ -327,7 +327,7 @@ export class Viewer {
     const entry = this.items.get(it.id)
     if (!entry) return
     const bad = this.overlapsWall(it)
-    this.selBox = new THREE.BoxHelper(entry.obj, bad ? '#e5484d' : '#f5a524')
+    this.selBox = new THREE.BoxHelper(entry.obj, bad ? '#c2413b' : '#d9773f')
     this.scene.add(this.selBox)
     const lb = label(`${it.name}<span>${fmt(it.w)} × ${fmt(it.d)} × ${fmt(it.h)}</span>`, `item-label${bad ? ' bad' : ''}`)
     lb.position.set(it.x, it.elev + it.h + 12, it.y)
@@ -390,11 +390,12 @@ export class Viewer {
   }
 
   resetCamera() {
-    const c = new THREE.Vector3(CENTER.x * CM, 0.4, (CENTER.y + 20) * CM * this.sy)
+    // 目標點往左偏一點，讓房子避開左側工具列
+    const c = new THREE.Vector3(CENTER.x * CM - 0.35, 0.4, (CENTER.y + 20) * CM * this.sy)
     this.orbit.target.copy(c)
     // 視窗越窄，相機拉越遠，確保整戶都在畫面內
     const aspect = this.host.clientWidth / Math.max(1, this.host.clientHeight)
-    const k = Math.max(1, 1.25 / aspect)
+    const k = Math.max(1, 1.18 / aspect)
     this.persp.position.set(c.x - 2.2 * k, 11.5 * k, c.z + 7 * k)
     this.orbit.update()
     this.frameTop()
@@ -631,7 +632,7 @@ export class Viewer {
       return
     }
     const Y = 3
-    const dotMat = new THREE.MeshBasicMaterial({ color: '#e5484d', depthTest: false })
+    const dotMat = new THREE.MeshBasicMaterial({ color: '#b8603a', depthTest: false })
     const dot = (p: THREE.Vector2) => {
       const m = new THREE.Mesh(new THREE.SphereGeometry(3.5, 16, 12), dotMat)
       m.position.set(p.x, Y, p.y)
@@ -646,7 +647,7 @@ export class Viewer {
     }
     dot(b)
     const geo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(a.x, Y, a.y), new THREE.Vector3(b.x, Y, b.y)])
-    const line = new THREE.Line(geo, new THREE.LineBasicMaterial({ color: '#e5484d', depthTest: false }))
+    const line = new THREE.Line(geo, new THREE.LineBasicMaterial({ color: '#b8603a', depthTest: false }))
     line.renderOrder = 20
     this.measureGroup.add(line)
     const dist = a.distanceTo(b)

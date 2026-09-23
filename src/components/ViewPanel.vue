@@ -1,70 +1,88 @@
 <script setup lang="ts">
+import { DoorOpen, Keyboard, Layers, Magnet, Map as MapIcon, Tag } from '@lucide/vue'
 import { design, ui } from '../store'
-import { rooms } from '../data/house'
-import { viewerRef } from '../viewerRef'
+
+const cuts = [
+  { label: '完整', value: () => design.ceilingHeight },
+  { label: '150', value: () => 150 },
+  { label: '90', value: () => 90 },
+]
+
+const keys: { k: string[]; t: string }[] = [
+  { k: ['V'], t: '選取工具' },
+  { k: ['M'], t: '移動工具' },
+  { k: ['R'], t: '旋轉 90°（Shift 反向）' },
+  { k: ['Q', 'E'], t: '微轉 15°' },
+  { k: ['↑', '↓', '←', '→'], t: '微調 1 公分（Shift × 10）' },
+  { k: ['Delete'], t: '刪除家具' },
+  { k: ['Esc'], t: '取消選取、清除量尺' },
+  { k: ['⌘', 'Z'], t: '上一步' },
+  { k: ['⌘', '⇧', 'Z'], t: '下一步' },
+]
 </script>
 
 <template>
-  <section v-if="ui.mode === 'walk'" class="card">
-    <header><h3>瞬間移動到…</h3></header>
-    <div class="chips wrap">
-      <button v-for="r in rooms.filter((x) => x.id !== 'ac')" :key="r.id" @click="viewerRef.current?.teleport(r.id)">
-        {{ r.name }}
+  <section class="section">
+    <div class="section-head">
+      <h3><Layers />牆高切面</h3>
+      <span class="value-chip">{{ Math.min(ui.wallCut, design.ceilingHeight) }} cm</span>
+    </div>
+    <input v-model.number="ui.wallCut" type="range" min="40" :max="design.ceilingHeight" step="5" />
+    <div class="seg full sm" style="margin-top: 10px">
+      <button
+        v-for="c in cuts"
+        :key="c.label"
+        :class="{ on: Math.min(ui.wallCut, design.ceilingHeight) === c.value() }"
+        @click="ui.wallCut = c.value()"
+      >
+        {{ c.label }}
       </button>
     </div>
-    <p class="hint">W A S D 或方向鍵移動，拖曳滑鼠轉頭，按住 Shift 走快一點。</p>
+    <p class="muted">把牆切矮一點，從上面看比較好擺家具；室內漫遊時一律顯示完整牆高。</p>
   </section>
 
-  <section class="card">
-    <header><h3>牆面</h3></header>
-    <label class="slider">
-      <span>牆高切面 <b>{{ Math.min(ui.wallCut, design.ceilingHeight) }} cm</b></span>
-      <input v-model.number="ui.wallCut" type="range" min="40" :max="design.ceilingHeight" step="5" />
+  <section class="section">
+    <div class="section-head"><h3><Tag />顯示</h3></div>
+    <label class="switch-row">
+      <span><Tag />房間名稱與坪數</span>
+      <input v-model="ui.showLabels" type="checkbox" class="switch" />
     </label>
-    <div class="row tight">
-      <button @click="ui.wallCut = design.ceilingHeight">完整牆高</button>
-      <button @click="ui.wallCut = 150">切到 150</button>
-      <button @click="ui.wallCut = 90">切到 90</button>
-    </div>
-    <p class="hint">把牆切矮一點，從上面看比較好擺家具（漫遊模式一律顯示完整牆高）。</p>
-    <label class="check"><input v-model="ui.doorsOpen" type="checkbox" /> 門打開</label>
-  </section>
-
-  <section class="card">
-    <header><h3>標示與對照</h3></header>
-    <label class="check"><input v-model="ui.showLabels" type="checkbox" /> 顯示房間名稱與坪數</label>
-    <label class="check"><input v-model="ui.showOverlay" type="checkbox" /> 疊上原始平面圖（紅線）</label>
-    <label v-if="ui.showOverlay" class="slider">
-      <span>透明度</span>
+    <label class="switch-row">
+      <span><DoorOpen />門打開</span>
+      <input v-model="ui.doorsOpen" type="checkbox" class="switch" />
+    </label>
+    <label class="switch-row">
+      <span><MapIcon />疊上原始平面圖</span>
+      <input v-model="ui.showOverlay" type="checkbox" class="switch" />
+    </label>
+    <div v-if="ui.showOverlay" class="field" style="margin-top: 4px">
+      <span>疊圖透明度</span>
       <input v-model.number="ui.overlayOpacity" type="range" min="0.1" max="1" step="0.05" />
-    </label>
-    <p class="hint">
-      用「平面俯視」＋疊圖可以檢查模型和原圖是否對得上。
+    </div>
+    <p class="muted">
+      切到「平面俯視」再疊圖，可以檢查模型和原圖對不對得上。
       <template v-if="design.mirrored">A6・B6 模式下疊圖是 B2 平面圖上下翻轉，圖上的字會是反的。</template>
     </p>
   </section>
 
-  <section class="card">
-    <header><h3>拖曳對齊</h3></header>
-    <div class="chips">
-      <button v-for="s in [1, 5, 10]" :key="s" :class="{ on: ui.snap === s }" @click="ui.snap = s">{{ s }} cm</button>
+  <section class="section">
+    <div class="section-head">
+      <h3><Magnet />拖曳對齊</h3>
     </div>
-    <p class="hint">靠近牆 12 公分內會自動貼齊；按住 Alt 拖曳可自由移動。</p>
+    <div class="seg full sm">
+      <button v-for="s in [1, 5, 10]" :key="s" :class="{ on: ui.snap === s }" @click="ui.snap = s">每 {{ s }} cm</button>
+    </div>
+    <p class="muted">靠近牆 12 公分內會自動貼齊；拖曳時按住 Alt 可以自由移動。</p>
   </section>
 
-  <section class="card keys">
-    <header><h3>快捷鍵</h3></header>
-    <dl>
-      <dt>V / M</dt><dd>切換「選取」／「移動」工具</dd>
-      <dt>R / Shift+R</dt><dd>旋轉 ±90°</dd>
-      <dt>Q / E</dt><dd>微轉 15°</dd>
-      <dt>方向鍵</dt><dd>微調 1 cm（Shift 10 cm）</dd>
-      <dt>Delete</dt><dd>刪除家具</dd>
-      <dt>Esc</dt><dd>取消選取／清除量尺</dd>
-      <dt>⌘/Ctrl + Z</dt><dd>上一步</dd>
-      <dt>⌘/Ctrl + Shift + Z</dt><dd>下一步</dd>
-      <dt>滑鼠左鍵拖空白處</dt><dd>旋轉視角</dd>
-      <dt>右鍵拖曳 / 滾輪</dt><dd>平移 / 縮放</dd>
+  <section class="section">
+    <div class="section-head"><h3><Keyboard />快捷鍵</h3></div>
+    <dl class="keys">
+      <template v-for="row in keys" :key="row.t">
+        <dt><kbd v-for="k in row.k" :key="k">{{ k }}</kbd></dt>
+        <dd>{{ row.t }}</dd>
+      </template>
     </dl>
+    <p class="muted">Windows 請把 ⌘ 換成 Ctrl。</p>
   </section>
 </template>

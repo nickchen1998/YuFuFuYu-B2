@@ -189,6 +189,21 @@ export function floorTexture(p: FloorPreset): THREE.CanvasTexture {
   return tex
 }
 
+const thumbs = new Map<string, string>()
+
+/** 地板材質的小縮圖（面板用），取貼圖左上 60 × 60 公分 */
+export function floorThumb(p: FloorPreset): string {
+  const hit = thumbs.get(p.id)
+  if (hit) return hit
+  const src = floorTexture(p).image as HTMLCanvasElement
+  const c = document.createElement('canvas')
+  c.width = c.height = 96
+  c.getContext('2d')!.drawImage(src, 0, 0, S / 2, S / 2, 0, 0, 96, 96)
+  const url = c.toDataURL('image/png')
+  thumbs.set(p.id, url)
+  return url
+}
+
 /** 把黑線白底的平面圖轉成「紅線＋透明底」，疊在模型上比對用 */
 export function loadPlanOverlay(url: string, color = '#e0245e'): Promise<THREE.CanvasTexture> {
   return new Promise((resolve, reject) => {

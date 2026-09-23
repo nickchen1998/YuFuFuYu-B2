@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { Eraser, LandPlot, Minus, PaintRoller, Palette, Plus, Ruler } from '@lucide/vue'
 import { design, ui } from '../store'
-import { rooms, walls } from '../data/house'
+import { CEILING_DEFAULT, rooms, walls } from '../data/house'
 import { floorPresets, wallPalette } from '../data/materials'
 import { fmt, roomFacing, roomSize, PING } from '../geometry'
 import { floorThumb } from '../three/textures'
@@ -126,8 +126,8 @@ function stepCeiling(d: number) {
   <!-- 天花板 -->
   <section class="section">
     <div class="section-head">
-      <h3>天花板淨高</h3>
-      <span class="aside">預設 280 cm</span>
+      <h3>天花板高度</h3>
+      <span class="aside">預設 {{ CEILING_DEFAULT }} cm</span>
     </div>
     <div class="stepper">
       <button class="btn" title="降低 5 公分" @click="stepCeiling(-5)"><Minus /></button>

@@ -17,7 +17,8 @@ import type { Room, Wall } from '../types'
 //   Y: -20 | 0 | 140 | 152 | 245 | 260 | 554 | 569 | 599.5 | 614.5 | 665 | 685 | 741.5 | 756.5
 // ─────────────────────────────────────────────────────────────
 
-export const CEILING_DEFAULT = 280
+/** 室內高度（住戶提供：樓高約 3 米） */
+export const CEILING_DEFAULT = 300
 
 export const rooms: Room[] = [
   { id: 'living', name: '客餐廳・廚房', x1: 0, y1: 0, x2: 288, y2: 665, floor: 'oak' },
@@ -85,8 +86,8 @@ export const walls: Wall[] = [
       { id: 'master-window', kind: 'window', offset: 71.5, width: 170, sill: 90, height: 150, label: '主臥窗' },
     ],
   },
-  // 冷氣平台外側格柵
-  { id: 'ac-louver', x1: -286.5, y1: 685, x2: -15, y2: 700, style: 'louver' },
+  // 冷氣平台外側格柵：不高過主臥窗，頂端與窗頂齊高（窗台 90 + 窗高 150）
+  { id: 'ac-louver', x1: -286.5, y1: 685, x2: -15, y2: 700, height: 240, style: 'louver' },
 
   // ── 客餐廳下方外牆（廚房旁的窗） ──
   {

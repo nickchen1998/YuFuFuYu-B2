@@ -4,7 +4,7 @@ import { CEILING_DEFAULT, rooms } from './data/house'
 import { defaultFurniture } from './data/catalog'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 2
+const REV = 3
 
 export function defaultDesign(): Design {
   return {
@@ -34,6 +34,8 @@ function migrate(d: Design): Design {
     d.roomFloors = swapKeys(d.roomFloors)
     d.wallPaint = swapKeys(d.wallPaint)
   }
+  // rev 3：預設樓高由 280 改為 300；沒有手動改過的存檔跟著更新
+  if ((d.rev ?? 1) < 3 && d.ceilingHeight === 280) d.ceilingHeight = CEILING_DEFAULT
   d.rev = REV
   return d
 }

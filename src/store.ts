@@ -4,7 +4,9 @@ import { CEILING_DEFAULT, rooms } from './data/house'
 import { defaultFurniture } from './data/catalog'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 4
+const REV = 6
+/** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */
+const LAYOUT_REV = 6
 
 export function defaultDesign(): Design {
   return {
@@ -48,11 +50,11 @@ function load(): Design | null {
     if (!isDesign(parsed)) return null
     const rev = parsed.rev ?? 1
     migrate(parsed)
-    // rev 4：依住戶需求重新規劃家具（洗碗機、中島、按摩椅、書房、冷氣）。
+    // 家具預設配置更新時（rev 4：兩人生活規劃；rev 5：按摩椅移到次臥、冷氣位置；rev 6：窗下訂製中島），
     // 牆色、地板、樓高、戶別保留；舊的家具擺設另存一份，需要時可以救回來。
-    if (rev < 4) {
+    if (rev < LAYOUT_REV) {
       try {
-        localStorage.setItem(`${KEY}-furniture-before-rev4`, JSON.stringify(parsed.furniture))
+        localStorage.setItem(`${KEY}-furniture-backup-rev${rev}`, JSON.stringify(parsed.furniture))
       } catch {
         /* 存不了就算了 */
       }

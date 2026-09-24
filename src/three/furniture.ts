@@ -285,14 +285,40 @@ function kitchen(g: G, it: FurnitureItem) {
     ring.position.set(-w / 2 + 45 + ox, h + 0.9, 1 + oz)
     g.add(ring)
   }
-  // 壁面、吊櫃、抽油煙機
-  bx(g, w, 61, 1.5, 0, h, -d / 2 + 0.75, mat('#ebe8e3', 0.3))
+  // 壁面、吊櫃（150～230 公分）、抽油煙機
+  const upperY = 150
+  const upperH = 80
+  bx(g, w, upperY - h, 1.5, 0, h, -d / 2 + 0.75, mat('#ebe8e3', 0.3))
   const upperD = 35
-  bx(g, w, 70, upperD, 0, 150, -d / 2 + upperD / 2, mat(it.color, 0.6))
+  bx(g, w, upperH, upperD, 0, upperY, -d / 2 + upperD / 2, mat(it.color, 0.6))
   const line = mat(shadeHex(it.color, 0.55), 0.8)
-  const n = Math.round(w / 45)
-  for (let i = 1; i < n; i++) bx(g, 0.6, 68, 0.4, -w / 2 + (i * w) / n, 151, -d / 2 + upperD + 0.2, line)
-  bx(g, 75, 14, 50, -w / 2 + 45, 136, -d / 2 + 25, mat('#b9bcc0', 0.3, 0.7))
+  const upperFront = -d / 2 + upperD + 0.2
+  const handle = (x: number, y: number) => bx(g, 1.4, 12, 2, x, y, upperFront + 1, METAL())
+  // 水槽上方那一段（對齊 85 公分水槽下櫃）：下半是烘碗機（建商附），上半是兩扇門的吊櫃
+  const dryer = has(it, 'dishdryer')
+  const sinkX0 = w / 2 - 85
+  const plainW = dryer ? sinkX0 + w / 2 : w
+  const n = Math.max(1, Math.round(plainW / 45))
+  for (let i = 1; i < n; i++) bx(g, 0.6, upperH - 2, 0.4, -w / 2 + (i * plainW) / n, upperY + 1, upperFront, line)
+  for (let i = 0; i < n; i++) handle(-w / 2 + ((i + 0.5) * plainW) / n + (i % 2 === 0 ? 1 : -1) * (plainW / n / 2 - 4), upperY + 2)
+  if (dryer) {
+    const cx = sinkX0 + 85 / 2
+    const dw = 85 - 1
+    const dryerH = upperH / 2
+    bx(g, 0.6, upperH - 2, 0.4, sinkX0, upperY + 1, upperFront, line)
+    // 上半：兩扇門
+    bx(g, dw, 0.6, 0.4, cx, upperY + dryerH, upperFront, line)
+    bx(g, 0.6, dryerH - 2, 0.4, cx, upperY + dryerH + 1, upperFront, line)
+    handle(cx - 4, upperY + dryerH + 2)
+    handle(cx + 4, upperY + dryerH + 2)
+    // 下半：烘碗機
+    bx(g, dw, dryerH - 1, 1, cx, upperY + 0.5, upperFront + 0.3, mat('#d3d6da', 0.28, 0.7))
+    bx(g, dw - 8, dryerH - 13, 0.5, cx, upperY + 9, upperFront + 0.9, mat('#20252b', 0.08, 0.3))
+    bx(g, dw - 30, 1.8, 2.4, cx, upperY + dryerH - 6, upperFront + 1.6, METAL())
+    bx(g, 14, 3, 0.5, cx + dw / 2 - 12, upperY + 3, upperFront + 0.9, mat('#1b1f24', 0.3))
+    bx(g, 2, 1.2, 0.5, cx + dw / 2 - 22, upperY + 3.9, upperFront + 1, mat('#7fe0a0', 0.3, 0, '#7fe0a0'))
+  }
+  bx(g, 75, 14, 50, -w / 2 + 45, upperY - 14, -d / 2 + 25, mat('#b9bcc0', 0.3, 0.7))
   // 洗碗機：45 公分嵌入式，緊鄰水槽下櫃（水槽下櫃約 85 公分寬）
   if (has(it, 'dishwasher')) {
     const dx = w / 2 - 85 - 23.5
@@ -345,6 +371,89 @@ function acunit(g: G, it: FurnitureItem) {
   fan.rotation.x = Math.PI / 2
   fan.position.set(-w * 0.12, h / 2 + 2, d / 2 + 0.3)
   g.add(fan)
+}
+
+/**
+ * 餐桌中島：靠牆的收納中島（高 h、深 50）＋同一直線延伸的餐桌（高 75、深 d）。
+ * 背面（-z）靠牆；中島在 -x 端，餐桌在 +x 端，椅子放在正面（+z）。
+ */
+function diningisland(g: G, it: FurnitureItem) {
+  const { w, d } = it
+  const islandLen = Math.min(80, Math.round(w * 0.42))
+  const islandD = Math.min(50, d)
+  const tableLen = w - islandLen
+  const part = new THREE.Group()
+  part.position.set(-w / 2 + islandLen / 2, 0, -d / 2 + islandD / 2)
+  g.add(part)
+  island(part, { ...it, w: islandLen, d: islandD })
+  const tx = -w / 2 + islandLen + tableLen / 2
+  const wood = mat('#b08560', 0.5)
+  bx(g, tableLen, 4, d, tx, 71, 0, wood)
+  // 餐桌一端架在中島側面，另一端兩支腳
+  for (const sz of [-1, 1]) bx(g, 5, 71, 5, w / 2 - 6, 0, sz * (d / 2 - 6), mat('#6e5540', 0.6))
+  bx(g, 3, 8, d - 12, w / 2 - 6, 60, 0, mat('#6e5540', 0.6))
+}
+
+/**
+ * 窗下訂製中島：高度壓在窗台下，背面（-z）靠窗下的牆、正面（+z）朝室內。
+ * +x 端嵌微波爐；檯面正下方藏一張抽拉式餐桌，'tableout' 時拉出 90 公分（桌面高 = 中島高 − 6）。
+ */
+function windowisland(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const body = mat(it.color, 0.6)
+  const line = mat(shadeHex(it.color, 0.55), 0.8)
+  const topH = 4
+  const base = 8
+  const bodyTop = h - topH
+  const front = d / 2 + 0.15
+  bx(g, w - 4, base, d - 6, 0, 0, 0, line)
+  bx(g, w, bodyTop - base, d, 0, base, 0, body)
+  bx(g, w + 2, topH, d + 2, 0, bodyTop, 0, mat('#dcd8d1', 0.3))
+  // 抽拉餐桌的收納縫
+  const slotY = bodyTop - 5
+  bx(g, w - 4, 0.6, 0.4, 0, slotY, front, line)
+  // 微波爐（+x 端）
+  const mw = has(it, 'microwave')
+  const mwW = 45
+  const mh = 28
+  const mwCx = w / 2 - 4 - mwW / 2
+  const mwY = slotY - 2 - mh
+  if (mw) {
+    bx(g, mwW, mh, 1.2, mwCx, mwY, front + 0.45, mat('#c7cace', 0.3, 0.7))
+    bx(g, mwW * 0.68, mh - 7, 0.4, mwCx - mwW * 0.12, mwY + 3.5, front + 1.2, mat('#14171b', 0.1, 0.3))
+    bx(g, mwW * 0.18, mh - 7, 0.4, mwCx + mwW / 2 - mwW * 0.11 - 1, mwY + 3.5, front + 1.2, mat('#2b2f34', 0.4))
+    bx(g, 0.6, slotY - base, 0.4, w / 2 - 8 - mwW, base, front, line)
+    bx(g, mwW, 0.6, 0.4, mwCx, (base + mwY) / 2, front, line)
+  }
+  // 抽屜（微波爐以外的寬度，兩層）
+  const x1 = mw ? w / 2 - 8 - mwW : w / 2
+  const dw = x1 + w / 2
+  const cx = (x1 - w / 2) / 2
+  const rh = (slotY - base) / 2
+  bx(g, dw - 2, 0.6, 0.4, cx, base + rh, front, line)
+  for (let r = 0; r < 2; r++) bx(g, Math.min(24, dw / 3), 1.4, 2, cx, base + (r + 0.5) * rh, front + 0.8, METAL())
+  // 抽拉式餐桌
+  const tw = w - 10
+  if (has(it, 'tableout')) {
+    const ext = 90
+    const wood = mat('#b08560', 0.5)
+    bx(g, tw, 3, ext + 6, 0, bodyTop - 5, d / 2 + ext / 2 - 3, wood)
+    for (const sx of [-1, 1]) bx(g, 4, bodyTop - 5, 4, sx * (tw / 2 - 6), 0, d / 2 + ext - 7, mat('#3a3a3a', 0.5, 0.4))
+  } else {
+    bx(g, 16, 1.4, 2, 0, slotY + 1.5, front + 0.8, METAL())
+  }
+}
+
+/** 直立式吸塵器掛在充電座上 */
+function vacuum(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  bx(g, w, 1.5, d, 0, 0, 0, DARK())
+  bx(g, w * 0.5, h - 10, 2, 0, 1.5, -d / 2 + 1, mat('#d5d8dc', 0.4))
+  bx(g, 25, 6, 9, 0, 1.5, 3, mat('#3a3d42', 0.5))
+  cyl(g, 1.6, 1.6, h - 40, 0, 7, 2, mat('#b9bec4', 0.3, 0.7), 12)
+  const body = cyl(g, 5.5, 5.5, 22, 0, h - 36, 2, mat(it.color, 0.35, 0.3), 20)
+  body.rotation.x = 0.35
+  bx(g, 4, 14, 5, 0, h - 16, -1, DARK())
 }
 
 /** 升降桌：T 型雙柱腳架 */
@@ -469,6 +578,9 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   shower,
   acunit,
   acindoor,
+  vacuum,
+  windowisland,
+  diningisland,
   standingdesk,
   massagechair,
   airfryer,

@@ -15,8 +15,16 @@ const categoryIcons = { 臥室: BedDouble, 客廳: Sofa, 餐廚: Utensils, 其�
 
 /** 各種家具可以開關的配備 */
 const featureDefs: Record<string, { key: string; label: string }[]> = {
-  kitchen: [{ key: 'dishwasher', label: '洗碗機（45 公分，水槽旁）' }],
+  kitchen: [
+    { key: 'dishdryer', label: '烘碗機（水槽上方吊櫃，建商附）' },
+    { key: 'dishwasher', label: '洗碗機（45 公分，水槽旁，需改櫃）' },
+  ],
   island: [{ key: 'microwave', label: '嵌入微波爐' }],
+  diningisland: [{ key: 'microwave', label: '中島嵌入微波爐' }],
+  windowisland: [
+    { key: 'microwave', label: '嵌入微波爐' },
+    { key: 'tableout', label: '抽拉餐桌拉出（用餐時）' },
+  ],
 }
 
 function toggleFeature(key: string) {

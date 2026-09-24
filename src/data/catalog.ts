@@ -47,6 +47,11 @@ export const catalog: CatalogEntry[] = [
   { type: 'cabinet', name: '電器櫃', category: '餐廚', w: 60, d: 45, h: 200, color: '#ece6dc' },
   { type: 'island', name: '中島', category: '餐廚', w: 120, d: 60, h: 90, color: '#ece6dc' },
   { type: 'island', name: '中島（嵌微波爐）', category: '餐廚', w: 100, d: 50, h: 90, color: '#ece6dc', features: ['microwave'] },
+  { type: 'diningisland', name: '餐桌中島（收納＋餐桌）', category: '餐廚', w: 190, d: 75, h: 90, color: '#ece6dc', features: ['microwave'] },
+  {
+    type: 'windowisland', name: '窗下訂製中島（抽拉餐桌）', category: '餐廚', w: 110, d: 50, h: 78, color: '#ece6dc',
+    features: ['microwave', 'tableout'],
+  },
   { type: 'microwave', name: '微波爐', category: '餐廚', w: 50, d: 40, h: 30, elev: 90, color: '#d4d7db' },
   { type: 'airfryer', name: '氣炸鍋', category: '餐廚', w: 30, d: 36, h: 33, elev: 90, color: '#2d2d30' },
   { type: 'ricecooker', name: '電鍋', category: '餐廚', w: 32, d: 32, h: 30, elev: 90, color: '#e9e4da' },
@@ -54,6 +59,7 @@ export const catalog: CatalogEntry[] = [
   { type: 'cabinet', name: '鞋櫃', category: '其他', w: 120, d: 35, h: 110, color: '#ece6dc' },
   { type: 'cabinet', name: '收納櫃', category: '其他', w: 80, d: 40, h: 90, color: '#ece6dc' },
   { type: 'washer', name: '洗衣機', category: '其他', w: 60, d: 65, h: 100, color: '#eef0f2' },
+  { type: 'vacuum', name: '直立式吸塵器', category: '其他', w: 30, d: 25, h: 115, color: '#8a5cc2' },
   { type: 'acindoor', name: '冷氣室內機', category: '其他', w: 85, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
   { type: 'toilet', name: '馬桶', category: '其他', w: 40, d: 68, h: 76, color: '#f7f7f5' },
   { type: 'vanity', name: '洗手台', category: '其他', w: 70, d: 48, h: 85, color: '#b8916a' },
@@ -71,43 +77,48 @@ export function newId(prefix = 'f') {
 type Seed = Omit<FurnitureItem, 'id' | 'elev'> & { id: string; elev?: number }
 
 // 預設擺設（家具可拖曳；locked = 固定設備，要先解鎖才能移動）
-// 住戶需求（2026-09）：兩人住；次臥當書房＋主要衣櫃；主臥只放睡眠相關；
-// 廚房加洗碗機、中島（嵌微波爐，檯面放氣炸鍋與電鍋）；客廳加按摩椅；每間房一台冷氣
+// 住戶需求（2026-09）：兩人住；次臥當書房＋主要衣櫃＋按摩椅；主臥只放睡眠相關；
+// 窗下訂製一件式中島（內藏抽拉餐桌）；沙發對齊電視；鞋櫃右側留吸塵器；烘碗機（建商附）＋洗碗機（待確認改櫃）
 const seeds: Seed[] = [
-  // 客餐廳：右牆由上而下是按摩椅、雙人沙發、兩人餐桌，一起面向左牆的電視
-  { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 220, y: 17.5, rot: 0, w: 120, d: 35, h: 110, color: '#ece6dc' },
-  { id: 'massage', type: 'massagechair', name: '按摩椅', x: 213, y: 130, rot: 270, w: 80, d: 140, h: 115, color: '#4a4541' },
-  { id: 'sofa', type: 'sofa', name: '雙人沙發', x: 245.5, y: 255, rot: 270, w: 160, d: 85, h: 80, color: '#8e9ca8' },
-  { id: 'rug', type: 'rug', name: '地毯', x: 130, y: 255, rot: 90, w: 200, d: 150, h: 1, color: '#cfc5b4' },
-  { id: 'coffee', type: 'coffeetable', name: '茶几', x: 145, y: 255, rot: 90, w: 100, d: 50, h: 40, color: '#a67c52' },
-  { id: 'tvstand', type: 'tvstand', name: '電視櫃', x: 20, y: 190, rot: 90, w: 180, d: 40, h: 50, color: '#ece6dc' },
-  { id: 'tv', type: 'tv', name: '電視 55吋', x: 16, y: 190, rot: 90, w: 123, d: 8, h: 72, elev: 50, color: '#1b1b1d' },
+  // 客餐廳：電視、雙人沙發、茶几、地毯中心線對齊（y = 185）
+  { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 110, color: '#ece6dc' },
+  // 鞋櫃右側保留吸塵器位置
+  { id: 'vacuum', type: 'vacuum', name: '吸塵器', x: 262, y: 15, rot: 0, w: 30, d: 25, h: 115, color: '#8a5cc2' },
+  { id: 'sofa', type: 'sofa', name: '雙人沙發', x: 245.5, y: 185, rot: 270, w: 160, d: 85, h: 80, color: '#8e9ca8' },
+  { id: 'rug', type: 'rug', name: '地毯', x: 130, y: 185, rot: 90, w: 200, d: 150, h: 1, color: '#cfc5b4' },
+  { id: 'coffee', type: 'coffeetable', name: '茶几', x: 145, y: 185, rot: 90, w: 100, d: 50, h: 40, color: '#a67c52' },
+  { id: 'tvstand', type: 'tvstand', name: '電視櫃', x: 20, y: 185, rot: 90, w: 180, d: 40, h: 50, color: '#ece6dc' },
+  { id: 'tv', type: 'tv', name: '電視 55吋', x: 16, y: 185, rot: 90, w: 123, d: 8, h: 72, elev: 50, color: '#1b1b1d' },
   { id: 'fridge', type: 'fridge', name: '冰箱', x: 35, y: 414, rot: 90, w: 70, d: 70, h: 180, color: '#d4d8dc' },
-  { id: 'dining', type: 'table', name: '餐桌', x: 253, y: 400, rot: 90, w: 110, d: 70, h: 75, color: '#b08560' },
-  { id: 'dchair1', type: 'chair', name: '餐椅', x: 193, y: 373, rot: 90, w: 45, d: 50, h: 85, color: '#6b5a4a' },
-  { id: 'dchair2', type: 'chair', name: '餐椅', x: 193, y: 428, rot: 90, w: 45, d: 50, h: 85, color: '#6b5a4a' },
+  // 窗下訂製中島（一件式，請師傅訂做）：高 78 壓在窗台下；靠瓦斯爐端嵌微波爐，檯面放電鍋、氣炸鍋；
+  // 檯面下藏抽拉式餐桌，用餐時拉出，兩人並肩面窗坐。左留瓦斯爐站位 55、右留陽台門通道 63
+  {
+    id: 'dining', type: 'windowisland', name: '窗下訂製中島（抽拉餐桌）', x: 170, y: 640, rot: 180, w: 110, d: 50, h: 78,
+    color: '#ece6dc', features: ['microwave', 'tableout'],
+  },
+  { id: 'dchair1', type: 'chair', name: '餐椅', x: 145, y: 500, rot: 0, w: 45, d: 50, h: 85, color: '#6b5a4a' },
+  { id: 'dchair2', type: 'chair', name: '餐椅', x: 195, y: 500, rot: 0, w: 45, d: 50, h: 85, color: '#6b5a4a' },
+  { id: 'rice', type: 'ricecooker', name: '電鍋', x: 205, y: 640, rot: 180, w: 32, d: 32, h: 30, elev: 78, color: '#e9e4da' },
+  { id: 'fryer', type: 'airfryer', name: '氣炸鍋', x: 140, y: 640, rot: 180, w: 30, d: 36, h: 33, elev: 78, color: '#2d2d30' },
   {
     id: 'kitchen', type: 'kitchen', name: '一字型廚具', x: 30, y: 558.5, rot: 90, w: 213, d: 60, h: 85,
-    color: '#f1eee8', locked: true, features: ['dishwasher'],
+    color: '#f1eee8', locked: true, features: ['dishdryer', 'dishwasher'],
   },
-  // 中島：與廚具之間留 95 公分工作走道，右側留 83 公分通往次臥門與陽台門
-  { id: 'island', type: 'island', name: '中島', x: 180, y: 575, rot: 270, w: 100, d: 50, h: 90, color: '#ece6dc', features: ['microwave'] },
-  { id: 'rice', type: 'ricecooker', name: '電鍋', x: 180, y: 545, rot: 270, w: 32, d: 32, h: 30, elev: 90, color: '#e9e4da' },
-  { id: 'fryer', type: 'airfryer', name: '氣炸鍋', x: 180, y: 600, rot: 270, w: 30, d: 36, h: 33, elev: 90, color: '#2d2d30' },
-  // 冷氣：窗戶上方偏右（遠離瓦斯爐），沿長邊往沙發吹
-  { id: 'ac-living', type: 'acindoor', name: '冷氣（客餐廳）', x: 220, y: 652.5, rot: 180, w: 90, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
+  // 冷氣：鞋櫃上方，沿長邊往廚房吹（冷媒管需經天花板接回冷氣平台，約 7 米）
+  { id: 'ac-living', type: 'acindoor', name: '冷氣（客餐廳）', x: 200, y: 12.5, rot: 0, w: 90, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
   // 主臥：床頭靠左牆，兩側床頭櫃；衣櫃在上牆左段（建議用推拉門）
   { id: 'mbed', type: 'bed', name: '雙人床 5尺', x: -186.5, y: 486, rot: 90, w: 152, d: 200, h: 100, color: '#c9d3dc' },
   { id: 'mns1', type: 'nightstand', name: '床頭櫃', x: -269, y: 391, rot: 90, w: 35, d: 35, h: 50, color: '#b8916a' },
   { id: 'mns2', type: 'nightstand', name: '床頭櫃', x: -269, y: 581.5, rot: 90, w: 35, d: 35, h: 50, color: '#b8916a' },
   { id: 'mward', type: 'wardrobe', name: '衣櫃', x: -219, y: 290, rot: 0, w: 135, d: 60, h: 240, color: '#e4dccf' },
-  // 冷氣：床頭上方往床尾吹，風不直吹頭部；離室外機最近
-  { id: 'ac-master', type: 'acindoor', name: '冷氣（主臥）', x: -274, y: 486, rot: 90, w: 85, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
+  // 冷氣：窗戶上方（窗外就是冷氣平台，管線最短）；導風板往上調，避免直吹床
+  { id: 'ac-master', type: 'acindoor', name: '冷氣（主臥）', x: -130, y: 587, rot: 180, w: 85, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
-  // 次臥（書房＋主要衣櫃）：L 型衣櫃貼上牆與分戶牆，兩張升降桌並排靠分戶牆
-  { id: 'bward1', type: 'wardrobe', name: '衣櫃（L 型上段）', x: 423.75, y: 30, rot: 0, w: 241.5, d: 60, h: 240, color: '#e4dccf' },
-  { id: 'bward2', type: 'wardrobe', name: '衣櫃（L 型側段）', x: 514.5, y: 150, rot: 270, w: 180, d: 60, h: 240, color: '#e4dccf' },
+  // 次臥（書房＋主要衣櫃＋按摩椅）：衣櫃整排貼上牆；按摩椅靠分戶牆、面向房內；兩張升降桌並排靠分戶牆
+  { id: 'bward1', type: 'wardrobe', name: '衣櫃', x: 423.75, y: 30, rot: 0, w: 241.5, d: 60, h: 240, color: '#e4dccf' },
+  // 按摩椅：選零靠牆機型（背後留 5 公分），躺平時往前滑到約 180 公分
+  { id: 'massage', type: 'massagechair', name: '按摩椅', x: 469.5, y: 170, rot: 270, w: 80, d: 140, h: 115, color: '#4a4541' },
   { id: 'bdesk1', type: 'standingdesk', name: '升降桌', x: 514.5, y: 340, rot: 270, w: 120, d: 60, h: 73, color: '#d8c3a5' },
   { id: 'bdesk2', type: 'standingdesk', name: '升降桌', x: 514.5, y: 460, rot: 270, w: 120, d: 60, h: 73, color: '#d8c3a5' },
   { id: 'bchair1', type: 'chair', name: '辦公椅', x: 452, y: 340, rot: 90, w: 50, d: 50, h: 100, color: '#5b5f63' },

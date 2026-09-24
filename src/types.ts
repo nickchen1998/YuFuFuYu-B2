@@ -65,6 +65,8 @@ export interface FurnitureItem {
   elev: number
   color: string
   locked?: boolean
+  /** 額外配備，例如廚具的 'dishwasher'、中島的 'microwave' */
+  features?: string[]
 }
 
 export interface Design {

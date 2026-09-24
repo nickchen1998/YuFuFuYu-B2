@@ -297,6 +297,7 @@ export class Viewer {
         this.items.delete(id)
       }
     }
+    this.applyAirflow()
     this.updateSelection()
   }
 
@@ -347,10 +348,19 @@ export class Viewer {
     return this.ui.mode === 'top' ? this.ortho : this.ui.mode === 'walk' ? this.walkCam : this.persp
   }
 
+  /** 冷氣出風示意：可開關，漫遊模式一律隱藏 */
+  applyAirflow() {
+    const show = this.ui.showAirflow && this.ui.mode !== 'walk'
+    this.furnitureGroup.traverse((o) => {
+      if (o.userData.airflow) o.visible = show
+    })
+  }
+
   setMode(mode: ViewMode) {
     this.orbit.enabled = mode === 'orbit'
     this.topCtl.enabled = mode === 'top'
     this.ceilings.visible = mode === 'walk'
+    this.applyAirflow()
     this.setLabels()
     this.rebuildWalls()
     this.updateSelection()

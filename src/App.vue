@@ -142,6 +142,7 @@ onMounted(() => {
   watch(() => ui.selectedId, () => v.updateSelection())
   watch(() => ui.tool, () => v.clearMeasure())
   watch(() => design.mirrored, () => v.applyMirror())
+  watch(() => ui.showAirflow, () => v.applyAirflow())
 })
 
 onBeforeUnmount(() => {

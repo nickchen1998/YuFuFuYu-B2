@@ -4,7 +4,7 @@ import { CEILING_DEFAULT, rooms } from './data/house'
 import { defaultFurniture } from './data/catalog'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 3
+const REV = 4
 
 export function defaultDesign(): Design {
   return {
@@ -46,7 +46,18 @@ function load(): Design | null {
     if (!raw) return null
     const parsed = JSON.parse(raw)
     if (!isDesign(parsed)) return null
+    const rev = parsed.rev ?? 1
     migrate(parsed)
+    // rev 4：依住戶需求重新規劃家具（洗碗機、中島、按摩椅、書房、冷氣）。
+    // 牆色、地板、樓高、戶別保留；舊的家具擺設另存一份，需要時可以救回來。
+    if (rev < 4) {
+      try {
+        localStorage.setItem(`${KEY}-furniture-before-rev4`, JSON.stringify(parsed.furniture))
+      } catch {
+        /* 存不了就算了 */
+      }
+      parsed.furniture = defaultFurniture()
+    }
     const base = defaultDesign()
     return { ...base, ...parsed, roomFloors: { ...base.roomFloors, ...parsed.roomFloors } }
   } catch {
@@ -94,6 +105,7 @@ export const ui = reactive({
   overlayOpacity: 0.8,
   doorsOpen: true,
   mainDoorOpen: false,
+  showAirflow: true,
   snap: 5,
   selectedId: null as string | null,
   paintColor: '#a7bac9',

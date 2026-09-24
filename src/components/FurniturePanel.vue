@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import {
   BedDouble, ChevronRight, Copy, Lock, MapPin, MousePointer2, Move, Package, Plus, RotateCcw, RotateCw, Rows3,
-  Sofa, Trash, TriangleAlert, Utensils, X,
+  Sofa, Sparkles, Trash, TriangleAlert, Utensils, X,
 } from '@lucide/vue'
 import { design, ui } from '../store'
 import { catalog, categories, newId, type CatalogEntry } from '../data/catalog'
@@ -12,6 +12,21 @@ import type { FurnitureItem } from '../types'
 import { furnitureIcon } from './icons'
 
 const categoryIcons = { 臥室: BedDouble, 客廳: Sofa, 餐廚: Utensils, 其他: Package } as const
+
+/** 各種家具可以開關的配備 */
+const featureDefs: Record<string, { key: string; label: string }[]> = {
+  kitchen: [{ key: 'dishwasher', label: '洗碗機（45 公分，水槽旁）' }],
+  island: [{ key: 'microwave', label: '嵌入微波爐' }],
+}
+
+function toggleFeature(key: string) {
+  const it = selected.value
+  if (!it) return
+  const set = new Set(it.features ?? [])
+  if (set.has(key)) set.delete(key)
+  else set.add(key)
+  it.features = [...set]
+}
 
 const cat = ref(categories[0])
 const target = ref('living')
@@ -54,6 +69,7 @@ function add(c: CatalogEntry) {
     h: c.h,
     elev: c.elev ?? 0,
     color: c.color,
+    ...(c.features ? { features: [...c.features] } : {}),
   }
   design.furniture.push(it)
   ui.selectedId = it.id
@@ -147,6 +163,10 @@ function remove() {
     <label class="switch-row">
       <span><Lock />鎖定位置</span>
       <input v-model="selected.locked" type="checkbox" class="switch" />
+    </label>
+    <label v-for="f in featureDefs[selected.type] ?? []" :key="f.key" class="switch-row">
+      <span><Sparkles />{{ f.label }}</span>
+      <input type="checkbox" class="switch" :checked="selected.features?.includes(f.key)" @change="toggleFeature(f.key)" />
     </label>
 
     <div class="item-actions">

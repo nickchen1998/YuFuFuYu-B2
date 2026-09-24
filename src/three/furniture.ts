@@ -89,9 +89,39 @@ function cabinet(g: G, it: FurnitureItem, style: 'doors' | 'drawers', legs = fal
   }
 }
 
+const has = (it: FurnitureItem, f: string) => (it.features ?? []).includes(f)
+
+/** 中島：正面（+z）是抽屜；有 'microwave' 時在 -x 端嵌入微波爐 */
 function island(g: G, it: FurnitureItem) {
-  cabinet(g, { ...it, h: it.h - 4 }, 'doors')
-  bx(g, it.w + 4, 4, it.d + 16, 0, it.h - 4, 6, mat('#dedbd5', 0.3))
+  const { w, d, h } = it
+  const body = mat(it.color, 0.6)
+  const line = mat(shadeHex(it.color, 0.55), 0.8)
+  const topH = 4
+  const base = 8
+  const bodyTop = h - topH
+  bx(g, w - 4, base, d - 6, 0, 0, 0, line)
+  bx(g, w, bodyTop - base, d, 0, base, 0, body)
+  bx(g, w + 4, topH, d + 4, 0, bodyTop, 0, mat('#dcd8d1', 0.3))
+  const front = d / 2 + 0.15
+  const mw = has(it, 'microwave')
+  const mwW = Math.min(52, w - 24)
+  const x0 = mw ? -w / 2 + mwW + 4 : -w / 2
+  const dw = w / 2 - x0
+  const cx = (x0 + w / 2) / 2
+  const rows = 3
+  const rh = (bodyTop - base) / rows
+  for (let r = 1; r < rows; r++) bx(g, dw - 2, 0.6, 0.4, cx, base + r * rh, front, line)
+  for (let r = 0; r < rows; r++) bx(g, Math.min(24, dw / 3), 1.4, 2, cx, base + (r + 0.5) * rh, front + 0.8, METAL())
+  if (!mw) return
+  bx(g, 0.6, bodyTop - base, 0.4, x0, base, front, line)
+  const mcx = -w / 2 + 2 + mwW / 2
+  const mh = 30
+  const y0 = bodyTop - 6 - mh
+  bx(g, mwW, mh, 1.2, mcx, y0, front + 0.45, mat('#c7cace', 0.3, 0.7))
+  bx(g, mwW * 0.68, mh - 7, 0.4, mcx - mwW * 0.12, y0 + 3.5, front + 1.2, mat('#14171b', 0.1, 0.3))
+  bx(g, mwW * 0.18, mh - 7, 0.4, mcx + mwW / 2 - mwW * 0.11 - 1, y0 + 3.5, front + 1.2, mat('#2b2f34', 0.4))
+  bx(g, mwW - 2, 0.6, 0.4, mcx, (base + y0) / 2, front, line)
+  bx(g, 16, 1.4, 2, mcx, (base + y0) / 2 + (y0 - base) / 4, front + 0.8, METAL())
 }
 
 function desk(g: G, it: FurnitureItem) {
@@ -263,6 +293,14 @@ function kitchen(g: G, it: FurnitureItem) {
   const n = Math.round(w / 45)
   for (let i = 1; i < n; i++) bx(g, 0.6, 68, 0.4, -w / 2 + (i * w) / n, 151, -d / 2 + upperD + 0.2, line)
   bx(g, 75, 14, 50, -w / 2 + 45, 136, -d / 2 + 25, mat('#b9bcc0', 0.3, 0.7))
+  // 洗碗機：45 公分嵌入式，緊鄰水槽下櫃（水槽下櫃約 85 公分寬）
+  if (has(it, 'dishwasher')) {
+    const dx = w / 2 - 85 - 23.5
+    const top = h - 4
+    bx(g, 45, top - 11, 1.6, dx, 10, d / 2 + 1, mat('#c9ccd0', 0.28, 0.75))
+    bx(g, 45, 6, 1.7, dx, top - 7, d / 2 + 1.05, mat('#2b2f34', 0.35))
+    bx(g, 30, 1.6, 2.4, dx, top - 14, d / 2 + 2.2, METAL())
+  }
 }
 
 function toilet(g: G, it: FurnitureItem) {
@@ -309,6 +347,98 @@ function acunit(g: G, it: FurnitureItem) {
   g.add(fan)
 }
 
+/** 升降桌：T 型雙柱腳架 */
+function standingdesk(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const frame = mat('#2c2d30', 0.5, 0.4)
+  bx(g, w, 2.5, d, 0, h - 2.5, 0, mat(it.color, 0.5))
+  for (const sx of [-1, 1]) {
+    const x = sx * (w / 2 - 16)
+    bx(g, 7, 3, d - 6, x, 0, 0, frame)
+    bx(g, 6.5, h - 9, 6.5, x, 3, 0, frame)
+    bx(g, 5, 3.5, d - 12, x, h - 6, 0, frame)
+  }
+  bx(g, w - 36, 4, 4, 0, h - 8, -d / 4, frame)
+  bx(g, 11, 1.6, 5, w / 2 - 14, h - 4.1, d / 2 - 3, mat('#141517', 0.3))
+}
+
+/** 按摩椅：正面（+z）是腳靠，背靠往後傾 */
+function massagechair(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const up = mat(it.color, 0.75)
+  const soft = mat(shadeHex(it.color, 1.45), 0.85)
+  bx(g, w - 12, 10, d - 24, 0, 0, -6, DARK())
+  for (const sx of [-1, 1]) bx(g, 14, 60, d * 0.6, sx * (w / 2 - 7), 8, -d * 0.06, up)
+  bx(g, w - 28, 16, 56, 0, 34, d * 0.02, soft)
+  const back = bx(g, w - 18, h - 32, 26, 0, 36, -d / 2 + 30, up)
+  back.rotation.x = -0.34
+  const pad = bx(g, w - 34, h - 50, 6, 0, 46, -d / 2 + 44, soft)
+  pad.rotation.x = -0.34
+  const leg = bx(g, w - 30, 48, 16, 0, 4, d / 2 - 24, up)
+  leg.rotation.x = 0.42
+}
+
+function airfryer(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  bx(g, w, h * 0.9, d, 0, 0, 0, mat(it.color, 0.35))
+  bx(g, w - 5, h * 0.44, 0.8, 0, 3, d / 2 + 0.3, mat(shadeHex(it.color, 0.7), 0.3))
+  bx(g, 9, 3, 6, 0, h * 0.28, d / 2 + 3, mat('#141414', 0.4))
+  bx(g, w * 0.45, h * 0.12, 0.5, 0, h * 0.68, d / 2 + 0.2, mat('#101418', 0.2))
+  cyl(g, Math.min(w, d) * 0.36, Math.min(w, d) * 0.42, h * 0.1, 0, h * 0.9, 0, mat(shadeHex(it.color, 1.25), 0.3), 24)
+}
+
+/** 電鍋（大同電鍋造型） */
+function ricecooker(g: G, it: FurnitureItem) {
+  const r = Math.min(it.w, it.d) / 2
+  const { h } = it
+  cyl(g, r * 0.95, r * 0.88, h * 0.7, 0, 0, 0, mat(it.color, 0.35), 36)
+  cyl(g, r * 0.7, r * 0.96, h * 0.18, 0, h * 0.7, 0, mat(shadeHex(it.color, 1.04), 0.3), 36)
+  cyl(g, r * 0.2, r * 0.26, h * 0.12, 0, h * 0.88, 0, DARK(), 16)
+  for (const sx of [-1, 1]) bx(g, 4, 3, 10, sx * r * 0.98, h * 0.55, 0, DARK())
+  bx(g, 7, 5, 2, 0, h * 0.14, r * 0.9, mat('#c4453c', 0.4))
+}
+
+function microwave(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  bx(g, w, h, d, 0, 0, 0, mat(it.color, 0.35, 0.3))
+  bx(g, w * 0.66, h - 8, 0.6, -w * 0.13, 4, d / 2 + 0.2, mat('#15181c', 0.1, 0.3))
+  bx(g, w * 0.2, h - 8, 0.6, w / 2 - w * 0.12 - 1, 4, d / 2 + 0.2, mat('#2b2f34', 0.4))
+}
+
+let airflowMat: THREE.MeshBasicMaterial | null = null
+
+/** 分離式冷氣室內機：正面（+z）出風，附出風範圍示意 */
+function acindoor(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  bx(g, w, h, d, 0, 0, 0, mat(it.color, 0.4))
+  bx(g, w - 2, h * 0.6, 0.8, 0, h * 0.36, d / 2 + 0.3, mat(shadeHex(it.color, 1.03), 0.3))
+  bx(g, w - 8, 3, 0.6, 0, h * 0.12, d / 2 + 0.4, mat('#3a3f45', 0.5))
+  const vane = bx(g, w - 10, 1, 7, 0, 0, d / 2 + 1.5, mat(shadeHex(it.color, 0.92), 0.4))
+  vane.rotation.x = 0.55
+  bx(g, 3, 1, 0.5, w / 2 - 10, h * 0.26, d / 2 + 0.75, mat('#5fd1ff', 0.3, 0, '#5fd1ff'))
+  // 出風範圍：往前 230 公分、往下 110 公分、左右各擴散 45 公分，越遠越淡
+  const reach = 230
+  const drop = 110
+  const spread = 45
+  const geo = new THREE.BufferGeometry()
+  geo.setAttribute(
+    'position',
+    new THREE.Float32BufferAttribute(
+      [-w / 2 + 8, 1, d / 2 + 2, w / 2 - 8, 1, d / 2 + 2, w / 2 + spread, -drop, d / 2 + reach, -w / 2 - spread, -drop, d / 2 + reach],
+      3,
+    ),
+  )
+  const c = new THREE.Color('#5aaeff')
+  geo.setAttribute('color', new THREE.Float32BufferAttribute([c.r, c.g, c.b, 0.45, c.r, c.g, c.b, 0.45, c.r, c.g, c.b, 0, c.r, c.g, c.b, 0], 4))
+  geo.setIndex([0, 1, 2, 0, 2, 3])
+  airflowMat ??= new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+  const flow = new THREE.Mesh(geo, airflowMat)
+  flow.userData.airflow = true
+  flow.raycast = () => {}
+  flow.renderOrder = 5
+  g.add(flow)
+}
+
 function plainBox(g: G, it: FurnitureItem) {
   bx(g, it.w, it.h, it.d, 0, 0, 0, mat(it.color, 0.7))
 }
@@ -338,12 +468,18 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   vanity,
   shower,
   acunit,
+  acindoor,
+  standingdesk,
+  massagechair,
+  airfryer,
+  ricecooker,
+  microwave,
   box: plainBox,
 }
 
 /** 會影響模型外觀的欄位（改了就要重建模型） */
 export function furnitureSignature(it: FurnitureItem) {
-  return `${it.type}|${it.w}|${it.d}|${it.h}|${it.color}`
+  return `${it.type}|${it.w}|${it.d}|${it.h}|${it.color}|${(it.features ?? []).join(',')}`
 }
 
 export function buildFurniture(it: FurnitureItem): THREE.Group {

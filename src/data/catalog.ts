@@ -133,6 +133,8 @@ const seeds: Seed[] = [
     id: 'kitchen', type: 'kitchen', name: '一字型廚具', x: 30, y: 558.5, rot: 90, w: 213, d: 60, h: 85,
     color: '#f1eee8', locked: true, features: ['dishdryer', 'dishwasher'],
   },
+  // 外套掛勾：進門右手邊、沙發和吸塵器之間的牆（輕隔間），MUJI 壁掛家具三連掛鉤，掛勾高 170
+  { id: 'coathooks', type: 'coathooks', name: '外套掛勾（壁掛）', x: 282, y: 55, rot: 270, w: 44, d: 12, h: 100, elev: 70, color: '#c9a57a' },
   // 身高參考：184 與 154 公分的人，站在電視區和冰箱之間，看人和家具的高低比例（不是家具）
   { id: 'person184', type: 'person', name: '身高參考 184 公分', x: 95, y: 315, rot: 0, w: 46, d: 26, h: 184, color: '#5f7488' },
   { id: 'person154', type: 'person', name: '身高參考 154 公分', x: 150, y: 315, rot: 0, w: 38, d: 22, h: 154, color: '#c9a98a' },

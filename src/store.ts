@@ -5,7 +5,7 @@ import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 29
+const REV = 30
 /**
  * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
  * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
@@ -58,6 +58,8 @@ const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   [28, ['coffee'], ['x', 'w', 'd']],
   // rev 29：客廳加 184、154 公分的身高參考人形
   [29, ['person184', 'person154']],
+  // rev 30：進門右手邊加外套掛勾
+  [30, ['coathooks']],
   [25, ['shoe', 'sofa', 'coffeebar', 'rug', 'coffee', 'tvstand', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'mbed', 'mns1', 'mns2', 'mward', 'bward1', 'scab', 'vanity', 'vanity2'], ['color']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */
@@ -191,6 +193,8 @@ export const ui = reactive({
   cabinetOpen: true,
   /** 所有櫃子都打開櫃門 */
   openAllCabinets: false,
+  /** 身高參考人形 */
+  showPeople: true,
   snap: 5,
   selectedId: null as string | null,
   paintColor: '#a7bac9',

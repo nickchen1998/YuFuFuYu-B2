@@ -299,7 +299,18 @@ export class Viewer {
       }
     }
     this.applyAirflow()
+    this.applyPeople()
     this.updateSelection()
+  }
+
+  /** 身高參考人形：可以隱藏 */
+  applyPeople() {
+    for (const it of this.design.furniture) {
+      if (it.type !== 'person') continue
+      const entry = this.items.get(it.id)
+      if (entry) entry.obj.visible = this.ui.showPeople
+    }
+    if (!this.ui.showPeople && this.selected()?.type === 'person') this.ui.selectedId = null
   }
 
   /** 櫃門：選取的櫃子打開（看櫃內格局），或是全部打開 */
@@ -482,7 +493,12 @@ export class Viewer {
     this.raycaster.setFromCamera(this.ndc(e), this.camera)
     const targets: THREE.Object3D[] = [this.furnitureGroup, ...this.floors.values()]
     if (this.wallsGroup) targets.push(this.wallsGroup)
-    return this.raycaster.intersectObjects(targets, true)[0] ?? null
+    // 隱藏的東西（人形、打開櫃門時的門片）點不到
+    const shown = (o: THREE.Object3D | null) => {
+      for (let n = o; n; n = n.parent) if (!n.visible) return false
+      return true
+    }
+    return this.raycaster.intersectObjects(targets, true).find((h) => shown(h.object)) ?? null
   }
 
   /** 滑鼠在地面上的平面座標（公分） */

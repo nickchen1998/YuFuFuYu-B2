@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch, type Component } from 'vue'
 import {
   Box, Check, DoorOpen, Footprints, House, Info, Layers, Map as MapIcon, MapPin,
-  MousePointer2, Move, PaintRoller, Palette, Ruler, SlidersHorizontal, Sofa, Tag,
+  MousePointer2, Move, PaintRoller, Palette, PersonStanding, Ruler, SlidersHorizontal, Sofa, Tag,
 } from '@lucide/vue'
 import { Viewer } from './three/Viewer'
 import { design, ui } from './store'
@@ -122,6 +122,7 @@ onMounted(() => {
   watch(() => design.mirrored, () => v.applyMirror())
   watch(() => ui.showAirflow, () => v.applyAirflow())
   watch(() => [ui.cabinetOpen, ui.openAllCabinets], () => v.applyInterior())
+  watch(() => ui.showPeople, () => v.applyPeople())
 })
 
 onBeforeUnmount(() => {
@@ -195,6 +196,15 @@ onBeforeUnmount(() => {
       >
         <Tag />
         <span>標示</span>
+      </button>
+      <button
+        class="rail-btn toggle tip tip-right"
+        :class="{ on: ui.showPeople }"
+        data-tip="顯示／隱藏 184、154 公分的身高參考人形"
+        @click="ui.showPeople = !ui.showPeople"
+      >
+        <PersonStanding />
+        <span>人形</span>
       </button>
       <button
         class="rail-btn toggle tip tip-right"

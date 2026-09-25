@@ -712,6 +712,21 @@ function ecooker(g: G, it: FurnitureItem) {
   bx(g, w * 0.5, 1.6, 3, 0, h, -d * 0.1, DARK())
 }
 
+/** 外套掛勾（MUJI 壁掛家具 三連掛鉤）：掛勾橫條在最上面，下面畫兩件掛著的外套；背面（-z）貼牆 */
+function coathooks(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const bar = mat(it.color, 0.55)
+  bx(g, w, 10, 2.5, 0, h - 10, -d / 2 + 1.25, bar)
+  for (let i = 0; i < 3; i++) bx(g, 1.6, 1.6, 5, -w / 2 + w * (i + 0.5) / 3, h - 7, -d / 2 + 4, bar)
+  // 掛著的外套（深灰、駝色）
+  const coat = (x: number, color: string, len: number) => {
+    const c = bx(g, 30, len, 7, x, h - 8 - len, -d / 2 + 6, mat(color, 0.95))
+    c.rotation.z = 0.02
+  }
+  coat(-w / 3, '#6d6a66', 78)
+  coat(w / 3 - 2, '#b89a76', 68)
+}
+
 /** 身高參考人形：頭、身體、手、腳依身高比例（h = 身高），正面朝 +z */
 function person(g: G, it: FurnitureItem) {
   const { h } = it
@@ -832,6 +847,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   ricecooker,
   ecooker,
   person,
+  coathooks,
   microwave,
   box: plainBox,
 }

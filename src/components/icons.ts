@@ -49,6 +49,7 @@ const map: Record<string, Component> = {
   ricecooker: CookingPot,
   ecooker: CookingPot,
   person: PersonStanding,
+  coathooks: Shirt,
   box: Box,
 }
 

@@ -142,15 +142,16 @@ export const seedInteriors: Record<string, CabinetInterior> = {
         depth: 57,
         cols: [
           { w: 56, parts: [P('drawer', null, 'drawer', '鍋蓋・烤盤'), P('appliance', 38, 'open', '嵌入微波爐（開孔 56 × 38 × 55）')] },
-          { parts: [P('drawer', null, 'drawer', '抹布・備品'), P('drawer', null, 'drawer', '保鮮膜・夾鏈袋'), P('drawer', null, 'drawer', '餐具')] },
+          // 微波爐旁：最上層電子鍋抽拉開放層板（和微波爐同高），用的時候拉出來約 20 cm；下面兩個抽屜
+          { parts: [P('drawer', null, 'drawer', '抹布・保鮮膜・夾鏈袋'), P('drawer', null, 'drawer', '餐具'), P('appliance', 26, 'open', '電子鍋（抽拉開放層板）')] },
         ],
       },
       // 走道側（面向陽台門）：上層兩格電器抽拉開放層板，電鍋、氣炸鍋用的時候拉出來約 20 cm，蒸氣不會悶在櫃子裡；
-      // 下層門片櫃（左邊可以收電子鍋）。中間一片中立板，層板跨距不超過 80
+      // 下層門片櫃。中間一片中立板，層板跨距不超過 80
       {
         name: '走道側',
         cols: [
-          { parts: [P('shelf', null, 'door', '電子鍋（不用時收這裡）・保鮮盒'), P('appliance', 34, 'open', '電鍋（抽拉開放層板）')] },
+          { parts: [P('shelf', null, 'door', '保鮮盒・備品'), P('appliance', 34, 'open', '電鍋（抽拉開放層板）')] },
           { parts: [P('shelf', null, 'door', '烤盤・鍋具'), P('appliance', 34, 'open', '氣炸鍋（抽拉開放層板）')] },
         ],
       },

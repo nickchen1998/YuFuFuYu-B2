@@ -128,8 +128,8 @@ const seeds: Seed[] = [
   // 氣炸鍋橫放（走道側淨深只有 29），炸籃朝餐桌那頭
   { id: 'rice', type: 'ricecooker', name: '電鍋（抽拉層板）', x: 198.5, y: 639.8, rot: 90, w: 31, d: 26, h: 26, elev: 39.5, color: '#e9e4da' },
   { id: 'fryer', type: 'airfryer', name: '氣炸鍋（抽拉層板）', x: 198.5, y: 591.2, rot: 180, w: 24, d: 32.5, h: 31, elev: 39.5, color: '#2d2d30' },
-  // 電子鍋：平常放檯面靠窗（插平面插座），不用時收進走道側左下的門片櫃
-  { id: 'ecooker', type: 'ecooker', name: '電子鍋', x: 165, y: 628, rot: 180, w: 23, d: 30, h: 19, elev: 76, color: '#e7e3dc' },
+  // 電子鍋：中島廚房側、微波爐旁的抽拉開放層板上（和微波爐同高，離地約 47.5），用的時候拉出來
+  { id: 'ecooker', type: 'ecooker', name: '電子鍋（抽拉層板）', x: 154.4, y: 644.4, rot: 270, w: 23, d: 30, h: 19, elev: 47.5, color: '#e7e3dc' },
   {
     id: 'kitchen', type: 'kitchen', name: '一字型廚具', x: 30, y: 558.5, rot: 90, w: 213, d: 60, h: 85,
     color: '#f1eee8', locked: true, features: ['dishdryer', 'dishwasher'],

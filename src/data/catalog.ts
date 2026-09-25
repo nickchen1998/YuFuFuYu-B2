@@ -56,7 +56,7 @@ export const catalog: CatalogEntry[] = [
     type: 'windowisland', name: '窗下訂製中島（抽拉餐桌）', category: '餐廚', w: 110, d: 50, h: 78, color: '#ece6dc',
     features: ['microwave', 'tableout'],
   },
-  { type: 'peninsula', name: '訂製中島餐桌（半島型）', category: '餐廚', w: 220, d: 90, h: 76, color: '#ece6dc' },
+  { type: 'peninsula', name: '訂製中島餐桌（半島型）', category: '餐廚', w: 220, d: 90, h: 76, color: '#ece6dc', features: ['outlets'] },
   { type: 'coffeebar', name: '咖啡櫃（零食櫃）', category: '餐廚', w: 100, d: 40, h: 90, color: '#ece6dc' },
   { type: 'coffeemaker', name: '咖啡機', category: '餐廚', w: 25, d: 35, h: 35, elev: 90, color: '#3a3a3d' },
   { type: 'microwave', name: '微波爐', category: '餐廚', w: 50, d: 40, h: 30, elev: 90, color: '#d4d7db' },
@@ -111,7 +111,7 @@ const seeds: Seed[] = [
   // 收起時廚房側走道 60、次臥門與陽台門側走道 68；瓦斯爐前站位 65
   {
     id: 'dining', type: 'peninsula', name: '訂製中島餐桌', x: 170, y: 555, rot: 90, w: 220, d: 90, h: 76,
-    color: '#ece6dc',
+    color: '#ece6dc', features: ['outlets'],
   },
   { id: 'dchair1', type: 'chair', name: '餐椅', x: 145, y: 475, rot: 90, w: 45, d: 50, h: 85, color: '#6b5a4a' },
   { id: 'dchair2', type: 'chair', name: '餐椅', x: 145, y: 535, rot: 90, w: 45, d: 50, h: 85, color: '#6b5a4a' },

@@ -95,8 +95,9 @@ export const seedInteriors: Record<string, CabinetInterior> = {
       {
         cols: [
           {
-            // 懸空鞋櫃（離地 20）：只有櫃子底下開放放室內拖鞋；櫃內每一層都在門片裡，最下層放常穿的鞋
+            // 落地鞋櫃（不做踢腳）：只有最下面一格開放放室內拖鞋；上面每一層都在門片裡，拖鞋上面那層放常穿的鞋
             parts: [
+              P('shoe', 18, 'open', '室內拖鞋（開放）'),
               P('shoe', 18, 'door', '常穿的鞋'),
               P('shoe', 26, 'door', '高筒鞋・雨鞋'),
               P('shoe', null, 'door', '鞋子'),
@@ -157,9 +158,10 @@ export const seedInteriors: Record<string, CabinetInterior> = {
         name: '廚房側',
         depth: 57,
         cols: [
-          { w: 56, parts: [P('drawer', null, 'drawer', '鍋蓋・烤盤'), P('appliance', 38, 'open', '嵌入微波爐（開孔 56 × 38 × 55）')] },
-          // 微波爐旁：最上層電子鍋抽拉開放層板（和微波爐同高），用的時候拉出來約 20 cm；下面兩個抽屜
-          { parts: [P('drawer', null, 'drawer', '抹布・保鮮膜・夾鏈袋'), P('drawer', null, 'drawer', '餐具'), P('appliance', 26, 'open', '電子鍋（抽拉開放層板）')] },
+          { w: 56, parts: [P('drawer', null, 'drawer', '鍋蓋（直立鍋蓋架）・烤盤'), P('appliance', 38, 'open', '嵌入微波爐（開孔 56 × 38 × 55）')] },
+          // 微波爐旁：最上層電子鍋收納抽拉層板（淨高 26，電子鍋高 19）；上蓋掀開要約 40 cm，在格子裡打不開，
+          // 煮飯時拉出層板、整台拿到正上方檯面（靠窗平面插座）煮；下面兩個抽屜
+          { parts: [P('drawer', null, 'drawer', '抹布・保鮮膜・夾鏈袋'), P('drawer', null, 'drawer', '餐具'), P('appliance', 26, 'open', '電子鍋收納（抽拉層板；煮飯時拿到檯面）')] },
         ],
       },
       // 走道側（面向陽台門）：上層兩格電器抽拉開放層板，電鍋、氣炸鍋用的時候拉出來約 20 cm，蒸氣不會悶在櫃子裡；
@@ -168,7 +170,7 @@ export const seedInteriors: Record<string, CabinetInterior> = {
         name: '走道側',
         cols: [
           { parts: [P('shelf', null, 'door', '保鮮盒・備品'), P('appliance', 34, 'open', '電鍋（抽拉開放層板）')] },
-          { parts: [P('shelf', null, 'door', '烤盤・鍋具'), P('appliance', 34, 'open', '氣炸鍋（抽拉開放層板）')] },
+          { parts: [P('shelf', null, 'door', '不常用的鍋：鑄鐵鍋・火鍋鍋・大湯鍋'), P('appliance', 34, 'open', '氣炸鍋（抽拉開放層板）')] },
         ],
       },
     ],

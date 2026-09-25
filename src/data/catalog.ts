@@ -91,8 +91,8 @@ type Seed = Omit<FurnitureItem, 'id' | 'elev'> & { id: string; elev?: number }
 // 訂製半島型中島餐桌（一端靠窗下的牆、兩張椅）；沙發對齊電視；鞋櫃右側留吸塵器；烘碗機（建商附）＋洗碗機（待確認改櫃）
 const seeds: Seed[] = [
   // 客餐廳：電視、雙人沙發、茶几、地毯中心線對齊（y = 185）
-  // 鞋櫃懸空離地 20：底下開放放室內拖鞋；上緣 128 和旁邊的吸塵器櫃齊平，上面是洞洞板
-  { id: 'shoe', type: 'cabinet', name: '鞋櫃（懸空）', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 108, elev: 20, color: '#efe9df', features: ['floating'] },
+  // 鞋櫃落地（不懸浮、不做踢腳）：最下面一格開放放室內拖鞋，腳一踢就收進去；上緣 128 和旁邊的吸塵器櫃齊平，上面是洞洞板
+  { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 128, color: '#efe9df', features: ['noplinth'] },
   // 鞋櫃右側保留吸塵器位置
   // 吸塵器收在鞋櫃右邊的吸塵器櫃裡（落地、單門、櫃內預留插座充電）
   { id: 'vaccab', type: 'cabinet', name: '吸塵器收納櫃', x: 259, y: 17.5, rot: 0, w: 36, d: 35, h: 128, color: '#efe9df', features: ['noplinth'] },
@@ -130,8 +130,9 @@ const seeds: Seed[] = [
   // 氣炸鍋橫放（走道側淨深只有 29），炸籃朝餐桌那頭
   { id: 'rice', type: 'ricecooker', name: '電鍋（抽拉層板）', x: 198.5, y: 639.8, rot: 90, w: 31, d: 26, h: 26, elev: 39.5, color: '#e9e4da' },
   { id: 'fryer', type: 'airfryer', name: '氣炸鍋（抽拉層板）', x: 198.5, y: 591.2, rot: 180, w: 24, d: 32.5, h: 31, elev: 39.5, color: '#2d2d30' },
-  // 電子鍋：中島廚房側、微波爐旁的抽拉開放層板上（和微波爐同高，離地約 47.5），用的時候拉出來
-  { id: 'ecooker', type: 'ecooker', name: '電子鍋（抽拉層板）', x: 154.4, y: 644.4, rot: 270, w: 23, d: 30, h: 19, elev: 47.5, color: '#e7e3dc' },
+  // 電子鍋（象印 NS-LBF05 23 × 30 × 19）：平常收在中島廚房側、微波爐旁的抽拉層板上（離地約 47.5）；
+  // 上蓋往上掀要約 40 cm，格子裡打不開，煮飯時整台拿到正上方靠窗的檯面、插平面插座
+  { id: 'ecooker', type: 'ecooker', name: '電子鍋（抽拉層板收納）', x: 154.4, y: 644.4, rot: 270, w: 23, d: 30, h: 19, elev: 47.5, color: '#e7e3dc' },
   // 分類垃圾桶：裝在水槽下櫃靠冰箱那扇門後面（Hailo Tandem AS 15/15，寬 25 × 深 48 × 高 40），開門桶子就跟著滑出來；
   // 前面 15 L 一般垃圾（套 14 L 專用袋）、後面 15 L 回收；避開水槽正下方的存水彎和右邊洗碗機的水管
   { id: 'kbin', type: 'pullbin', name: '分類垃圾桶（水槽下櫃・抽拉）', x: 34, y: 467, rot: 90, w: 25, d: 48, h: 40, elev: 10, color: '#4a4d52' },

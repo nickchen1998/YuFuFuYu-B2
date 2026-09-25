@@ -27,12 +27,14 @@ export const partKinds: { id: PartKind; name: string; color: string; hint: strin
   { id: 'pants', name: '褲架', color: '#dfe5e9', hint: '抽拉式褲架，淨高要 60 以上、櫃深 55 以上。' },
   { id: 'storage', name: '收納箱', color: '#ebe6dc', hint: '棉被、行李箱、換季衣物、收納盒。28 吋行李箱約 50 × 30 × 75。' },
   { id: 'appliance', name: '家電', color: '#dcdfe3', hint: '記得預留插座與散熱空間；嵌入式家電照型錄的開孔尺寸。' },
+  { id: 'mugs', name: '馬克杯', color: '#e6e1ee', hint: '星巴克 BTS 杯約 Ø9.5 × 高 8.9、含把手寬 13.3；3 個疊高約 27，每層淨高 30 以上。' },
   { id: 'empty', name: '空格', color: '#f4f1ec', hint: '' },
 ]
 export const partKind = (k: PartKind) => partKinds.find((p) => p.id === k) ?? partKinds[partKinds.length - 1]
 
 export const frontKinds: { id: FrontKind; name: string }[] = [
   { id: 'door', name: '門片' },
+  { id: 'glass', name: '玻璃門' },
   { id: 'drawer', name: '抽屜' },
   { id: 'open', name: '開放' },
 ]
@@ -170,7 +172,7 @@ export function layoutFace(face: CabinetFace, innerW: number, innerH: number): F
 // ───────────────────────── 門片、抽屜面板 ─────────────────────────
 
 export interface FrontPiece {
-  kind: 'door' | 'drawer'
+  kind: 'door' | 'glass' | 'drawer'
   col: number
   /** 蓋住的格子（由下往上） */
   parts: number[]
@@ -188,10 +190,11 @@ export function frontPieces(fl: FaceLayout): FrontPiece[] {
     const hinge: 'l' | 'r' = fl.cols.length > 1 && c.i % 2 === 1 ? 'r' : 'l'
     let cur: FrontPiece | null = null
     for (const p of c.parts) {
-      if (p.part.front === 'door') {
-        if (cur && !p.part.split) cur.parts.push(p.i)
+      if (p.part.front === 'door' || p.part.front === 'glass') {
+        const kind = p.part.front
+        if (cur && cur.kind === kind && !p.part.split) cur.parts.push(p.i)
         else {
-          cur = { kind: 'door', col: c.i, parts: [p.i], leaves, hinge }
+          cur = { kind, col: c.i, parts: [p.i], leaves, hinge }
           out.push(cur)
         }
       } else {
@@ -224,7 +227,7 @@ export function frontRect(fl: FaceLayout, piece: FrontPiece, frame: CabFrame) {
 
 export function interiorStats(inter: CabinetInterior, it: FurnitureItem) {
   const frame = cabinetFrame(it)
-  const s = { rod: 0, pullrods: 0, drawers: 0, shelves: 0, shoes: 0, books: 0, doors: 0, pants: 0 }
+  const s = { rod: 0, pullrods: 0, drawers: 0, shelves: 0, shoes: 0, books: 0, doors: 0, pants: 0, mugs: 0 }
   for (const face of inter.faces) {
     const fl = layoutFace(face, frame.innerW, frame.innerH)
     for (const c of fl.cols)
@@ -237,8 +240,9 @@ export function interiorStats(inter: CabinetInterior, it: FurnitureItem) {
         else if (k === 'shoe') s.shoes += Math.floor(c.w / 20)
         else if (k === 'books') s.books += Math.floor(c.w / 3)
         else if (k === 'pants') s.pants += 1
+        else if (k === 'mugs') s.mugs += Math.floor((c.w - 2) / 14.5) * Math.min(3, Math.floor((p.h - 2) / 8.9))
       }
-    for (const f of frontPieces(fl)) if (f.kind === 'door') s.doors += f.leaves
+    for (const f of frontPieces(fl)) if (f.kind !== 'drawer') s.doors += f.leaves
   }
   return s
 }

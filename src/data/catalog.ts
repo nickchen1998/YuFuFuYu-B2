@@ -99,6 +99,8 @@ const seeds: Seed[] = [
   { id: 'sofa', type: 'sofa', name: '三人沙發', x: 243, y: 185, rot: 270, w: 210, d: 90, h: 80, color: '#cfc4b2' },
   // 咖啡櫃（零食櫃）：沙發旁、與冰箱斜對面；90 公分高的矮櫃，咖啡機放檯面（建議預留插座）
   { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃）', x: 268, y: 345, rot: 270, w: 100, d: 40, h: 90, color: '#d9c2a0' },
+  // 咖啡櫃上方：馬克杯展示吊櫃（玻璃門、木框），下緣離地 135，檯面留 45 放咖啡機、手沖壺；牆是輕隔間，要補強
+  { id: 'mugcab', type: 'cabinet', name: '馬克杯展示櫃（玻璃門）', x: 273, y: 345, rot: 270, w: 100, d: 30, h: 68, elev: 135, color: '#d9c2a0', features: ['floating'] },
   { id: 'espresso', type: 'coffeemaker', name: '咖啡機', x: 266, y: 345, rot: 270, w: 25, d: 35, h: 35, elev: 90, color: '#3a3a3d' },
   { id: 'rug', type: 'rug', name: '地毯', x: 130, y: 185, rot: 90, w: 200, d: 150, h: 1, color: '#e0d6c4' },
   { id: 'coffee', type: 'coffeetable', name: '茶几', x: 145, y: 185, rot: 90, w: 100, d: 50, h: 40, color: '#c9a57a' },

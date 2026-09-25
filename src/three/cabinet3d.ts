@@ -5,7 +5,7 @@ import {
   BACK, DOOR, PANEL, STONE, cabinetFrame, faceDepths, frontPieces, frontRect, interiorOf, layoutFace, peninsulaStorageLen,
   type CabFrame,
 } from '../cabinet'
-import { mat, shadeHex } from './mats'
+import { glassMat, mat, shadeHex } from './mats'
 import { hashStr } from './textures'
 
 // 依「櫃內規劃」建出櫃子：櫃體（側板、底板、頂板、背板、立板、層板）＋門片＋櫃內物品示意。
@@ -283,6 +283,26 @@ function contents(b: Batch, part: CabinetPart, c: Cell, clothes: boolean, rand: 
       }
       break
     }
+    case 'mugs': {
+      // 星巴克 BTS 杯：Ø9.5 × 高 8.9，把手在右側；一疊最多 3 個，單排排在前面
+      const stacks = Math.max(1, Math.floor((c.w - 2) / 14.5))
+      const pitch = (c.w - 2) / stacks
+      const levels = Math.min(3, Math.floor((c.h - 2) / 8.9))
+      const MUG = ['#f4f2ee', '#f7f5f1', '#efece6']
+      const BAND = ['#3f6f8f', '#c0503f', '#5c8a5a', '#d7a64a', '#7b5ea8', '#2f4f6f', '#c77b8a']
+      const z = c.D / 2 - 7
+      for (let i = 0; i < stacks; i++) {
+        const cx = c.x0 + 1 + pitch * (i + 0.5) - 1.8
+        const n = rand() < 0.2 ? levels - 1 : levels
+        for (let k = 0; k < n; k++) {
+          const y = c.y0 + k * 8.95
+          b.jar(4.75, 8.9, cx, y, z, pick(MUG))
+          b.jar(4.8, 2.6, cx, y + 3.2, z, pick(BAND))
+          b.box(1.2, 5.5, 1.6, cx + 5.4, y + 1.8, z, pick(MUG))
+        }
+      }
+      break
+    }
     case 'appliance': {
       if (label.includes('抽拉')) {
         // 電器抽拉層板：托盤＋兩側滑軌（上面的電鍋、氣炸鍋是另外的家具）
@@ -345,7 +365,8 @@ function buildFace(fg: G, it: FurnitureItem, face: CabinetFace, fr: CabFrame, D:
         if (!drawers) box(fg, c.w, T, D, cx0 + c.w / 2, py - T, 0, body)
       }
       const rand = rng(hashStr(`${it.id}:${fi}:${c.i}:${p.i}:${p.part.kind}:${p.part.label ?? ''}`))
-      contents(p.part.front === 'open' ? shown : hidden, p.part, { x0: cx0, w: c.w, y0: py, h: p.h, D }, clothes, rand)
+      const visible = p.part.front === 'open' || p.part.front === 'glass'
+      contents(visible ? shown : hidden, p.part, { x0: cx0, w: c.w, y0: py, h: p.h, D }, clothes, rand)
     }
   }
   hidden.flush(fg, true)
@@ -369,12 +390,22 @@ function buildFace(fg: G, it: FurnitureItem, face: CabinetFace, fr: CabFrame, D:
     const fy1 = fr.y0 + r.y1
     const fw = fx1 - fx0
     const fh = fy1 - fy0
-    box(fronts, fw, fh, 0.3, (fx0 + fx1) / 2, fy0, D / 2 + 0.15, seamM)
+    if (piece.kind !== 'glass') box(fronts, fw, fh, 0.3, (fx0 + fx1) / 2, fy0, D / 2 + 0.15, seamM)
     const leafW = fw / piece.leaves
     for (let k = 0; k < piece.leaves; k++) {
       const lx0 = fx0 + k * leafW + gap
       const lx1 = fx0 + (k + 1) * leafW - gap
-      box(fronts, lx1 - lx0, fh - gap * 2, DOOR - 0.3, (lx0 + lx1) / 2, fy0 + gap, zDoor + (DOOR - 0.3) / 2, doorM)
+      if (piece.kind === 'glass') {
+        // 玻璃門：木框＋玻璃，關著也看得到裡面
+        const lw = lx1 - lx0
+        const lh = fh - gap * 2
+        const fz = zDoor + (DOOR - 0.3) / 2
+        const fw2 = 3
+        for (const sx of [-1, 1]) box(fronts, fw2, lh, DOOR - 0.3, (lx0 + lx1) / 2 + sx * (lw / 2 - fw2 / 2), fy0 + gap, fz, doorM)
+        for (const y of [fy0 + gap, fy0 + gap + lh - fw2]) box(fronts, lw - fw2 * 2, fw2, DOOR - 0.3, (lx0 + lx1) / 2, y, fz, doorM)
+        const pane = box(fronts, lw - fw2 * 2, lh - fw2 * 2, 0.4, (lx0 + lx1) / 2, fy0 + gap + fw2, fz, glassMat())
+        pane.castShadow = false
+      } else box(fronts, lx1 - lx0, fh - gap * 2, DOOR - 0.3, (lx0 + lx1) / 2, fy0 + gap, zDoor + (DOOR - 0.3) / 2, doorM)
       if (piece.kind === 'drawer') {
         const hw = Math.min(16, fw / 3)
         box(fronts, hw, 1.2, 1.6, (fx0 + fx1) / 2, fy1 - Math.min(5, fh * 0.3) - 0.6, zFace + 0.8, metal)

@@ -154,8 +154,8 @@ const colDims = computed(() =>
 
       <g class="fronts">
         <g v-for="f in fronts" :key="f.key">
-          <rect :x="f.x0 + 0.5" :y="f.y0 + 0.5" :width="f.x1 - f.x0 - 1" :height="f.y1 - f.y0 - 1" :class="f.kind === 'door' ? 'door' : 'drawer'" />
-          <template v-if="f.kind === 'door'">
+          <rect :x="f.x0 + 0.5" :y="f.y0 + 0.5" :width="f.x1 - f.x0 - 1" :height="f.y1 - f.y0 - 1" :class="f.kind === 'drawer' ? 'drawer' : f.kind" />
+          <template v-if="f.kind !== 'drawer'">
             <line v-for="l in f.leaves.slice(1)" :key="l.k" :x1="l.x" :x2="l.x" :y1="f.y0" :y2="f.y1" class="door" />
             <polyline v-for="l in f.leaves" :key="`s${l.k}`" :points="l.swing" class="swing" />
           </template>

@@ -1,5 +1,5 @@
 import type { FurnitureItem } from './types'
-import { hasInterior, interiorOf, peninsulaStorageLen } from './cabinet'
+import { cabinetFrame, frontPieces, frontRect, hasInterior, interiorOf, layoutFace, peninsulaStorageLen } from './cabinet'
 import { money, type ShopPick } from './data/shopping'
 
 // 系統櫃／訂製家具估價：依 2025–2026 雙北公開報價的平均單價（15 家價目表、文章，2026/09 整理），
@@ -36,6 +36,8 @@ export const RATES = {
   deepTop: 1.5,
   /** 鐵件桌腳 元/組 */
   ironLegs: 3650,
+  /** 鋁框／木框玻璃門比一般門片貴的部分 元/才（噴砂玻璃門片 500～600/才 − 素面門片 180～250/才，PRO360） */
+  glassPerCai: 335,
   /** 懸浮壁掛櫃的壁掛五金＋牆面補強（行情約 1,000～3,000） 元/座 */
   floatMount: 2000,
   /** 既有廚櫃改裝 45 cm 洗碗機（拆櫃改櫃＋門板＋踢腳）元/次 */
@@ -123,17 +125,36 @@ export function cabinetEstimate(it: FurnitureItem): ShopPick[] {
   }
 
   const n = chi(it.w)
-  const [rate, rateName] = it.type === 'tvstand' ? [RATES.tv, '電視櫃'] : it.h >= 150 ? [RATES.tall, '高櫃'] : [RATES.low, '矮櫃']
+  const hanging = it.elev >= 100 && it.h <= 120
+  const [rate, rateName] =
+    it.type === 'tvstand' ? [RATES.tv, '電視櫃'] : hanging ? [RATES.tallExtra, '吊櫃'] : it.h >= 150 ? [RATES.tall, '高櫃'] : [RATES.low, '矮櫃']
+  // 玻璃門面積（才 = 30.3 × 30.3 公分）
+  const fr = cabinetFrame(it)
+  let glassCai = 0
+  for (const face of interiorOf(it).faces) {
+    const L = layoutFace(face, fr.innerW, fr.innerH)
+    for (const pc of frontPieces(L)) {
+      if (pc.kind !== 'glass') continue
+      const r = frontRect(L, pc, fr)
+      glassCai += ((r.x1 - r.x0) * (r.y1 - r.y0)) / (30.3 * 30.3)
+    }
+  }
   const shallow = it.type === 'wardrobe' && it.d < 55 ? 1 + RATES.shallow : 1
   const toCeiling = rate === RATES.tall && it.h > 245
   const floating = (it.features ?? []).includes('floating')
-  const cost = n * rate * shallow + (toCeiling ? n * RATES.tallExtra * shallow : 0) + extrasCost(c) + (floating ? RATES.floatMount : 0)
+  const cost =
+    n * rate * shallow +
+    (toCeiling ? n * RATES.tallExtra * shallow : 0) +
+    extrasCost(c) +
+    (floating ? RATES.floatMount : 0) +
+    glassCai * RATES.glassPerCai
   const text = [
     `${n} 尺 × ${rateName} ${fmt(rate)}`,
     toCeiling ? `上櫃 ${n} 尺 × ${fmt(RATES.tallExtra)}` : '',
     shallow < 1 ? '45 深約 −5%' : '',
     ...extrasText(c),
-    floating ? `懸浮壁掛五金＋補強 ${fmt(RATES.floatMount)}` : '',
+    glassCai ? `玻璃門加價 ${Math.round(glassCai * 10) / 10} 才 × ${RATES.glassPerCai}` : '',
+    floating ? `壁掛五金＋補強 ${fmt(RATES.floatMount)}` : '',
   ]
     .filter(Boolean)
     .join(' ＋ ')

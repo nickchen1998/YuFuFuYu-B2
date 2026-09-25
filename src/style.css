@@ -2239,6 +2239,11 @@ input[type='color']::-moz-color-swatch {
   stroke-width: 1;
   stroke-dasharray: 4 3;
 }
+.cab-svg .glass {
+  fill: rgba(170, 205, 225, 0.22);
+  stroke: #5f7f95;
+  stroke-width: 1.2;
+}
 .cab-svg .drawer {
   fill: none;
   stroke: #5f5850;

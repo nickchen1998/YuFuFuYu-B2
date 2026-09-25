@@ -118,6 +118,19 @@ export const seedInteriors: Record<string, CabinetInterior> = {
     ],
   },
 
+  // 馬克杯展示吊櫃 100 × 30 × 68（咖啡櫃上方）：兩欄各約 47 寬、上下兩層各約 31 高，星巴克 BTS 杯 3 個一疊；
+  // 玻璃門關著也看得到，單排約 36 個、前後兩排約 72 個
+  mugcab: {
+    faces: [
+      {
+        cols: [
+          { parts: [P('mugs', null, 'glass', '馬克杯（3 個一疊）'), P('mugs', null, 'glass', '馬克杯（3 個一疊）')] },
+          { parts: [P('mugs', null, 'glass', '馬克杯（3 個一疊）'), P('mugs', null, 'glass', '馬克杯（3 個一疊）')] },
+        ],
+      },
+    ],
+  },
+
   // 電視櫃 180 × 40 × 50：左邊開放放網路設備（遙控器訊號、散熱），中間抽屜，右邊門片
   tvstand: {
     faces: [

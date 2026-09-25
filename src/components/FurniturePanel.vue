@@ -160,6 +160,7 @@ const stats = computed(() => {
   if (s.shoes) out.push(`鞋子約 ${s.shoes} 雙`)
   if (s.books) out.push(`書約 ${s.books} 本`)
   if (s.pants) out.push(`褲架 ${s.pants} 組`)
+  if (s.mugs) out.push(`馬克杯約 ${s.mugs} 個（單排、3 個一疊）`)
   if (s.doors) out.push(`門片 ${s.doors} 扇`)
   return out
 })

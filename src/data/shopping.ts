@@ -47,7 +47,6 @@ const alias: Record<string, string> = {
   bchair2: 'bchair1',
   mns2: 'mns1',
   ac2: 'ac1',
-  toilet2: 'toilet',
 }
 
 export const shopping: Record<string, ShopInfo> = {
@@ -613,38 +612,6 @@ export const shopping: Record<string, ShopInfo> = {
       'LG 在部分通路標示深 69，以官網的 66 為準；可以預留深 70 比較保險',
       '想要最淺：聲寶 SD-10DH 深 62.5（約 NT$25,900）；想要可以換門的方向：Bosch WQB245A0TC 9 kg、220V（約 NT$49,900）',
       '和洗衣機並排時，兩台的門最好往外側開、不要互相擋到；LG 門不能換邊，要先排好左右位置',
-    ],
-  },
-  toilet: {
-    summary: '建商附的馬桶只要換免治便座；選瞬熱式比較省電、體積也小，重點是插座位置和馬桶長度。',
-    specs: [
-      '110V 三孔接地插座，放在馬桶側後方、離地約 30～50 cm',
-      '浴室插座的迴路要有漏電斷路器',
-      '馬桶進水角閥加裝分岔三通',
-      '確認馬桶是長型還是短型，以及安裝孔距',
-    ],
-    picks: [
-      {
-        name: 'TOTO TCF8342TW（S2 WASHLET）',
-        detail: '瞬熱式，寬 46.2 × 深 53.1 × 高 13.1，110V；前噴霧、噴嘴自潔、無縫便座',
-        price: '約 NT$9,900（2026/09 PChome，需自行安裝）',
-        url: 'https://24h.pchome.com.tw/prod/DEDW27-A900HSK9B',
-        source: 'PChome',
-      },
-      {
-        name: '國際牌 DL-PSTK09TWW',
-        rec: true,
-        detail: '瞬熱式，110V；安裝板可以調整，適合各種孔距，機板防水，不鏽鋼噴嘴',
-        price: '約 NT$8,990（2026/09 PChome，含基本安裝）',
-        url: 'https://24h.pchome.com.tw/prod/DMBM0M-A900GSFE9',
-        source: 'PChome',
-      },
-    ],
-    search: ['TCF8342TW', 'DL-PSTK09TWW', 'DL-RPTK10TWS'],
-    notes: [
-      'TOTO 在通路買多半不含安裝，要另外找水電；國際牌通常附原廠基本安裝',
-      '想要遙控器、超薄便座：國際牌 DL-RPTK10TWS（約 NT$13,205，PChome）',
-      '國際牌標示的適用水壓是 0.5～7.5 kgf/cm²，水壓低的話要加壓',
     ],
   },
   shower: {

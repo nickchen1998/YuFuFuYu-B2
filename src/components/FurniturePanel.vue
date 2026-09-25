@@ -310,7 +310,7 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
       </ul>
     </div>
 
-    <p v-if="!info" class="muted">這件的選購資料還在整理中。</p>
+    <p v-if="!info" class="muted">{{ category === '建商附' ? '建商附的設備，不用另外買。' : '這件的選購資料還在整理中。' }}</p>
   </section>
 
   <!-- 家具清單 -->

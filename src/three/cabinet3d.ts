@@ -432,6 +432,17 @@ export function interiorCabinet(g: G, it: FurnitureItem) {
     const dark = mat('#2f3033', 0.6)
     for (const sx of [-1, 1]) for (const sz of [-1, 1]) box(g, 3, base, 3, sx * (w / 2 - 5), 0, sz * (d / 2 - 5), dark)
   } else if (base > 0) box(g, w - 2, base, d - 6, 0, 0, -3, edge)
+  if ((it.features ?? []).includes('floating') && it.name.includes('鞋') && it.elev > 8) {
+    // 懸空鞋櫃底下的室內拖鞋（地面在 -elev）
+    const b = new Batch()
+    const COLORS = ['#d8cfc0', '#8f9aa3', '#c9a98a', '#e8e4dc']
+    const pairs = Math.max(1, Math.floor((w - 6) / 22))
+    for (let i = 0; i < pairs; i++) {
+      const px = -w / 2 + 3 + ((i + 0.5) * (w - 6)) / pairs
+      for (const s of [-1, 1]) b.box(9, 3.5, 26, px + s * 5, -it.elev, 1, COLORS[i % COLORS.length])
+    }
+    b.flush(g, false)
+  }
   const cd = d - DOOR
   const cz = -DOOR / 2
   for (const sx of [-1, 1]) box(g, T, h - base, cd, sx * (w / 2 - T / 2), base, cz, body)

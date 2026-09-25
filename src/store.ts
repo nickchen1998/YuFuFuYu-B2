@@ -5,7 +5,7 @@ import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 30
+const REV = 32
 /**
  * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
  * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
@@ -60,6 +60,14 @@ const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   [29, ['person184', 'person154']],
   // rev 30：進門右手邊加外套掛勾
   [30, ['coathooks']],
+  // rev 31：鞋櫃改懸空（離地 20，底下放室內拖鞋），櫃高 100
+  [31, ['shoe'], ['name', 'h', 'elev', 'features', 'interior']],
+  // rev 32：吸塵器收進鞋櫃旁的吸塵器櫃；鞋櫃上緣對齊 128、洞洞板上移、外套掛勾挪 2
+  [32, ['vaccab']],
+  [32, ['shoe'], ['h']],
+  [32, ['vacuum'], ['name', 'x', 'y', 'elev']],
+  [32, ['pegboard'], ['elev', 'h']],
+  [32, ['coathooks'], ['y']],
   [25, ['shoe', 'sofa', 'coffeebar', 'rug', 'coffee', 'tvstand', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'mbed', 'mns1', 'mns2', 'mward', 'bward1', 'scab', 'vanity', 'vanity2'], ['color']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */

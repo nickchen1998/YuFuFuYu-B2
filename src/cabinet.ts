@@ -78,7 +78,8 @@ export function cabinetFrame(it: FurnitureItem): CabFrame {
   // floating = 懸浮壁掛（沒有櫃腳、踢腳，整個櫃子鎖在牆上）
   const floating = (it.features ?? []).includes('floating')
   const legs = !floating && (it.type === 'nightstand' || it.type === 'tvstand')
-  const base = it.type === 'bookshelf' || floating ? 0 : 8
+  // noplinth = 落地但不做踢腳（例如吸塵器櫃，底板直接貼地，裡面才放得下）
+  const base = it.type === 'bookshelf' || floating || (it.features ?? []).includes('noplinth') ? 0 : 8
   let w = it.w
   let h = it.h
   let top: CabFrame['top'] = 'panel'

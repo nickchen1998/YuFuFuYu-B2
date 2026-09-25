@@ -87,15 +87,16 @@ export const seedInteriors: Record<string, CabinetInterior> = {
     ],
   },
 
-  // 鞋櫃 80 × 35 × 110：最下層開放放常穿的鞋，最上層一個抽屜放鑰匙、口罩
+  // 鞋櫃 80 × 35 × 100（懸空離地 20，底下放室內拖鞋）：最下層開放放常穿的鞋，最上層一個抽屜放鑰匙、口罩
   shoe: {
     faces: [
       {
         cols: [
           {
+            // 懸空鞋櫃（離地 20）：櫃子底下放室內拖鞋；最下層開放放常穿的鞋
             parts: [
-              P('shoe', 20, 'open', '常穿的鞋（開放）'),
-              P('shoe', 28, 'door', '高筒鞋・雨鞋'),
+              P('shoe', 18, 'open', '常穿的鞋（開放）'),
+              P('shoe', 26, 'door', '高筒鞋・雨鞋'),
               P('shoe', null, 'door', '鞋子'),
               P('shoe', null, 'door', '鞋子'),
               P('drawer', 12, 'drawer', '鑰匙・口罩・發票'),
@@ -105,6 +106,9 @@ export const seedInteriors: Record<string, CabinetInterior> = {
       },
     ],
   },
+
+  // 吸塵器收納櫃 36 × 35 × 128（落地、沒有踢腳）：單門，裡面放直立吸塵器＋充電座，背板預留插座、門片或側板開通風孔
+  vaccab: { faces: [{ cols: [{ parts: [P('empty', null, 'door', '吸塵器＋充電座（櫃內預留插座）')] }] }] },
 
   // 咖啡櫃 100 × 40 × 90：左邊零食、右邊咖啡器具，最上層抽屜放豆子與小物
   coffeebar: {

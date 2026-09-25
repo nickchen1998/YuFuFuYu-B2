@@ -91,11 +91,14 @@ type Seed = Omit<FurnitureItem, 'id' | 'elev'> & { id: string; elev?: number }
 // 訂製半島型中島餐桌（一端靠窗下的牆、四張椅）；沙發對齊電視；鞋櫃右側留吸塵器；烘碗機（建商附）＋洗碗機（待確認改櫃）
 const seeds: Seed[] = [
   // 客餐廳：電視、雙人沙發、茶几、地毯中心線對齊（y = 185）
-  { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 110, color: '#efe9df' },
+  // 鞋櫃懸空離地 20：底下開放放室內拖鞋；上緣 128 和旁邊的吸塵器櫃齊平，上面是洞洞板
+  { id: 'shoe', type: 'cabinet', name: '鞋櫃（懸空）', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 108, elev: 20, color: '#efe9df', features: ['floating'] },
   // 鞋櫃右側保留吸塵器位置
-  { id: 'vacuum', type: 'vacuum', name: '吸塵器', x: 262, y: 15, rot: 0, w: 30, d: 25, h: 115, color: '#8a5cc2' },
+  // 吸塵器收在鞋櫃右邊的吸塵器櫃裡（落地、單門、櫃內預留插座充電）
+  { id: 'vaccab', type: 'cabinet', name: '吸塵器收納櫃', x: 259, y: 17.5, rot: 0, w: 36, d: 35, h: 128, color: '#efe9df', features: ['noplinth'] },
+  { id: 'vacuum', type: 'vacuum', name: '吸塵器（收在櫃內）', x: 259, y: 17, rot: 0, w: 30, d: 25, h: 115, elev: 1.8, color: '#8a5cc2' },
   // 洞洞板：鞋櫃與吸塵器上方一整片（130～230 公分，上方留 20 公分給冷氣）
-  { id: 'pegboard', type: 'pegboard', name: '洞洞板', x: 222.5, y: 1, rot: 0, w: 125, d: 2, h: 100, elev: 130, color: '#f4f1ea' },
+  { id: 'pegboard', type: 'pegboard', name: '洞洞板', x: 222.5, y: 1, rot: 0, w: 125, d: 2, h: 98, elev: 132, color: '#f4f1ea' },
   { id: 'sofa', type: 'sofa', name: '三人沙發', x: 243, y: 185, rot: 270, w: 210, d: 90, h: 80, color: '#cfc4b2' },
   // 咖啡櫃（零食櫃）：沙發旁、與冰箱斜對面；90 公分高的矮櫃，咖啡機放檯面（建議預留插座）
   { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃）', x: 268, y: 345, rot: 270, w: 100, d: 40, h: 90, color: '#d9c2a0' },
@@ -134,7 +137,7 @@ const seeds: Seed[] = [
     color: '#f1eee8', locked: true, features: ['dishdryer', 'dishwasher'],
   },
   // 外套掛勾：進門右手邊、沙發和吸塵器之間的牆（輕隔間），MUJI 壁掛家具三連掛鉤，掛勾高 170
-  { id: 'coathooks', type: 'coathooks', name: '外套掛勾（壁掛）', x: 282, y: 55, rot: 270, w: 44, d: 12, h: 100, elev: 70, color: '#c9a57a' },
+  { id: 'coathooks', type: 'coathooks', name: '外套掛勾（壁掛）', x: 282, y: 57, rot: 270, w: 44, d: 12, h: 100, elev: 70, color: '#c9a57a' },
   // 身高參考：184 與 154 公分的人，站在電視區和冰箱之間，看人和家具的高低比例（不是家具）
   { id: 'person184', type: 'person', name: '身高參考 184 公分', x: 95, y: 315, rot: 0, w: 46, d: 26, h: 184, color: '#5f7488' },
   { id: 'person154', type: 'person', name: '身高參考 154 公分', x: 150, y: 315, rot: 0, w: 38, d: 22, h: 154, color: '#c9a98a' },

@@ -77,9 +77,11 @@ export const PENINSULA_TOP = 4
 export function cabinetFrame(it: FurnitureItem): CabFrame {
   // floating = 懸浮壁掛（沒有櫃腳、踢腳，整個櫃子鎖在牆上）
   const floating = (it.features ?? []).includes('floating')
-  const legs = !floating && (it.type === 'nightstand' || it.type === 'tvstand')
+  // prettylegs = 美腿（實木錐形腳，櫃體離地 18）
+  const prettyLegs = (it.features ?? []).includes('prettylegs')
+  const legs = prettyLegs || (!floating && (it.type === 'nightstand' || it.type === 'tvstand'))
   // noplinth = 落地但不做踢腳（例如吸塵器櫃，底板直接貼地，裡面才放得下）
-  const base = it.type === 'bookshelf' || floating || (it.features ?? []).includes('noplinth') ? 0 : 8
+  const base = prettyLegs ? 18 : it.type === 'bookshelf' || floating || (it.features ?? []).includes('noplinth') ? 0 : 8
   let w = it.w
   let h = it.h
   let top: CabFrame['top'] = 'panel'

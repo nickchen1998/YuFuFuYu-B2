@@ -108,8 +108,8 @@ const seeds: Seed[] = [
   { id: 'rug', type: 'rug', name: '地毯', x: 130, y: 185, rot: 90, w: 200, d: 150, h: 1, color: '#e0d6c4' },
   // 圓形小茶几（直徑 70、高 42，白橡木），離沙發約 38、離電視櫃約 50
   { id: 'coffee', type: 'coffeetable', name: '圓形小茶几', x: 125, y: 185, rot: 90, w: 70, d: 70, h: 42, color: '#c9a57a', features: ['round'] },
-  // 電視櫃：懸浮壁掛（離地 18，掃地機器人進得去），高 35，上緣到壁掛電視下緣留 17
-  { id: 'tvstand', type: 'tvstand', name: '電視櫃（懸浮壁掛）', x: 20, y: 185, rot: 90, w: 180, d: 40, h: 35, elev: 18, color: '#d9c2a0', features: ['floating'] },
+  // 電視櫃：實木美腿（錐形腳高 18，掃地機器人進得去），櫃體高 35，上緣 53 到壁掛電視下緣留 17
+  { id: 'tvstand', type: 'tvstand', name: '電視櫃（美腿）', x: 20, y: 185, rot: 90, w: 180, d: 40, h: 53, color: '#d9c2a0', features: ['prettylegs'] },
   // 電視壁掛：下緣離地 70（坐在沙發上視線約在畫面中心），下方保留電視櫃
   { id: 'tv', type: 'tv', name: '電視 55吋（壁掛）', x: 3, y: 185, rot: 90, w: 123, d: 6, h: 72, elev: 70, color: '#1b1b1d', features: ['wallmount'] },
   // 冰箱：六門、製冰室獨立（國際牌 NR-F552YT 等，65 × 69.9 × 185），背面貼牆、上方沒有櫃子

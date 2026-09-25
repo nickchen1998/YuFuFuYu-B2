@@ -449,7 +449,20 @@ export function interiorCabinet(g: G, it: FurnitureItem) {
   const { w, d, h, base } = fr
   const body = mat(it.color, 0.6)
   const edge = mat(shadeHex(it.color, 0.55), 0.8)
-  if (fr.legs) {
+  if (fr.legs && hasF(it, 'prettylegs')) {
+    // 美腿：實木錐形腳（上粗下細、微微外八），寬的櫃子中間多一對
+    const oak = mat('#b8946a', 0.55)
+    const xs = w > 120 ? [-(w / 2 - 7), 0, w / 2 - 7] : [-(w / 2 - 7), w / 2 - 7]
+    for (const x of xs)
+      for (const sz of [-1, 1]) {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(2.3, 1.3, base, 14), oak)
+        leg.position.set(x, base / 2, sz * (d / 2 - 7))
+        leg.rotation.z = x === 0 ? 0 : Math.sign(x) * -0.06
+        leg.rotation.x = sz * 0.06
+        leg.castShadow = true
+        g.add(leg)
+      }
+  } else if (fr.legs) {
     const dark = mat('#2f3033', 0.6)
     for (const sx of [-1, 1]) for (const sz of [-1, 1]) box(g, 3, base, 3, sx * (w / 2 - 5), 0, sz * (d / 2 - 5), dark)
   } else if (base > 0) box(g, w - 2, base, d - 6, 0, 0, -3, edge)

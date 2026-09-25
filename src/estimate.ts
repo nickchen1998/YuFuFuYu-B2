@@ -38,6 +38,8 @@ export const RATES = {
   ironLegs: 3650,
   /** 鋁框／木框玻璃門比一般門片貴的部分 元/才（噴砂玻璃門片 500～600/才 − 素面門片 180～250/才，PRO360） */
   glassPerCai: 335,
+  /** 美腿（實木錐形櫃腳，高 18）元/支：網購橡膠木 12 cm 約 44／支，橡木、18 cm 或請廠商配約 300～500 */
+  prettyLeg: 400,
   /** 懸浮壁掛櫃的壁掛五金＋牆面補強（行情約 1,000～3,000） 元/座 */
   floatMount: 2000,
   /** 既有廚櫃改裝 45 cm 洗碗機（拆櫃改櫃＋門板＋踢腳）元/次 */
@@ -133,7 +135,13 @@ export function cabinetEstimate(it: FurnitureItem): ShopPick[] {
   const n = chi(it.w)
   const hanging = it.elev >= 100 && it.h <= 120
   const [rate, rateName] =
-    it.type === 'tvstand' ? [RATES.tv, '電視櫃'] : hanging ? [RATES.tallExtra, '吊櫃'] : it.h >= 150 ? [RATES.tall, '高櫃'] : [RATES.low, '矮櫃']
+    it.type === 'tvstand'
+      ? [RATES.tv, '電視櫃']
+      : hanging
+        ? [RATES.tallExtra, '吊櫃']
+        : it.h >= 150
+          ? [RATES.tall, '高櫃']
+          : [RATES.low, '矮櫃']
   // 玻璃門面積（才 = 30.3 × 30.3 公分）
   const fr = cabinetFrame(it)
   let glassCai = 0
@@ -148,11 +156,13 @@ export function cabinetEstimate(it: FurnitureItem): ShopPick[] {
   const shallow = it.type === 'wardrobe' && it.d < 55 ? 1 + RATES.shallow : 1
   const toCeiling = rate === RATES.tall && it.h > 245
   const floating = (it.features ?? []).includes('floating')
+  const legCount = (it.features ?? []).includes('prettylegs') ? (it.w > 120 ? 6 : 4) : 0
   const cost =
     n * rate * shallow +
     (toCeiling ? n * RATES.tallExtra * shallow : 0) +
     extrasCost(c) +
     (floating ? RATES.floatMount : 0) +
+    legCount * RATES.prettyLeg +
     glassCai * RATES.glassPerCai
   const text = [
     `${n} 尺 × ${rateName} ${fmt(rate)}`,
@@ -161,6 +171,7 @@ export function cabinetEstimate(it: FurnitureItem): ShopPick[] {
     ...extrasText(c),
     glassCai ? `玻璃門加價 ${Math.round(glassCai * 10) / 10} 才 × ${RATES.glassPerCai}` : '',
     floating ? `壁掛五金＋補強 ${fmt(RATES.floatMount)}` : '',
+    legCount ? `美腿 ${legCount} × ${RATES.prettyLeg}` : '',
   ]
     .filter(Boolean)
     .join(' ＋ ')

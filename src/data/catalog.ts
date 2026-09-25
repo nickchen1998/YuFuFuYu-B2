@@ -100,9 +100,13 @@ const seeds: Seed[] = [
   // 洞洞板：鞋櫃與吸塵器上方一整片（130～230 公分，上方留 20 公分給冷氣）
   { id: 'pegboard', type: 'pegboard', name: '洞洞板', x: 222.5, y: 1, rot: 0, w: 125, d: 2, h: 98, elev: 132, color: '#f4f1ea' },
   { id: 'sofa', type: 'sofa', name: '三人沙發', x: 243, y: 185, rot: 270, w: 210, d: 90, h: 80, color: '#cfc4b2' },
-  // 咖啡櫃（零食櫃）：沙發旁、與冰箱斜對面；90 公分高的矮櫃，咖啡機放檯面（建議預留插座）
-  { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃＋馬克杯展示）', x: 268, y: 355, rot: 270, w: 120, d: 40, h: 90, color: '#d9c2a0' },
-  { id: 'espresso', type: 'coffeemaker', name: '咖啡機', x: 266, y: 345, rot: 270, w: 25, d: 35, h: 35, elev: 90, color: '#3a3a3d' },
+  // 咖啡櫃（零食櫃）：沙發旁、與冰箱斜對面；90 公分高的矮櫃，檯面上方牆面兩組雙連插座
+  { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃＋馬克杯展示）', x: 268, y: 355, rot: 270, w: 120, d: 40, h: 90, color: '#d9c2a0', features: ['outlets'] },
+  // 咖啡櫃檯面（寬 120、深 40），面對咖啡櫃由左到右照沖煮順序：豆罐 ×4 → 磨豆機 → 義式咖啡機 → 奶泡機 → 右邊約 35 公分出杯區（下面就是馬克杯櫃）
+  { id: 'beans', type: 'canisters', name: '咖啡豆密封罐 ×4', x: 275.5, y: 309, rot: 270, w: 23, d: 23, h: 17, elev: 90, color: '#e8e6e1' },
+  { id: 'grinder', type: 'grinder', name: '磨豆機', x: 275, y: 331, rot: 270, w: 13, d: 22, h: 36, elev: 90, color: '#2f3033' },
+  { id: 'espresso', type: 'coffeemaker', name: '義式咖啡機', x: 268.5, y: 350, rot: 270, w: 15, d: 33, h: 31, elev: 90, color: '#c4c6c8' },
+  { id: 'frother', type: 'frother', name: '奶泡機', x: 276, y: 370, rot: 270, w: 11, d: 11, h: 20, elev: 90, color: '#b9bcc0' },
   { id: 'rug', type: 'rug', name: '地毯', x: 130, y: 185, rot: 90, w: 200, d: 150, h: 1, color: '#e0d6c4' },
   // 圓形小茶几（直徑 70、高 42，白橡木），離沙發約 38、離電視櫃約 50
   { id: 'coffee', type: 'coffeetable', name: '圓形小茶几', x: 125, y: 185, rot: 90, w: 70, d: 70, h: 42, color: '#c9a57a', features: ['round'] },

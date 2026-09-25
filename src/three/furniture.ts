@@ -712,6 +712,50 @@ function ecooker(g: G, it: FurnitureItem) {
   bx(g, w * 0.5, 1.6, 3, 0, h, -d * 0.1, DARK())
 }
 
+/** 磨豆機（窄身直立）：底座、靠後的機身、正面出粉口＋接粉杯，上面煙燻色豆倉和黑色蓋子 */
+function grinder(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const body = mat(it.color, 0.35, 0.3)
+  const bodyTop = 2 + h * 0.6
+  const zb = -d * 0.15
+  bx(g, w, 2, d, 0, 0, 0, mat(shadeHex(it.color, 0.8), 0.4, 0.3))
+  bx(g, w, bodyTop - 2, d * 0.7, 0, 2, zb, body)
+  bx(g, w * 0.7, 3, d * 0.3, 0, bodyTop - 9, d * 0.2, body)
+  cyl(g, w * 0.26, w * 0.24, 7, 0, 2, d * 0.3, mat('#b8bcc2', 0.3, 0.7), 20)
+  cyl(g, w * 0.47, w * 0.3, h - 2 - bodyTop, 0, bodyTop, zb, mat('#4a3c33', 0.15, 0.1), 24)
+  cyl(g, w * 0.49, w * 0.49, 2, 0, h - 2, zb, DARK(), 24)
+}
+
+/** 電動奶泡機（Aeroccino 這類）：黑色底座、金屬奶壺、黑色蓋子，正面一顆按鈕 */
+function frother(g: G, it: FurnitureItem) {
+  const { w, h } = it
+  const r = w / 2
+  cyl(g, r, r, 2.5, 0, 0, 0, mat('#2b2b2e', 0.4), 32)
+  cyl(g, r * 0.86, r * 0.8, h - 5.5, 0, 2.5, 0, mat(it.color, 0.25, 0.6), 32)
+  cyl(g, r * 0.9, r * 0.9, 3, 0, h - 3, 0, DARK(), 32)
+  bx(g, 2, 1.2, 1, 0, 0.6, r, mat('#e9e5dc', 0.3))
+}
+
+/** 咖啡豆密封罐 ×4（2 × 2 排）：圓筒罐身＋深色上蓋 */
+function canisters(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const r = Math.min(w, d) / 4 - 0.5
+  for (const sx of [-1, 1])
+    for (const sz of [-1, 1]) {
+      const x = (sx * w) / 4
+      const z = (sz * d) / 4
+      cyl(g, r, r, h - 2.5, x, 0, z, mat(it.color, 0.35, 0.3), 28)
+      cyl(g, r + 0.2, r + 0.2, 2.5, x, h - 2.5, z, mat(shadeHex(it.color, 0.45), 0.4, 0.3), 28)
+    }
+}
+
+/** 咖啡櫃：櫃體照櫃內規劃；'outlets' 時檯面上方牆面加兩組雙連插座（磨豆機、咖啡機、奶泡機＋備用） */
+function coffeebar(g: G, it: FurnitureItem) {
+  interiorCabinet(g, it)
+  if (!has(it, 'outlets')) return
+  for (const x of [-it.w / 4, it.w / 12]) outletPlate(g, x, it.h + 18, -it.d / 2, 0)
+}
+
 /** Dyson 直立式涼風扇（Purifier Cool TP11 造型）：下面圓柱濾網、上面長橢圓出風環；正面（+z）出風，附風向示意 */
 function towerfan(g: G, it: FurnitureItem) {
   const { w, h } = it
@@ -844,7 +888,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   nightstand: interiorCabinet,
   tvstand: interiorCabinet,
   bookshelf: interiorCabinet,
-  coffeebar: interiorCabinet,
+  coffeebar,
   island,
   desk,
   table,
@@ -878,6 +922,9 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   airfryer,
   ricecooker,
   ecooker,
+  grinder,
+  frother,
+  canisters,
   person,
   coathooks,
   towerfan,

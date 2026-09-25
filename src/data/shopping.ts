@@ -1785,6 +1785,8 @@ const APPLIANCES = [
   'coffeemaker',
   'ricecooker',
   'ecooker',
+  'grinder',
+  'frother',
   'towerfan',
   'airfryer',
   'microwave',

@@ -103,8 +103,8 @@ const seeds: Seed[] = [
   { id: 'mugcab', type: 'cabinet', name: '馬克杯展示櫃（玻璃門）', x: 273, y: 345, rot: 270, w: 100, d: 30, h: 68, elev: 135, color: '#d9c2a0', features: ['floating'] },
   { id: 'espresso', type: 'coffeemaker', name: '咖啡機', x: 266, y: 345, rot: 270, w: 25, d: 35, h: 35, elev: 90, color: '#3a3a3d' },
   { id: 'rug', type: 'rug', name: '地毯', x: 130, y: 185, rot: 90, w: 200, d: 150, h: 1, color: '#e0d6c4' },
-  // 圓形小茶几（直徑 60、高 42，橡木），離沙發約 23 cm
-  { id: 'coffee', type: 'coffeetable', name: '圓形小茶几', x: 145, y: 185, rot: 90, w: 60, d: 60, h: 42, color: '#c9a57a', features: ['round'] },
+  // 圓形小茶几（直徑 70、高 42，白橡木），離沙發約 38、離電視櫃約 50
+  { id: 'coffee', type: 'coffeetable', name: '圓形小茶几', x: 125, y: 185, rot: 90, w: 70, d: 70, h: 42, color: '#c9a57a', features: ['round'] },
   // 電視櫃：懸浮壁掛（離地 18，掃地機器人進得去），高 35，上緣到壁掛電視下緣留 17
   { id: 'tvstand', type: 'tvstand', name: '電視櫃（懸浮壁掛）', x: 20, y: 185, rot: 90, w: 180, d: 40, h: 35, elev: 18, color: '#d9c2a0', features: ['floating'] },
   // 電視壁掛：下緣離地 70（坐在沙發上視線約在畫面中心），下方保留電視櫃

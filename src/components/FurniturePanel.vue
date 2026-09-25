@@ -8,7 +8,6 @@ import {
   Lightbulb,
   MapPin,
   Ruler,
-  Search,
   ShoppingBag,
   Store,
   TriangleAlert,
@@ -31,13 +30,9 @@ import {
 } from '../cabinet'
 import {
   cabinetMaterials,
-  cabinetSearch,
   cabinetVendors,
-  googleUrl,
   itemCategory,
-  momoUrl,
   money,
-  pchomeUrl,
   shopInfo,
   shopKey,
   type ShopVendor,
@@ -158,12 +153,8 @@ const columns = computed(() => {
 
 // ───────────────────────── 購買資訊 ─────────────────────────
 
-const searchTerms = computed(() => {
-  if (!selected.value) return []
-  if (custom.value) return info.value?.search?.length ? info.value.search : cabinetSearch
-  return info.value?.search?.length ? info.value.search : [selected.value.name.replace(/（.*?）/g, '')]
-})
-const vendors = computed<ShopVendor[]>(() => [...(info.value?.vendors ?? []), ...(custom.value ? cabinetVendors : [])])
+/** 廠商只給系統櫃／訂製家具（沒有商品卡片，要找廠商報價）；買現成的家具看商品卡片上的連結就好 */
+const vendors = computed<ShopVendor[]>(() => (custom.value ? [...(info.value?.vendors ?? []), ...cabinetVendors] : []))
 const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.length || cabinetMaterials.hardware?.length))
 </script>
 
@@ -289,22 +280,7 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
       <ShopPicks :picks="info.picks" :group="infoKey!" :qty="infoQty" />
     </div>
 
-    <!-- 搜尋 -->
-    <div v-if="searchTerms.length" class="detail-sec">
-      <h3><Search />{{ custom ? '搜尋廠商' : '到電商搜尋' }}</h3>
-      <div v-for="k in searchTerms" :key="k" class="search-row">
-        <span>{{ k }}</span>
-        <template v-if="custom">
-          <a class="chip" :href="googleUrl(k)" target="_blank" rel="noopener noreferrer">Google</a>
-        </template>
-        <template v-else>
-          <a class="chip" :href="pchomeUrl(k)" target="_blank" rel="noopener noreferrer">PChome</a>
-          <a class="chip" :href="momoUrl(k)" target="_blank" rel="noopener noreferrer">momo</a>
-        </template>
-      </div>
-    </div>
-
-    <!-- 廠商 -->
+    <!-- 廠商（系統櫃／訂製） -->
     <div v-if="vendors.length" class="detail-sec">
       <h3><Store />廠商</h3>
       <ShopVendors :vendors="vendors" />
@@ -318,12 +294,6 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
         <li v-for="x in r.info.specs" :key="x">{{ x }}</li>
       </ul>
       <div v-if="r.info.picks?.length" class="sec-gap"><ShopPicks :picks="r.info.picks" :group="`${infoKey}/${r.title}`" :qty="1" /></div>
-      <div v-for="k in r.info.search ?? []" :key="k" class="search-row">
-        <span>{{ k }}</span>
-        <a class="chip" :href="pchomeUrl(k)" target="_blank" rel="noopener noreferrer">PChome</a>
-        <a class="chip" :href="momoUrl(k)" target="_blank" rel="noopener noreferrer">momo</a>
-      </div>
-      <ShopVendors v-if="r.info.vendors?.length" :vendors="r.info.vendors" />
       <ul v-if="r.info.notes?.length" class="bullets">
         <li v-for="x in r.info.notes" :key="x">{{ x }}</li>
       </ul>

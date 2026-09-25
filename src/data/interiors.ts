@@ -42,12 +42,12 @@ export const seedInteriors: Record<string, CabinetInterior> = {
           // 下面放大行李箱，上面層板放摺疊衣物
           {
             parts: [
-              P('storage', 80, 'open', '28 吋行李箱'),
+              P('storage', 80, 'open', '28 吋行李箱（直立）'),
               P('shelf', null, 'open', '毛衣'),
               P('shelf', null, 'open', '牛仔褲・長褲'),
               P('shelf', null, 'open', 'T 恤'),
               P('shelf', null, 'open', '包包'),
-              P('storage', 70, 'open', '最上層：登機箱'),
+              P('storage', 70, 'open', '最上層：登機箱 ×2（直立並排）'),
             ],
           },
         ],

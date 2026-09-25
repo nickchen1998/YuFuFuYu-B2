@@ -264,6 +264,13 @@ function contents(b: Batch, part: CabinetPart, c: Cell, clothes: boolean, rand: 
           const sd = Math.min(c.D - 6, 30)
           b.box(sw, sh, sd, xc, c.y0, back + sd / 2 + 3, '#3b4652')
           b.box(14, 2, 3, xc, c.y0 + sh, back + sd / 2 + 3, '#222428')
+        } else if (label.includes('×2') && c.h >= 58 && c.w >= 50) {
+          // 兩個登機箱直立並排（每個約 23 寬 × 35 深 × 55 高）
+          for (const s of [-1, 1]) {
+            const x = xc + s * 12.5
+            b.box(22, 55, 35, x, c.y0, back + 19.5, s < 0 ? '#9c6b4e' : '#5d6f7d')
+            b.box(10, 2, 3, x, c.y0 + 55, back + 19.5, '#222428')
+          }
         } else {
           const sw = Math.min(c.w - 6, 36)
           const sd = Math.min(c.D - 4, 55)

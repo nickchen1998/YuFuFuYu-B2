@@ -47,6 +47,7 @@ const map: Record<string, Component> = {
   microwave: Microwave,
   airfryer: CookingPot,
   ricecooker: CookingPot,
+  ecooker: CookingPot,
   box: Box,
 }
 

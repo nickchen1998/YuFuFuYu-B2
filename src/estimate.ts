@@ -43,14 +43,15 @@ const fmt = (n: number) => n.toLocaleString('en-US')
 export const chi = (cm: number) => Math.max(1, Math.ceil(cm / 30.3 - 0.05))
 
 function counts(it: FurnitureItem) {
-  const c = { drawerOut: 0, drawerIn: 0, rods: 0, pants: 0 }
+  const c = { drawerOut: 0, drawerIn: 0, rods: 0, pants: 0, pullouts: 0 }
   for (const face of interiorOf(it).faces)
     for (const col of face.cols)
       for (const p of col.parts) {
         if (p.kind === 'drawer') {
           if (p.front === 'drawer') c.drawerOut++
           else c.drawerIn++
-        } else if (p.kind === 'hang' || p.kind === 'pullrod') c.rods++
+        } else if (p.kind === 'appliance' && (p.label ?? '').includes('抽拉')) c.pullouts++
+        else if (p.kind === 'hang' || p.kind === 'pullrod') c.rods++
         else if (p.kind === 'pants') c.pants++
       }
   return c
@@ -62,10 +63,11 @@ function extrasText(c: ReturnType<typeof counts>) {
   if (c.drawerIn) out.push(`內抽屜 ${c.drawerIn} × ${fmt(RATES.drawerIn)}`)
   if (c.rods) out.push(`衣桿 ${c.rods} × ${fmt(RATES.rod)}`)
   if (c.pants) out.push(`褲架 ${c.pants} × ${fmt(RATES.pantsRack)}`)
+  if (c.pullouts) out.push(`電器抽拉層板 ${c.pullouts} × ${fmt(RATES.drawerOut)}`)
   return out
 }
 const extrasCost = (c: ReturnType<typeof counts>) =>
-  c.drawerOut * RATES.drawerOut + c.drawerIn * RATES.drawerIn + c.rods * RATES.rod + c.pants * RATES.pantsRack
+  (c.drawerOut + c.pullouts) * RATES.drawerOut + c.drawerIn * RATES.drawerIn + c.rods * RATES.rod + c.pants * RATES.pantsRack
 
 function estPick(name: string, cost: number, detail: string, rec = true): ShopPick {
   const v = Math.round(cost / 10) * 10

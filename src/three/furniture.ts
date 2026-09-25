@@ -688,6 +688,17 @@ function ricecooker(g: G, it: FurnitureItem) {
   bx(g, 7, 5, 2, 0, h * 0.14, r * 0.9, mat('#c4453c', 0.4))
 }
 
+/** 電子鍋（象印／虎牌這類方圓造型）：正面有操作面板，上蓋把手 */
+function ecooker(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const body = cyl(g, w / 2, w / 2 - 0.5, h * 0.78, 0, 0, 0, mat(it.color, 0.35, 0.2), 40)
+  body.scale.z = d / w
+  const lid = cyl(g, w / 2 - 0.3, w / 2, h * 0.22, 0, h * 0.78, 0, mat(shadeHex(it.color, 1.15), 0.3, 0.2), 40)
+  lid.scale.z = d / w
+  bx(g, w * 0.45, h * 0.3, 1, 0, h * 0.35, d / 2 - 1, mat('#1d2126', 0.3))
+  bx(g, w * 0.5, 1.6, 3, 0, h, -d * 0.1, DARK())
+}
+
 function microwave(g: G, it: FurnitureItem) {
   const { w, d, h } = it
   bx(g, w, h, d, 0, 0, 0, mat(it.color, 0.35, 0.3))
@@ -774,6 +785,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   massagechair,
   airfryer,
   ricecooker,
+  ecooker,
   microwave,
   box: plainBox,
 }

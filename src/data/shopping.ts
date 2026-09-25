@@ -258,8 +258,13 @@ export const shopping: Record<string, ShopInfo> = {
     ],
   },
   rice: {
-    summary: '兩人用選大同 6 人份就夠：寬 30.8 × 深 26 放得進 32 × 32；10 人份寬 34.8 會超出。',
-    specs: ['檯面佔用 ≤ 32 × 32', '110V；電鍋約 600W、小電子鍋約 450W', '上方不要有吊櫃（會有蒸氣）'],
+    summary:
+      '收在中島走道側的抽拉開放層板上（格子淨寬 46.8、淨深 29.4、淨高 34），用的時候拉出約 20 cm 讓蒸氣散掉；兩人用選大同 6 人份（寬 30.8 × 深 26）最剛好。',
+    specs: [
+      '層板格子淨寬 46.8 × 淨深 29.4 × 淨高 34：電鍋含把手高度要低於 32',
+      '110V、約 600W；格子背板預留插座，電線長度要夠抽拉',
+      '用的時候把層板拉出來，蒸氣口要在檯面外面',
+    ],
     picks: [
       {
         name: '大同 TATUNG 6 人份不鏽鋼電鍋 TAC-06L-MCW',
@@ -276,13 +281,6 @@ export const shopping: Record<string, ShopInfo> = {
         url: 'https://24h.pchome.com.tw/prod/DMBI61-A900GFVXI',
         source: 'PChome',
       },
-      {
-        name: '象印 ZOJIRUSHI 3 人份黑金剛微電腦電子鍋 NS-LBF05',
-        detail: '寬 23 × 深 30 × 高 19、450W；白飯口感較好、最省空間，但不能蒸',
-        price: '約 NT$5,490（2026/09 PChome）',
-        url: 'https://24h.pchome.com.tw/prod/DMBI0E-A9009TYVQ',
-        source: 'PChome',
-      },
     ],
     search: ['大同電鍋 6人份 TAC-06L', '大同電鍋 10人份 TAC-10L', '象印 NS-LBF05'],
     notes: [
@@ -291,8 +289,13 @@ export const shopping: Record<string, ShopInfo> = {
     ],
   },
   fryer: {
-    summary: '兩人用 4L 左右就夠；國際牌 NF-HC100 最省空間，飛利浦 4.1L 深度剛好 36。',
-    specs: ['檯面佔用 ≤ 30 W × 36 D（把手朝外）', '容量 4～6 L、110V', '背後有排熱口，後方要留空間'],
+    summary:
+      '收在中島走道側的抽拉開放層板上，因為走道側淨深只有 29.4，氣炸鍋要橫放（炸籃朝餐桌那頭）；國際牌 NF-HC100 橫放後 32.5 × 24、高 30.7，放得進。',
+    specs: [
+      '層板格子淨寬 46.8 × 淨深 29.4 × 淨高 34：橫放後深度（機身寬）要 ≤ 28、高度 ≤ 32',
+      '容量 4～6 L、110V、約 1,200～1,500W；格子背板預留插座',
+      '背後排熱口朝側板時要留 10 cm，使用時把層板拉出來',
+    ],
     picks: [
       {
         name: '國際牌 Panasonic 4L 多功能氣炸鍋 NF-HC100',
@@ -774,7 +777,11 @@ export const shopping: Record<string, ShopInfo> = {
   },
   tv: {
     summary: '180 cm 看 55 吋 4K 剛好；白天光線強選 Mini LED，晚上看片選 OLED。',
-    specs: ['55 吋機身寬約 123，掛在 180 cm 電視櫃正上方，兩側各留約 28', '壁掛：確認電視背面的 VESA 孔距和壁掛架相容，腳座用不到', '2025～2026 年款，HDMI 2.1、120Hz 以上'],
+    specs: [
+      '55 吋機身寬約 123，掛在 180 cm 電視櫃正上方，兩側各留約 28',
+      '壁掛：確認電視背面的 VESA 孔距和壁掛架相容，腳座用不到',
+      '2025～2026 年款，HDMI 2.1、120Hz 以上',
+    ],
     picks: [
       {
         name: 'Samsung QA55QN80HAXXZW（QN80H，2026）',
@@ -1419,6 +1426,29 @@ export const shopping: Record<string, ShopInfo> = {
       },
     ],
   },
+
+  // 電子鍋（2026/09 查詢）
+  ecooker: {
+    summary: '平常放在中島檯面靠窗（插平面插座），不用時收進走道側左下的門片櫃；兩人用 3 人份就夠。',
+    specs: ['檯面上的位置約 23 × 30', '收進門片櫃要橫放：格子淨深 29.4、淨高約 26', '110V、約 450W；和電鍋、氣炸鍋錯開使用'],
+    picks: [
+      {
+        name: '象印 ZOJIRUSHI 3 人份黑金剛微電腦電子鍋 NS-LBF05',
+        detail: '寬 23 × 深 30 × 高 19、450W；白飯口感好、體積小',
+        price: '約 NT$5,490（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DMBI0E-A9009TYVQ',
+        source: 'PChome',
+        rec: true,
+      },
+      {
+        name: '虎牌 TIGER 3 人份微電腦電子鍋 JAI-G55R',
+        detail: '約 22.4 × 28.3 × 18.9；比象印便宜',
+        price: '約 NT$3,391（2026/09 PChome）',
+      },
+    ],
+    search: ['象印 NS-LBF05', '虎牌 JAI-G55R'],
+    notes: ['電子鍋和電鍋、氣炸鍋同時開會超過一組 15A 插座，錯開使用或分兩個迴路', '收進櫃子前等鍋子完全冷卻、內鍋擦乾，避免悶出水氣'],
+  },
 }
 
 /** 系統櫃共用的板材、五金建議 */
@@ -1565,6 +1595,7 @@ const APPLIANCES = [
   'vacuum',
   'coffeemaker',
   'ricecooker',
+  'ecooker',
   'airfryer',
   'microwave',
   'projector',

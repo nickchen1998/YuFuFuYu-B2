@@ -119,9 +119,12 @@ const seeds: Seed[] = [
   { id: 'dchair2', type: 'chair', name: '餐椅', x: 145, y: 535, rot: 90, w: 45, d: 50, h: 85, color: '#6b5a4a' },
   { id: 'dchair3', type: 'chair', name: '餐椅', x: 195, y: 475, rot: 270, w: 45, d: 50, h: 85, color: '#6b5a4a' },
   { id: 'dchair4', type: 'chair', name: '餐椅', x: 195, y: 535, rot: 270, w: 45, d: 50, h: 85, color: '#6b5a4a' },
-  // 電鍋、氣炸鍋在收納段檯面上橫向並排，正面朝餐桌
-  { id: 'rice', type: 'ricecooker', name: '電鍋', x: 148, y: 615, rot: 180, w: 32, d: 32, h: 30, elev: 76, color: '#e9e4da' },
-  { id: 'fryer', type: 'airfryer', name: '氣炸鍋', x: 192, y: 615, rot: 180, w: 30, d: 36, h: 33, elev: 76, color: '#2d2d30' },
+  // 電鍋、氣炸鍋收在中島走道側的抽拉開放層板上（離地約 39.5），用的時候拉出來；
+  // 氣炸鍋橫放（走道側淨深只有 29），炸籃朝餐桌那頭
+  { id: 'rice', type: 'ricecooker', name: '電鍋（抽拉層板）', x: 198.5, y: 639.8, rot: 90, w: 31, d: 26, h: 26, elev: 39.5, color: '#e9e4da' },
+  { id: 'fryer', type: 'airfryer', name: '氣炸鍋（抽拉層板）', x: 198.5, y: 591.2, rot: 180, w: 24, d: 32.5, h: 31, elev: 39.5, color: '#2d2d30' },
+  // 電子鍋：平常放檯面靠窗（插平面插座），不用時收進走道側左下的門片櫃
+  { id: 'ecooker', type: 'ecooker', name: '電子鍋', x: 165, y: 628, rot: 180, w: 23, d: 30, h: 19, elev: 76, color: '#e7e3dc' },
   {
     id: 'kitchen', type: 'kitchen', name: '一字型廚具', x: 30, y: 558.5, rot: 90, w: 213, d: 60, h: 85,
     color: '#f1eee8', locked: true, features: ['dishdryer', 'dishwasher'],

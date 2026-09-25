@@ -145,12 +145,13 @@ export const seedInteriors: Record<string, CabinetInterior> = {
           { parts: [P('drawer', null, 'drawer', '抹布・備品'), P('drawer', null, 'drawer', '保鮮膜・夾鏈袋'), P('drawer', null, 'drawer', '餐具')] },
         ],
       },
-      // 走道側加一片中立板（層板跨距不超過 80），左右各一扇門
+      // 走道側（面向陽台門）：上層兩格電器抽拉開放層板，電鍋、氣炸鍋用的時候拉出來約 20 cm，蒸氣不會悶在櫃子裡；
+      // 下層門片櫃（左邊可以收電子鍋）。中間一片中立板，層板跨距不超過 80
       {
         name: '走道側',
         cols: [
-          { parts: [P('shelf', null, 'door', '烤盤・大鍋'), P('shelf', null, 'door', '鍋具')] },
-          { parts: [P('shelf', null, 'door', '保鮮盒'), P('shelf', null, 'door', '備品・乾貨')] },
+          { parts: [P('shelf', null, 'door', '電子鍋（不用時收這裡）・保鮮盒'), P('appliance', 34, 'open', '電鍋（抽拉開放層板）')] },
+          { parts: [P('shelf', null, 'door', '烤盤・鍋具'), P('appliance', 34, 'open', '氣炸鍋（抽拉開放層板）')] },
         ],
       },
     ],

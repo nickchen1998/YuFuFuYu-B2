@@ -284,6 +284,13 @@ function contents(b: Batch, part: CabinetPart, c: Cell, clothes: boolean, rand: 
       break
     }
     case 'appliance': {
+      if (label.includes('抽拉')) {
+        // 電器抽拉層板：托盤＋兩側滑軌（上面的電鍋、氣炸鍋是另外的家具）
+        b.box(c.w - 2, 1.5, c.D - 1, xc, c.y0, 0.5, TRAY)
+        for (const s of [-1, 1]) b.box(1, 3.5, c.D - 2, xc + s * (c.w / 2 - 0.6), c.y0, 0.5, ROD)
+        b.box(c.w - 2, 4, 1, xc, c.y0 + 1.5, c.D / 2 - 0.5, TRAY)
+        break
+      }
       const front = c.D / 2 + DOOR
       if (label.includes('微波')) {
         const aw = c.w - 0.6

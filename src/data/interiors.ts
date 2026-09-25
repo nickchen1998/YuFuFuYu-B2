@@ -105,26 +105,14 @@ export const seedInteriors: Record<string, CabinetInterior> = {
   // 吸塵器收納櫃 36 × 35 × 128（落地、沒有踢腳）：單門，裡面放直立吸塵器＋充電座，背板預留插座、門片或側板開通風孔
   vaccab: { faces: [{ cols: [{ parts: [P('empty', null, 'door', '吸塵器＋充電座（櫃內預留插座）')] }] }] },
 
-  // 咖啡櫃 100 × 40 × 90：左邊零食、右邊咖啡器具，最上層抽屜放豆子與小物
+  // 咖啡櫃 120 × 40 × 90：左邊零食門片櫃＋最上層抽屜（咖啡豆、濾紙、膠囊）；
+  // 右邊 60 寬玻璃門馬克杯展示，上下兩層，星巴克 BTS 杯 3 個一疊，單排 4 疊 × 2 層 = 24 個，前後兩排約 48 個
   coffeebar: {
     faces: [
       {
         cols: [
-          { parts: [P('shelf', null, 'door', '零食・泡麵'), P('shelf', null, 'door', '零食'), P('drawer', 15, 'drawer', '咖啡豆・濾紙')] },
-          { parts: [P('storage', null, 'door', '手沖壺・磨豆機・馬克杯'), P('drawer', 15, 'drawer', '膠囊・湯匙・糖包')] },
-        ],
-      },
-    ],
-  },
-
-  // 馬克杯展示吊櫃 100 × 30 × 68（咖啡櫃上方）：兩欄各約 47 寬、上下兩層各約 31 高，星巴克 BTS 杯 3 個一疊；
-  // 玻璃門關著也看得到，單排約 36 個、前後兩排約 72 個
-  mugcab: {
-    faces: [
-      {
-        cols: [
-          { parts: [P('mugs', null, 'glass', '馬克杯（3 個一疊）'), P('mugs', null, 'glass', '馬克杯（3 個一疊）')] },
-          { parts: [P('mugs', null, 'glass', '馬克杯（3 個一疊）'), P('mugs', null, 'glass', '馬克杯（3 個一疊）')] },
+          { w: 54, parts: [P('shelf', null, 'door', '零食・泡麵'), P('shelf', null, 'door', '零食'), P('drawer', 15, 'drawer', '咖啡豆・濾紙・膠囊')] },
+          { parts: [P('mugs', 31, 'glass', '馬克杯（3 個一疊）'), P('mugs', null, 'glass', '馬克杯（3 個一疊）')] },
         ],
       },
     ],

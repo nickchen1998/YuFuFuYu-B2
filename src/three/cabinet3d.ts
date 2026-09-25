@@ -256,7 +256,20 @@ function contents(b: Batch, part: CabinetPart, c: Cell, clothes: boolean, rand: 
       break
     }
     case 'storage': {
-      if (label.includes('行李') || label.includes('登機')) {
+      if (label.includes('橫躺')) {
+        // 行李箱橫躺疊放：28 吋（約 76 × 50 × 30）在下，登機箱（約 55 × 38 × 23）疊在上面；側邊提把朝外
+        const stack: [number, number, number, string][] = []
+        if (label.includes('28')) stack.push([Math.min(c.w - 4, 76), 30, Math.min(c.D - 6, 50), '#3b4652'])
+        const carry = label.includes('×2') ? 2 : label.includes('登機') ? 1 : 0
+        for (let i = 0; i < carry; i++) stack.push([Math.min(c.w - 6, 55), 23, Math.min(c.D - 8, 38), i ? '#5d6f7d' : '#9c6b4e'])
+        let y = c.y0
+        for (const [sw, sh, sd, col] of stack) {
+          if (y + sh > c.y0 + c.h) break
+          b.box(sw, sh, sd, xc, y, back + sd / 2 + 2, col)
+          b.box(14, 2.5, 2, xc, y + sh / 2 - 1.25, back + sd + 3, '#222428')
+          y += sh + 0.3
+        }
+      } else if (label.includes('行李') || label.includes('登機')) {
         const big = c.h >= 60 && !label.includes('登機')
         if (big) {
           const sw = Math.min(c.w - 6, 48)

@@ -1191,6 +1191,84 @@ export const shopping: Record<string, ShopInfo> = {
       '手拉幕和電動幕的盒身比畫面寬，買之前先量牆寬',
     ],
   },
+
+  // 床頭櫃（買現成的，2026/09 查詢）
+  mns1: {
+    summary: '牆邊只有 30 cm，兩顆都選寬 30、深 30～40、高 45～53.5 的同款成品櫃；放投影機那顆要選箱體結構，最好有內建插座或雙抽屜。',
+    specs: [
+      '寬 26～32：牆邊那顆 ≤ 30，床往外挪一點最多 32；兩顆同款',
+      '深 ≤ 40（35 以內最好）；高 45～55，和床墊面（50～55）一樣高或略低',
+      '放投影機那顆：頂板至少 25 × 25、放 4 kg 不晃；箱體結構比細腳桌穩',
+      '一抽屜＋一開放格或兩個抽屜；背面開放、有出線孔或內建插座更好',
+    ],
+    picks: [
+      {
+        name: 'HOPMA 合馬 嵌入式美背插座單抽床頭櫃（2 入）',
+        detail: '寬 30 × 深 40 × 高 53.5；上抽屜、下開放格，頂部有 AC × 2、USB、Type-C 插座；台灣製 E1 塑合板，有白櫻桃色',
+        price: '約 NT$1,888／2 入，單買約 NT$999（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DQCD3G-A900GNRZV',
+        source: 'PChome',
+        cost: 944,
+        costNote: '2 入組平均一個',
+        rec: true,
+      },
+      {
+        name: 'NITORI 宜得利 實木邊桌 松木 LUCA（網購限定）',
+        detail: '約寬 30 × 深 30 × 高 50；松木實木，一抽屜＋下層板，背面開放好走線；四腳桌型，要自己組',
+        price: '約 NT$1,490／個（2026/09 NITORI 官網）',
+        url: 'https://www.nitori-net.tw/product/2600277s',
+        source: 'NITORI 官網',
+      },
+      {
+        name: 'IKEA PS 2026 床邊桌 松木／下翻門',
+        detail: '寬 30 × 深 30 × 高 50；實心松木箱體，下翻門＋內層板，沒有抽屜，結構紮實',
+        price: '約 NT$2,499／個（2026/09 IKEA）',
+        url: 'https://www.ikea.com.tw/zh/products/chests-and-other-furniture/bedside-tables/ikea-ps-2026-art-70621765',
+        source: 'IKEA 官網',
+      },
+      {
+        name: '直人木業 DELA 簡約風白榆木床頭櫃 30cm',
+        detail: '寬 30 × 深 40 × 高 52.5；兩個抽屜、三節滑軌，18 mm 木芯板；台灣製，保固 3 年',
+        price: '約 NT$2,960～3,020／個（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DQCD2Y-A900KB617',
+        source: 'PChome',
+      },
+      {
+        name: '有情門 小寶置物櫃 W30',
+        detail: '寬 30 × 深 33 × 高 45；梣木實木＋樺木積層板，兩個抽屜，圓角箱體最穩；6 種木色',
+        price: '約 NT$9,200／個（2026/09 有情門官網）',
+        url: 'https://www.twucm.com/zh-TW/products/loop-storage-cabinet',
+        source: '有情門官網',
+      },
+    ],
+    search: ['床頭櫃 寬30 高50', '插座床頭櫃 30cm 台灣製', '直人木業 DELA 床頭櫃 30', '有情門 小寶置物櫃 W30'],
+    vendors: [
+      {
+        name: 'IKEA 新莊店',
+        detail: '新北市新莊區中正路 1 號，10:00～22:00；PS 2026 有現貨（新店店也有）',
+        phone: '(02) 412-8869',
+        url: 'https://www.ikea.com.tw/zh/store/hsin-chuang/info',
+      },
+      {
+        name: 'NITORI 宜得利 中和環球店／土城大全聯店',
+        detail: '中和區中山路三段 122 號；土城區永安街 25 號。LUCA 是網購限定，可以門市取貨',
+        url: 'https://www.nitori-net.tw/store',
+      },
+      {
+        name: '有情門 誠品新板門市',
+        detail: '板橋區縣民大道二段 66 號 2 樓；去看小寶櫃前先打電話問有沒有展示',
+        phone: '(02) 2721-6829',
+        url: 'https://www.twucm.com/store/eslitebanqiao',
+      },
+    ],
+    notes: [
+      '牆邊那顆如果剛好 30 cm，買 30 寬會完全卡死，標示尺寸也常有 ±1～2 cm 誤差；下單前實際量一次，必要時床往外挪 1～2 cm',
+      'IKEA、NITORI 的床邊桌大多寬 37～45，只有 PS 2026 和 LUCA 是 30 寬；MUJI 沒有寬 32 以下的',
+      'HOPMA 有內建插座，投影機電源可以就近接，最適合放投影機那顆；兩顆都買 2 入組最划算',
+      '更便宜：諳木藏庫 實木生態板二抽床頭櫃 30 × 30 × 49，PChome 約 NT$929',
+      '投影機散熱孔不要貼牆，底下墊止滑墊',
+    ],
+  },
 }
 
 /** 系統櫃共用的板材、五金建議 */

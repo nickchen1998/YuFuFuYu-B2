@@ -31,6 +31,8 @@ export const RATES = {
   deepTop: 1.5,
   /** 鐵件桌腳 元/組 */
   ironLegs: 3650,
+  /** 懸浮壁掛櫃的壁掛五金＋牆面補強（行情約 1,000～3,000） 元/座 */
+  floatMount: 2000,
   /** 既有廚櫃改裝 45 cm 洗碗機（拆櫃改櫃＋門板＋踢腳）元/次 */
   dishwasherMod: 10600,
 }
@@ -104,12 +106,14 @@ export function cabinetEstimate(it: FurnitureItem): ShopPick[] {
   const [rate, rateName] = it.type === 'tvstand' ? [RATES.tv, '電視櫃'] : it.h >= 150 ? [RATES.tall, '高櫃'] : [RATES.low, '矮櫃']
   const shallow = it.type === 'wardrobe' && it.d < 55 ? 1 + RATES.shallow : 1
   const toCeiling = rate === RATES.tall && it.h > 245
-  const cost = n * rate * shallow + (toCeiling ? n * RATES.tallExtra * shallow : 0) + extrasCost(c)
+  const floating = (it.features ?? []).includes('floating')
+  const cost = n * rate * shallow + (toCeiling ? n * RATES.tallExtra * shallow : 0) + extrasCost(c) + (floating ? RATES.floatMount : 0)
   const text = [
     `${n} 尺 × ${rateName} ${fmt(rate)}`,
     toCeiling ? `上櫃 ${n} 尺 × ${fmt(RATES.tallExtra)}` : '',
     shallow < 1 ? '45 深約 −5%' : '',
     ...extrasText(c),
+    floating ? `懸浮壁掛五金＋補強 ${fmt(RATES.floatMount)}` : '',
   ]
     .filter(Boolean)
     .join(' ＋ ')

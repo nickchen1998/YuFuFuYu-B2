@@ -73,8 +73,10 @@ export const peninsulaStorageLen = (it: FurnitureItem) => Math.min(100, Math.rou
 export const PENINSULA_TOP = 4
 
 export function cabinetFrame(it: FurnitureItem): CabFrame {
-  const legs = it.type === 'nightstand' || it.type === 'tvstand'
-  const base = it.type === 'bookshelf' ? 0 : 8
+  // floating = 懸浮壁掛（沒有櫃腳、踢腳，整個櫃子鎖在牆上）
+  const floating = (it.features ?? []).includes('floating')
+  const legs = !floating && (it.type === 'nightstand' || it.type === 'tvstand')
+  const base = it.type === 'bookshelf' || floating ? 0 : 8
   let w = it.w
   let h = it.h
   let top: CabFrame['top'] = 'panel'

@@ -1121,6 +1121,38 @@ export const shopping: Record<string, ShopInfo> = {
       '檯面上方沒有吊櫃，水箱從上面拿出來加水沒問題',
     ],
   },
+  mirror: {
+    summary: '全身鏡掛在主臥衣櫃右側板（側板深 45，鏡子寬 40 剛好）：不對床、主臥門打開也不會擋到，拿了衣服轉身就能照。',
+    specs: ['寬 ≤ 40、高 150～160', '離地約 30～180：154 公分看得到腳，184 公分看得到頭頂', '要有防爆膜（鏡子不能做強化）'],
+    picks: [
+      {
+        name: 'IKEA NISSEDAL 鏡子 白色 40 × 150',
+        rec: true,
+        detail: '直掛橫掛都可以、附掛件（螺絲另買）；背面有安全膜；纖維板細框 6.5 kg；白框配衣櫃顏色',
+        price: '約 NT$1,499（2026/09 IKEA）',
+        url: 'https://www.ikea.com.tw/zh/products/wall-decoration/mirrors/nissedal-art-20552769',
+        source: 'IKEA',
+      },
+      {
+        name: '訂做 5 mm 明鏡直接貼側板（估價）',
+        detail: '40 × 160 以才計約 8～8.5 才 × 115～150 ＋ 光邊約 13 尺；跟衣櫃一起請系統櫃廠商做，可以省另外的出車費；背面加貼防爆膜',
+        price: '約 NT$1,250～1,700（2026/09 玻璃行價目推算，不含安裝）',
+        url: 'https://www.wuchen-art.com/products_detail/283',
+        source: '戊辰玻璃價目',
+      },
+      {
+        name: 'NITORI 門後掛鏡 KC544 LBR（備案）',
+        detail: '34 × 1.5 × 125 楓木框，掛在主臥門背面；門厚 3～3.9 cm 才掛得上；比較短、沒有標示防爆膜',
+        price: '約 NT$999（2026/09 NITORI）',
+        url: 'https://www.nitori-net.tw/product/8100719s',
+        source: 'NITORI',
+      },
+    ],
+    notes: [
+      '系統櫃側板多半 18 mm 厚，螺絲用 15 mm 以下，才不會從衣櫃裡面穿出來；也可以請廠商在側板預埋掛件',
+      '光線從窗戶那側打過來（人站著時在左手邊），照鏡子不會背光',
+    ],
+  },
   grinder: {
     summary: '放在豆罐和咖啡機中間；要磨得到義式的細度，機身窄、不高，檯面上方沒有吊櫃也不會擋到豆倉。',
     specs: ['寬 ≤ 15、深 ≤ 25（檯面深 40）', '可以磨義式細粉，最好無段調整，方便配 Dedica 微調', '110V，接左邊專用迴路插座'],

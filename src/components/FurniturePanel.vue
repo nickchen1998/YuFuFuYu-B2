@@ -285,7 +285,6 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
     </div>
 
     <p v-if="!info" class="muted">這件的選購資料還在整理中。</p>
-    <p class="muted detail-foot">要新增、移除或調整這件家具，直接跟我說。</p>
   </section>
 
   <!-- 家具清單 -->
@@ -337,6 +336,6 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
         <ChevronRight class="fl-go" />
       </button>
     </section>
-    <p class="fl-hint">點一件家具（或直接點 3D 畫面）看尺寸、櫃內格局和建議商品。要新增、移除或調整，直接跟我說。</p>
+    <p class="fl-hint">點一件家具（或直接點 3D 畫面）看尺寸、櫃內格局和建議商品。</p>
   </div>
 </template>

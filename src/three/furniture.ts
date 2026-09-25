@@ -712,6 +712,38 @@ function ecooker(g: G, it: FurnitureItem) {
   bx(g, w * 0.5, 1.6, 3, 0, h, -d * 0.1, DARK())
 }
 
+/** 身高參考人形：頭、身體、手、腳依身高比例（h = 身高），正面朝 +z */
+function person(g: G, it: FurnitureItem) {
+  const { h } = it
+  const skin = mat('#e8c9a8', 0.8)
+  const top = mat(it.color, 0.85)
+  const bottom = mat(shadeHex(it.color, 0.55), 0.85)
+  const hipY = h * 0.52
+  const shoulderY = h * 0.815
+  const headR = h * 0.063
+  const legR = h * 0.036
+  for (const sx of [-1, 1]) {
+    cyl(g, legR, legR * 0.8, hipY - 3, sx * h * 0.05, 3, 0, bottom, 14)
+    bx(g, legR * 2, 3, legR * 3.4, sx * h * 0.05, 0, legR * 0.8, mat('#3a3633', 0.7))
+    // 手臂自然下垂，手在大腿旁
+    cyl(g, h * 0.026, h * 0.022, h * 0.33, sx * h * 0.135, shoulderY - h * 0.33, 0, top, 12)
+    const hand = new THREE.Mesh(new THREE.SphereGeometry(h * 0.028, 14, 10), skin)
+    hand.position.set(sx * h * 0.135, shoulderY - h * 0.35, 0)
+    hand.castShadow = true
+    g.add(hand)
+  }
+  const torso = cyl(g, h * 0.1, h * 0.085, shoulderY - hipY, 0, hipY, 0, top, 20)
+  torso.scale.z = 0.55
+  cyl(g, h * 0.022, h * 0.024, h * 0.05, 0, shoulderY, 0, skin, 12)
+  const head = new THREE.Mesh(new THREE.SphereGeometry(headR, 22, 16), skin)
+  head.position.set(0, h - headR, 0)
+  head.castShadow = true
+  g.add(head)
+  const hair = new THREE.Mesh(new THREE.SphereGeometry(headR * 1.04, 22, 16, 0, Math.PI * 2, 0, Math.PI * 0.5), mat('#2e2a27', 0.9))
+  hair.position.set(0, h - headR, -headR * 0.08)
+  g.add(hair)
+}
+
 function microwave(g: G, it: FurnitureItem) {
   const { w, d, h } = it
   bx(g, w, h, d, 0, 0, 0, mat(it.color, 0.35, 0.3))
@@ -799,6 +831,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   airfryer,
   ricecooker,
   ecooker,
+  person,
   microwave,
   box: plainBox,
 }

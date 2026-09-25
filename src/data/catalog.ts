@@ -133,6 +133,9 @@ const seeds: Seed[] = [
     id: 'kitchen', type: 'kitchen', name: '一字型廚具', x: 30, y: 558.5, rot: 90, w: 213, d: 60, h: 85,
     color: '#f1eee8', locked: true, features: ['dishdryer', 'dishwasher'],
   },
+  // 身高參考：184 與 154 公分的人，站在電視區和冰箱之間，看人和家具的高低比例（不是家具）
+  { id: 'person184', type: 'person', name: '身高參考 184 公分', x: 95, y: 315, rot: 0, w: 46, d: 26, h: 184, color: '#5f7488' },
+  { id: 'person154', type: 'person', name: '身高參考 154 公分', x: 150, y: 315, rot: 0, w: 38, d: 22, h: 154, color: '#c9a98a' },
   // 冷氣：鞋櫃上方，沿長邊往廚房吹（冷媒管需經天花板接回冷氣平台，約 7 米）
   { id: 'ac-living', type: 'acindoor', name: '冷氣（客餐廳）', x: 200, y: 12.5, rot: 0, w: 90, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 

@@ -1644,6 +1644,7 @@ const APPLIANCES = [
 
 /** 分類：系統櫃（訂做）、訂製、家電、衛浴（自己買的洗臉盆）、建商附、家具 */
 export function itemCategory(it: FurnitureItem): string {
+  if (it.type === 'person') return '參考'
   if (it.type === 'vanity') return '衛浴'
   if (it.type === 'kitchen' || (it.locked && it.type !== 'acunit')) return '建商附'
   if (it.type === 'peninsula') return '訂製'

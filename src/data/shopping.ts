@@ -325,26 +325,7 @@ export const shopping: Record<string, ShopInfo> = {
     ],
   },
   kitchen: {
-    summary: '台灣買得到的 45 cm 全嵌式洗碗機只有 Bosch 兩款（110V），要拆掉水槽旁一個 45 cm 下櫃，另做一片和廚具同款的門板。',
-    specs: ['洗碗機櫃內空間 寬 45 × 深 55 × 高 81.5～87.5', '110V 專用插座＋進排水接水槽旁', '需加裝與廚具同款門板（7.5 kg 以下）'],
-    picks: [
-      {
-        name: 'BOSCH 博世 SPV2IKX00X 2 系列 45 cm 全嵌式洗碗機',
-        detail: '9 人份、110V、52 dB；寬 44.8 × 深 55 × 高 81.5，需自備門板',
-        price: '約 NT$40,000（2026/09 甫佳電器；建議售價 NT$46,800）',
-        url: 'https://www.bosch-home.com.tw/zh/mkt-product/dishwashers/built-in-dishwashers/bifulldishwashers45width/SPV2IKX00X',
-        source: 'Bosch 官網',
-      },
-      {
-        name: 'BOSCH 博世 SPV4IMX00X 4 系列 45 cm 全嵌式洗碗機',
-        rec: true,
-        detail: '10 人份、110V、48 dB、AquaStop 防漏、餐具抽屜；外型尺寸和 2 系列相同',
-        price: '約 NT$44,000（2026/09 甫佳電器；建議售價 NT$52,000）',
-        url: 'https://www.bosch-home.com.tw/zh/mkt-product/dishwashers/built-in-dishwashers/bifulldishwashers45width/SPV4IMX00X',
-        source: 'Bosch 官網',
-      },
-    ],
-    search: ['BOSCH SPV2IKX00X', 'BOSCH SPV4IMX00X', '45公分 全嵌式洗碗機'],
+    summary: '建商附的一字型廚具（烘碗機也是建商附）；水槽旁要拆一個 45 cm 下櫃改裝洗碗機。',
     vendors: [
       {
         name: 'Bosch 博世家電 洗碗機專人到府評估',
@@ -388,6 +369,33 @@ export const shopping: Record<string, ShopInfo> = {
       '檯面下淨高不足 81.5 cm 時，要抬高檯面或改踢腳板',
       '建商保固期內改櫃，先問建商會不會影響保固，門板色號也向建商要',
       '改櫃施工可以找：Bosch 到府評估 NT$500（0800-368-888）、陽光空間精品廚具 板橋（02-2675-6761）、九兆廚具（02-2610-8321）',
+    ],
+    related: [
+      {
+        title: '45 cm 洗碗機',
+        info: {
+          summary: '台灣買得到的 45 cm 全嵌式洗碗機只有 Bosch 兩款（110V），要拆掉水槽旁一個 45 cm 下櫃，另做一片和廚具同款的門板。',
+          specs: ['洗碗機櫃內空間 寬 45 × 深 55 × 高 81.5～87.5', '110V 專用插座＋進排水接水槽旁', '需加裝與廚具同款門板（7.5 kg 以下）'],
+          picks: [
+            {
+              name: 'BOSCH 博世 SPV2IKX00X 2 系列 45 cm 全嵌式洗碗機',
+              detail: '9 人份、110V、52 dB；寬 44.8 × 深 55 × 高 81.5，需自備門板',
+              price: '約 NT$40,000（2026/09 甫佳電器；建議售價 NT$46,800）',
+              url: 'https://www.bosch-home.com.tw/zh/mkt-product/dishwashers/built-in-dishwashers/bifulldishwashers45width/SPV2IKX00X',
+              source: 'Bosch 官網',
+            },
+            {
+              name: 'BOSCH 博世 SPV4IMX00X 4 系列 45 cm 全嵌式洗碗機',
+              rec: true,
+              detail: '10 人份、110V、48 dB、AquaStop 防漏、餐具抽屜；外型尺寸和 2 系列相同',
+              price: '約 NT$44,000（2026/09 甫佳電器；建議售價 NT$52,000）',
+              url: 'https://www.bosch-home.com.tw/zh/mkt-product/dishwashers/built-in-dishwashers/bifulldishwashers45width/SPV4IMX00X',
+              source: 'Bosch 官網',
+            },
+          ],
+          search: ['BOSCH SPV2IKX00X', 'BOSCH SPV4IMX00X', '45公分 全嵌式洗碗機'],
+        },
+      },
     ],
   },
 

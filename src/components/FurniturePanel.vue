@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import {
   ArrowLeft,
   Calculator,
@@ -65,9 +65,24 @@ const info = computed(() => (selected.value ? shopInfo(selected.value) : undefin
 const infoKey = computed(() => (selected.value ? shopKey(selected.value) : undefined))
 const infoQty = computed(() => (infoKey.value ? (furnitureGroups(design.furniture).get(infoKey.value)?.qty ?? 1) : 1))
 const itemSpend = computed(() => (infoKey.value ? (budget.value.byRoot.get(infoKey.value) ?? 0) : 0))
+/** 清單一列的金額：家具本身（建議商品＋估價），附屬設備另外列在下面 */
 const rowSpend = (it: FurnitureItem) => {
   const k = shopKey(it)
-  return k ? (budget.value.byRoot.get(k) ?? 0) : 0
+  if (!k) return 0
+  return budget.value.lines.filter((l) => l.root === k && (l.title === '建議商品' || l.title === '估價')).reduce((s, l) => s + (l.total ?? 0), 0)
+}
+/** 附屬設備（中島的微波爐、檯面插座，廚具的洗碗機…）：列在清單的家具下面，不用點進去才看得到 */
+const rowRelated = (it: FurnitureItem) => {
+  const k = shopKey(it)
+  const rel = k ? (shopInfo(it)?.related ?? []) : []
+  return rel.map((r) => {
+    const lines = budget.value.lines.filter((l) => l.root === k && l.title === r.title)
+    return {
+      title: r.title,
+      pick: lines.map((l) => l.pick).join('、'),
+      total: lines.reduce((s, l) => s + (l.total ?? 0), 0),
+    }
+  })
 }
 const showLines = ref(false)
 const estimate = computed(() => (selected.value ? estimateGroup(selected.value) : null))
@@ -84,6 +99,19 @@ watch(
 )
 function openItem(id: string) {
   ui.selectedId = id
+}
+/** 打開家具並捲到某個附屬設備的區塊（扣掉上方固定區的高度） */
+async function openRelated(id: string, title: string) {
+  ui.selectedId = id
+  await nextTick()
+  requestAnimationFrame(() => {
+    const box = detailEl.value?.closest('.inspector-body')
+    const sec = detailEl.value?.querySelector<HTMLElement>(`[data-rel="${title}"]`)
+    const fixed = detailEl.value?.querySelector<HTMLElement>('.detail-fixed')
+    if (!box || !sec) return
+    const top = sec.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop
+    box.scrollTop = top - (fixed?.offsetHeight ?? 0) - 8
+  })
 }
 const category = computed(() => (selected.value ? itemCategory(selected.value) : ''))
 const custom = computed(() => category.value === '系統櫃' || category.value === '訂製')
@@ -291,7 +319,7 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
     </div>
 
     <!-- 附屬設備（例如中島的嵌入微波爐、檯面插座） -->
-    <div v-for="r in info?.related ?? []" :key="r.title" class="detail-sec">
+    <div v-for="r in info?.related ?? []" :key="r.title" class="detail-sec" :data-rel="r.title">
       <h3><ShoppingBag />{{ r.title }}</h3>
       <p v-if="r.info.summary" class="sec-summary">{{ r.info.summary }}</p>
       <ul v-if="r.info.specs?.length" class="bullets">
@@ -349,20 +377,29 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
 
     <section v-for="g in grouped" :key="g.room" class="fl-room">
       <h3>{{ g.room }}</h3>
-      <button v-for="r in g.rows" :key="r.it.id" class="fl-item" @click="ui.selectedId = r.it.id">
-        <span class="fl-icon"><component :is="furnitureIcon(r.it.type)" /></span>
-        <span class="fl-text">
-          <b
-            >{{ r.it.name }}<i v-if="r.count > 1"> ×{{ r.count }}</i></b
-          >
-          <small>
-            {{ fmt(r.it.w) }} × {{ fmt(r.it.d) }} × {{ fmt(r.it.h) }} 公分
-            <span v-if="rowSpend(r.it)" class="fl-spend">・{{ money(rowSpend(r.it)) }}</span>
-          </small>
-        </span>
-        <em class="cat-tag" :data-cat="itemCategory(r.it)">{{ itemCategory(r.it) }}</em>
-        <ChevronRight class="fl-go" />
-      </button>
+      <template v-for="r in g.rows" :key="r.it.id">
+        <button class="fl-item" @click="ui.selectedId = r.it.id">
+          <span class="fl-icon"><component :is="furnitureIcon(r.it.type)" /></span>
+          <span class="fl-text">
+            <b>{{ r.it.name }}<i v-if="r.count > 1"> ×{{ r.count }}</i></b>
+            <small>
+              {{ fmt(r.it.w) }} × {{ fmt(r.it.d) }} × {{ fmt(r.it.h) }} 公分
+              <span v-if="rowSpend(r.it)" class="fl-spend">・{{ money(rowSpend(r.it)) }}</span>
+            </small>
+          </span>
+          <em class="cat-tag" :data-cat="itemCategory(r.it)">{{ itemCategory(r.it) }}</em>
+          <ChevronRight class="fl-go" />
+        </button>
+        <!-- 附屬設備：列在家具下面 -->
+        <button v-for="x in rowRelated(r.it)" :key="x.title" class="fl-sub" @click="openRelated(r.it.id, x.title)">
+          <span class="fl-sub-text">
+            <b>{{ x.title }}</b>
+            <small>{{ x.pick || '還沒選' }}</small>
+          </span>
+          <span v-if="x.total" class="fl-sub-cost">{{ money(x.total) }}</span>
+          <ChevronRight class="fl-go" />
+        </button>
+      </template>
     </section>
     <p class="fl-hint">點一件家具（或直接點 3D 畫面）看尺寸、櫃內格局和建議商品。</p>
   </div>

@@ -525,7 +525,8 @@ function slidingDoors(g: G, it: FurnitureItem, w: number, d: number, h: number) 
     const ph = h - 6
     const f = 3.5
     for (const sx of [-1, 1]) box(doors, f, ph, 2.4, x + sx * (pw / 2 - f / 2), 1, z, frame)
-    for (const y of [1, 1 + ph - f]) box(doors, pw - f * 2, f, 2.4, x, y, z, frame)
+    // 門高約 294，已接近鋁框上限，中間加一支橫條補強
+    for (const y of [1, 1 + ph - f, 1 + ph * 0.52]) box(doors, pw - f * 2, f, 2.4, x, y, z, frame)
     const pane = box(doors, pw - f * 2, ph - f * 2, 0.5, x, 1 + f, z, frostedMat())
     pane.castShadow = false
     box(doors, 1.2, 30, 1.2, x + (i % 2 === 0 ? 1 : -1) * (pw / 2 - f - 3), 95, z + 1.6, frame)

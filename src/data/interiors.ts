@@ -5,51 +5,46 @@ import { P } from '../cabinet'
 // 高度都是淨高；沒寫的自動分配。衣櫃做到頂（300），上櫃另外一扇短門。
 
 export const seedInteriors: Record<string, CabinetInterior> = {
-  // 次臥主衣櫃 241.5 × 60 × 300：鋼管收納（不用木板）＋整面拉門；四欄各約 58 淨寬，兩人衣服以這裡為主
+  // 次臥主衣櫃 241.5 × 60 × 300：IKEA ELVARLI 頂天立地鋁柱＋鋼層板、鋼衣桿（不用木板），外面整面拉門。
+  // ELVARLI 每格只有 80 或 40 寬：80＋80＋40，剩下約 20 放燙衣板；格子對齊三片拉門（每片約 82）
   bward1: {
     faces: [
       {
         cols: [
-          // 長衣區
+          // 80 格：兩個登機箱放最上層，下面長衣
           {
+            w: 80,
             parts: [
               P('storage', 45, 'open', '收納箱・包包'),
               P('hang', 140, 'open', '長大衣・洋裝'),
               P('shelf', null, 'open', '帽子・圍巾'),
-              P('storage', 70, 'open', '最上層：棉被'),
-            ],
-          },
-          // 上下雙層吊掛
-          {
-            parts: [
-              P('hang', 90, 'open', '下層：褲子・裙子'),
-              P('hang', 95, 'open', '上層：襯衫・外套'),
-              P('shelf', null, 'open', '包包'),
-              P('storage', 70, 'open', '最上層：換季衣物'),
-            ],
-          },
-          // 網籃抽屜＋短衣吊掛
-          {
-            parts: [
-              P('drawer', 20, 'open', '網籃：內衣'),
-              P('drawer', 20, 'open', '網籃：襪子'),
-              P('drawer', 20, 'open', '網籃：運動服・睡衣'),
-              P('hang', null, 'open', '襯衫・T 恤'),
-              P('shelf', 28, 'open', '摺疊衣物'),
-              P('storage', 70, 'open', '最上層：換季衣物'),
-            ],
-          },
-          // 下面放大行李箱，上面層板放摺疊衣物
-          {
-            parts: [
-              P('storage', 80, 'open', '28 吋行李箱（直立）'),
-              P('shelf', null, 'open', '毛衣'),
-              P('shelf', null, 'open', '牛仔褲・長褲'),
-              P('shelf', null, 'open', 'T 恤'),
-              P('shelf', null, 'open', '包包'),
               P('storage', 70, 'open', '最上層：登機箱 ×2（直立並排）'),
             ],
           },
+          // 80 格：28 吋行李箱放最下面，上面短衣吊掛
+          {
+            w: 80,
+            parts: [
+              P('storage', 80, 'open', '28 吋行李箱（直立）'),
+              P('hang', null, 'open', '襯衫・外套・褲子'),
+              P('shelf', 28, 'open', '包包'),
+              P('storage', 70, 'open', '最上層：棉被・換季衣物'),
+            ],
+          },
+          // 40 格：鋼層板放摺疊衣物（內衣、襪子用有蓋的金屬或 PP 收納盒）
+          {
+            w: 40,
+            parts: [
+              P('storage', null, 'open', '收納盒：內衣・襪子'),
+              P('shelf', null, 'open', '運動服・睡衣'),
+              P('shelf', null, 'open', 'T 恤'),
+              P('shelf', null, 'open', '毛衣'),
+              P('shelf', null, 'open', '牛仔褲・長褲'),
+              P('storage', 70, 'open', '最上層：換季衣物'),
+            ],
+          },
+          // 剩下的空間：燙衣板、長柄工具
+          { parts: [P('empty', null, 'open', '燙衣板・長柄工具')] },
         ],
       },
     ],

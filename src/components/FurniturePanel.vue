@@ -193,8 +193,13 @@ const columns = computed(() => {
 // ───────────────────────── 購買資訊 ─────────────────────────
 
 /** 廠商只給系統櫃／訂製家具（沒有商品卡片，要找廠商報價）；買現成的家具看商品卡片上的連結就好 */
-const vendors = computed<ShopVendor[]>(() => (custom.value ? [...(info.value?.vendors ?? []), ...cabinetVendors] : []))
-const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.length || cabinetMaterials.hardware?.length))
+const isSteel = computed(() => !!selected.value?.features?.includes('steel'))
+const vendors = computed<ShopVendor[]>(() =>
+  custom.value ? [...(info.value?.vendors ?? []), ...(isSteel.value ? [] : cabinetVendors)] : [],
+)
+const hasShared = computed(
+  () => custom.value && !isSteel.value && !!(cabinetMaterials.boards?.length || cabinetMaterials.hardware?.length),
+)
 </script>
 
 <template>

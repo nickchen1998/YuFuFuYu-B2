@@ -85,9 +85,22 @@ function estPick(name: string, cost: number, detail: string, rec = true): ShopPi
   return { name, detail, cost: v, price: `約 ${money(v)}（依行情平均推算）`, rec, category: '系統櫃・訂製' }
 }
 
-/** 鋼管衣櫃＋整面拉門（行情查詢中，先回傳空的） */
-function steelEstimate(_it: FurnitureItem): ShopPick[] {
-  return []
+/** 鋼管衣櫃的拉門與安裝（鋼管系統本身在建議商品裡勾選）：拉門約 80 才 × 520 ＋ 中橫條 ＋ 緩衝；安裝 50／才 ＋ 系統鎖天花 */
+function steelEstimate(it: FurnitureItem): ShopPick[] {
+  const picks: ShopPick[] = []
+  if ((it.features ?? []).includes('sliding')) {
+    const cai = Math.round(((it.w * (it.h - 6)) / (30.3 * 30.3)) * 10) / 10
+    const n = Math.max(2, Math.round(it.w / 85))
+    picks.push(
+      estPick(
+        `整面拉門 ${n} 片（估價）`,
+        cai * 520 + 1000 + 3500,
+        `鋁框＋5 mm 強化長虹／霧面玻璃，約 ${cai} 才 × 520 ＋ 中橫條約 1,000 ＋ 關門緩衝約 3,500；上吊式軌道加地面導輪`,
+      ),
+      estPick('拉門安裝＋鋼管系統鎖天花（估價）', cai * 50 + 2500, `拉門安裝約 ${cai} 才 × 50 ＋ 系統組裝、鎖天花板約 2,500`),
+    )
+  }
+  return picks
 }
 
 /** 一件家具的估價項目（系統櫃、訂製中島、洗碗機改櫃）；不需要估價的回傳空陣列 */

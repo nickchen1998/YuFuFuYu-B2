@@ -331,6 +331,20 @@ function contents(b: Batch, part: CabinetPart, c: Cell, clothes: boolean, rand: 
       }
       break
     }
+    case 'robot': {
+      // 掃地機器人的家（ECOVACS DEEBOT mini 基座 32 × 40 × 38.5）：這格沒有底板，基座直接放地上（櫃子底面 y = 0），
+      // 後面留 2 cm 走線；機器人停在基座前面的斜坡上，水箱在基座頂上、往上拿
+      const bw = Math.min(c.w - 10, 32)
+      const td = 20
+      const zf = back + 2 + td
+      b.box(bw, 38.5, td, xc, 0, back + 2 + td / 2, '#f1f1ef')
+      b.box(bw - 4, 8, td - 3, xc, 30.5, back + 2 + td / 2, '#cfd8dc')
+      b.box(bw - 8, 7, 0.6, xc, 16, zf + 0.3, '#2b2d30')
+      b.box(bw, 1.2, 18, xc, 0, zf + 9, '#dcdcda')
+      b.jar(14.3, 9, xc, 1.2, zf + 6, '#f4f4f2')
+      b.jar(4, 1.5, xc, 10.2, zf + 6, '#2b2d30')
+      break
+    }
     case 'appliance': {
       if (label.includes('抽拉')) {
         // 電器抽拉層板：托盤＋兩側滑軌（上面的電鍋、氣炸鍋是另外的家具）
@@ -478,7 +492,12 @@ export function interiorCabinet(g: G, it: FurnitureItem) {
   } else if (fr.legs) {
     const dark = mat('#2f3033', 0.6)
     for (const sx of [-1, 1]) for (const sz of [-1, 1]) box(g, 3, base, 3, sx * (w / 2 - 5), 0, sz * (d / 2 - 5), dark)
-  } else if (base > 0) box(g, w - 2, base, d - 6, 0, 0, -3, edge)
+  }
+  // 掃地機器人的家：那一欄不做踢腳和底板，機器人直接從地面開進去
+  const bays = layoutFace(inter.faces[0], fr.innerW, fr.innerH)
+    .cols.filter((c) => c.parts[0]?.part.kind === 'robot')
+    .map((c) => [-fr.innerW / 2 + c.x, -fr.innerW / 2 + c.x + c.w] as [number, number])
+  if (!fr.legs && base > 0) for (const [a, b] of spans(-w / 2 + 1, w / 2 - 1, bays)) box(g, b - a, base, d - 6, (a + b) / 2, 0, -3, edge)
   if ((it.features ?? []).includes('floating') && it.name.includes('鞋') && it.elev > 8) {
     // 懸空鞋櫃底下的室內拖鞋（地面在 -elev）
     const b = new Batch()
@@ -510,7 +529,7 @@ export function interiorCabinet(g: G, it: FurnitureItem) {
     const cd = d - DOOR
     const cz = -DOOR / 2
     for (const sx of [-1, 1]) box(g, T, h - base, cd, sx * (w / 2 - T / 2), base, cz, body)
-    box(g, w - T * 2, T, cd, 0, base, cz, body)
+    for (const [a, b] of spans(-w / 2 + T, w / 2 - T, bays)) box(g, b - a, T, cd, (a + b) / 2, base, cz, body)
     if (fr.top === 'panel') box(g, w - T * 2, T, cd, 0, h - T, cz, body)
     else if (fr.top === 'stone') box(g, w + 1, STONE, d + 1, 0, h - STONE, 0.5, mat('#dcd8d1', 0.3))
     box(g, w - T * 2, fr.innerH, BACK, 0, fr.y0, -d / 2 + BACK / 2, mat(shadeHex(it.color, 0.93), 0.75))
@@ -520,6 +539,18 @@ export function interiorCabinet(g: G, it: FurnitureItem) {
     buildFace(fg, it, inter.faces[0], fr, dp.clear, 0)
   }
   if (sliding) slidingDoors(g, it, w, d, h)
+}
+
+/** [from, to] 扣掉 holes（已排序、不重疊）後剩下的區段 */
+function spans(from: number, to: number, holes: [number, number][]): [number, number][] {
+  const out: [number, number][] = []
+  let x = from
+  for (const [a, b] of [...holes].sort((p, q) => p[0] - q[0])) {
+    if (a > x + 0.1) out.push([x, Math.min(a, to)])
+    x = Math.max(x, b)
+  }
+  if (to > x + 0.1) out.push([x, to])
+  return out
 }
 
 /** 整面落地頂天拉門：上吊式軌道，前後兩軌交錯，鋁框＋霧面玻璃（門片群組標 front，打開櫃門時隱藏） */

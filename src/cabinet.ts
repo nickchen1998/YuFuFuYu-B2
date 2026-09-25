@@ -28,6 +28,12 @@ export const partKinds: { id: PartKind; name: string; color: string; hint: strin
   { id: 'storage', name: '收納箱', color: '#ebe6dc', hint: '棉被、行李箱、換季衣物、收納盒。28 吋行李箱約 50 × 30 × 75。' },
   { id: 'appliance', name: '家電', color: '#dcdfe3', hint: '記得預留插座與散熱空間；嵌入式家電照型錄的開孔尺寸。' },
   { id: 'mugs', name: '馬克杯', color: '#e6e1ee', hint: '星巴克 BTS 杯約 Ø9.5 × 高 8.9、含把手寬 13.3；3 個疊高約 27，每層淨高 30 以上。' },
+  {
+    id: 'robot',
+    name: '掃地機器人',
+    color: '#dfe7e1',
+    hint: '只能放在最下面一格：這格不做底板和踢腳，機器人直接開進去。ECOVACS DEEBOT mini 基座 32 × 40 × 38.5：格寬 55、離地淨高 55 以上、櫃深 45。',
+  },
   { id: 'empty', name: '空格', color: '#f4f1ec', hint: '' },
 ]
 export const partKind = (k: PartKind) => partKinds.find((p) => p.id === k) ?? partKinds[partKinds.length - 1]
@@ -349,6 +355,13 @@ export function interiorWarnings(it: FurnitureItem, mirrored = false): string[] 
         if (k === 'pullrod' && c.w < 45) out.push(`${n}：欄寬不到 45，前後拉桿吊的衣服會卡到側板`)
         if ((k === 'books' || k === 'shelf') && c.w > 80) out.push(`${n}：層板跨距 ${Math.round(c.w)} 超過 80，放重物久了會彎，建議加立板`)
         if (k === 'pants' && (p.h < 60 || dp.clear < 50)) out.push(`${n}：褲架需要淨高 60、淨深 50 以上`)
+        if (k === 'robot') {
+          if (p.i > 0) out.push(`${n}：掃地機器人的家要在最下面一格，機器人才開得進去`)
+          const bay = fr.y0 + p.y + p.h - (p.i === 0 ? fr.base : 0)
+          if (bay < 53) out.push(`${n}：掃地機器人格離地淨高約 ${Math.round(bay)}，基座水箱要往上拿，建議 55 以上`)
+          if (c.w < 45) out.push(`${n}：掃地機器人格寬 ${Math.round(c.w)}，基座兩側各要留 5 公分以上`)
+          if (dp.clear < 41) out.push(`${n}：淨深 ${Math.round(dp.clear * 10) / 10}，機器人停好會凸出櫃子，櫃深建議 45`)
+        }
       }
     }
   })

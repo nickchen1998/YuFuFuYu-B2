@@ -176,7 +176,7 @@ export const seedInteriors: Record<string, CabinetInterior> = {
     ],
   },
 
-  // 次臥書房：椅子背後的矮櫃 250 × 40 × 90（文件、線材、印表機），避開按摩椅前方
+  // 次臥書房：椅子背後的矮櫃 250 × 45 × 90（文件、線材、印表機、掃地機器人），避開按摩椅前方
   scab: {
     faces: [
       {
@@ -191,8 +191,15 @@ export const seedInteriors: Record<string, CabinetInterior> = {
               P('drawer', null, 'drawer', '文具'),
             ],
           },
-          { parts: [P('shelf', null, 'door', '文件・說明書'), P('shelf', null, 'door', 'A4 文件夾（直立）')] },
-          { parts: [P('storage', null, 'door', '線材收納盒'), P('storage', null, 'door', '備品')] },
+          { parts: [P('shelf', null, 'door', '文件・說明書・線材收納盒'), P('shelf', null, 'door', 'A4 文件夾（直立）')] },
+          // 最右邊：掃地機器人的家（開放、沒有底板，離地淨高約 56），上面一格門片放耗材
+          {
+            w: 58,
+            parts: [
+              P('robot', 54, 'open', '掃地機器人的家（ECOVACS DEEBOT mini 2 基座，背板預留插座）'),
+              P('storage', null, 'door', '掃地機耗材：集塵袋・清潔液・備用刷'),
+            ],
+          },
         ],
       },
     ],

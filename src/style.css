@@ -1934,6 +1934,14 @@ a.pick:hover {
   margin-top: 22px;
   font-size: 13px;
 }
+.sec-summary {
+  margin: 0 0 4px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.sec-gap {
+  margin: 12px 0 6px;
+}
 
 /* 立面圖 */
 .cab-svg {

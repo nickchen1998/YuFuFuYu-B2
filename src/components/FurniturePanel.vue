@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import {
-  ArrowLeft, ChevronRight, ExternalLink, LayoutPanelTop, Layers, Lightbulb, MapPin, Phone, Ruler, Search, ShoppingBag, Store,
+  ArrowLeft, ChevronRight, LayoutPanelTop, Layers, Lightbulb, MapPin, Ruler, Search, ShoppingBag, Store,
   TriangleAlert,
 } from '@lucide/vue'
 import { design, ui } from '../store'
@@ -16,6 +16,8 @@ import {
   cabinetMaterials, cabinetSearch, cabinetVendors, googleUrl, itemCategory, momoUrl, pchomeUrl, shopInfo, type ShopVendor,
 } from '../data/shopping'
 import CabinetElevation from './CabinetElevation.vue'
+import ShopPicks from './ShopPicks.vue'
+import ShopVendors from './ShopVendors.vue'
 
 // 右側「家具清單」：只列出目前擺放的家具（新增、移除、調整都由住戶告訴 Claude 處理），
 // 點進去看尺寸規格、櫃內格局、板材、建議商品與廠商。
@@ -215,22 +217,7 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
     <!-- 建議商品 -->
     <div v-if="info?.picks?.length" class="detail-sec">
       <h3><ShoppingBag />建議商品</h3>
-      <component
-        :is="p.url ? 'a' : 'div'"
-        v-for="p in info.picks"
-        :key="p.name"
-        class="pick"
-        :href="p.url"
-        :target="p.url ? '_blank' : undefined"
-        :rel="p.url ? 'noopener noreferrer' : undefined"
-      >
-        <b>{{ p.name }}</b>
-        <small v-if="p.detail">{{ p.detail }}</small>
-        <span class="pick-foot">
-          <em>{{ p.price ?? '價格請以通路為準' }}</em>
-          <span v-if="p.url" class="pick-link">{{ p.source ?? '查看' }}<ExternalLink /></span>
-        </span>
-      </component>
+      <ShopPicks :picks="info.picks" />
     </div>
 
     <!-- 搜尋 -->
@@ -251,14 +238,26 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
     <!-- 廠商 -->
     <div v-if="vendors.length" class="detail-sec">
       <h3><Store />廠商</h3>
-      <div v-for="v in vendors" :key="v.name" class="vendor">
-        <b>{{ v.name }}</b>
-        <small v-if="v.detail">{{ v.detail }}</small>
-        <div v-if="v.phone || v.url" class="vendor-links">
-          <a v-if="v.phone" :href="`tel:${v.phone.replace(/[^\d+]/g, '')}`"><Phone />{{ v.phone }}</a>
-          <a v-if="v.url" :href="v.url" target="_blank" rel="noopener noreferrer"><ExternalLink />網站</a>
-        </div>
+      <ShopVendors :vendors="vendors" />
+    </div>
+
+    <!-- 附屬設備（例如中島的嵌入微波爐、檯面插座） -->
+    <div v-for="r in info?.related ?? []" :key="r.title" class="detail-sec">
+      <h3><ShoppingBag />{{ r.title }}</h3>
+      <p v-if="r.info.summary" class="sec-summary">{{ r.info.summary }}</p>
+      <ul v-if="r.info.specs?.length" class="bullets">
+        <li v-for="x in r.info.specs" :key="x">{{ x }}</li>
+      </ul>
+      <div v-if="r.info.picks?.length" class="sec-gap"><ShopPicks :picks="r.info.picks" /></div>
+      <div v-for="k in r.info.search ?? []" :key="k" class="search-row">
+        <span>{{ k }}</span>
+        <a class="chip" :href="pchomeUrl(k)" target="_blank" rel="noopener noreferrer">PChome</a>
+        <a class="chip" :href="momoUrl(k)" target="_blank" rel="noopener noreferrer">momo</a>
       </div>
+      <ShopVendors v-if="r.info.vendors?.length" :vendors="r.info.vendors" />
+      <ul v-if="r.info.notes?.length" class="bullets">
+        <li v-for="x in r.info.notes" :key="x">{{ x }}</li>
+      </ul>
     </div>
 
     <div v-if="info?.notes?.length" class="detail-sec">

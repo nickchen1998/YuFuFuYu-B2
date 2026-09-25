@@ -1,251 +1,905 @@
-import type { FurnitureItem } from '../types'
-import { hasInterior } from '../cabinet'
+import type { FurnitureItem } from "../types";
+import { hasInterior } from "../cabinet";
 
 // 每件家具的選購資料：規格需求、建議商品（附連結）、廠商、系統櫃板材。
 // 價格、型號是 2026/09 上網查到的，實際以通路和廠商報價為準。
 
 export interface ShopPick {
-  name: string
-  detail?: string
-  price?: string
-  url?: string
-  source?: string
+  name: string;
+  detail?: string;
+  price?: string;
+  url?: string;
+  source?: string;
 }
 export interface ShopVendor {
-  name: string
-  detail?: string
-  phone?: string
-  url?: string
+  name: string;
+  detail?: string;
+  phone?: string;
+  url?: string;
 }
 export interface ShopInfo {
-  summary?: string
-  specs?: string[]
-  picks?: ShopPick[]
-  search?: string[]
-  vendors?: ShopVendor[]
+  summary?: string;
+  specs?: string[];
+  picks?: ShopPick[];
+  search?: string[];
+  vendors?: ShopVendor[];
   /** 系統櫃：板材、五金 */
-  material?: string[]
-  notes?: string[]
+  material?: string[];
+  notes?: string[];
+  /** 附屬的設備（例如中島的嵌入微波爐、檯面插座），各自一組建議商品 */
+  related?: { title: string; info: ShopInfo }[];
 }
 
 /** 同款家具共用一份資料 */
 const alias: Record<string, string> = {
-  dchair2: 'dchair1',
-  dchair3: 'dchair1',
-  dchair4: 'dchair1',
-  bdesk2: 'bdesk1',
-  bchair2: 'bchair1',
-  mns2: 'mns1',
-  ac2: 'ac1',
-  toilet2: 'toilet',
-  vanity2: 'vanity',
-}
+  dchair2: "dchair1",
+  dchair3: "dchair1",
+  dchair4: "dchair1",
+  bdesk2: "bdesk1",
+  bchair2: "bchair1",
+  mns2: "mns1",
+  ac2: "ac1",
+  toilet2: "toilet",
+  vanity2: "vanity",
+};
 
 export const shopping: Record<string, ShopInfo> = {
   // ───────────── 系統櫃（2026/09 查詢） ─────────────
   bward1: {
-    summary: '300 cm 到頂四欄大衣櫃：分上下兩桶疊裝，門片分段，五金集中在抽屜與吊桿。',
+    summary:
+      "300 cm 到頂四欄大衣櫃：分上下兩桶疊裝，門片分段，五金集中在抽屜與吊桿。",
     material: [
-      '桶身 18 mm 美耐皿系統板＋8 mm 背板；上櫃 70 cm 另成一桶疊上，接縫對齊門縫',
-      '每欄門片約 58 寬 × 228 高，裝 4 個緩衝鉸鏈；上櫃短門裝 2 個',
-      '外抽屜用三節全展緩衝滑軌；吊桿選加厚鋁管，約 57 cm 跨距不需中撐',
+      "桶身 18 mm 美耐皿系統板＋8 mm 背板；上櫃 70 cm 另成一桶疊上，接縫對齊門縫",
+      "每欄門片約 58 寬 × 228 高，裝 4 個緩衝鉸鏈；上櫃短門裝 2 個",
+      "外抽屜用三節全展緩衝滑軌；吊桿選加厚鋁管，約 57 cm 跨距不需中撐",
     ],
     notes: [
-      '28 吋行李箱約 46～50 寬、70～76 高：格內淨高留 80 以上、淨寬 52 以上',
-      '長衣區淨高 150 以上；雙吊上下各留約 95～100',
-      '到頂要現場量天花板與樑，頂端留 1～2 cm 用封板收邊',
-      '上櫃放棉被、過季衣物，可配下拉式升降衣桿（要符合欄寬規格）',
+      "28 吋行李箱約 46～50 寬、70～76 高：格內淨高留 80 以上、淨寬 52 以上",
+      "長衣區淨高 150 以上；雙吊上下各留約 95～100",
+      "到頂要現場量天花板與樑，頂端留 1～2 cm 用封板收邊",
+      "上櫃放棉被、過季衣物，可配下拉式升降衣桿（要符合欄寬規格）",
     ],
   },
   mward: {
-    summary: '45 cm 淺衣櫃，衣架無法橫掛，改用前後伸縮衣桿＋窄門。',
+    summary: "45 cm 淺衣櫃，衣架無法橫掛，改用前後伸縮衣桿＋窄門。",
     material: [
-      '18 mm 桶身、8 mm 背板；300 高同樣分上下兩桶疊裝',
-      '對開窄門約 34 寬 × 228 高，每片 4 個鉸鏈；窄高門容易翹，可以問廠商有沒有門片校正器',
-      '伸縮衣桿鎖在層板下方，每欄裝 1 支（衣服寬約 45～50）',
+      "18 mm 桶身、8 mm 背板；300 高同樣分上下兩桶疊裝",
+      "對開窄門約 34 寬 × 228 高，每片 4 個鉸鏈；窄高門容易翹，可以問廠商有沒有門片校正器",
+      "伸縮衣桿鎖在層板下方，每欄裝 1 支（衣服寬約 45～50）",
     ],
     notes: [
-      '只放常穿的衣服，厚大衣掛次臥主衣櫃',
-      '外抽屜放摺疊衣物，深約 40 cm 用全展緩衝滑軌',
-      '確認門片打開後，伸縮桿拉出來不會卡到門片或鉸鏈',
+      "只放常穿的衣服，厚大衣掛次臥主衣櫃",
+      "外抽屜放摺疊衣物，深約 40 cm 用全展緩衝滑軌",
+      "確認門片打開後，伸縮桿拉出來不會卡到門片或鉸鏈",
     ],
   },
   shoe: {
-    summary: '玄關矮鞋櫃：底部 20 cm 開放放常穿鞋，中段門片可調層板，頂層抽屜放小物。',
+    summary:
+      "玄關矮鞋櫃：底部 20 cm 開放放常穿鞋，中段門片可調層板，頂層抽屜放小物。",
     material: [
-      '桶身指定 P3 防潮板；層板打 32 mm 排孔可調，每層 15～18 cm（短靴 25～30）',
-      '對開門約 2 × 40 cm；門片下緣留縫，或背板上下開通風孔形成對流',
-      '頂層抽屜深 10～15 cm 放鑰匙、口罩，用緩衝滑軌',
+      "桶身指定 P3 防潮板；層板打 32 mm 排孔可調，每層 15～18 cm（短靴 25～30）",
+      "對開門約 2 × 40 cm；門片下緣留縫，或背板上下開通風孔形成對流",
+      "頂層抽屜深 10～15 cm 放鑰匙、口罩，用緩衝滑軌",
     ],
     notes: [
-      '內寬約 76 cm，每層約 3 雙；門片段 4 層約 12 雙，加開放層約 15 雙',
-      '開放層底板用耐刮耐水的面材或放鞋盤，濕鞋先晾乾再收',
-      '旁邊預留插座，可以放除濕棒或小風扇',
+      "內寬約 76 cm，每層約 3 雙；門片段 4 層約 12 雙，加開放層約 15 雙",
+      "開放層底板用耐刮耐水的面材或放鞋盤，濕鞋先晾乾再收",
+      "旁邊預留插座，可以放除濕棒或小風扇",
     ],
   },
   coffeebar: {
-    summary: '咖啡機檯面要耐水、耐熱，下方抽屜＋門片，預留插座與散熱。',
+    summary: "咖啡機檯面要耐水、耐熱，下方抽屜＋門片，預留插座與散熱。",
     material: [
-      '檯面建議人造石、石英石或 HPL 美耐板，不用一般系統板檯面（封邊怕水）',
-      '桶身指定 P3 防潮板；抽屜三節全展緩衝，膠囊、咖啡豆放淺抽',
-      '咖啡機約 1,200～1,500 W，建議專用迴路插座（請水電確認）',
+      "檯面建議人造石、石英石或 HPL 美耐板，不用一般系統板檯面（封邊怕水）",
+      "桶身指定 P3 防潮板；抽屜三節全展緩衝，膠囊、咖啡豆放淺抽",
+      "咖啡機約 1,200～1,500 W，建議專用迴路插座（請水電確認）",
     ],
-    notes: ['櫃深 40 cm：確認咖啡機深度，加上背後 5～10 cm 散熱與插頭空間'],
+    notes: ["櫃深 40 cm：確認咖啡機深度，加上背後 5～10 cm 散熱與插頭空間"],
   },
   tvstand: {
-    summary: '低矮電視櫃：網路設備格要散熱、好走線；做懸空要先確認牆體。',
+    summary: "低矮電視櫃：網路設備格要散熱、好走線；做懸空要先確認牆體。",
     material: [
-      '懸空：RC 牆用吊碼＋膨脹螺絲；輕隔間要預埋 18 mm 夾板，否則改用櫃腳',
-      '網路設備格背板開散熱孔和走線孔，或這格不裝背板',
-      '180 cm 長：頂底板用 25 mm，或分兩桶，避免中間下垂；抽屜用全展緩衝',
+      "懸空：RC 牆用吊碼＋膨脹螺絲；輕隔間要預埋 18 mm 夾板，否則改用櫃腳",
+      "網路設備格背板開散熱孔和走線孔，或這格不裝背板",
+      "180 cm 長：頂底板用 25 mm，或分兩桶，避免中間下垂；抽屜用全展緩衝",
     ],
     notes: [
-      '網路設備格預留插座與網路孔，前面不裝門或改用格柵門',
-      '懸空離地至少 12～15 cm（依掃地機高度）；櫃腳方案用可調腳＋踢腳板，較便宜',
+      "網路設備格預留插座與網路孔，前面不裝門或改用格柵門",
+      "懸空離地至少 12～15 cm（依掃地機高度）；櫃腳方案用可調腳＋踢腳板，較便宜",
     ],
   },
   mns1: {
-    summary: '主臥兩個小床頭櫃；放投影機的那個要穩、有電、通風。',
+    summary: "主臥兩個小床頭櫃；放投影機的那個要穩、有電、通風。",
     material: [
-      '18 mm 桶身；放投影機那個頂板用 25 mm，減少晃動',
-      '上抽屜＋下開放格，抽屜全展緩衝；30 寬的抽屜內寬只有約 20～23 cm',
-      '背板開線孔，側邊預留插座／USB；投影機進出風口前後保持淨空',
-    ],
-    notes: ['投影機要對準投影牆，50 cm 高度不夠時用可調角度支架', '做懸空壁掛需要牆內補強，比較好清掃；落地版用小踢腳'],
-  },
-  scab: {
-    summary: '書房長矮櫃：放文件、線材和印表機，抽屜滑軌選耐重型。',
-    material: [
-      '檯面 25 mm 系統板或人造石，250 cm 一片不接縫',
-      '文件抽屜選承重 40 kg 以上的三節全展滑軌；放 A4 吊掛夾先確認夾子規格',
-      '印表機格不裝門，背板開散熱孔與線孔；印表機較重可以加重型拉板',
+      "18 mm 桶身；放投影機那個頂板用 25 mm，減少晃動",
+      "上抽屜＋下開放格，抽屜全展緩衝；30 寬的抽屜內寬只有約 20～23 cm",
+      "背板開線孔，側邊預留插座／USB；投影機進出風口前後保持淨空",
     ],
     notes: [
-      '櫃身分 2 桶（例如 125＋125）比較好搬運安裝，檯面再用一片蓋過',
-      '靠輕隔間：頂部用 L 片鎖進骨料或預埋的夾板，防止往前傾',
-      '文件門片櫃層板可調；A4 檔案夾需深 32～35 cm，40 深夠用',
+      "投影機要對準投影牆，50 cm 高度不夠時用可調角度支架",
+      "做懸空壁掛需要牆內補強，比較好清掃；落地版用小踢腳",
+    ],
+  },
+  scab: {
+    summary: "書房長矮櫃：放文件、線材和印表機，抽屜滑軌選耐重型。",
+    material: [
+      "檯面 25 mm 系統板或人造石，250 cm 一片不接縫",
+      "文件抽屜選承重 40 kg 以上的三節全展滑軌；放 A4 吊掛夾先確認夾子規格",
+      "印表機格不裝門，背板開散熱孔與線孔；印表機較重可以加重型拉板",
+    ],
+    notes: [
+      "櫃身分 2 桶（例如 125＋125）比較好搬運安裝，檯面再用一片蓋過",
+      "靠輕隔間：頂部用 L 片鎖進骨料或預埋的夾板，防止往前傾",
+      "文件門片櫃層板可調；A4 檔案夾需深 32～35 cm，40 深夠用",
     ],
   },
   dining: {
-    summary: '收納段用系統櫃或廚具桶身，桌腳、牙板用鐵件或木作，檯面由廚具／石材廠做一片連續。',
+    summary:
+      "收納段用系統櫃或廚具桶身，桌腳、牙板用鐵件或木作，檯面由廚具／石材廠做一片連續。",
     material: [
-      '檯面首選石英石：耐刮、不吃色，約 100～400 元/公分，90 深會加價',
-      '人造石 80～150 元/公分，可無縫、刮傷可修補，但較軟、怕熱鍋',
-      '美耐板檯面最便宜（約 1,500～3,500 元/尺），但怕水從接縫滲入、邊緣有黑邊',
-      '實木檯面觸感溫潤，但要定期上油、怕水漬與熱鍋',
+      "檯面首選石英石：耐刮、不吃色，約 100～400 元/公分，90 深會加價",
+      "人造石 80～150 元/公分，可無縫、刮傷可修補，但較軟、怕熱鍋",
+      "美耐板檯面最便宜（約 1,500～3,500 元/尺），但怕水從接縫滲入、邊緣有黑邊",
+      "實木檯面觸感溫潤，但要定期上油、怕水漬與熱鍋",
     ],
     notes: [
-      '220 × 90 石英石可以一片不接縫（確認大板尺寸），2 cm 厚約 95 kg',
-      '餐桌段下方用 18 mm 木心板底板或鐵件框＋牙板承重，桌腳建議鐵件',
-      '櫃體、桌腳、檯面交給同一家統包負責高度與水平，避免三家互推責任',
-      '微波爐依說明書留散熱，建議選嵌入式機種；檯面插座開孔要和收納段抽屜錯開',
+      "220 × 90 石英石可以一片不接縫（確認大板尺寸），2 cm 厚約 95 kg",
+      "餐桌段下方用 18 mm 木心板底板或鐵件框＋牙板承重，桌腳建議鐵件",
+      "櫃體、桌腳、檯面交給同一家統包負責高度與水平，避免三家互推責任",
+      "微波爐依說明書留散熱，建議選嵌入式機種；檯面插座開孔要和收納段抽屜錯開",
     ],
-    search: ['土城 廚具 石英石檯面', '石英石 人造石 檯面 價格 每公分', '訂製 中島 餐桌 系統櫃 新北'],
+    search: [
+      "土城 廚具 石英石檯面",
+      "石英石 人造石 檯面 價格 每公分",
+      "訂製 中島 餐桌 系統櫃 新北",
+    ],
+    related: [
+      {
+        title: "嵌入式微波爐",
+        info: {
+          summary:
+            "櫻花 E5650A 目前仍在售，官方安裝尺寸 56 × 55 × 38 和中島預留孔完全一樣，仍是首選。",
+          specs: [
+            "開孔 56 W × 38 H × 55 D（60 cm 模組）",
+            "110V 嵌入式微波（燒烤）爐",
+            "建議獨立插座／迴路",
+          ],
+          picks: [
+            {
+              name: "櫻花 SAKURA E5650A 嵌入式變頻微波烤箱",
+              detail:
+                "機體寬 59.5 × 深 41 × 高 38.8；安裝寬 56 × 深 55 × 高 38；25L、110V、1450W",
+              price: "約 NT$15,570（2026/09 PChome，含部分地區基本安裝）",
+              url: "https://24h.pchome.com.tw/prod/DPAL33-A900GRZRR",
+              source: "PChome",
+            },
+            {
+              name: "BOSCH 博世 BEL554MS0U 6 系列嵌入式微波燒烤爐",
+              detail:
+                "機體寬 59.4 × 高 38.2 × 深 38.8；開孔寬 56～56.8 × 高 38～38.2 × 深 55；25L、110V",
+              price: "約 NT$19,900（2026/09 甫佳電器；建議售價 NT$23,000）",
+              url: "https://www.bosch-home.com.tw/zh/mkt-product/cooking-baking/microwaves/built-in-microwaves/BEL554MS0U",
+              source: "Bosch 官網",
+            },
+            {
+              name: "伊萊克斯 Electrolux EMFB25BG 600 系列嵌入式微波烤箱",
+              detail:
+                "機體 59.5 × 39 × 37.7；開孔 56 × 36.5 × 41，38 高的孔要用上下固格裝法＋換短腳；110V",
+              price: "約 NT$21,000（2026/09 伊萊克斯官網）",
+              url: "https://www.electrolux.com.tw/appliances/microwave-ovens/emfb25bg/",
+              source: "伊萊克斯官網",
+            },
+          ],
+          search: ["櫻花 E5650A", "BOSCH BEL554MS0U", "伊萊克斯 EMFB25BG"],
+          notes: [
+            "木作開孔照所選機種的原廠施工圖做；E5650A 的開孔尺寸和目前預留的一樣",
+            "微波爐最大 1,450W，建議獨立迴路，不要和電鍋／氣炸鍋共用插座",
+            "插座設在機器背後插得到的位置，例如旁邊抽屜櫃內或開孔後側",
+          ],
+        },
+      },
+      {
+        title: "檯面嵌入插座（靠窗）",
+        info: {
+          summary:
+            "用國際牌「地板插座」嵌在檯面：蓋上後和檯面齊平，掀蓋就能用，接地雙插座。",
+          specs: [
+            "雙連三孔（接地）、15A 125V",
+            "蓋板和檯面齊平、掀蓋式",
+            "檯面下需約 8 cm 埋入深度",
+          ],
+          picks: [
+            {
+              name: "國際牌 Panasonic DUFN2200T-1 鋁合金地板插座",
+              detail:
+                "面板 13 × 13、埋入深約 7.8 cm；接地雙插座，附金屬接線盒和保護蓋",
+              price: "約 NT$1,116（2026/09 水電材料網）",
+              url: "https://pstw.panasonic.com.tw/catalog/files/dc_shiyou/DUFN2200T-1.pdf",
+              source: "國際牌規格圖",
+            },
+            {
+              name: "國際牌 Panasonic DU5942PFK 不鏽鋼彈插地板插座",
+              detail:
+                "角型不鏽鋼、雙層鉸鍊緩慢升起、接地雙插座，附埋入盒；台灣製",
+              price: "約 NT$1,269（2026/09 momo）",
+              url: "https://www.momoshop.com.tw/TP/TP0008831/goodsDetail/TP00088310000267",
+              source: "momo",
+            },
+          ],
+          search: [
+            "國際牌 DUFN2200T-1",
+            "國際牌 DU5942PFK",
+            "地板插座 接地雙插座",
+          ],
+          vendors: [
+            {
+              name: "允順水電材料（台北）",
+              detail: "有賣國際牌地板插座系列，可以電話詢價、現場買",
+              phone: "02-2767-1360",
+              url: "https://www.wenshun.com.tw/products/panasonic-du5942pfk",
+            },
+          ],
+          notes: [
+            "額定 15A：電鍋 600W＋氣炸鍋 1,200～1,500W 同時開會超過，請錯開使用，或做兩組插座各拉一迴路",
+            "埋入盒深約 8 cm，位置要避開下方抽屜和滑軌，最好在固定側板上方",
+            "蓋上只能擋一般潑濺，不是防水插座；擦桌子前先把蓋子關好",
+            "這是地板用插座，嵌在檯面要請水電和木作依原廠尺寸開孔",
+          ],
+        },
+      },
+    ],
   },
-}
+
+  // ───────────── 餐廚（2026/09 查詢） ─────────────
+  dchair1: {
+    summary:
+      "選椅寬 45 以下、無扶手、座高約 45 的款式；兩側對面都要收進去，椅深最好也 45 以下，否則會凸出桌緣幾公分。",
+    specs: [
+      "椅寬 ≤ 45、無扶手",
+      "座高約 45（桌高 76）",
+      "椅深 ≤ 45 兩側才能對收（桌深 90）",
+      "每側 2 張，桌下淨長約需 90 以上",
+    ],
+    picks: [
+      {
+        name: "IKEA SANDSBERG 軟坐墊餐椅",
+        detail:
+          "寬 45 × 深 45 × 高 76、座高 46；鋼腳＋軟墊，寬、深、座高都剛好符合",
+        price: "約 NT$599／張（2026/09 IKEA 官網）",
+        url: "https://www.ikea.com.tw/zh/products/dining-seating/upholstered-chairs/sandsberg-art-50605257",
+        source: "IKEA 官網",
+      },
+      {
+        name: "無印良品 MUJI 木製椅／布面座／橡膠木／深色",
+        detail:
+          "寬 38 × 深 48.5 × 高 77.5、座高 45.5；實木、棉麻座面、免組裝，最窄",
+        price: "約 NT$2,690／張（2026/09 PChome）",
+        url: "https://24h.pchome.com.tw/prod/DEDK1O-A900IUN5I",
+        source: "PChome",
+      },
+      {
+        name: "無印良品 MUJI 木製圓椅／橡木",
+        detail:
+          "寬 45 × 深 51 × 高 77；橡木實木腳、弧形椅背，質感最好，但椅深較深",
+        price: "約 NT$4,990／張（2026/09 PChome）",
+        url: "https://24h.pchome.com.tw/prod/DEDK6A-A900BMPZN",
+        source: "PChome",
+      },
+    ],
+    search: [
+      "IKEA SANDSBERG 餐椅",
+      "無印良品 木製椅 橡膠木",
+      "無印良品 木製圓椅 橡木",
+    ],
+    notes: [
+      "椅背約高 76～78，比桌下淨高（約 72）高：推進去時椅背會靠在桌緣，只有座面收進桌下",
+      "兩側椅深加起來超過 90 會互頂：MUJI 兩款會各凸出約 2～6 cm",
+      "更便宜：IKEA SANDSBERG 硬座款約 NT$349（寬 39 × 深 47 × 高 77、座高 45）",
+      "要整張收進桌下只能改用椅凳，例如 IKEA KYRRE 椅凳 42 × 48 × 45，約 NT$499",
+    ],
+  },
+  rice: {
+    summary:
+      "兩人用選大同 6 人份就夠：寬 30.8 × 深 26 放得進 32 × 32；10 人份寬 34.8 會超出。",
+    specs: [
+      "檯面佔用 ≤ 32 × 32",
+      "110V；電鍋約 600W、小電子鍋約 450W",
+      "上方不要有吊櫃（會有蒸氣）",
+    ],
+    picks: [
+      {
+        name: "大同 TATUNG 6 人份不鏽鋼電鍋 TAC-06L-MCW",
+        detail:
+          "寬 30.8 × 深 26 × 高 22、600W、304 不鏽鋼內鍋；兩人煮飯蒸菜夠用",
+        price: "約 NT$2,690（2026/09 PChome）",
+        url: "https://24h.pchome.com.tw/prod/DMBI4K-A900INYCB",
+        source: "PChome",
+      },
+      {
+        name: "大同 TATUNG 10 人份全不鏽鋼電鍋 TAC-10L-MCW",
+        detail:
+          "寬 34.8 × 深 29.5 × 高 26.5，寬度超過 32；可以放整隻雞或疊多層蒸盤",
+        price: "約 NT$2,680（2026/09 PChome）",
+        url: "https://24h.pchome.com.tw/prod/DMBI61-A900GFVXI",
+        source: "PChome",
+      },
+      {
+        name: "象印 ZOJIRUSHI 3 人份黑金剛微電腦電子鍋 NS-LBF05",
+        detail: "寬 23 × 深 30 × 高 19、450W；白飯口感較好、最省空間，但不能蒸",
+        price: "約 NT$5,490（2026/09 PChome）",
+        url: "https://24h.pchome.com.tw/prod/DMBI0E-A9009TYVQ",
+        source: "PChome",
+      },
+    ],
+    search: [
+      "大同電鍋 6人份 TAC-06L",
+      "大同電鍋 10人份 TAC-10L",
+      "象印 NS-LBF05",
+    ],
+    notes: [
+      "大同電鍋寬度含兩側把手；6 人份和 10 人份價錢幾乎一樣，差別只在體積",
+      "電鍋和氣炸鍋同時開約 1,800～2,100W，已經超過一組 15A 插座（見中島的檯面插座說明）",
+    ],
+  },
+  fryer: {
+    summary:
+      "兩人用 4L 左右就夠；國際牌 NF-HC100 最省空間，飛利浦 4.1L 深度剛好 36。",
+    specs: [
+      "檯面佔用 ≤ 30 W × 36 D（把手朝外）",
+      "容量 4～6 L、110V",
+      "背後有排熱口，後方要留空間",
+    ],
+    picks: [
+      {
+        name: "國際牌 Panasonic 4L 多功能氣炸鍋 NF-HC100",
+        detail: "寬 24 × 深 32.5 × 高 30.7、1200W、觸控 8 種模式；尺寸最寬裕",
+        price: "約 NT$1,580（2026/09 PChome）",
+        url: "https://24h.pchome.com.tw/prod/DMAG5E-A900K9RDG",
+        source: "PChome",
+      },
+      {
+        name: "飛利浦 PHILIPS 數位海星氣炸鍋 4.1L HD9252/50（小綠）",
+        detail: "約寬 26.4 × 深 36 × 高 29.5（含把手）、海星底盤；深度剛好 36",
+        price: "約 NT$3,580（2026/09 PChome）",
+        url: "https://24h.pchome.com.tw/prod/DMACCH-A900JGXIC",
+        source: "PChome",
+      },
+      {
+        name: "飛利浦 PHILIPS 星樂視透視海星氣炸鍋 4.2L NA221",
+        detail:
+          "寬 27.3 × 深 36.8 × 高 29.3、1500W、有透視窗；深度超出約 0.8 cm",
+        price: "約 NT$4,265（2026/09 PChome；官網 NT$4,490）",
+        url: "https://24h.pchome.com.tw/prod/DMAC0E-A900I6WNL",
+        source: "PChome",
+      },
+    ],
+    search: ["國際牌 NF-HC100", "飛利浦 HD9252", "飛利浦 NA221"],
+    notes: [
+      "放不進的：小米智慧氣炸鍋 4.5L 深 37（超 1 cm）；Tefal EY111B70 寬 33.2（超出）",
+      "機身背面會排熱，背後和兩側建議留約 10 cm，不要貼著窗簾",
+      "HD9252 白色款官網已標示停產，綠色款 /50 目前還買得到",
+    ],
+  },
+  kitchen: {
+    summary:
+      "台灣買得到的 45 cm 全嵌式洗碗機只有 Bosch 兩款（110V），要拆掉水槽旁一個 45 cm 下櫃，另做一片和廚具同款的門板。",
+    specs: [
+      "洗碗機櫃內空間 寬 45 × 深 55 × 高 81.5～87.5",
+      "110V 專用插座＋進排水接水槽旁",
+      "需加裝與廚具同款門板（7.5 kg 以下）",
+    ],
+    picks: [
+      {
+        name: "BOSCH 博世 SPV2IKX00X 2 系列 45 cm 全嵌式洗碗機",
+        detail: "9 人份、110V、52 dB；寬 44.8 × 深 55 × 高 81.5，需自備門板",
+        price: "約 NT$40,000（2026/09 甫佳電器；建議售價 NT$46,800）",
+        url: "https://www.bosch-home.com.tw/zh/mkt-product/dishwashers/built-in-dishwashers/bifulldishwashers45width/SPV2IKX00X",
+        source: "Bosch 官網",
+      },
+      {
+        name: "BOSCH 博世 SPV4IMX00X 4 系列 45 cm 全嵌式洗碗機",
+        detail:
+          "10 人份、110V、48 dB、AquaStop 防漏、餐具抽屜；外型尺寸和 2 系列相同",
+        price: "約 NT$44,000（2026/09 甫佳電器；建議售價 NT$52,000）",
+        url: "https://www.bosch-home.com.tw/zh/mkt-product/dishwashers/built-in-dishwashers/bifulldishwashers45width/SPV4IMX00X",
+        source: "Bosch 官網",
+      },
+    ],
+    search: ["BOSCH SPV2IKX00X", "BOSCH SPV4IMX00X", "45公分 全嵌式洗碗機"],
+    vendors: [
+      {
+        name: "Bosch 博世家電 洗碗機專人到府評估",
+        detail:
+          "官方商城付費到府評估 NT$500；從官方通路買機另有免費評估（活動到 2026/12/31）",
+        phone: "0800-368-888",
+        url: "https://www.bosch-home-shop.com.tw/products/service-home-inspection",
+      },
+      {
+        name: "陽光空間精品廚具（板橋）",
+        detail: "板橋金門街，系統廚具設計、改造、安裝；週五、週日公休",
+        phone: "02-2675-6761",
+        url: "https://www.sunnyspacedesign.com/",
+      },
+      {
+        name: "九兆廚具裝璜行",
+        detail:
+          "八里工廠直營，有土城中央路、中和景新街施工案例；可以詢問改櫃裝洗碗機",
+        phone: "02-2610-8321",
+        url: "https://www.miokitchen9999.com.tw/Product-Item_66264.html",
+      },
+      {
+        name: "春蘭系統廚具",
+        detail:
+          "桃園龜山工廠直營，網站有永和／中和／土城案例；要先確認是否接小規模改櫃",
+        phone: "03-329-6968",
+        url: "https://chunlan0514.com/about/",
+      },
+      {
+        name: "鑫部落（洗碗機空間改造）",
+        detail:
+          "部落格，轉介 45／60 cm 洗碗機改櫃和水電師傅；大台北可施工，用表單或 Email 聯絡",
+        url: "https://newguest88.pixnet.net/blog/posts/10354210712",
+      },
+      {
+        name: "甫佳電器（Bosch 經銷）",
+        detail: "台北 Bosch 經銷，上面兩款的現價在這裡查到；安裝費另外詢問",
+        phone: "02-2736-0238",
+        url: "https://www.fuchia.tw/v2/shop/item/2319",
+      },
+    ],
+    notes: [
+      "Miele 台灣總代理只賣 60 cm 機種；伊萊克斯 45 cm 只有獨立式，沒有全嵌款",
+      "改櫃行情（網路案例）：拆櫃＋新做櫃約 NT$1 萬內，再加抬高檯面約 NT$1.5 萬內",
+      "檯面下淨高不足 81.5 cm 時，要抬高檯面或改踢腳板",
+      "建商保固期內改櫃，先問建商會不會影響保固，門板色號也向建商要",
+    ],
+  },
+
+  // ───────────── 冷氣、洗烘、衛浴（2026/09 查詢） ─────────────
+  "ac-living": {
+    summary:
+      "客餐廳加上開放式廚房，建議 5.0 kW（7～8 坪級）1 對 1；室內機寬度要 90 以下，大金同級室內機寬 99，放不下。",
+    specs: [
+      "建議能力 5.0 kW（5.79 坪＋廚房熱源）",
+      "室內機寬 ≤ 90，上方離天花板 5 cm 以上",
+      "冷媒管約 7 m；5.0 kW 為液管 2 分／氣管 4 分",
+      "室外機要拉 220V 專用迴路",
+    ],
+    picks: [
+      {
+        name: "三菱重工 DXK50ZST2-W／DXC50ZST2-W（晴空二代）",
+        detail:
+          "室內機寬 87 × 高 29 × 深 23；室外機寬 78（含蓋 84.2）× 高 59.5 × 深 29，放得進平台；5.0 kW 一級能效",
+        price: "約 NT$54,900（2026/09 PChome，含運送定位，安裝另計）",
+        url: "https://24h.pchome.com.tw/prod/DPAFGD-A900IDE8A",
+        source: "PChome",
+      },
+      {
+        name: "國際牌 CS-UJ50BA2／CU-UJ50BHA2（UJ 系列）",
+        detail:
+          "室內機寬 89 × 高 29.5 × 深 24.1，左右只剩約 0.5 cm；室外機寬 78 × 高 66.6 × 深 28.9，高度超過 60",
+        price: "約 NT$43,300～51,600（2026/09 PChome／momo，含標準安裝）",
+        url: "https://24h.pchome.com.tw/prod/DPAFCP-A900K5DD3",
+        source: "PChome",
+      },
+      {
+        name: "大金 FTHF50ZVLT／RHF50ZVLT（豪菁 Z）",
+        detail:
+          "室內機寬 99 × 高 29.5 × 深 28.1，預留要加寬到約 105；室外機寬 84.5 × 高 59.5 × 深 30，放得進平台",
+        price: "約 NT$46,500（2026/09 PChome，含運送＋標準安裝）",
+        url: "https://24h.pchome.com.tw/prod/DPAF90-A900JTYGP",
+        source: "PChome",
+      },
+    ],
+    search: ["DXK50ZST2-W", "CS-UJ50BA2 CU-UJ50BHA2", "FTHF50ZVLT RHF50ZVLT"],
+    notes: [
+      "寬度最有餘裕的是三菱重工（87）；國際牌 89 幾乎佔滿 90，側邊出管要先跟師傅確認",
+      "冷媒管 7 m：部分通路的基本安裝只含 5 m，超過的 2 分 4 分管每米約 NT$550",
+      "如果建商已經預埋冷媒管，要確認管徑是 2 分 4 分，而且接得到室外機平台",
+    ],
+  },
+  "ac-master": {
+    summary:
+      "主臥 2.79 坪建議 2.0～2.2 kW（3 坪級），接一對二室外機；室內機寬度要 85 以下。",
+    specs: [
+      "建議能力 2.0～2.2 kW",
+      "室內機寬 ≤ 85（窗戶上方）",
+      "和次臥共用一台一對二室外機",
+    ],
+    picks: [
+      {
+        name: "大金 FTHF20ZVLT（接 2MXP50ZVLT）",
+        detail:
+          "寬 77 × 高 28.5 × 深 24.2，左右各約 4 cm；和 FTHF30 一起接時約 2.0 kW",
+        price:
+          "一對二組合（FTHF20＋FTHF30）約 NT$59,800（2026/09 玉明，含 10 m 基本安裝）",
+        url: "https://www.3uo.tw/ecommerce/2MXP50ZVLT_2030/",
+        source: "玉明電器",
+      },
+      {
+        name: "國際牌 CS-UJ22BA2（接 CU-2J52FHA2）",
+        detail:
+          "寬 79.8 × 高 29.5 × 深 24.1，左右各約 2.6 cm；2.2 kW，有 nanoe X",
+        price:
+          "一對二組合（UJ22＋UJ28）約 NT$53,800（2026/09 克拉家電，含標準安裝）",
+        url: "https://www.kela.com.tw/product/6066--Panasonic%E5%9C%8B%E9%9A%9B%E3%80%90CU-2J52FHA2-CS-UJ22BA2-CS-UJ28BA2%E3%80%91%E4%B8%80%E5%B0%8D%E4%BA%8C%E8%AE%8A%E9%A0%BB%E5%88%86%E9%9B%A2%E5%BC%8F%E5%86%B7%E6%B0%A3(%E5%86%B7%E6%9A%96%E5%9E%8B)(%E5%90%AB%E6%A8%99%E6%BA%96%E5%AE%89%E8%A3%9D)",
+        source: "克拉家電",
+      },
+    ],
+    search: ["2MXP50ZVLT FTHF20ZVLT", "CU-2J52FHA2 CS-UJ22BA2"],
+    notes: [
+      "價格是整組一對二（主臥＋次臥）的價錢，不要重複計算",
+      "一對二的兩台室內機要同一種模式運轉（不能一間冷氣、一間暖氣）",
+    ],
+  },
+  "ac-study": {
+    summary:
+      "次臥 4.05 坪，兩個人加上電腦會發熱，建議 2.8～3.0 kW（5 坪級）；室內機寬度 80 以下是最緊的位置。",
+    specs: [
+      "建議能力 2.8～3.0 kW",
+      "電腦和人體發熱約多 0.4～0.8 kW",
+      "室內機寬 ≤ 80（窗戶上方）",
+    ],
+    picks: [
+      {
+        name: "大金 FTHF30ZVLT（接 2MXP50ZVLT）",
+        detail:
+          "寬 77 × 高 28.5 × 深 24.2，左右各約 1.5 cm；和 FTHF20 一起接時約 3.0 kW",
+        price: "含在一對二組合價裡（見主臥冷氣）",
+        url: "https://www.3uo.tw/ecommerce/2MXP50ZVLT_2030/",
+        source: "玉明電器",
+      },
+      {
+        name: "國際牌 CS-UJ28BA2（接 CU-2J52FHA2）",
+        detail: "寬 79.8，預留 80 幾乎沒有餘裕，建議放寬到 85 以上；2.8 kW",
+        price: "含在一對二組合價裡（見主臥冷氣）",
+        url: "https://www.momoshop.com.tw/product/13675918",
+        source: "momo",
+      },
+    ],
+    search: ["2MXP50ZVLT FTHF30ZVLT", "CU-2J52FHA2 CS-UJ28BA2"],
+    notes: [
+      "如果這間西曬或整天開電腦，3.6 kW 會更穩，但加起來會超過一對二的額定能力，要改配置",
+      "尺寸上大金 77 cm 最適合這個 80 cm 的位置",
+    ],
+  },
+  ac1: {
+    summary:
+      "兩台室外機：A 台給客餐廳（1 對 1，5.0 kW），B 台給兩間臥室（一對二，5.0 kW）；首選大金 2MXP50ZVLT（體積最小）搭配三菱重工 DXC50ZST2-W，兩台都放得進平台。",
+    specs: [
+      "平台每格約寬 85 × 深 32 × 高 60",
+      "兩台室外機各拉一條 220V 專用迴路",
+      "一對二每間房各自有冷媒管（2 分／3 分）和排水管",
+    ],
+    picks: [
+      {
+        name: "B 台：大金 2MXP50ZVLT（一對二）",
+        detail:
+          "寬 67.5 × 高 55 × 深 28.4，放得進平台；額定 5.0 kW，一級能效，年耗電約 1,024 度",
+        price: "組合約 NT$59,800～71,000（2026/09 玉明／PChome，含基本安裝）",
+        url: "https://24h.pchome.com.tw/prod/DPAF5Z-A900J5BWC",
+        source: "PChome",
+      },
+      {
+        name: "A 台：三菱重工 DXC50ZST2-W（1 對 1）",
+        detail:
+          "寬 78（含蓋 84.2）× 高 59.5 × 深 29，放得進但很貼；最長配管 25 m",
+        price: "約 NT$54,900（2026/09 PChome，安裝另計）",
+        url: "https://24h.pchome.com.tw/prod/DPAFGD-A900IDE8A",
+        source: "PChome",
+      },
+      {
+        name: "全國際牌：CU-UJ50BHA2＋CU-2J52FHA2",
+        detail:
+          "1 對 1 為寬 78 × 高 66.6、一對二為寬 86 × 高 66.6，高度都超過 60，要先確認平台淨高",
+        price: "兩台合計約 NT$97,000～114,000（2026/09，含安裝）",
+        source: "玉明電器／克拉家電／momo",
+      },
+    ],
+    search: ["2MXP50ZVLT", "DXC50ZST2-W", "CU-2J52FHA2"],
+    vendors: [
+      {
+        name: "玉明電器（3uo.tw）",
+        detail:
+          "大台北地區安裝；一對二組合價含 10 m 銅管基本安裝，超長每米加 NT$450～650",
+        url: "https://www.3uo.tw/product-category/air-conditioner/daikin-air-conditioner/daikin-cold-and-warm-1-to-many/",
+      },
+    ],
+    notes: [
+      "方案一（尺寸最合）：三菱重工 1 對 1＋大金一對二，約 NT$11.5～12.6 萬，另加 1 對 1 的安裝費",
+      "方案二（全大金）：RHF50ZVLT＋2MXP50ZVLT，約 NT$10.6～11.8 萬含安裝，但客廳室內機寬 99",
+      "方案三（全國際牌）：約 NT$9.7～11.4 萬含安裝，最便宜，但兩台室外機高 66.6，超過 60",
+      "兩台室外機並排時，出風不要對著另一台吹，背面也要留散熱空間",
+    ],
+  },
+  washer: {
+    summary:
+      "陽台 60 × 65 的位置，建議選 60 cm 寬的滾筒洗衣機（高 85，和乾衣機一樣高，也不會擋到窗戶）；兩個人 10～13 kg 就夠。",
+    specs: [
+      "寬 ≤ 60、深 ≤ 65（含門）、高 ≤ 100",
+      "前方留約 50 cm 開門、取衣服",
+      "要有洗衣機專用水龍頭和地排；Bosch 要 220V 插座",
+    ],
+    picks: [
+      {
+        name: "LG WD-S13VBW（13 kg 蒸洗脫）",
+        detail:
+          "寬 60 × 高 85 × 深 61.5；AI DD 直驅馬達，外型和 LG WR-100VW 乾衣機同系列，可並排",
+        price: "約 NT$26,000（2026/09 PChome）",
+        url: "https://www.lg.com/tw/washer-dryers/front-loading-washing-machines/wd-s13vbw/",
+        source: "LG 官網",
+      },
+      {
+        name: "Bosch WGA15200TC（10 kg）",
+        detail:
+          "寬 59.8 × 高 84.8 × 深 59，三款裡最淺；220V；門往左開，不能換邊",
+        price: "約 NT$34,900（2026/09 PChome）",
+        url: "https://24h.pchome.com.tw/prod/DPAI1R-A900IHAUI",
+        source: "PChome",
+      },
+      {
+        name: "國際牌 NA-VS120RW-B（12 kg 洗脫）",
+        detail:
+          "寬 59.6 × 高 84.5 × 深 66，比 65 多 1 cm；和 NH-VS100HP-B 乾衣機同系列配色",
+        price: "約 NT$24,210～26,900（2026/09 PChome）",
+        url: "https://24h.pchome.com.tw/prod/DPAI1H-A900HH74M",
+        source: "PChome",
+      },
+    ],
+    search: ["WD-S13VBW", "WGA15200TC", "NA-VS120RW"],
+    notes: [
+      "直立式洗衣機多數機高超過 100，開蓋還要再往上的空間，放在窗下不建議",
+      "進水管和排水管都在背面，實際深度要多留 2～3 cm",
+    ],
+  },
+  dryer: {
+    summary:
+      "兩款 10 kg 熱泵乾衣機規格查證無誤，都是 110V；深度約 66～67（超過 65），另外要看門往哪邊開。",
+    specs: [
+      "10 kg 熱泵式，110V 專用插座",
+      "寬 60、高 85、深約 66～67",
+      "LG 門打開 90° 時總深 111.5，前方要留走道",
+      "用集水盒，或改接排水管",
+    ],
+    picks: [
+      {
+        name: "LG WR-100VW",
+        detail:
+          "官網：寬 60 × 高 85 × 深 66，開門深 111.5，110V，門不能換邊；雙變頻熱泵",
+        price: "約 NT$28,900（2026/09 PChome）",
+        url: "https://www.lg.com/tw/washer-dryers/dryers/wr-100vw/",
+        source: "LG 官網",
+      },
+      {
+        name: "國際牌 NH-VS100HP-B",
+        detail:
+          "寬 59.6 × 高 84.5 × 深 66.7，110V，門的鉸鏈在右側；nanoe X、IoT",
+        price: "約 NT$31,800～32,310（2026/09 玉明／燦坤／PChome）",
+        url: "https://www.panasonic.com/tw/consumer/washing-machine/washing-and-drying/stacked/nh-vs100hp.html",
+        source: "國際牌官網",
+      },
+      {
+        name: "夏普 SHARP KD-FKH10DT（烘布郎）",
+        detail:
+          "10 kg 熱泵，寬 59.8 × 高 85 × 深 66，110V；出廠由右往左開，可付費請原廠改門的方向",
+        price: "約 NT$27,900（2026/09 PChome）",
+        url: "https://24h.pchome.com.tw/prod/DPAI3F-A900J14XI",
+        source: "PChome",
+      },
+    ],
+    search: ["WR-100VW", "NH-VS100HP", "KD-FKH10DT"],
+    vendors: [
+      {
+        name: "LG 客服",
+        detail: "安裝、保固諮詢",
+        phone: "0800-898-899",
+      },
+      {
+        name: "Panasonic 客服",
+        detail: "安裝、保固諮詢",
+        phone: "0800-098-800",
+      },
+    ],
+    notes: [
+      "LG 在部分通路標示深 69，以官網的 66 為準；可以預留深 70 比較保險",
+      "想要最淺：聲寶 SD-10DH 深 62.5（約 NT$25,900）；想要可以換門的方向：Bosch WQB245A0TC 9 kg、220V（約 NT$49,900）",
+      "和洗衣機並排時，兩台的門最好往外側開、不要互相擋到；LG 門不能換邊，要先排好左右位置",
+    ],
+  },
+  toilet: {
+    summary:
+      "建商附的馬桶只要換免治便座；選瞬熱式比較省電、體積也小，重點是插座位置和馬桶長度。",
+    specs: [
+      "110V 三孔接地插座，放在馬桶側後方、離地約 30～50 cm",
+      "浴室插座的迴路要有漏電斷路器",
+      "馬桶進水角閥加裝分岔三通",
+      "確認馬桶是長型還是短型，以及安裝孔距",
+    ],
+    picks: [
+      {
+        name: "TOTO TCF8342TW（S2 WASHLET）",
+        detail:
+          "瞬熱式，寬 46.2 × 深 53.1 × 高 13.1，110V；前噴霧、噴嘴自潔、無縫便座",
+        price: "約 NT$9,900（2026/09 PChome，需自行安裝）",
+        url: "https://24h.pchome.com.tw/prod/DEDW27-A900HSK9B",
+        source: "PChome",
+      },
+      {
+        name: "國際牌 DL-PSTK09TWW",
+        detail:
+          "瞬熱式，110V；安裝板可以調整，適合各種孔距，機板防水，不鏽鋼噴嘴",
+        price: "約 NT$8,990（2026/09 PChome，含基本安裝）",
+        url: "https://24h.pchome.com.tw/prod/DMBM0M-A900GSFE9",
+        source: "PChome",
+      },
+    ],
+    search: ["TCF8342TW", "DL-PSTK09TWW", "DL-RPTK10TWS"],
+    notes: [
+      "TOTO 在通路買多半不含安裝，要另外找水電；國際牌通常附原廠基本安裝",
+      "想要遙控器、超薄便座：國際牌 DL-RPTK10TWS（約 NT$13,205，PChome）",
+      "國際牌標示的適用水壓是 0.5～7.5 kgf/cm²，水壓低的話要加壓",
+    ],
+  },
+  shower: {
+    summary:
+      "淋浴間是建商附的，最實用的升級是浴室暖風乾燥機（冬天暖房、雨天烘衣、防霉）；想換龍頭可以改成恆溫淋浴柱。",
+    specs: [
+      "暖風機要在天花板開 30 × 30 cm 的孔，接 Ø100 排風管",
+      "暖風機要專用迴路：110V 型 20A、220V 型 15A 全極開關",
+      "淋浴柱要搭明管式冷熱水出水口",
+    ],
+    picks: [
+      {
+        name: "國際牌 FV-30BD1W（220V）／FV-30BD1R（110V）",
+        detail:
+          "DC 馬達、陶瓷加熱；暖房／乾燥／換氣／涼風，無線遙控；本體 27 × 29 × 18，1,650 W",
+        price: "約 NT$7,280～7,400（2026/09 PChome，不含安裝）",
+        url: "https://24h.pchome.com.tw/prod/DPAL4U-A900K3YMA",
+        source: "PChome",
+      },
+      {
+        name: "KOHLER Atom 恆溫三出水淋浴柱 K-32404T-7-CP",
+        detail: "恆溫閥避免水溫忽冷忽熱；三出水，有 3 種噴灑模式，鍍鉻",
+        price: "約 NT$16,071（2026/09 PChome，不含安裝）",
+        url: "https://24h.pchome.com.tw/prod/DEDW0U-A900KGZR1",
+        source: "PChome",
+      },
+    ],
+    search: ["FV-30BD1W", "FV-30BD1R", "K-32404T"],
+    notes: [
+      "趁交屋裝修時一起做；浴室如果已經有抽風機，可以沿用原本的風管位置換成暖風機",
+      "浴室較大或常烘衣服，可以選 FV-40BU1R／W（換氣 200 m³/h，開孔 40 × 28），約 NT$9,600～9,900",
+      "換淋浴柱會動到建商附的設備，先確認保固條款，並量好冷熱水出水口的孔距",
+    ],
+  },
+};
 
 /** 系統櫃共用的板材、五金建議 */
 export const cabinetMaterials: {
-  summary?: string
-  boards?: string[]
-  doors?: string[]
-  hardware?: string[]
-  prices?: string[]
-  checks?: string[]
+  summary?: string;
+  boards?: string[];
+  doors?: string[];
+  hardware?: string[];
+  prices?: string[];
+  checks?: string[];
 } = {
   summary:
-    '全屋統一用歐洲進口、甲醛 F1／F4星 的塑合板（EGGER、KAINDL 等），桶身 18 mm、背板 8 mm，檯面與長跨距層板用 25 mm；鞋櫃、咖啡櫃、中島指定 P3 防潮板；門片以美耐皿為主；五金指定 Blum／Hettich／Grass 緩衝鉸鏈與全展滑軌。合約寫明板材花色編號、甲醛等級、五金型號，並要求證明文件。',
+    "全屋統一用歐洲進口、甲醛 F1／F4星 的塑合板（EGGER、KAINDL 等），桶身 18 mm、背板 8 mm，檯面與長跨距層板用 25 mm；鞋櫃、咖啡櫃、中島指定 P3 防潮板；門片以美耐皿為主；五金指定 Blum／Hettich／Grass 緩衝鉸鏈與全展滑軌。合約寫明板材花色編號、甲醛等級、五金型號，並要求證明文件。",
   boards: [
-    '桶身、層板、門片 18 mm 系統板（塑合板），背板 8 mm；檯面、懸空層板、共用側板 25 mm',
-    '台灣常見歐洲板：奧地利 EGGER、KAINDL，德國 Pfleiderer，比利時 SPANO；比中國／東南亞板貴約 3～5 成',
-    '甲醛指定 CNS 2215 F1 或日本 F☆☆☆☆（平均 ≤ 0.3 mg/L）；E0 不是歐盟正式等級，約等於 F2',
-    '防潮依 EN 312：P3／P5／P7 才算防潮板，P2 是一般乾燥室內用；潮濕處請寫明 P3',
-    '板材斷面綠色只是染料，不代表防潮；EGGER 花色碼（如 H1348）可以對照原廠色卡',
-    '系統板原板長度有限，櫃高超過約 240 cm 多半要分上下兩桶疊裝，也會另外計價',
+    "桶身、層板、門片 18 mm 系統板（塑合板），背板 8 mm；檯面、懸空層板、共用側板 25 mm",
+    "台灣常見歐洲板：奧地利 EGGER、KAINDL，德國 Pfleiderer，比利時 SPANO；比中國／東南亞板貴約 3～5 成",
+    "甲醛指定 CNS 2215 F1 或日本 F☆☆☆☆（平均 ≤ 0.3 mg/L）；E0 不是歐盟正式等級，約等於 F2",
+    "防潮依 EN 312：P3／P5／P7 才算防潮板，P2 是一般乾燥室內用；潮濕處請寫明 P3",
+    "板材斷面綠色只是染料，不代表防潮；EGGER 花色碼（如 H1348）可以對照原廠色卡",
+    "系統板原板長度有限，櫃高超過約 240 cm 多半要分上下兩桶疊裝，也會另外計價",
   ],
   doors: [
-    '美耐皿（與桶身同一種板）：最便宜、耐刮、好清潔，衣櫃、床頭櫃首選',
-    '結晶鋼烤：壓克力亮面，好看但易刮、易留指紋；門片加價約 90～240 元/公分',
-    '烤漆（鋼琴／陶瓷）：顏色自由，陶瓷烤漆最硬也最貴；門片加價約 100～270 元/公分',
-    '實木貼皮：木紋自然、價格不高，但怕潮濕和日照變色',
-    '美耐板（HPL）：耐磨、短時間耐熱約 130°C，適合咖啡櫃、中島；轉角斷面會露黑邊',
-    '平開門單片寬 45～60 cm、高度 240 cm 以下；約 200 cm 高的門片要裝 4 個鉸鏈',
+    "美耐皿（與桶身同一種板）：最便宜、耐刮、好清潔，衣櫃、床頭櫃首選",
+    "結晶鋼烤：壓克力亮面，好看但易刮、易留指紋；門片加價約 90～240 元/公分",
+    "烤漆（鋼琴／陶瓷）：顏色自由，陶瓷烤漆最硬也最貴；門片加價約 100～270 元/公分",
+    "實木貼皮：木紋自然、價格不高，但怕潮濕和日照變色",
+    "美耐板（HPL）：耐磨、短時間耐熱約 130°C，適合咖啡櫃、中島；轉角斷面會露黑邊",
+    "平開門單片寬 45～60 cm、高度 240 cm 以下；約 200 cm 高的門片要裝 4 個鉸鏈",
   ],
   hardware: [
-    '鉸鏈：Blum CLIP top BLUMOTION、Hettich Sensys、Grass Tiomos，要有內建緩衝、三向可調',
-    '抽屜滑軌：三節全展＋緩衝；文件、印表機這類重物選承重 40 kg 以上；國產川湖 King Slide 性價比高',
-    '金屬側牆抽屜（Blum LEGRABOX／TANDEMBOX、Hettich）比木抽耐用，但每抽加價較多',
-    '淺衣櫃用前後伸縮衣桿；高處用下拉式升降衣桿，要符合櫃寬規格',
-    '報價單寫品牌＋型號，同一品牌入門款和旗艦款價差好幾倍',
-    '輕隔間牆：封板前預埋 18 mm 夾板或補牆鐵，螺絲鎖進骨料或補強板',
+    "鉸鏈：Blum CLIP top BLUMOTION、Hettich Sensys、Grass Tiomos，要有內建緩衝、三向可調",
+    "抽屜滑軌：三節全展＋緩衝；文件、印表機這類重物選承重 40 kg 以上；國產川湖 King Slide 性價比高",
+    "金屬側牆抽屜（Blum LEGRABOX／TANDEMBOX、Hettich）比木抽耐用，但每抽加價較多",
+    "淺衣櫃用前後伸縮衣桿；高處用下拉式升降衣桿，要符合櫃寬規格",
+    "報價單寫品牌＋型號，同一品牌入門款和旗艦款價差好幾倍",
+    "輕隔間牆：封板前預埋 18 mm 夾板或補牆鐵，螺絲鎖進骨料或補強板",
   ],
   prices: [
-    '高櫃／衣櫃約 4,500～9,000 元/尺，吊櫃、下櫃約 2,500～4,000 元/尺（woodliving 2026/1）',
-    '高櫃門片式 4,800～6,000、矮櫃門片式 4,000～6,000、電視櫃 2,500～2,800 元/尺（PRO360 2025/7）',
-    '板材品牌（高櫃）：EGGER 約 4,500～6,000、KAINDL 約 5,000～6,500、Pfleiderer 約 5,500～7,500 元/尺',
-    '五金加價：全展緩衝抽屜每抽 1,200～2,500、褲架 3,500～6,000、升降衣桿 4,500～9,000',
-    '檯面：人造石 80～150、石英石 100～400 元/公分，加深另計',
-    '1 尺 ≈ 30 cm，不足 1 尺以 1 尺計；櫃高超過 240 cm 多半另計，實際以廠商報價為準',
+    "高櫃／衣櫃約 4,500～9,000 元/尺，吊櫃、下櫃約 2,500～4,000 元/尺（woodliving 2026/1）",
+    "高櫃門片式 4,800～6,000、矮櫃門片式 4,000～6,000、電視櫃 2,500～2,800 元/尺（PRO360 2025/7）",
+    "板材品牌（高櫃）：EGGER 約 4,500～6,000、KAINDL 約 5,000～6,500、Pfleiderer 約 5,500～7,500 元/尺",
+    "五金加價：全展緩衝抽屜每抽 1,200～2,500、褲架 3,500～6,000、升降衣桿 4,500～9,000",
+    "檯面：人造石 80～150、石英石 100～400 元/公分，加深另計",
+    "1 尺 ≈ 30 cm，不足 1 尺以 1 尺計；櫃高超過 240 cm 多半另計，實際以廠商報價為準",
   ],
   checks: [
-    '要求出廠證明、進口報單、進料紀錄，日期要和這次施工相符',
-    '板材進場時拍板邊噴印與標示（甲醛等級、批號、製造年月）留存',
-    '合約寫明：板材品牌／花色編號／F1 或 F4星／P3 防潮、五金品牌型號、保固年限',
-    '完工後通風 2～4 週，可以請檢測公司量室內甲醛（標準 0.08 ppm／1 小時）',
-    '驗收：門縫一致、鉸鏈調好、抽屜全拉出不卡、封邊不翹、防傾倒固定點確實',
+    "要求出廠證明、進口報單、進料紀錄，日期要和這次施工相符",
+    "板材進場時拍板邊噴印與標示（甲醛等級、批號、製造年月）留存",
+    "合約寫明：板材品牌／花色編號／F1 或 F4星／P3 防潮、五金品牌型號、保固年限",
+    "完工後通風 2～4 週，可以請檢測公司量室內甲醛（標準 0.08 ppm／1 小時）",
+    "驗收：門縫一致、鉸鏈調好、抽屜全拉出不卡、封邊不翹、防傾倒固定點確實",
   ],
-}
+};
 
 /** 系統櫃／木作廠商（土城附近，2026/09 查詢；電話、地址請再確認） */
 export const cabinetVendors: ShopVendor[] = [
   {
-    name: '歐德傢俱 土城店（直營）',
-    detail: '全台連鎖品牌，土城學府路二段 168 號有門市；官網稱用德國進口 F4星防潮塑合板',
-    phone: '02-2260-6588',
-    url: 'https://www.order.com.tw/location.php?act=list&cid=1',
+    name: "歐德傢俱 土城店（直營）",
+    detail:
+      "全台連鎖品牌，土城學府路二段 168 號有門市；官網稱用德國進口 F4星防潮塑合板",
+    phone: "02-2260-6588",
+    url: "https://www.order.com.tw/location.php?act=list&cid=1",
   },
   {
-    name: '綠的傢俱 中和店／板橋店',
-    detail: '大型系統家具連鎖；中和中山路三段 104 號、板橋漢生東路 276 號',
-    phone: '02-2221-0676',
-    url: 'https://www.green-furniture.com.tw/store/',
+    name: "綠的傢俱 中和店／板橋店",
+    detail: "大型系統家具連鎖；中和中山路三段 104 號、板橋漢生東路 276 號",
+    phone: "02-2221-0676",
+    url: "https://www.green-furniture.com.tw/store/",
   },
   {
-    name: '誠鑫企業社（土城在地）',
-    detail: '土城中央路四段，20 多年經驗、有門市展示區；廚具、石英石／人造石檯面、系統櫃都做，適合中島',
-    phone: '02-2268-3877',
-    url: 'https://www.chengxinkitchen.com.tw/index.html',
+    name: "誠鑫企業社（土城在地）",
+    detail:
+      "土城中央路四段，20 多年經驗、有門市展示區；廚具、石英石／人造石檯面、系統櫃都做，適合中島",
+    phone: "02-2268-3877",
+    url: "https://www.chengxinkitchen.com.tw/index.html",
   },
   {
-    name: '主婦歐化廚具工廠',
-    detail: '板橋大觀路三段，工廠展示中心可預約；有土城案例',
-    phone: '02-2681-7788',
-    url: 'https://www.madam-kitchenware.com/product/furniture46',
+    name: "主婦歐化廚具工廠",
+    detail: "板橋大觀路三段，工廠展示中心可預約；有土城案例",
+    phone: "02-2681-7788",
+    url: "https://www.madam-kitchenware.com/product/furniture46",
   },
   {
-    name: '振發室內裝修工程（土城）',
-    detail: 'PRO360 5.0 分／28 則評價；做輕隔間也做系統家具，適合書房那面輕隔間的補強',
-    url: 'https://www.pro360.com.tw/service/122155',
+    name: "振發室內裝修工程（土城）",
+    detail:
+      "PRO360 5.0 分／28 則評價；做輕隔間也做系統家具，適合書房那面輕隔間的補強",
+    url: "https://www.pro360.com.tw/service/122155",
   },
-]
-export const cabinetSearch: string[] = ['系統櫃 土城', '系統櫃 土城 展示中心', '系統板 P3 防潮 EN312', 'CNS 2215 F1 板材 甲醛']
+];
+export const cabinetSearch: string[] = [
+  "系統櫃 土城",
+  "系統櫃 土城 展示中心",
+  "系統板 P3 防潮 EN312",
+  "CNS 2215 F1 板材 甲醛",
+];
 
 export function shopInfo(it: FurnitureItem): ShopInfo | undefined {
-  return shopping[it.id] ?? shopping[alias[it.id] ?? '']
+  return shopping[it.id] ?? shopping[alias[it.id] ?? ""];
 }
 
-export const pchomeUrl = (q: string) => `https://24h.pchome.com.tw/search/?q=${encodeURIComponent(q)}`
-export const momoUrl = (q: string) => `https://www.momoshop.com.tw/search/searchShop.jsp?keyword=${encodeURIComponent(q)}`
-export const googleUrl = (q: string) => `https://www.google.com/search?q=${encodeURIComponent(q)}`
+export const pchomeUrl = (q: string) =>
+  `https://24h.pchome.com.tw/search/?q=${encodeURIComponent(q)}`;
+export const momoUrl = (q: string) =>
+  `https://www.momoshop.com.tw/search/searchShop.jsp?keyword=${encodeURIComponent(q)}`;
+export const googleUrl = (q: string) =>
+  `https://www.google.com/search?q=${encodeURIComponent(q)}`;
 
-const APPLIANCES = ['tv', 'fridge', 'washer', 'dryer', 'acindoor', 'acunit', 'vacuum', 'coffeemaker', 'ricecooker', 'airfryer', 'microwave', 'projector']
+const APPLIANCES = [
+  "tv",
+  "fridge",
+  "washer",
+  "dryer",
+  "acindoor",
+  "acunit",
+  "vacuum",
+  "coffeemaker",
+  "ricecooker",
+  "airfryer",
+  "microwave",
+  "projector",
+];
 
 /** 分類：系統櫃（訂做）、訂製、家電、建商附、家具 */
 export function itemCategory(it: FurnitureItem): string {
-  if (it.type === 'kitchen' || it.locked) return '建商附'
-  if (it.type === 'peninsula') return '訂製'
-  if (hasInterior(it)) return '系統櫃'
-  if (it.type === 'projection') return '示意'
-  if (APPLIANCES.includes(it.type)) return '家電'
-  return '家具'
+  if (it.type === "kitchen" || it.locked) return "建商附";
+  if (it.type === "peninsula") return "訂製";
+  if (hasInterior(it)) return "系統櫃";
+  if (it.type === "projection") return "示意";
+  if (APPLIANCES.includes(it.type)) return "家電";
+  return "家具";
 }

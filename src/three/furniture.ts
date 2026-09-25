@@ -749,6 +749,20 @@ function canisters(g: G, it: FurnitureItem) {
     }
 }
 
+/** 抽拉式分類垃圾桶（Hailo Tandem 這類）：鋁框上前後兩個桶（前面一般垃圾、後面回收），收在下櫃門片後面 */
+function pullbin(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const frame = mat('#b9bcc0', 0.35, 0.6)
+  bx(g, w, 1.5, d, 0, 0, 0, frame)
+  for (const sx of [-1, 1]) bx(g, 1, 6, d, (sx * (w - 1)) / 2, 1.5, 0, frame)
+  const bd = d / 2 - 1.5
+  for (const [sz, col] of [[1, '#4a4d52'], [-1, '#5f7a6a']] as [number, string][]) {
+    const z = (sz * (bd + 1.5)) / 2
+    bx(g, w - 3, h - 3.5, bd, 0, 1.5, z, mat(col, 0.5))
+    bx(g, w - 2.5, 2, bd + 0.5, 0, h - 2, z, mat(shadeHex(col, 1.25), 0.4))
+  }
+}
+
 /** 全身鏡（貼在牆面或櫃子側板）：淺橡木細框＋鏡面，正面朝 +z */
 function mirror(g: G, it: FurnitureItem) {
   const { w, d, h } = it
@@ -937,6 +951,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   frother,
   canisters,
   mirror,
+  pullbin,
   person,
   coathooks,
   towerfan,

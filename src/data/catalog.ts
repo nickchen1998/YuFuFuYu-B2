@@ -132,6 +132,9 @@ const seeds: Seed[] = [
   { id: 'fryer', type: 'airfryer', name: '氣炸鍋（抽拉層板）', x: 198.5, y: 591.2, rot: 180, w: 24, d: 32.5, h: 31, elev: 39.5, color: '#2d2d30' },
   // 電子鍋：中島廚房側、微波爐旁的抽拉開放層板上（和微波爐同高，離地約 47.5），用的時候拉出來
   { id: 'ecooker', type: 'ecooker', name: '電子鍋（抽拉層板）', x: 154.4, y: 644.4, rot: 270, w: 23, d: 30, h: 19, elev: 47.5, color: '#e7e3dc' },
+  // 分類垃圾桶：裝在水槽下櫃靠冰箱那扇門後面（Hailo Tandem AS 15/15，寬 25 × 深 48 × 高 40），開門桶子就跟著滑出來；
+  // 前面 15 L 一般垃圾（套 14 L 專用袋）、後面 15 L 回收；避開水槽正下方的存水彎和右邊洗碗機的水管
+  { id: 'kbin', type: 'pullbin', name: '分類垃圾桶（水槽下櫃・抽拉）', x: 34, y: 467, rot: 90, w: 25, d: 48, h: 40, elev: 10, color: '#4a4d52' },
   {
     id: 'kitchen', type: 'kitchen', name: '一字型廚具', x: 30, y: 558.5, rot: 90, w: 213, d: 60, h: 85,
     color: '#f1eee8', locked: true, features: ['dishdryer', 'dishwasher'],

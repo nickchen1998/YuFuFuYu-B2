@@ -1,6 +1,6 @@
 import type { Component } from 'vue'
 import {
-  AirVent, Archive, Bean, Milk, RectangleVertical, PersonStanding, Armchair, Bath, BedDouble, Box, BrushCleaning, Circle, Coffee, CookingPot, Fan, Grid3x3, Presentation, Projector, Laptop, Library, LampFloor, Microwave, Monitor,
+  AirVent, Archive, Bean, Milk, RectangleVertical, Trash2, PersonStanding, Armchair, Bath, BedDouble, Box, BrushCleaning, Circle, Coffee, CookingPot, Fan, Grid3x3, Presentation, Projector, Laptop, Library, LampFloor, Microwave, Monitor,
   RectangleHorizontal, Refrigerator, Rows3, Shirt, ShowerHead, Sofa, Sprout, Square, Table2, Toilet, Tv,
   WashingMachine,
 } from '@lucide/vue'
@@ -52,6 +52,7 @@ const map: Record<string, Component> = {
   frother: Milk,
   canisters: Bean,
   mirror: RectangleVertical,
+  pullbin: Trash2,
   person: PersonStanding,
   coathooks: Shirt,
   towerfan: Fan,

@@ -191,10 +191,16 @@ const seeds: Seed[] = [
   // 全套衛浴（固定設備）：淋浴間 + 馬桶 + 洗手台
   { id: 'shower', type: 'shower', name: '淋浴間', x: -239.25, y: 70, rot: 0, w: 94.5, d: 140, h: 200, color: '#e8e8e6', locked: true },
   { id: 'toilet', type: 'toilet', name: '馬桶', x: -150, y: 106, rot: 180, w: 40, d: 68, h: 76, color: '#f7f7f5', locked: true },
-  { id: 'vanity', type: 'vanity', name: '洗臉盆浴櫃（全套衛浴）', x: -62.5, y: 115, rot: 180, w: 85, d: 50, h: 85, color: '#efe9df', locked: true },
+  // 全套衛浴洗手台：柯林斯 ST-R-80（盆 80 × 48、壁掛櫃高 60），靠右邊牆；朝馬桶那端（左邊）26.5 寬開放格放衛生紙，
+  // 正面和側面都拿得到，坐在馬桶上伸手就拿到（開放格離馬桶約 30）
+  { id: 'vanity', type: 'vanity', name: '洗臉盆浴櫃（全套衛浴・側邊開放格）', x: -60, y: 116, rot: 180, w: 80, d: 48, h: 85, color: '#efe9df', locked: true, features: ['sideniche'] },
+  // 鏡櫃（全套）：和成 LAG8066BF 80 × 16 × 66 除霧鏡櫃，對齊洗手台；離地 118～184（龍頭上方留約 13，184 公分照得到頭頂）
+  { id: 'mcab1', type: 'mirrorcab', name: '鏡櫃（全套衛浴・除霧）', x: -60, y: 132, rot: 180, w: 80, d: 16, h: 66, elev: 118, color: '#f4f3ef' },
   // 主臥半套衛浴（固定設備）：馬桶 + 洗臉盆
   { id: 'toilet2', type: 'toilet', name: '馬桶', x: -216, y: 198.5, rot: 90, w: 40, d: 68, h: 76, color: '#f7f7f5', locked: true },
   { id: 'vanity2', type: 'vanity', name: '洗臉盆浴櫃（半套衛浴）', x: -39, y: 198.5, rot: 270, w: 70, d: 48, h: 85, color: '#efe9df', locked: true },
+  // 鏡櫃（半套）：大巨光 1450 50 × 14 × 60（上面鏡門、下面一格開放層板），對齊 51 寬的洗臉盆；離地 120～180
+  { id: 'mcab2', type: 'mirrorcab', name: '鏡櫃（半套衛浴）', x: -22, y: 198.5, rot: 270, w: 50, d: 14, h: 60, elev: 120, color: '#f4f3ef', features: ['openshelf'] },
 
   // 冷氣平台
   { id: 'ac1', type: 'acunit', name: '冷氣室外機', x: -196, y: 660, rot: 0, w: 85, d: 32, h: 60, color: '#e3e5e7', locked: true },

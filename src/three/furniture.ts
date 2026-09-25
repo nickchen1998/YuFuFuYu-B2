@@ -355,12 +355,66 @@ function toilet(g: G, it: FurnitureItem) {
 
 function vanity(g: G, it: FurnitureItem) {
   const { w, d, h } = it
-  cabinet(g, { ...it, h: h - 12 }, 'doors')
+  if (has(it, 'sideniche')) vanityNiche(g, it)
+  else cabinet(g, { ...it, h: h - 12 }, 'doors')
   bx(g, w, 12, d, 0, h - 12, 0, WHITE())
   const sink = cyl(g, 17, 17, 0.5, 0, h, 2, mat('#d8dde0', 0.15), 36)
   sink.scale.z = 0.7
   cyl(g, 1.5, 1.5, 22, 0, h, -d / 2 + 6, METAL(), 12)
   bx(g, 2.5, 2.5, 12, 0, h + 19, -d / 2 + 11, METAL())
+}
+
+/**
+ * 'sideniche' 浴櫃（柯林斯 ST-80 這類）：壁掛櫃高 60、底下懸空；-x 是門片段，+x 端 26.5 寬的開放格朝馬桶，
+ * 正面和側面都拿得到，上下兩層放衛生紙（下層捲筒、上層抽取式）
+ */
+function vanityNiche(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const cabH = 60
+  const y0 = h - 12 - cabH
+  const nw = 26.5
+  const body = mat(it.color, 0.6)
+  const line = mat(shadeHex(it.color, 0.55), 0.8)
+  const bw = w - nw
+  const cx = -w / 2 + bw / 2
+  const front = d / 2 - 1
+  bx(g, bw, cabH, d - 2, cx, y0, -1, body)
+  bx(g, 0.6, cabH - 2, 0.4, cx, y0 + 1, front + 0.15, line)
+  for (const s of [-1, 1]) bx(g, 1.4, 12, 2, cx + s * 4, y0 + cabH - 20, front + 0.9, METAL())
+  const nx = w / 2 - nw / 2
+  const wood = mat('#8a6a4f', 0.6)
+  bx(g, nw, 1.8, d - 2, nx, y0, -1, wood)
+  bx(g, nw, 1.8, d - 2, nx, y0 + cabH / 2 - 0.9, -1, wood)
+  bx(g, nw, cabH, 1.8, nx, y0, -d / 2 + 0.9, wood)
+  const paper = mat('#f7f6f2', 0.85)
+  for (const z of [-12, 0, 12]) cyl(g, 5.5, 5.5, 10, nx, y0 + 1.8, z, paper, 20)
+  for (const z of [-9, 10]) for (const k of [0, 1]) bx(g, 11, 7, 18, nx, y0 + cabH / 2 + 0.9 + k * 7.2, z, paper)
+}
+
+/** 浴室鏡櫃：白色防水櫃體＋鏡門（寬 60 以上對開）；'openshelf' 時最下面一格開放層板 */
+function mirrorcab(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const body = mat(it.color, 0.4)
+  const mirrorM = mat('#dde4e8', 0.04, 0.35)
+  bx(g, w, h, 1, 0, 0, -d / 2 + 0.5, body)
+  for (const sx of [-1, 1]) bx(g, 1.5, h, d - 2, sx * (w / 2 - 0.75), 0, -1, body)
+  bx(g, w - 3, 1.5, d - 2, 0, 0, -1, body)
+  bx(g, w - 3, 1.5, d - 2, 0, h - 1.5, -1, body)
+  const shelfH = has(it, 'openshelf') ? Math.round(h * 0.22) : 0
+  if (shelfH) {
+    bx(g, w - 3, 1.5, d - 2, 0, shelfH, -1, body)
+    cyl(g, 2.5, 2.5, 12, -w / 4, 1.5, -1, mat('#cfe0e6', 0.3), 16)
+    cyl(g, 2, 2, 9, -w / 4 + 7, 1.5, -1, mat('#e8d9c4', 0.4), 16)
+  }
+  const n = w >= 60 ? 2 : 1
+  const dw = w / n
+  const dh = h - shelfH - (shelfH ? 1.5 : 0)
+  const dy = h - dh
+  for (let i = 0; i < n; i++) {
+    const x = -w / 2 + dw * (i + 0.5)
+    bx(g, dw - 0.4, dh, 1.8, x, dy, d / 2 - 0.9, body)
+    bx(g, dw - 1.6, dh - 1.2, 0.3, x, dy + 0.6, d / 2 + 0.15, mirrorM)
+  }
 }
 
 function shower(g: G, it: FurnitureItem) {
@@ -952,6 +1006,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   canisters,
   mirror,
   pullbin,
+  mirrorcab,
   person,
   coathooks,
   towerfan,

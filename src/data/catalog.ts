@@ -98,17 +98,19 @@ const seeds: Seed[] = [
   { id: 'fridge', type: 'fridge', name: '冰箱', x: 35, y: 414, rot: 90, w: 70, d: 70, h: 180, color: '#d4d8dc' },
   // 訂製中島餐桌（半島型，一件式）：一端靠窗下的牆，檯面連續高 76（壓在窗台 80 下）。
   // 靠窗 100 公分是收納（朝廚房嵌微波爐＋抽屜，另一側門片櫃；檯面放電鍋、氣炸鍋），往室內 120 公分是餐桌。
-  // 四張椅子兩側各兩張，圖上是收進桌下的樣子；收起時廚房側走道 60、次臥門與陽台門側走道 68
+  // 寬 90：檯面上電鍋、氣炸鍋可以橫向並排；四張椅子兩側各兩張，圖上是收進桌下的樣子；
+  // 收起時廚房側走道 60、次臥門與陽台門側走道 68；瓦斯爐前站位 65
   {
-    id: 'dining', type: 'peninsula', name: '訂製中島餐桌', x: 170, y: 555, rot: 90, w: 220, d: 70, h: 76,
+    id: 'dining', type: 'peninsula', name: '訂製中島餐桌', x: 170, y: 555, rot: 90, w: 220, d: 90, h: 76,
     color: '#ece6dc', features: ['microwave'],
   },
   { id: 'dchair1', type: 'chair', name: '餐椅', x: 145, y: 475, rot: 90, w: 45, d: 50, h: 85, color: '#6b5a4a' },
   { id: 'dchair2', type: 'chair', name: '餐椅', x: 145, y: 535, rot: 90, w: 45, d: 50, h: 85, color: '#6b5a4a' },
   { id: 'dchair3', type: 'chair', name: '餐椅', x: 195, y: 475, rot: 270, w: 45, d: 50, h: 85, color: '#6b5a4a' },
   { id: 'dchair4', type: 'chair', name: '餐椅', x: 195, y: 535, rot: 270, w: 45, d: 50, h: 85, color: '#6b5a4a' },
-  { id: 'rice', type: 'ricecooker', name: '電鍋', x: 170, y: 640, rot: 90, w: 32, d: 32, h: 30, elev: 76, color: '#e9e4da' },
-  { id: 'fryer', type: 'airfryer', name: '氣炸鍋', x: 170, y: 598, rot: 90, w: 30, d: 36, h: 33, elev: 76, color: '#2d2d30' },
+  // 電鍋、氣炸鍋在收納段檯面上橫向並排，正面朝餐桌
+  { id: 'rice', type: 'ricecooker', name: '電鍋', x: 148, y: 615, rot: 180, w: 32, d: 32, h: 30, elev: 76, color: '#e9e4da' },
+  { id: 'fryer', type: 'airfryer', name: '氣炸鍋', x: 192, y: 615, rot: 180, w: 30, d: 36, h: 33, elev: 76, color: '#2d2d30' },
   {
     id: 'kitchen', type: 'kitchen', name: '一字型廚具', x: 30, y: 558.5, rot: 90, w: 213, d: 60, h: 85,
     color: '#f1eee8', locked: true, features: ['dishdryer', 'dishwasher'],

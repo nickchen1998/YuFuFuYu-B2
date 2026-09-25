@@ -301,6 +301,18 @@ export class Viewer {
     this.updateSelection()
   }
 
+  /** 櫃門：櫃內規劃面板打開時，選取的櫃子打開；或是全部打開 */
+  applyInterior() {
+    const editing = this.ui.cabinetEditor && this.ui.cabinetOpen ? this.ui.selectedId : null
+    for (const [id, entry] of this.items) {
+      const open = this.ui.openAllCabinets || id === editing
+      entry.obj.traverse((o) => {
+        if (o.userData.front) o.visible = !open
+        else if (o.userData.interior) o.visible = open
+      })
+    }
+  }
+
   private disposeItem(entry: ItemEntry) {
     this.furnitureGroup.remove(entry.obj)
     entry.obj.traverse((o) => {
@@ -320,6 +332,7 @@ export class Viewer {
   }
 
   updateSelection() {
+    this.applyInterior()
     const it = this.selected()
     if (this.selBox) {
       this.scene.remove(this.selBox)

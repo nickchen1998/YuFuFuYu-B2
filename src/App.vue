@@ -12,6 +12,7 @@ import { rooms } from './data/house'
 import FurniturePanel from './components/FurniturePanel.vue'
 import RoomsPanel from './components/RoomsPanel.vue'
 import ViewPanel from './components/ViewPanel.vue'
+import CabinetEditor from './components/CabinetEditor.vue'
 import type { Tool, ViewMode } from './types'
 
 const host = ref<HTMLElement>()
@@ -143,6 +144,7 @@ onMounted(() => {
   watch(() => ui.tool, () => v.clearMeasure())
   watch(() => design.mirrored, () => v.applyMirror())
   watch(() => ui.showAirflow, () => v.applyAirflow())
+  watch(() => [ui.cabinetEditor, ui.cabinetOpen, ui.openAllCabinets], () => v.applyInterior())
 })
 
 onBeforeUnmount(() => {
@@ -280,6 +282,8 @@ onBeforeUnmount(() => {
         <div v-if="ui.measure" class="measure-pill"><Ruler />{{ ui.measure }}</div>
       </div>
     </footer>
+
+    <CabinetEditor />
 
     <Transition name="toast">
       <div v-if="toast" class="toast"><Check />{{ toast }}</div>

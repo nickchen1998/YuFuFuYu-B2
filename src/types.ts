@@ -67,6 +67,46 @@ export interface FurnitureItem {
   locked?: boolean
   /** 額外配備，例如廚具的 'dishwasher'、中島的 'microwave' */
   features?: string[]
+  /** 櫃子內部規劃（衣櫃、鞋櫃、書櫃等）；沒有時用預設配置 */
+  interior?: CabinetInterior
+}
+
+/**
+ * 櫃內格子的用途：hang = 吊衣桿、pullrod = 前後拉桿（淺櫃吊衣）、shelf = 層板、books = 書、
+ * drawer = 抽屜、shoe = 鞋子、pants = 褲架、storage = 收納箱（棉被、行李箱）、appliance = 家電、empty = 空格
+ */
+export type PartKind = 'hang' | 'pullrod' | 'shelf' | 'books' | 'drawer' | 'shoe' | 'pants' | 'storage' | 'appliance' | 'empty'
+/** 格子正面：door = 門片、drawer = 抽屜面板（外抽）、open = 開放格 */
+export type FrontKind = 'door' | 'drawer' | 'open'
+
+/** 一欄裡的一格（由下往上排） */
+export interface CabinetPart {
+  kind: PartKind
+  /** 淨高（不含層板）；不填 = 自動分配剩下的高度 */
+  h?: number
+  front: FrontKind
+  label?: string
+  /** 門片和下面那一格分開（例如上櫃另外一扇短門） */
+  split?: boolean
+}
+
+export interface CabinetColumn {
+  /** 淨寬（不含立板）；不填 = 自動分配剩下的寬度 */
+  w?: number
+  parts: CabinetPart[]
+}
+
+/** 櫃子的一個正面；雙面櫃（中島）有兩面 */
+export interface CabinetFace {
+  name?: string
+  /** 這一面的外深（含門片）；只有雙面櫃的第一面需要 */
+  depth?: number
+  /** 由左到右（站在這一面前面看） */
+  cols: CabinetColumn[]
+}
+
+export interface CabinetInterior {
+  faces: CabinetFace[]
 }
 
 export interface Design {

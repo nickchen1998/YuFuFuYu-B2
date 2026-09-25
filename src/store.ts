@@ -1,12 +1,16 @@
 import { reactive, watch } from 'vue'
-import type { Design, Tool, ViewMode } from './types'
+import type { Design, FurnitureItem, Tool, ViewMode } from './types'
 import { CEILING_DEFAULT, rooms } from './data/house'
 import { defaultFurniture } from './data/catalog'
+import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 12
-/** 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整 */
-const FURNITURE_PATCHES: [number, string[]][] = [
+const REV = 13
+/**
+ * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
+ * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
+ */
+const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   // rev 7：加大雙人床、半島型中島餐桌與四張椅、三人沙發、咖啡櫃
   [7, ['mbed', 'mns1', 'mns2', 'mward', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'rice', 'fryer', 'sofa', 'coffeebar', 'espresso']],
   // rev 8：中島餐桌加寬到 90，電鍋與氣炸鍋橫向並排
@@ -17,6 +21,10 @@ const FURNITURE_PATCHES: [number, string[]][] = [
   [10, ['washer', 'dryer']],
   // rev 12：洗衣機、乾衣機維持並排，整組往次臥窗下那面牆推（離女兒牆遠、避免淋雨）
   [12, ['washer', 'dryer']],
+  // rev 13：衣櫃做到頂＋櫃內規劃；次臥椅子背後加矮櫃與到頂書櫃
+  [13, ['mward', 'bward1'], ['h', 'interior']],
+  [13, ['shoe', 'coffeebar', 'tvstand', 'mns1', 'mns2', 'dining'], ['interior', 'features']],
+  [13, ['scab', 'sshelf']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */
 const LAYOUT_REV = 6
@@ -74,8 +82,20 @@ function load(): Design | null {
       parsed.furniture = defaultFurniture()
     } else {
       const seeds = new Map(defaultFurniture().map((f) => [f.id, f]))
-      for (const [patchRev, ids] of FURNITURE_PATCHES) {
+      for (const [patchRev, ids, fields] of FURNITURE_PATCHES) {
         if (rev >= patchRev) continue
+        if (fields) {
+          for (const f of parsed.furniture) {
+            const seed = seeds.get(f.id)
+            if (!seed || seed.type !== f.type || !ids.includes(f.id)) continue
+            const rec = f as unknown as Record<string, unknown>
+            for (const k of fields) {
+              if (seed[k] === undefined) delete rec[k]
+              else rec[k] = clone(seed[k])
+            }
+          }
+          continue
+        }
         parsed.furniture = [
           ...parsed.furniture.filter((f) => !ids.includes(f.id)),
           ...ids.flatMap((id) => seeds.get(id) ?? []),
@@ -130,6 +150,11 @@ export const ui = reactive({
   doorsOpen: true,
   mainDoorOpen: false,
   showAirflow: true,
+  /** 櫃內規劃面板；打開時選取的櫃子在 3D 裡打開櫃門（cabinetOpen） */
+  cabinetEditor: false,
+  cabinetOpen: true,
+  /** 所有櫃子都打開櫃門 */
+  openAllCabinets: false,
   snap: 5,
   selectedId: null as string | null,
   paintColor: '#a7bac9',

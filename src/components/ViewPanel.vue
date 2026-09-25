@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AirVent, DoorClosed, DoorOpen, Keyboard, Layers, Magnet, Map as MapIcon, Tag } from '@lucide/vue'
+import { AirVent, DoorClosed, DoorOpen, Keyboard, Layers, LayoutPanelTop, Magnet, Map as MapIcon, Tag } from '@lucide/vue'
 import { design, ui } from '../store'
 
 const cuts = [
@@ -58,6 +58,10 @@ const keys: { k: string[]; t: string }[] = [
     <label class="switch-row">
       <span><AirVent />冷氣出風、投影光線示意</span>
       <input v-model="ui.showAirflow" type="checkbox" class="switch" />
+    </label>
+    <label class="switch-row">
+      <span><LayoutPanelTop />打開所有櫃門（看櫃內）</span>
+      <input v-model="ui.openAllCabinets" type="checkbox" class="switch" />
     </label>
     <label class="switch-row">
       <span><MapIcon />疊上原始平面圖</span>

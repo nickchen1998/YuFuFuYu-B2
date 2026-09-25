@@ -2,6 +2,8 @@ import * as THREE from 'three'
 import type { FurnitureItem } from '../types'
 import { mat, glassMat, shadeHex } from './mats'
 import { hashStr } from './textures'
+import { interiorCabinet, peninsulaStorage } from './cabinet3d'
+import { PENINSULA_TOP, peninsulaStorageLen } from '../cabinet'
 
 // 每個家具都在自己的座標系（公分）建模：
 //   原點 = 平面外框中心、地面；寬沿 x、深沿 z、正面朝 +z
@@ -194,33 +196,6 @@ function rug(g: G, it: FurnitureItem) {
   const border = mat(shadeHex(it.color, 0.8), 1)
   const b = 6
   for (const sz of [-1, 1]) bx(g, it.w - 2, Math.max(0.8, it.h) + 0.2, b, 0, 0, sz * (it.d / 2 - b / 2 - 1), border).castShadow = false
-}
-
-function bookshelf(g: G, it: FurnitureItem) {
-  const { w, d, h } = it
-  const m = mat(it.color, 0.6)
-  const t = 2
-  bx(g, t, h, d, -w / 2 + t / 2, 0, 0, m)
-  bx(g, t, h, d, w / 2 - t / 2, 0, 0, m)
-  bx(g, w, t, d, 0, h - t, 0, m)
-  bx(g, w, 6, d, 0, 0, 0, m)
-  bx(g, w, h, 1, 0, 0, -d / 2 + 0.5, m)
-  const rand = rng(hashStr(it.id))
-  const colors = ['#7a4b3a', '#355c7d', '#c06c84', '#6c8f5c', '#e0c28c', '#3d3d3d', '#b6a58c', '#8c6a9a']
-  const shelves = Math.max(2, Math.floor((h - 6) / 36))
-  const sh = (h - 6 - t) / shelves
-  for (let i = 0; i < shelves; i++) {
-    const y = 6 + i * sh
-    if (i > 0) bx(g, w - t * 2, t, d - 1, 0, y - t, 0.5, m)
-    let x = -w / 2 + t + 1
-    const limit = w / 2 - t - 1 - (rand() * w) / 3
-    while (x < limit) {
-      const bw = 2 + rand() * 3
-      const bh = Math.min(sh - 5, 18 + rand() * 12)
-      bx(g, bw, bh, d * 0.75, x + bw / 2, y, 0, mat(colors[Math.floor(rand() * colors.length)], 0.8))
-      x += bw + 0.3
-    }
-  }
 }
 
 function plant(g: G, it: FurnitureItem) {
@@ -446,83 +421,18 @@ function windowisland(g: G, it: FurnitureItem) {
 
 /**
  * 訂製中島餐桌（半島型）：-x 端靠牆是收納段，+x 端是餐桌段，檯面連續同高。
- * 收納段 -z 側（朝廚房）嵌微波爐與抽屜、+z 側是門片櫃；餐桌段兩側都能放椅子並收進桌下。
+ * 收納段是雙面櫃（內部規劃見 interiors.ts）：-z 側朝廚房、+z 側朝走道；餐桌段兩側都能放椅子並收進桌下。
  */
 function peninsula(g: G, it: FurnitureItem) {
   const { w, d, h } = it
-  const ls = Math.min(100, Math.round(w * 0.45))
-  const body = mat(it.color, 0.6)
-  const line = mat(shadeHex(it.color, 0.55), 0.8)
-  const topH = 4
-  const base = 8
-  const bodyTop = h - topH
-  const sx0 = -w / 2
-  const sx1 = -w / 2 + ls
-  const scx = (sx0 + sx1) / 2
-  bx(g, ls - 2, base, d - 8, scx, 0, 0, line)
-  bx(g, ls, bodyTop - base, d, scx, base, 0, body)
-  bx(g, w, topH, d + 2, 0, bodyTop, 0, mat('#dcd8d1', 0.3))
+  const ls = peninsulaStorageLen(it)
+  const bodyTop = h - PENINSULA_TOP
+  peninsulaStorage(g, it)
+  bx(g, w, PENINSULA_TOP, d + 2, 0, bodyTop, 0, mat('#dcd8d1', 0.3))
   // 餐桌段：末端兩支腳＋中間橫樑
   const legM = mat('#8a8680', 0.5, 0.3)
   for (const sz of [-1, 1]) bx(g, 5, bodyTop, 5, w / 2 - 5, 0, sz * (d / 2 - 5), legM)
-  bx(g, w - ls - 8, 6, 3, (sx1 + w / 2) / 2, bodyTop - 6, 0, mat(shadeHex(it.color, 0.85), 0.6))
-  // -z 側（朝廚房）：微波爐＋抽屜；微波爐照市售 60 公分嵌入式模組（外觀約 60 × 38）
-  const kz = -d / 2 - 0.15
-  const mw = has(it, 'microwave')
-  const mwW = 59.5
-  const mh = 38
-  const mwCx = sx1 - 4 - mwW / 2
-  const mwY = bodyTop - 6 - mh
-  if (mw) {
-    bx(g, mwW, mh, 1.2, mwCx, mwY, kz - 0.45, mat('#c7cace', 0.3, 0.7))
-    bx(g, mwW * 0.68, mh - 7, 0.4, mwCx + mwW * 0.12, mwY + 3.5, kz - 1.2, mat('#14171b', 0.1, 0.3))
-    bx(g, mwW * 0.18, mh - 7, 0.4, mwCx - mwW / 2 + mwW * 0.11 + 1, mwY + 3.5, kz - 1.2, mat('#2b2f34', 0.4))
-    bx(g, mwW, 0.6, 0.4, mwCx, (base + mwY) / 2, kz, line)
-    bx(g, 16, 1.4, 2, mwCx, (base + mwY) / 2 + (mwY - base) / 4, kz - 0.8, METAL())
-    bx(g, 0.6, bodyTop - base, 0.4, sx1 - 8 - mwW, base, kz, line)
-  }
-  const dx1 = mw ? sx1 - 8 - mwW : sx1
-  const dcx = (sx0 + dx1) / 2
-  const ddw = dx1 - sx0
-  const rh = (bodyTop - base) / 3
-  for (let r = 1; r < 3; r++) bx(g, ddw - 2, 0.6, 0.4, dcx, base + r * rh, kz, line)
-  for (let r = 0; r < 3; r++) bx(g, Math.min(22, ddw / 3), 1.4, 2, dcx, base + (r + 0.5) * rh, kz - 0.8, METAL())
-  // +z 側（朝走道）：兩扇門片
-  const pz = d / 2 + 0.15
-  bx(g, 0.6, bodyTop - base - 2, 0.4, scx, base + 1, pz, line)
-  for (const sx of [-1, 1]) bx(g, 1.4, 14, 2, scx + sx * 4, bodyTop - 24, pz + 0.8, METAL())
-}
-
-/**
- * 咖啡櫃（零食櫃）：下櫃門片＋抽屜。
- * 高 110 以下是矮櫃，咖啡機直接放檯面；更高時多一段開放檯面（木背板＋層板燈）與上櫃。
- */
-function coffeebar(g: G, it: FurnitureItem) {
-  const { w, d, h } = it
-  const body = mat(it.color, 0.6)
-  const line = mat(shadeHex(it.color, 0.55), 0.8)
-  const front = d / 2 + 0.15
-  const base = 8
-  const tall = h > 110
-  const lowH = tall ? 88 : h
-  const nicheH = 50
-  const upY = lowH + nicheH
-  bx(g, w - 2, base, d - 4, 0, 0, -2, line)
-  bx(g, w, lowH - base - 3, d, 0, base, 0, body)
-  bx(g, w + 1, 3, d + 1, 0, lowH - 3, 0.5, mat('#dcd8d1', 0.3))
-  bx(g, w - 2, 0.6, 0.4, 0, lowH - 20, front, line)
-  bx(g, 0.6, lowH - 21 - base, 0.4, 0, base, front, line)
-  for (const sx of [-1, 1]) {
-    bx(g, 16, 1.4, 2, sx * (w / 4), lowH - 13, front + 0.8, METAL())
-    bx(g, 1.4, 14, 2, sx * 4, lowH - 40, front + 0.8, METAL())
-  }
-  if (!tall) return
-  bx(g, w, nicheH, 2, 0, lowH, -d / 2 + 1, mat('#b08560', 0.5))
-  for (const sx of [-1, 1]) bx(g, 2, nicheH, d, sx * (w / 2 - 1), lowH, 0, body)
-  bx(g, w, h - upY, d, 0, upY, 0, body)
-  bx(g, 0.6, h - upY - 2, 0.4, 0, upY + 1, front, line)
-  for (const sx of [-1, 1]) bx(g, 1.4, 14, 2, sx * 4, upY + 3, front + 0.8, METAL())
-  bx(g, w - 10, 1, 3, 0, upY - 1, 0, mat('#fff2d6', 0.3, 0, '#fff2d6'))
+  bx(g, w - ls - 8, 6, 3, (-w / 2 + ls + w / 2) / 2, bodyTop - 6, 0, mat(shadeHex(it.color, 0.85), 0.6))
 }
 
 function coffeemaker(g: G, it: FurnitureItem) {
@@ -757,10 +667,13 @@ function plainBox(g: G, it: FurnitureItem) {
 
 const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   bed,
-  wardrobe: (g, it) => cabinet(g, it, 'doors'),
-  cabinet: (g, it) => cabinet(g, it, 'doors'),
-  nightstand: (g, it) => cabinet(g, it, 'drawers', true),
-  tvstand: (g, it) => cabinet(g, it, 'drawers', true),
+  // 有櫃內規劃的櫃子
+  wardrobe: interiorCabinet,
+  cabinet: interiorCabinet,
+  nightstand: interiorCabinet,
+  tvstand: interiorCabinet,
+  bookshelf: interiorCabinet,
+  coffeebar: interiorCabinet,
   island,
   desk,
   table,
@@ -770,7 +683,6 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   coffeetable,
   tv,
   rug,
-  bookshelf,
   plant,
   lamp,
   fridge,
@@ -784,7 +696,6 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   vacuum,
   windowisland,
   peninsula,
-  coffeebar,
   coffeemaker,
   dryer,
   projector,
@@ -801,7 +712,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
 
 /** 會影響模型外觀的欄位（改了就要重建模型） */
 export function furnitureSignature(it: FurnitureItem) {
-  return `${it.type}|${it.w}|${it.d}|${it.h}|${it.color}|${(it.features ?? []).join(',')}`
+  return `${it.type}|${it.name}|${it.w}|${it.d}|${it.h}|${it.color}|${(it.features ?? []).join(',')}|${it.interior ? JSON.stringify(it.interior) : ''}`
 }
 
 export function buildFurniture(it: FurnitureItem): THREE.Group {

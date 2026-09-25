@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import {
-  BedDouble, ChevronRight, Copy, Lock, MapPin, MousePointer2, Move, Package, Plus, RotateCcw, RotateCw, Rows3,
+  BedDouble, ChevronRight, Copy, LayoutPanelTop, Lock, MapPin, MousePointer2, Move, Package, Plus, RotateCcw, RotateCw, Rows3,
   Sofa, Sparkles, Trash, TriangleAlert, Utensils, X,
 } from '@lucide/vue'
 import { design, ui } from '../store'
@@ -10,6 +10,7 @@ import { rooms } from '../data/house'
 import { blockingRects, footprint, rectsOverlap, roomAt } from '../geometry'
 import type { FurnitureItem } from '../types'
 import { furnitureIcon } from './icons'
+import { hasInterior } from '../cabinet'
 
 const categoryIcons = { 臥室: BedDouble, 客廳: Sofa, 餐廚: Utensils, 其他: Package } as const
 
@@ -21,7 +22,6 @@ const featureDefs: Record<string, { key: string; label: string }[]> = {
   ],
   island: [{ key: 'microwave', label: '嵌入微波爐' }],
   diningisland: [{ key: 'microwave', label: '中島嵌入微波爐' }],
-  peninsula: [{ key: 'microwave', label: '收納段嵌入微波爐' }],
   windowisland: [
     { key: 'microwave', label: '嵌入微波爐' },
     { key: 'tableout', label: '抽拉餐桌拉出（用餐時）' },
@@ -177,6 +177,15 @@ function remove() {
       <span><Sparkles />{{ f.label }}</span>
       <input type="checkbox" class="switch" :checked="selected.features?.includes(f.key)" @change="toggleFeature(f.key)" />
     </label>
+
+    <button
+      v-if="hasInterior(selected)"
+      class="btn block cab-open"
+      :class="ui.cabinetEditor ? 'primary' : 'soft'"
+      @click="ui.cabinetEditor = !ui.cabinetEditor"
+    >
+      <LayoutPanelTop />{{ ui.cabinetEditor ? '收起櫃內規劃' : '櫃內規劃（立面圖）' }}
+    </button>
 
     <div class="item-actions">
       <button

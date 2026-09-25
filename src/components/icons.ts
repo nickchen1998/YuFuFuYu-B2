@@ -30,6 +30,7 @@ const map: Record<string, Component> = {
   projection: Presentation,
   pegboard: Grid3x3,
   vacuum: BrushCleaning,
+  dryer: WashingMachine,
   roundtable: Circle,
   fridge: Refrigerator,
   cabinet: Archive,

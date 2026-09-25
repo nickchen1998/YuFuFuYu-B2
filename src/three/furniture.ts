@@ -466,11 +466,11 @@ function peninsula(g: G, it: FurnitureItem) {
   const legM = mat('#8a8680', 0.5, 0.3)
   for (const sz of [-1, 1]) bx(g, 5, bodyTop, 5, w / 2 - 5, 0, sz * (d / 2 - 5), legM)
   bx(g, w - ls - 8, 6, 3, (sx1 + w / 2) / 2, bodyTop - 6, 0, mat(shadeHex(it.color, 0.85), 0.6))
-  // -z 側（朝廚房）：微波爐＋抽屜
+  // -z 側（朝廚房）：微波爐＋抽屜；微波爐照市售 60 公分嵌入式模組（外觀約 60 × 38）
   const kz = -d / 2 - 0.15
   const mw = has(it, 'microwave')
-  const mwW = 45
-  const mh = 28
+  const mwW = 59.5
+  const mh = 38
   const mwCx = sx1 - 4 - mwW / 2
   const mwY = bodyTop - 6 - mh
   if (mw) {
@@ -627,6 +627,26 @@ function pegboard(g: G, it: FurnitureItem) {
   hat.rotation.x = Math.PI / 2
 }
 
+/** 滾筒乾衣機（熱泵式）：上方控制面板＋左上集水盒，正面大圓門 */
+function dryer(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const f = d / 2
+  bx(g, w, h, d, 0, 0, 0, mat(it.color, 0.35))
+  bx(g, w - 2, 12, 0.5, 0, h - 14, f + 0.2, mat(shadeHex(it.color, 0.93), 0.4))
+  bx(g, 16, 7, 0.6, -w / 2 + 11, h - 11.5, f + 0.4, mat(shadeHex(it.color, 0.85), 0.4))
+  bx(g, 14, 4, 0.6, w * 0.12, h - 10, f + 0.4, mat('#1d2a38', 0.2))
+  const ring = new THREE.Mesh(new THREE.CylinderGeometry(w * 0.34, w * 0.34, 2.4, 44), mat('#c3c8cd', 0.3, 0.6))
+  ring.rotation.x = Math.PI / 2
+  ring.position.set(0, h * 0.42, f + 1.2)
+  g.add(ring)
+  const door = new THREE.Mesh(new THREE.CylinderGeometry(w * 0.27, w * 0.27, 2.6, 44), mat('#2a3440', 0.1, 0.2))
+  door.rotation.x = Math.PI / 2
+  door.position.set(0, h * 0.42, f + 1.3)
+  g.add(door)
+  bx(g, 3, 12, 3, w * 0.36, h * 0.36, f + 2.5, mat('#9aa3ab', 0.3, 0.6))
+  bx(g, w - 10, 6, 1, 0, 2, f + 0.3, DARK())
+}
+
 /** 直立式吸塵器掛在充電座上 */
 function vacuum(g: G, it: FurnitureItem) {
   const { w, d, h } = it
@@ -766,6 +786,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   peninsula,
   coffeebar,
   coffeemaker,
+  dryer,
   projector,
   projection,
   pegboard,

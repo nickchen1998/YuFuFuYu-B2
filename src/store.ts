@@ -5,7 +5,7 @@ import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 40
+const REV = 41
 /**
  * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
  * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
@@ -85,6 +85,10 @@ const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   // rev 40：電子鍋改放微波爐旁的抽拉開放層板
   [40, ['dining'], ['interior']],
   [40, ['ecooker'], ['name', 'x', 'y', 'rot', 'elev']],
+  // rev 41：餐桌改短（220 → 170，靠窗端不動），餐椅改兩張面對面
+  [41, ['dining'], ['y', 'w']],
+  [41, ['dchair1', 'dchair2'], ['x', 'y', 'rot']],
+  [41, ['dchair3', 'dchair4']],
   [25, ['shoe', 'sofa', 'coffeebar', 'rug', 'coffee', 'tvstand', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'mbed', 'mns1', 'mns2', 'mward', 'bward1', 'scab', 'vanity', 'vanity2'], ['color']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */

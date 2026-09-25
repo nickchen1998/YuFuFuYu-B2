@@ -70,8 +70,8 @@ export interface CabFrame {
 
 export const STONE = 3
 
-/** 半島型中島收納段的長度 */
-export const peninsulaStorageLen = (it: FurnitureItem) => Math.min(100, Math.round(it.w * 0.45))
+/** 半島型中島收納段的長度：固定 99（微波爐欄 56＋電子鍋欄 37.6＋側板），桌子太短時才跟著縮 */
+export const peninsulaStorageLen = (it: FurnitureItem) => Math.min(99, Math.round(it.w * 0.6))
 export const PENINSULA_TOP = 4
 
 export function cabinetFrame(it: FurnitureItem): CabFrame {

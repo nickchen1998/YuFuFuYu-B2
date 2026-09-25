@@ -26,7 +26,7 @@ export const BUDGET_CATS = ['家具', '家電・設備', '系統櫃・訂製']
 function budgetCategory(it: FurnitureItem) {
   const c = itemCategory(it)
   if (c === '系統櫃' || c === '訂製') return '系統櫃・訂製'
-  if (c === '家電' || c === '建商附') return '家電・設備'
+  if (c === '家電' || c === '建商附' || c === '衛浴') return '家電・設備'
   return '家具'
 }
 

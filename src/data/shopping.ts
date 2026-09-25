@@ -48,7 +48,6 @@ const alias: Record<string, string> = {
   mns2: 'mns1',
   ac2: 'ac1',
   toilet2: 'toilet',
-  vanity2: 'vanity',
 }
 
 export const shopping: Record<string, ShopInfo> = {
@@ -1414,8 +1413,9 @@ const APPLIANCES = [
   'projector',
 ]
 
-/** 分類：系統櫃（訂做）、訂製、家電、建商附、家具 */
+/** 分類：系統櫃（訂做）、訂製、家電、衛浴（自己買的洗臉盆）、建商附、家具 */
 export function itemCategory(it: FurnitureItem): string {
+  if (it.type === 'vanity') return '衛浴'
   if (it.type === 'kitchen' || it.locked) return '建商附'
   if (it.type === 'peninsula') return '訂製'
   if (hasInterior(it)) return '系統櫃'

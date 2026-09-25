@@ -1560,6 +1560,11 @@ input[type='color']::-moz-color-swatch {
   background: #e6eef6;
   color: #3d5a78;
 }
+.cat-tag[data-cat='衛浴'],
+.meta-chip.cat[data-cat='衛浴'] {
+  background: #e3f1ef;
+  color: #2f6b64;
+}
 .cat-tag[data-cat='建商附'],
 .meta-chip.cat[data-cat='建商附'] {
   background: #ecebe7;

@@ -88,9 +88,9 @@ export const seedInteriors: Record<string, CabinetInterior> = {
       {
         cols: [
           {
-            // 懸空鞋櫃（離地 20）：櫃子底下放室內拖鞋；最下層開放放常穿的鞋
+            // 懸空鞋櫃（離地 20）：只有櫃子底下開放放室內拖鞋；櫃內每一層都在門片裡，最下層放常穿的鞋
             parts: [
-              P('shoe', 18, 'open', '常穿的鞋（開放）'),
+              P('shoe', 18, 'door', '常穿的鞋'),
               P('shoe', 26, 'door', '高筒鞋・雨鞋'),
               P('shoe', null, 'door', '鞋子'),
               P('shoe', null, 'door', '鞋子'),

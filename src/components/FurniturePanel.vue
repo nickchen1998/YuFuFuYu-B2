@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import {
-  ArrowLeft, ChevronRight, LayoutPanelTop, Layers, Lightbulb, MapPin, Ruler, Search, ShoppingBag, Store,
+  ArrowLeft,
+  ChevronRight,
+  LayoutPanelTop,
+  Layers,
+  Lightbulb,
+  MapPin,
+  Ruler,
+  Search,
+  ShoppingBag,
+  Store,
   TriangleAlert,
 } from '@lucide/vue'
 import { design, ui } from '../store'
@@ -10,10 +19,27 @@ import { rooms } from '../data/house'
 import { roomAt } from '../geometry'
 import { furnitureIcon } from './icons'
 import {
-  cabinetFrame, faceDepths, frontKinds, hasInterior, interiorOf, interiorStats, interiorWarnings, layoutFace, partKind,
+  cabinetFrame,
+  faceDepths,
+  frontKinds,
+  hasInterior,
+  interiorOf,
+  interiorStats,
+  interiorWarnings,
+  layoutFace,
+  partKind,
 } from '../cabinet'
 import {
-  cabinetMaterials, cabinetSearch, cabinetVendors, googleUrl, itemCategory, momoUrl, money, pchomeUrl, shopInfo, shopKey,
+  cabinetMaterials,
+  cabinetSearch,
+  cabinetVendors,
+  googleUrl,
+  itemCategory,
+  momoUrl,
+  money,
+  pchomeUrl,
+  shopInfo,
+  shopKey,
   type ShopVendor,
 } from '../data/shopping'
 import { budget, furnitureGroups } from '../budget'
@@ -55,6 +81,17 @@ const rowSpend = (it: FurnitureItem) => {
   return k ? (budget.value.byRoot.get(k) ?? 0) : 0
 }
 const showLines = ref(false)
+
+// 換一件家具時捲回最上面
+const detailEl = ref<HTMLElement>()
+watch(
+  () => ui.selectedId,
+  () => {
+    const box = detailEl.value?.closest('.inspector-body')
+    if (box) box.scrollTop = 0
+  },
+  { flush: 'post' },
+)
 function openItem(id: string) {
   ui.selectedId = id
 }
@@ -132,35 +169,48 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
 
 <template>
   <!-- 家具詳細資料 -->
-  <section v-if="selected" class="detail">
-    <button class="back-btn" @click="ui.selectedId = null"><ArrowLeft />全部家具</button>
+  <section v-if="selected" ref="detailEl" class="detail">
+    <!-- 固定在上方：返回、名稱、摘要、尺寸規格；下面的內容捲動 -->
+    <div class="detail-fixed">
+      <button class="back-btn" @click="ui.selectedId = null"><ArrowLeft />全部家具</button>
 
-    <div class="detail-head">
-      <span class="detail-icon"><component :is="furnitureIcon(selected.type)" /></span>
-      <div class="detail-title">
-        <h2>{{ selected.name }}</h2>
-        <div class="item-meta">
-          <span class="meta-chip"><MapPin />{{ selectedRoom }}</span>
-          <span class="meta-chip cat" :data-cat="category">{{ category }}</span>
+      <div class="detail-head">
+        <span class="detail-icon"><component :is="furnitureIcon(selected.type)" /></span>
+        <div class="detail-title">
+          <h2>{{ selected.name }}</h2>
+          <div class="item-meta">
+            <span class="meta-chip"><MapPin />{{ selectedRoom }}</span>
+            <span class="meta-chip cat" :data-cat="category">{{ category }}</span>
+          </div>
         </div>
       </div>
-    </div>
-    <p v-if="info?.summary" class="detail-summary">{{ info.summary }}</p>
-    <p v-if="itemSpend" class="detail-spend">這件已勾選 <b>{{ money(itemSpend) }}</b></p>
+      <p v-if="info?.summary" class="detail-summary">{{ info.summary }}</p>
+      <p v-if="itemSpend" class="detail-spend">
+        這件已勾選 <b>{{ money(itemSpend) }}</b>
+      </p>
 
-    <div class="detail-sec">
-      <h3><Ruler />尺寸規格</h3>
-      <div class="spec-grid">
-        <div><span>寬</span><b>{{ fmt(selected.w) }}</b></div>
-        <div><span>深</span><b>{{ fmt(selected.d) }}</b></div>
-        <div><span>高</span><b>{{ fmt(selected.h) }}</b></div>
-        <div v-if="selected.elev"><span>離地</span><b>{{ fmt(selected.elev) }}</b></div>
+      <div class="detail-sec">
+        <h3><Ruler />尺寸規格</h3>
+        <div class="spec-grid">
+          <div>
+            <span>寬</span><b>{{ fmt(selected.w) }}</b>
+          </div>
+          <div>
+            <span>深</span><b>{{ fmt(selected.d) }}</b>
+          </div>
+          <div>
+            <span>高</span><b>{{ fmt(selected.h) }}</b>
+          </div>
+          <div v-if="selected.elev">
+            <span>離地</span><b>{{ fmt(selected.elev) }}</b>
+          </div>
+        </div>
+        <p class="muted tight">單位：公分。</p>
+        <ul v-if="features.length || info?.specs?.length" class="bullets">
+          <li v-for="f in features" :key="f">配備：{{ f }}</li>
+          <li v-for="s in info?.specs ?? []" :key="s">{{ s }}</li>
+        </ul>
       </div>
-      <p class="muted tight">單位：公分。</p>
-      <ul v-if="features.length || info?.specs?.length" class="bullets">
-        <li v-for="f in features" :key="f">配備：{{ f }}</li>
-        <li v-for="s in info?.specs ?? []" :key="s">{{ s }}</li>
-      </ul>
     </div>
 
     <!-- 櫃內格局 -->
@@ -232,7 +282,9 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
 
     <!-- 建議商品 -->
     <div v-if="info?.picks?.length" class="detail-sec">
-      <h3><ShoppingBag />建議商品<small v-if="infoQty > 1" class="h3-note">×{{ infoQty }}</small></h3>
+      <h3>
+        <ShoppingBag />建議商品<small v-if="infoQty > 1" class="h3-note">×{{ infoQty }}</small>
+      </h3>
       <p class="muted tight pick-hint">勾選的商品會計入總花費，標「推薦」的是預設組合。</p>
       <ShopPicks :picks="info.picks" :group="infoKey!" :qty="infoQty" />
     </div>
@@ -326,7 +378,9 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
       <button v-for="r in g.rows" :key="r.it.id" class="fl-item" @click="ui.selectedId = r.it.id">
         <span class="fl-icon"><component :is="furnitureIcon(r.it.type)" /></span>
         <span class="fl-text">
-          <b>{{ r.it.name }}<i v-if="r.count > 1"> ×{{ r.count }}</i></b>
+          <b
+            >{{ r.it.name }}<i v-if="r.count > 1"> ×{{ r.count }}</i></b
+          >
           <small>
             {{ fmt(r.it.w) }} × {{ fmt(r.it.d) }} × {{ fmt(r.it.h) }} 公分
             <span v-if="rowSpend(r.it)" class="fl-spend">・{{ money(rowSpend(r.it)) }}</span>

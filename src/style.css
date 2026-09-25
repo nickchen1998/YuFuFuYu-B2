@@ -1569,8 +1569,21 @@ input[type='color']::-moz-color-swatch {
 /* ── 家具詳細資料 ─────────────────────────────────────── */
 
 .detail {
-  padding: 12px 0 12px;
+  padding: 0 0 12px;
   font-size: 14px;
+}
+.detail-fixed {
+  position: sticky;
+  top: -4px;
+  z-index: 3;
+  margin: -4px -16px 0;
+  padding: 14px 16px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 6px 12px -10px rgba(38, 34, 30, 0.25);
+}
+.detail-fixed .detail-sec {
+  padding-bottom: 0;
 }
 .back-btn {
   display: inline-flex;

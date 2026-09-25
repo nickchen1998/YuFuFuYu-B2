@@ -19,7 +19,7 @@ const layout = computed(() => {
 })
 const mirrored = computed(() => !!design.mirrored)
 
-// 依容器寬度縮放（最大每公分 6 像素，小櫃子不會畫得太誇張；高度最多 440）
+// 依容器寬度縮放（最大每公分 6 像素，小櫃子不會畫得太誇張；高度最多 560）
 const boxW = ref(320)
 let ro: ResizeObserver | null = null
 let observed: HTMLElement | null = null
@@ -40,7 +40,7 @@ onBeforeUnmount(() => ro?.disconnect())
 
 const geo = computed(() => {
   const fr = frame.value
-  const s = Math.min((boxW.value - M.l - M.r) / fr.w, (440 - M.t - M.b) / fr.h, 6)
+  const s = Math.min((boxW.value - M.l - M.r) / fr.w, (560 - M.t - M.b) / fr.h, 6)
   return { s, W: M.l + fr.w * s + M.r, H: M.t + fr.h * s + M.b }
 })
 const X = (x: number) => M.l + x * geo.value.s
@@ -70,7 +70,7 @@ const cells = computed(() => {
       const h = p.h * s
       const kind = partKind(p.part.kind)
       const name = p.part.label || kind.name
-      const two = h >= 28
+      const two = h >= 30
       return {
         key: `${c.i}-${p.i}`,
         x: X(PANEL + dispX(c.x, c.w)),
@@ -79,9 +79,9 @@ const cells = computed(() => {
         h,
         fill: kind.color,
         tip: `${name}（${kind.name}）淨寬 ${fmt(c.w)} × 淨高 ${fmt(p.h)}`,
-        line1: fit(two ? name : `${name} ${fmt(p.h)}`, w - 5, h < 14 ? 8.5 : 10),
-        line2: two ? fit(fmt(p.h), w - 5, 9) : '',
-        font: h < 14 ? 8.5 : 10,
+        line1: fit(two ? name : `${name} ${fmt(p.h)}`, w - 5, h < 15 ? 9.5 : 11.5),
+        line2: two ? fit(fmt(p.h), w - 5, 10.5) : '',
+        font: h < 15 ? 9.5 : 11.5,
       }
     }),
   )
@@ -149,7 +149,7 @@ const colDims = computed(() =>
         <title>{{ c.tip }}</title>
         <rect :x="c.x" :y="c.y" :width="c.w" :height="c.h" :fill="c.fill" />
         <text :x="c.x + c.w / 2" :y="c.y + c.h / 2 + (c.line2 ? -2 : 3.5)" text-anchor="middle" :font-size="c.font">{{ c.line1 }}</text>
-        <text v-if="c.line2" :x="c.x + c.w / 2" :y="c.y + c.h / 2 + 10" text-anchor="middle" class="cell-dim">{{ c.line2 }}</text>
+        <text v-if="c.line2" :x="c.x + c.w / 2" :y="c.y + c.h / 2 + 11.5" text-anchor="middle" class="cell-dim">{{ c.line2 }}</text>
       </g>
 
       <g class="fronts">

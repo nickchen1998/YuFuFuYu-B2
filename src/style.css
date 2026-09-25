@@ -1460,52 +1460,129 @@ input[type='color']::-moz-color-swatch {
   color: var(--ink-3);
 }
 
-/* ── 家具詳細資料 ─────────────────────────────────────── */
+/* ── 家具清單 ─────────────────────────────────────────── */
 
-.list-intro {
-  padding-bottom: 12px;
+.fl {
+  padding: 6px 0 20px;
 }
-.list-item .cat-tag {
+.fl-room + .fl-room {
+  margin-top: 8px;
+}
+.fl-room h3 {
+  margin: 14px 2px 6px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+.fl-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 8px;
+  border-radius: 12px;
+  text-align: left;
+  transition: background 0.12s;
+}
+.fl-item:hover {
+  background: var(--sunken);
+}
+.fl-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 10px;
+  background: var(--sunken);
+  color: var(--ink-2);
+  --ico: 19px;
+}
+.fl-item:hover .fl-icon {
+  background: var(--surface);
+}
+.fl-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.fl-text b {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fl-text b i {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+.fl-text small {
+  font-size: 13px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.fl-go {
+  flex: none;
+  color: var(--line-strong);
+  --ico: 16px;
+}
+.fl-hint {
+  margin: 20px 4px 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+.cat-tag {
   flex: none;
   font-style: normal;
-  font-size: 10.5px;
-  padding: 1px 6px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
   border-radius: 999px;
   background: var(--sunken);
   color: var(--ink-3);
 }
 .cat-tag[data-cat='系統櫃'],
-.badge.cat[data-cat='系統櫃'],
+.meta-chip.cat[data-cat='系統櫃'],
 .cat-tag[data-cat='訂製'],
-.badge.cat[data-cat='訂製'] {
+.meta-chip.cat[data-cat='訂製'] {
   background: var(--accent-soft);
   color: var(--accent-ink);
 }
 .cat-tag[data-cat='家電'],
-.badge.cat[data-cat='家電'] {
+.meta-chip.cat[data-cat='家電'] {
   background: #e6eef6;
   color: #3d5a78;
 }
 .cat-tag[data-cat='建商附'],
-.badge.cat[data-cat='建商附'] {
+.meta-chip.cat[data-cat='建商附'] {
   background: #ecebe7;
   color: #6d675f;
 }
 
+/* ── 家具詳細資料 ─────────────────────────────────────── */
+
 .detail {
-  padding: 12px 0 8px;
+  padding: 12px 0 12px;
+  font-size: 14px;
 }
 .back-btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  height: 28px;
-  padding: 0 8px 0 4px;
-  margin-left: -4px;
-  border-radius: 8px;
+  gap: 6px;
+  height: 34px;
+  padding: 0 10px 0 6px;
+  margin-left: -6px;
+  border-radius: 9px;
   color: var(--ink-2);
-  font-size: 12.5px;
-  --ico: 15px;
+  font-size: 14px;
+  --ico: 17px;
 }
 .back-btn:hover {
   background: var(--sunken);
@@ -1514,55 +1591,68 @@ input[type='color']::-moz-color-swatch {
 .detail-head {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   margin-top: 10px;
 }
 .detail-icon {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 50px;
+  height: 50px;
   flex: none;
-  border-radius: 12px;
+  border-radius: 14px;
   background: var(--accent-soft);
   color: var(--accent-ink);
-  --ico: 22px;
+  --ico: 25px;
 }
 .detail-title {
   min-width: 0;
 }
 .detail-title h2 {
   margin: 0;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 700;
   line-height: 1.3;
 }
 .detail-title .item-meta {
-  margin: 5px 0 0;
+  margin: 6px 0 0;
+}
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: var(--sunken);
+  color: var(--ink-2);
+  font-size: 12.5px;
+  font-weight: 500;
+  --ico: 13px;
 }
 .detail-summary {
-  margin: 12px 0 0;
-  padding: 10px 12px;
-  border-radius: 10px;
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: 12px;
   background: #fff8f3;
   border: 1px solid #f0d9cb;
-  font-size: 12.5px;
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.65;
   color: var(--ink);
 }
 .detail-sec {
-  padding: 16px 0 2px;
-  margin-top: 14px;
+  padding: 18px 0 2px;
+  margin-top: 16px;
   border-top: 1px solid var(--line);
 }
 .detail-sec h3 {
   display: flex;
   align-items: center;
-  gap: 7px;
-  margin: 0 0 10px;
-  font-size: 13.5px;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 15.5px;
   font-weight: 700;
-  --ico: 16px;
+  --ico: 18px;
 }
 .detail-sec h3 .lucide {
   color: var(--ink-3);
@@ -1572,7 +1662,7 @@ input[type='color']::-moz-color-swatch {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .sec-head h3 {
   margin: 0;
@@ -1580,52 +1670,53 @@ input[type='color']::-moz-color-swatch {
 .spec-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+  gap: 8px;
 }
 .spec-grid > div {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 7px 9px;
-  border-radius: 9px;
+  padding: 9px 11px;
+  border-radius: 10px;
   background: var(--sunken);
 }
 .spec-grid span {
-  font-size: 11px;
+  font-size: 12.5px;
   color: var(--ink-3);
 }
 .spec-grid b {
-  font-size: 15px;
+  font-size: 19px;
   font-variant-numeric: tabular-nums;
 }
 .muted.tight {
-  margin-top: 6px;
-  font-size: 11.5px;
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.6;
 }
 .bullets {
-  margin: 8px 0 0;
-  padding-left: 18px;
-  font-size: 12.5px;
-  line-height: 1.6;
+  margin: 10px 0 0;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.65;
   color: var(--ink);
 }
 .bullets li + li {
-  margin-top: 3px;
+  margin-top: 4px;
 }
 .face-tabs {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .elev {
-  margin-top: 8px;
-  padding: 8px 4px;
-  border-radius: 10px;
+  margin-top: 10px;
+  padding: 10px 4px;
+  border-radius: 12px;
   background: var(--sunken);
 }
 .cab-toggle {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: 12px;
+  gap: 8px;
+  font-size: 13px;
   color: var(--ink-2);
   white-space: nowrap;
   cursor: pointer;
@@ -1633,24 +1724,38 @@ input[type='color']::-moz-color-swatch {
 .cab-stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 10px;
+  gap: 6px;
+  margin-top: 12px;
+}
+.stat {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: var(--sunken);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
 }
 .cab-warn {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-top: 10px;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fdf4e6;
 }
 .cab-warn p {
   display: flex;
   align-items: flex-start;
-  gap: 6px;
+  gap: 7px;
   margin: 0;
-  font-size: 12px;
-  line-height: 1.5;
-  color: #9a5b12;
-  --ico: 14px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #8a520f;
+  --ico: 16px;
 }
 .cab-warn p .lucide {
   flex: none;
@@ -1658,23 +1763,23 @@ input[type='color']::-moz-color-swatch {
 }
 .parts-list,
 .more {
-  margin-top: 12px;
+  margin-top: 14px;
   border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 0 10px;
+  border-radius: 12px;
+  padding: 0 12px;
 }
 .parts-list summary,
 .more summary {
   display: flex;
   align-items: center;
-  gap: 6px;
-  height: 36px;
+  gap: 7px;
+  height: 42px;
   cursor: pointer;
   list-style: none;
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--ink-2);
-  --ico: 14px;
+  --ico: 16px;
 }
 .parts-list summary::-webkit-details-marker,
 .more summary::-webkit-details-marker {
@@ -1689,29 +1794,29 @@ input[type='color']::-moz-color-swatch {
   transform: rotate(90deg);
 }
 .more[open] {
-  padding-bottom: 10px;
+  padding-bottom: 12px;
 }
 .parts-col {
-  padding: 6px 0 10px;
+  padding: 8px 0 12px;
   border-top: 1px solid var(--line);
 }
 .parts-col > b {
   display: block;
-  margin-bottom: 4px;
-  font-size: 12px;
+  margin-bottom: 6px;
+  font-size: 13.5px;
 }
 .parts-row {
   display: grid;
-  grid-template-columns: 10px 1fr auto;
+  grid-template-columns: 12px 1fr auto;
   align-items: center;
-  gap: 7px;
-  padding: 2px 0;
-  font-size: 12px;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 13.5px;
 }
 .parts-row i {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
   border: 1px solid rgba(80, 70, 60, 0.25);
 }
 .parts-row span {
@@ -1722,16 +1827,16 @@ input[type='color']::-moz-color-swatch {
 }
 .parts-row small {
   color: var(--ink-3);
-  font-size: 11px;
+  font-size: 12.5px;
   white-space: nowrap;
 }
 .pick {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: 10px 12px;
-  margin-bottom: 7px;
-  border-radius: 10px;
+  gap: 4px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border-radius: 12px;
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--ink);
@@ -1743,12 +1848,12 @@ a.pick:hover {
   background: #fffaf6;
 }
 .pick b {
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.4;
 }
 .pick small {
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: 13.5px;
+  line-height: 1.55;
   color: var(--ink-2);
 }
 .pick-foot {
@@ -1756,29 +1861,29 @@ a.pick:hover {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 .pick-foot em {
   font-style: normal;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--accent-ink);
 }
 .pick-link {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   flex: none;
-  font-size: 11.5px;
+  font-size: 13px;
   color: var(--ink-3);
-  --ico: 12px;
+  --ico: 14px;
 }
 .search-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 0;
-  font-size: 12.5px;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 14px;
 }
 .search-row span {
   flex: 1;
@@ -1788,13 +1893,13 @@ a.pick:hover {
   white-space: nowrap;
 }
 .search-row .chip {
-  height: 24px;
-  padding: 0 9px;
-  font-size: 11.5px;
+  height: 30px;
+  padding: 0 12px;
+  font-size: 13px;
   text-decoration: none;
 }
 .vendor {
-  padding: 8px 0;
+  padding: 10px 0;
   border-bottom: 1px dashed var(--line);
 }
 .vendor:last-child {
@@ -1802,31 +1907,32 @@ a.pick:hover {
 }
 .vendor b {
   display: block;
-  font-size: 13px;
+  font-size: 15px;
 }
 .vendor small {
   display: block;
-  margin-top: 2px;
-  font-size: 12px;
-  line-height: 1.5;
+  margin-top: 3px;
+  font-size: 13.5px;
+  line-height: 1.55;
   color: var(--ink-2);
 }
 .vendor-links {
   display: flex;
-  gap: 12px;
-  margin-top: 4px;
+  gap: 14px;
+  margin-top: 6px;
 }
 .vendor-links a {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 12px;
+  gap: 5px;
+  font-size: 13.5px;
   color: var(--accent-ink);
   text-decoration: none;
-  --ico: 13px;
+  --ico: 15px;
 }
 .detail-foot {
-  margin-top: 18px;
+  margin-top: 22px;
+  font-size: 13px;
 }
 
 /* 立面圖 */
@@ -1861,7 +1967,7 @@ a.pick:hover {
 }
 .cab-svg .dim-text {
   fill: var(--ink-2);
-  font-size: 10px;
+  font-size: 11.5px;
 }
 .cab-svg .cell rect {
   stroke: rgba(80, 70, 60, 0.18);
@@ -1876,7 +1982,7 @@ a.pick:hover {
 }
 .cab-svg .cell .cell-dim {
   fill: var(--ink-3);
-  font-size: 9px;
+  font-size: 10.5px;
 }
 .cab-svg .fronts {
   pointer-events: none;

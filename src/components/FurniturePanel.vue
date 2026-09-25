@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import {
-  ArrowLeft, ChevronRight, ExternalLink, LayoutPanelTop, Layers, Lightbulb, MapPin, Phone, Ruler, Rows3, Search, ShoppingBag, Store,
+  ArrowLeft, ChevronRight, ExternalLink, LayoutPanelTop, Layers, Lightbulb, MapPin, Phone, Ruler, Search, ShoppingBag, Store,
   TriangleAlert,
 } from '@lucide/vue'
 import { design, ui } from '../store'
+import type { FurnitureItem } from '../types'
 import { rooms } from '../data/house'
 import { roomAt } from '../geometry'
 import { furnitureIcon } from './icons'
@@ -25,11 +26,18 @@ const selected = computed(() => design.furniture.find((f) => f.id === ui.selecte
 const roomName = (x: number, y: number) => roomAt(x, y)?.name ?? '室外'
 const selectedRoom = computed(() => (selected.value ? roomName(selected.value.x, selected.value.y) : ''))
 
+/** 依房間分組；同名同尺寸的家具合成一列（例如 餐椅 ×4） */
 const grouped = computed(() => {
   const names = [...rooms.map((r) => r.name), '室外']
-  const out = names.map((room) => ({ room, items: [] as typeof design.furniture }))
-  for (const it of design.furniture) out.find((g) => g.room === roomName(it.x, it.y))!.items.push(it)
-  return out.filter((g) => g.items.length)
+  const out = names.map((room) => ({ room, rows: [] as { it: FurnitureItem; count: number; key: string }[] }))
+  for (const it of design.furniture) {
+    const g = out.find((x) => x.room === roomName(it.x, it.y))!
+    const key = `${it.type}|${it.name}|${it.w}|${it.d}|${it.h}`
+    const row = g.rows.find((r) => r.key === key)
+    if (row) row.count++
+    else g.rows.push({ it, count: 1, key })
+  }
+  return out.filter((g) => g.rows.length)
 })
 
 const info = computed(() => (selected.value ? shopInfo(selected.value) : undefined))
@@ -115,8 +123,8 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
       <div class="detail-title">
         <h2>{{ selected.name }}</h2>
         <div class="item-meta">
-          <span class="badge"><MapPin />{{ selectedRoom }}</span>
-          <span class="badge cat" :data-cat="category">{{ category }}</span>
+          <span class="meta-chip"><MapPin />{{ selectedRoom }}</span>
+          <span class="meta-chip cat" :data-cat="category">{{ category }}</span>
         </div>
       </div>
     </div>
@@ -157,7 +165,7 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
       <CabinetElevation :item="selected" :face="fi" />
       <p class="muted tight">虛線是門片（三角形尖端是鉸鏈那一邊）、短橫線是抽屜把手；格子裡的數字是淨高。</p>
       <div v-if="stats.length" class="cab-stats">
-        <span v-for="s in stats" :key="s" class="badge">{{ s }}</span>
+        <span v-for="s in stats" :key="s" class="stat">{{ s }}</span>
       </div>
       <div v-if="warnings.length" class="cab-warn">
         <p v-for="w in warnings" :key="w"><TriangleAlert />{{ w }}</p>
@@ -265,27 +273,19 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
   </section>
 
   <!-- 家具清單 -->
-  <template v-else>
-    <section class="section list-intro">
-      <div class="section-head">
-        <h3><Rows3 />家具清單</h3>
-        <span class="badge">{{ design.furniture.length }} 件</span>
-      </div>
-      <p class="muted tight">
-        點一件家具（或直接點 3D 畫面）看尺寸規格、建議商品與廠商；系統櫃會打開櫃門、顯示櫃內格局。要新增、移除或調整，直接跟我說。
-      </p>
-    </section>
-    <details v-for="g in grouped" :key="g.room" class="group" open>
-      <summary>
-        <ChevronRight class="chev" />{{ g.room }}
-        <span class="badge">{{ g.items.length }}</span>
-      </summary>
-      <button v-for="it in g.items" :key="it.id" class="list-item" @click="ui.selectedId = it.id">
-        <component :is="furnitureIcon(it.type)" />
-        <span>{{ it.name }}</span>
-        <small>{{ fmt(it.w) }}×{{ fmt(it.d) }}×{{ fmt(it.h) }}</small>
-        <em class="cat-tag" :data-cat="itemCategory(it)">{{ itemCategory(it) }}</em>
+  <div v-else class="fl">
+    <section v-for="g in grouped" :key="g.room" class="fl-room">
+      <h3>{{ g.room }}</h3>
+      <button v-for="r in g.rows" :key="r.it.id" class="fl-item" @click="ui.selectedId = r.it.id">
+        <span class="fl-icon"><component :is="furnitureIcon(r.it.type)" /></span>
+        <span class="fl-text">
+          <b>{{ r.it.name }}<i v-if="r.count > 1"> ×{{ r.count }}</i></b>
+          <small>{{ fmt(r.it.w) }} × {{ fmt(r.it.d) }} × {{ fmt(r.it.h) }} 公分</small>
+        </span>
+        <em class="cat-tag" :data-cat="itemCategory(r.it)">{{ itemCategory(r.it) }}</em>
+        <ChevronRight class="fl-go" />
       </button>
-    </details>
-  </template>
+    </section>
+    <p class="fl-hint">點一件家具（或直接點 3D 畫面）看尺寸、櫃內格局和建議商品。要新增、移除或調整，直接跟我說。</p>
+  </div>
 </template>

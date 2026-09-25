@@ -145,7 +145,14 @@ export const seedInteriors: Record<string, CabinetInterior> = {
           { parts: [P('drawer', null, 'drawer', '抹布・備品'), P('drawer', null, 'drawer', '保鮮膜・夾鏈袋'), P('drawer', null, 'drawer', '餐具')] },
         ],
       },
-      { name: '走道側', cols: [{ parts: [P('shelf', null, 'door', '烤盤・大鍋'), P('shelf', null, 'door', '保鮮盒・備品')] }] },
+      // 走道側加一片中立板（層板跨距不超過 80），左右各一扇門
+      {
+        name: '走道側',
+        cols: [
+          { parts: [P('shelf', null, 'door', '烤盤・大鍋'), P('shelf', null, 'door', '鍋具')] },
+          { parts: [P('shelf', null, 'door', '保鮮盒'), P('shelf', null, 'door', '備品・乾貨')] },
+        ],
+      },
     ],
   },
 

@@ -92,13 +92,8 @@ export function cabinetEstimate(it: FurnitureItem): ShopPick[] {
     const deepText = deep > 1 ? `，深 ${it.d} 加價 ×${deep}` : ''
     return [
       estPick('收納段櫃體（估價）', body, bodyText),
-      estPick('石英石檯面（估價）', it.w * RATES.quartz * deep, `${it.w} 公分 × ${RATES.quartz} 元${deepText}；含水槽開孔以外的基本加工`),
-      estPick(
-        '人造石檯面（估價）',
-        it.w * RATES.stone * deep,
-        `${it.w} 公分 × ${RATES.stone} 元${deepText}；比石英石軟、怕熱鍋，但可無縫修補`,
-        false,
-      ),
+      estPick('人造石檯面（估價）', it.w * RATES.stone * deep, `${it.w} 公分 × ${RATES.stone} 元${deepText}；可無縫、刮傷可修補，怕熱鍋`),
+      estPick('石英石檯面（估價）', it.w * RATES.quartz * deep, `${it.w} 公分 × ${RATES.quartz} 元${deepText}；比人造石耐刮耐熱`, false),
       estPick('餐桌段鐵件桌腳（估價）', RATES.ironLegs, 'ㄇ字鐵腳一組（90 深），另一端靠收納段支撐'),
     ]
   }

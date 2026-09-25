@@ -177,6 +177,18 @@ function sofa(g: G, it: FurnitureItem) {
 function coffeetable(g: G, it: FurnitureItem) {
   const { w, d, h } = it
   const m = mat(it.color, 0.5)
+  if (has(it, 'round')) {
+    // 圓形小茶几：圓桌面＋下層圓板＋四支木腳
+    const r = Math.min(w, d) / 2
+    cyl(g, r, r, 3, 0, h - 3, 0, m, 48)
+    cyl(g, r * 0.78, r * 0.78, 1.8, 0, 11, 0, m, 40)
+    const legM = mat(shadeHex(it.color, 0.9), 0.55)
+    for (let i = 0; i < 4; i++) {
+      const a = Math.PI / 4 + (i * Math.PI) / 2
+      cyl(g, 1.6, 1.4, h - 3, Math.cos(a) * r * 0.72, 0, Math.sin(a) * r * 0.72, legM, 12)
+    }
+    return
+  }
   bx(g, w, 4, d, 0, h - 4, 0, m)
   bx(g, w - 8, 2, d - 8, 0, 10, 0, m)
   for (const sx of [-1, 1]) for (const sz of [-1, 1]) bx(g, 4, h - 4, 4, sx * (w / 2 - 4), 0, sz * (d / 2 - 4), mat(shadeHex(it.color, 0.6), 0.6))

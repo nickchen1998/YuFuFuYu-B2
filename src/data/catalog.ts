@@ -91,19 +91,19 @@ type Seed = Omit<FurnitureItem, 'id' | 'elev'> & { id: string; elev?: number }
 // 訂製半島型中島餐桌（一端靠窗下的牆、四張椅）；沙發對齊電視；鞋櫃右側留吸塵器；烘碗機（建商附）＋洗碗機（待確認改櫃）
 const seeds: Seed[] = [
   // 客餐廳：電視、雙人沙發、茶几、地毯中心線對齊（y = 185）
-  { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 110, color: '#ece6dc' },
+  { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 110, color: '#efe9df' },
   // 鞋櫃右側保留吸塵器位置
   { id: 'vacuum', type: 'vacuum', name: '吸塵器', x: 262, y: 15, rot: 0, w: 30, d: 25, h: 115, color: '#8a5cc2' },
   // 洞洞板：鞋櫃與吸塵器上方一整片（130～230 公分，上方留 20 公分給冷氣）
   { id: 'pegboard', type: 'pegboard', name: '洞洞板', x: 222.5, y: 1, rot: 0, w: 125, d: 2, h: 100, elev: 130, color: '#f4f1ea' },
-  { id: 'sofa', type: 'sofa', name: '三人沙發', x: 243, y: 185, rot: 270, w: 210, d: 90, h: 80, color: '#8e9ca8' },
+  { id: 'sofa', type: 'sofa', name: '三人沙發', x: 243, y: 185, rot: 270, w: 210, d: 90, h: 80, color: '#cfc4b2' },
   // 咖啡櫃（零食櫃）：沙發旁、與冰箱斜對面；90 公分高的矮櫃，咖啡機放檯面（建議預留插座）
-  { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃）', x: 268, y: 345, rot: 270, w: 100, d: 40, h: 90, color: '#ece6dc' },
+  { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃）', x: 268, y: 345, rot: 270, w: 100, d: 40, h: 90, color: '#d9c2a0' },
   { id: 'espresso', type: 'coffeemaker', name: '咖啡機', x: 266, y: 345, rot: 270, w: 25, d: 35, h: 35, elev: 90, color: '#3a3a3d' },
-  { id: 'rug', type: 'rug', name: '地毯', x: 130, y: 185, rot: 90, w: 200, d: 150, h: 1, color: '#cfc5b4' },
-  { id: 'coffee', type: 'coffeetable', name: '茶几', x: 145, y: 185, rot: 90, w: 100, d: 50, h: 40, color: '#a67c52' },
+  { id: 'rug', type: 'rug', name: '地毯', x: 130, y: 185, rot: 90, w: 200, d: 150, h: 1, color: '#e0d6c4' },
+  { id: 'coffee', type: 'coffeetable', name: '茶几', x: 145, y: 185, rot: 90, w: 100, d: 50, h: 40, color: '#c9a57a' },
   // 電視櫃：懸浮壁掛（離地 18，掃地機器人進得去），高 35，上緣到壁掛電視下緣留 17
-  { id: 'tvstand', type: 'tvstand', name: '電視櫃（懸浮壁掛）', x: 20, y: 185, rot: 90, w: 180, d: 40, h: 35, elev: 18, color: '#ece6dc', features: ['floating'] },
+  { id: 'tvstand', type: 'tvstand', name: '電視櫃（懸浮壁掛）', x: 20, y: 185, rot: 90, w: 180, d: 40, h: 35, elev: 18, color: '#d9c2a0', features: ['floating'] },
   // 電視壁掛：下緣離地 70（坐在沙發上視線約在畫面中心），下方保留電視櫃
   { id: 'tv', type: 'tv', name: '電視 55吋（壁掛）', x: 3, y: 185, rot: 90, w: 123, d: 6, h: 72, elev: 70, color: '#1b1b1d', features: ['wallmount'] },
   // 冰箱：六門、製冰室獨立（國際牌 NR-F552YT 等，65 × 69.9 × 185），背面貼牆、上方沒有櫃子
@@ -114,12 +114,12 @@ const seeds: Seed[] = [
   // 收起時廚房側走道 60、次臥門與陽台門側走道 68；瓦斯爐前站位 65
   {
     id: 'dining', type: 'peninsula', name: '訂製中島餐桌', x: 170, y: 555, rot: 90, w: 220, d: 90, h: 76,
-    color: '#ece6dc', features: ['outlets', 'woodtop'],
+    color: '#efe9df', features: ['outlets', 'woodtop'],
   },
-  { id: 'dchair1', type: 'chair', name: '餐椅', x: 145, y: 475, rot: 90, w: 45, d: 50, h: 85, color: '#6b5a4a' },
-  { id: 'dchair2', type: 'chair', name: '餐椅', x: 145, y: 535, rot: 90, w: 45, d: 50, h: 85, color: '#6b5a4a' },
-  { id: 'dchair3', type: 'chair', name: '餐椅', x: 195, y: 475, rot: 270, w: 45, d: 50, h: 85, color: '#6b5a4a' },
-  { id: 'dchair4', type: 'chair', name: '餐椅', x: 195, y: 535, rot: 270, w: 45, d: 50, h: 85, color: '#6b5a4a' },
+  { id: 'dchair1', type: 'chair', name: '餐椅', x: 145, y: 475, rot: 90, w: 45, d: 50, h: 85, color: '#c49a6c' },
+  { id: 'dchair2', type: 'chair', name: '餐椅', x: 145, y: 535, rot: 90, w: 45, d: 50, h: 85, color: '#c49a6c' },
+  { id: 'dchair3', type: 'chair', name: '餐椅', x: 195, y: 475, rot: 270, w: 45, d: 50, h: 85, color: '#c49a6c' },
+  { id: 'dchair4', type: 'chair', name: '餐椅', x: 195, y: 535, rot: 270, w: 45, d: 50, h: 85, color: '#c49a6c' },
   // 電鍋、氣炸鍋收在中島走道側的抽拉開放層板上（離地約 39.5），用的時候拉出來；
   // 氣炸鍋橫放（走道側淨深只有 29），炸籃朝餐桌那頭
   { id: 'rice', type: 'ricecooker', name: '電鍋（抽拉層板）', x: 198.5, y: 639.8, rot: 90, w: 31, d: 26, h: 26, elev: 39.5, color: '#e9e4da' },
@@ -134,18 +134,18 @@ const seeds: Seed[] = [
   { id: 'ac-living', type: 'acindoor', name: '冷氣（客餐廳）', x: 200, y: 12.5, rot: 0, w: 90, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
   // 主臥：加大雙人床 6 尺床頭靠左牆，兩側 30 公分床頭櫃（買現成的，靠窗那側只有 30 寬）；上牆左段是 45 公分深的薄型衣櫃（對開窄門，前方留 52 公分）
-  { id: 'mbed', type: 'bed', name: '加大雙人床 6尺', x: -186.5, y: 478.5, rot: 90, w: 182, d: 200, h: 100, color: '#c9d3dc' },
-  { id: 'mns1', type: 'nightstand', name: '床頭櫃', x: -269, y: 372.5, rot: 90, w: 30, d: 35, h: 50, color: '#b8916a' },
-  { id: 'mns2', type: 'nightstand', name: '床頭櫃', x: -269, y: 584.5, rot: 90, w: 30, d: 35, h: 50, color: '#b8916a' },
+  { id: 'mbed', type: 'bed', name: '加大雙人床 6尺', x: -186.5, y: 478.5, rot: 90, w: 182, d: 200, h: 100, color: '#ece6da' },
+  { id: 'mns1', type: 'nightstand', name: '床頭櫃', x: -269, y: 372.5, rot: 90, w: 30, d: 35, h: 50, color: '#c9a57a' },
+  { id: 'mns2', type: 'nightstand', name: '床頭櫃', x: -269, y: 584.5, rot: 90, w: 30, d: 35, h: 50, color: '#c9a57a' },
   // 投影機：靠窗側床頭櫃上，斜向對準床尾那面牆（投影畫面中心對齊床的中線）
   { id: 'projector', type: 'projector', name: '投影機', x: -269, y: 584.5, rot: 110, w: 19, d: 19, h: 25, elev: 50, color: '#e9e9e6' },
   // 衣櫃做到頂（300）；內部規劃見 interiors.ts
-  { id: 'mward', type: 'wardrobe', name: '衣櫃（薄型 45 深）', x: -219, y: 282.5, rot: 0, w: 135, d: 45, h: 300, color: '#e4dccf' },
+  { id: 'mward', type: 'wardrobe', name: '衣櫃（薄型 45 深）', x: -219, y: 282.5, rot: 0, w: 135, d: 45, h: 300, color: '#efe9df' },
   // 冷氣：窗戶上方（窗外就是冷氣平台，管線最短）；導風板往上調，避免直吹床
   { id: 'ac-master', type: 'acindoor', name: '冷氣（主臥）', x: -130, y: 587, rot: 180, w: 85, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
   // 次臥（書房＋主要衣櫃＋按摩椅）：衣櫃整排貼上牆；按摩椅靠分戶牆、面向房內；兩張升降桌並排靠分戶牆
-  { id: 'bward1', type: 'wardrobe', name: '衣櫃', x: 423.75, y: 30, rot: 0, w: 241.5, d: 60, h: 300, color: '#e4dccf' },
+  { id: 'bward1', type: 'wardrobe', name: '衣櫃', x: 423.75, y: 30, rot: 0, w: 241.5, d: 60, h: 300, color: '#efe9df' },
   // 按摩椅：選零靠牆機型（背後留 5 公分），躺平時往前滑到約 180 公分
   { id: 'massage', type: 'massagechair', name: '按摩椅', x: 469.5, y: 170, rot: 270, w: 80, d: 140, h: 115, color: '#4a4541' },
   { id: 'bdesk1', type: 'standingdesk', name: '升降桌', x: 514.5, y: 340, rot: 270, w: 120, d: 60, h: 73, color: '#d8c3a5' },
@@ -154,7 +154,7 @@ const seeds: Seed[] = [
   { id: 'bchair2', type: 'chair', name: '辦公椅', x: 452, y: 460, rot: 90, w: 50, d: 50, h: 100, color: '#5b5f63' },
   // 椅子背後（靠客廳的輕隔間）：矮櫃放文件、線材、印表機（落地，高 90）；到次臥門前 5 公分為止、避開按摩椅前方。
   // 上方書櫃先拿掉（住戶覺得太高），之後再決定
-  { id: 'scab', type: 'cabinet', name: '書房矮櫃（文件・印表機）', x: 323, y: 340, rot: 90, w: 250, d: 40, h: 90, color: '#e4dccf' },
+  { id: 'scab', type: 'cabinet', name: '書房矮櫃（文件・印表機）', x: 323, y: 340, rot: 90, w: 250, d: 40, h: 90, color: '#d9c2a0' },
   // 冷氣：窗戶上方，沿長邊往衣櫃方向吹，風從桌子側邊經過
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 395, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
@@ -166,10 +166,10 @@ const seeds: Seed[] = [
   // 全套衛浴（固定設備）：淋浴間 + 馬桶 + 洗手台
   { id: 'shower', type: 'shower', name: '淋浴間', x: -239.25, y: 70, rot: 0, w: 94.5, d: 140, h: 200, color: '#e8e8e6', locked: true },
   { id: 'toilet', type: 'toilet', name: '馬桶', x: -150, y: 106, rot: 180, w: 40, d: 68, h: 76, color: '#f7f7f5', locked: true },
-  { id: 'vanity', type: 'vanity', name: '洗臉盆浴櫃（全套衛浴）', x: -62.5, y: 115, rot: 180, w: 85, d: 50, h: 85, color: '#b8916a', locked: true },
+  { id: 'vanity', type: 'vanity', name: '洗臉盆浴櫃（全套衛浴）', x: -62.5, y: 115, rot: 180, w: 85, d: 50, h: 85, color: '#efe9df', locked: true },
   // 主臥半套衛浴（固定設備）：馬桶 + 洗臉盆
   { id: 'toilet2', type: 'toilet', name: '馬桶', x: -216, y: 198.5, rot: 90, w: 40, d: 68, h: 76, color: '#f7f7f5', locked: true },
-  { id: 'vanity2', type: 'vanity', name: '洗臉盆浴櫃（半套衛浴）', x: -39, y: 198.5, rot: 270, w: 70, d: 48, h: 85, color: '#b8916a', locked: true },
+  { id: 'vanity2', type: 'vanity', name: '洗臉盆浴櫃（半套衛浴）', x: -39, y: 198.5, rot: 270, w: 70, d: 48, h: 85, color: '#efe9df', locked: true },
 
   // 冷氣平台
   { id: 'ac1', type: 'acunit', name: '冷氣室外機', x: -196, y: 660, rot: 0, w: 85, d: 32, h: 60, color: '#e3e5e7', locked: true },

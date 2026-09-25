@@ -12,6 +12,7 @@ export interface FloorPreset {
 }
 
 export const floorPresets: FloorPreset[] = [
+  { id: 'white-oak', name: '白橡木 超耐磨（無印風）', kind: 'wood', base: '#d8c09c', roughness: 0.62 },
   { id: 'oak', name: '淺橡木 超耐磨', kind: 'wood', base: '#c9a77c', roughness: 0.62 },
   { id: 'walnut', name: '胡桃木 超耐磨', kind: 'wood', base: '#7d5a3e', roughness: 0.6 },
   { id: 'greywood', name: '灰橡木 超耐磨', kind: 'wood', base: '#a8a197', roughness: 0.65 },

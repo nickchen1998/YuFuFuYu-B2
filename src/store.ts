@@ -5,7 +5,7 @@ import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 24
+const REV = 25
 /**
  * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
  * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
@@ -49,6 +49,8 @@ const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   [23, ['tvstand'], ['name', 'h', 'elev', 'features']],
   // rev 24：中島檯面改白橡木實木
   [24, ['dining'], ['features']],
+  // rev 25：無印風配色（白色高櫃、淺橡木矮櫃與木家具、米色布料）
+  [25, ['shoe', 'sofa', 'coffeebar', 'rug', 'coffee', 'tvstand', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'mbed', 'mns1', 'mns2', 'mward', 'bward1', 'scab', 'vanity', 'vanity2'], ['color']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */
 const LAYOUT_REV = 6
@@ -83,6 +85,9 @@ function migrate(d: Design): Design {
   }
   // rev 3：預設樓高由 280 改為 300；沒有手動改過的存檔跟著更新
   if ((d.rev ?? 1) < 3 && d.ceilingHeight === 280) d.ceilingHeight = CEILING_DEFAULT
+  // rev 25：無印風，客餐廳與兩間臥室的淺橡木地板換成白橡木
+  if ((d.rev ?? 1) < 25)
+    for (const id of ['living', 'master', 'bed2']) if (d.roomFloors?.[id] === 'oak') d.roomFloors[id] = 'white-oak'
   d.rev = REV
   return d
 }

@@ -75,7 +75,7 @@ export const walls: Wall[] = [
     id: 'part-wc-master', x1: -286.5, y1: 245, x2: -15, y2: 260,
     openings: [
       // 圖上是推拉門：開口約 80，門片掛在半套衛浴那側、往左拉開
-      { id: 'wc-door', kind: 'door', offset: 139, width: 80, sill: 0, height: 210, hinge: 'end', swing: 'a', label: '半套衛浴門', hidden: true, gap: 1.5 },
+      { id: 'wc-door', kind: 'pocket', offset: 139, width: 80, sill: 0, height: 210, hinge: 'start', swing: 'a', label: '半套衛浴拉門' },
     ],
   },
 
@@ -101,7 +101,7 @@ export const walls: Wall[] = [
   {
     id: 'part-living-bed2', x1: 288, y1: 0, x2: 303, y2: 561.5,
     openings: [
-      { id: 'bed2-door', kind: 'door', offset: 470, width: 80, sill: 0, height: 210, hinge: 'end', swing: 'b', label: '次臥門', hidden: true },
+      { id: 'bed2-door', kind: 'door', offset: 470, width: 80, sill: 0, height: 210, hinge: 'end', swing: 'b', label: '次臥門' },
     ],
   },
   // 客餐廳 / 工作陽台（延伸到陽台外緣）：陽台門在瓦斯爐正對面，往陽台外開

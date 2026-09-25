@@ -413,7 +413,8 @@ function buildFace(fg: G, it: FurnitureItem, face: CabinetFace, fr: CabFrame, D:
         }
       }
       const rand = rng(hashStr(`${it.id}:${fi}:${c.i}:${p.i}:${p.part.kind}:${p.part.label ?? ''}`))
-      const visible = p.part.front === 'open' || p.part.front === 'glass'
+      // 掃地機器人格：門片下面有縫，機器人看得到，一律畫出來
+      const visible = p.part.front === 'open' || p.part.front === 'glass' || p.part.kind === 'robot'
       contents(visible ? shown : hidden, p.part, { x0: cx0, w: c.w, y0: py, h: p.h, D }, clothes, rand, steel)
     }
   }

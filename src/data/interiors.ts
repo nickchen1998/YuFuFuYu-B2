@@ -192,11 +192,12 @@ export const seedInteriors: Record<string, CabinetInterior> = {
             ],
           },
           { parts: [P('shelf', null, 'door', '文件・說明書・線材收納盒'), P('shelf', null, 'door', 'A4 文件夾（直立）')] },
-          // 最右邊：掃地機器人的家（開放、沒有底板，離地淨高約 56），上面一格門片放耗材
+          // 最右邊：掃地機器人的家（沒有底板，離地淨高約 56）＋上面一格放耗材；
+          // 一片長門從上面蓋到離地 12：看過去看不到基座，機器人從門下進出，開門就能倒集塵袋、加水
           {
             w: 58,
             parts: [
-              P('robot', 54, 'open', '掃地機器人的家（ECOVACS DEEBOT mini 2 基座，背板預留插座）'),
+              P('robot', 54, 'door', '掃地機器人的家（DEEBOT mini 2 基座；門片下緣離地 12，機器人從門下進出）'),
               P('storage', null, 'door', '掃地機耗材：集塵袋・清潔液・備用刷'),
             ],
           },

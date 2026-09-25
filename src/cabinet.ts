@@ -12,6 +12,8 @@ export const BACK = 0.8
 export const DOOR = 1.8
 /** 欄寬超過這個數字時做兩扇對開門 */
 export const DOUBLE_DOOR_OVER = 62
+/** 掃地機器人格的門片下緣離地（機器人高約 10，從門下開出去；看過去看不到基座） */
+export const ROBOT_GAP = 12
 
 /** 有櫃內規劃（系統櫃／訂製）的種類；床頭櫃改用買的，不列在這裡（3D 仍照抽屜＋開放格畫） */
 export const INTERIOR_TYPES = ['wardrobe', 'cabinet', 'tvstand', 'coffeebar', 'bookshelf', 'peninsula']
@@ -32,7 +34,7 @@ export const partKinds: { id: PartKind; name: string; color: string; hint: strin
     id: 'robot',
     name: '掃地機器人',
     color: '#dfe7e1',
-    hint: '只能放在最下面一格：這格不做底板和踢腳，機器人直接開進去。ECOVACS DEEBOT mini 基座 32 × 40 × 38.5：格寬 55、離地淨高 55 以上、櫃深 45。',
+    hint: '只能放在最下面一格：這格不做底板和踢腳，機器人直接開進去；門片可以往下蓋住基座，下緣離地 12，機器人從門下進出。ECOVACS DEEBOT mini 基座 32 × 40 × 38.5：格寬 55、離地淨高 55 以上、櫃深 45。',
   },
   { id: 'empty', name: '空格', color: '#f4f1ec', hint: '' },
 ]
@@ -227,7 +229,8 @@ export function frontRect(fl: FaceLayout, piece: FrontPiece, frame: CabFrame) {
   const topExt = frame.top === 'panel' ? PANEL : 0
   const x0 = c.x - (piece.col === 0 ? PANEL : PANEL / 2)
   const x1 = c.x + c.w + (piece.col === last ? PANEL : PANEL / 2)
-  const y0 = first.y - (first.i === 0 ? PANEL : PANEL / 2)
+  // 門片蓋到掃地機器人格時，下緣停在離地 ROBOT_GAP，機器人從門下進出
+  const y0 = first.part.kind === 'robot' ? ROBOT_GAP - frame.y0 : first.y - (first.i === 0 ? PANEL : PANEL / 2)
   const y1 = top.y + top.h + (top.i === c.parts.length - 1 ? topExt : PANEL / 2)
   return { x0, x1, y0, y1 }
 }

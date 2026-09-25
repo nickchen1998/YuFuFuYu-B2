@@ -143,7 +143,8 @@ const seeds: Seed[] = [
   { id: 'fan-living', type: 'towerfan', name: 'Dyson 直立式電扇（客廳）', x: 273, y: 431, rot: 250, w: 22, d: 22, h: 105, color: '#eef0f2' },
   // 主臥這台放窗邊的牆角（床尾那側，另一個窗邊角落是床頭櫃），斜朝床
   { id: 'fan-master', type: 'towerfan', name: 'Dyson 直立式電扇（主臥）', x: -31, y: 583, rot: 235, w: 22, d: 22, h: 105, color: '#eef0f2' },
-  { id: 'fan-bed2', type: 'towerfan', name: 'Dyson 直立式電扇（次臥）', x: 526, y: 537, rot: 225, w: 22, d: 22, h: 105, color: '#eef0f2' },
+  // 次臥這台靠牆放在書房矮櫃靠衣櫃那一端（離衣櫃拉門約 1.2 m），斜朝升降桌和按摩椅中間，擺頭兩邊都吹得到
+  { id: 'fan-bed2', type: 'towerfan', name: 'Dyson 直立式電扇（次臥）', x: 320, y: 198, rot: 60, w: 22, d: 22, h: 105, color: '#eef0f2' },
   // 身高參考：184 與 154 公分的人，站在電視區和冰箱之間，看人和家具的高低比例（不是家具）
   { id: 'person184', type: 'person', name: '身高參考 184 公分', x: 95, y: 315, rot: 0, w: 46, d: 26, h: 184, color: '#5f7488' },
   { id: 'person154', type: 'person', name: '身高參考 154 公分', x: 150, y: 315, rot: 0, w: 38, d: 22, h: 154, color: '#c9a98a' },

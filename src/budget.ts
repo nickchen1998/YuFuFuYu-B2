@@ -1,7 +1,8 @@
 import { computed } from 'vue'
 import { design } from './store'
 import { isPicked, pickKey } from './purchases'
-import { itemCategory, pickCost, pickGroups, shopKey } from './data/shopping'
+import { itemCategory, pickCost, pickGroups, shopKey, type PickGroup } from './data/shopping'
+import { cabinetEstimate } from './estimate'
 import type { FurnitureItem } from './types'
 
 // 預算：把勾選的商品加總（同款家具乘上數量，例如餐椅 ×4）
@@ -29,6 +30,13 @@ function budgetCategory(it: FurnitureItem) {
   return '家具'
 }
 
+/** 系統櫃／訂製家具的估價（可以勾選，計入總花費） */
+export function estimateGroup(it: FurnitureItem): PickGroup | null {
+  const picks = cabinetEstimate(it)
+  if (!picks.length) return null
+  return { key: `${shopKey(it) ?? it.id}/估價`, title: '估價', picks, qty: 1 }
+}
+
 /** 同款家具合併：key → 數量與第一件 */
 export function furnitureGroups(list: FurnitureItem[]) {
   const groups = new Map<string, { qty: number; first: FurnitureItem }>()
@@ -46,7 +54,8 @@ export const budget = computed(() => {
   const lines: BudgetLine[] = []
   for (const [root, g] of furnitureGroups(design.furniture)) {
     const cat = budgetCategory(g.first)
-    for (const pg of pickGroups(root, g.qty)) {
+    const est = estimateGroup(g.first)
+    for (const pg of [...pickGroups(root, g.qty), ...(est ? [est] : [])]) {
       for (const p of pg.picks) {
         if (!isPicked(pickKey(pg.key, p.name), p.rec)) continue
         const unit = pickCost(p)
@@ -59,7 +68,7 @@ export const budget = computed(() => {
           unit,
           qty: pg.qty,
           total: unit == null ? null : unit * pg.qty,
-          category: pg.key === root ? (p.category ?? cat) : '家電・設備',
+          category: p.category ?? (pg.key === root ? cat : '家電・設備'),
           note: p.costNote,
         })
       }

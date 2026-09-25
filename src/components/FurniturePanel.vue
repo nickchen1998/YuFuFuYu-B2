@@ -2,9 +2,10 @@
 import { computed, ref, watch } from 'vue'
 import {
   ArrowLeft,
+  Calculator,
   ChevronRight,
-  LayoutPanelTop,
   Layers,
+  LayoutPanelTop,
   Lightbulb,
   MapPin,
   Ruler,
@@ -28,16 +29,9 @@ import {
   layoutFace,
   partKind,
 } from '../cabinet'
-import {
-  cabinetMaterials,
-  cabinetVendors,
-  itemCategory,
-  money,
-  shopInfo,
-  shopKey,
-  type ShopVendor,
-} from '../data/shopping'
-import { budget, furnitureGroups } from '../budget'
+import { cabinetMaterials, cabinetVendors, itemCategory, money, shopInfo, shopKey, type ShopVendor } from '../data/shopping'
+import { budget, estimateGroup, furnitureGroups } from '../budget'
+import { RATE_NOTE } from '../estimate'
 import { resetPicks } from '../purchases'
 import CabinetElevation from './CabinetElevation.vue'
 import ShopPicks from './ShopPicks.vue'
@@ -76,6 +70,7 @@ const rowSpend = (it: FurnitureItem) => {
   return k ? (budget.value.byRoot.get(k) ?? 0) : 0
 }
 const showLines = ref(false)
+const estimate = computed(() => (selected.value ? estimateGroup(selected.value) : null))
 
 // 換一件家具時捲回最上面
 const detailEl = ref<HTMLElement>()
@@ -240,6 +235,14 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
           </div>
         </div>
       </details>
+    </div>
+
+    <!-- 估價（系統櫃、訂製、改櫃） -->
+    <div v-if="estimate" class="detail-sec">
+      <h3><Calculator />估價</h3>
+      <p class="muted tight pick-hint">照這件的尺寸、抽屜和衣桿數量推算，勾選的會計入總花費。</p>
+      <ShopPicks :picks="estimate.picks" :group="estimate.key" :qty="1" />
+      <p class="muted tight">{{ RATE_NOTE }}</p>
     </div>
 
     <!-- 板材與五金 -->

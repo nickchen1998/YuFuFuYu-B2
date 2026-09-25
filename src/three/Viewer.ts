@@ -8,6 +8,7 @@ import { floorPresets } from '../data/materials'
 import { blockingRects, fmt, footprint, rectsOverlap, roomSize, type Rect } from '../geometry'
 import { buildWalls } from './walls'
 import { buildFurniture, furnitureSignature } from './furniture'
+import { hasInterior } from '../cabinet'
 import { floorTexture, loadPlanOverlay, TEX_CM } from './textures'
 import { mat } from './mats'
 import { pauseHistory, resumeHistory } from '../history'
@@ -303,7 +304,8 @@ export class Viewer {
 
   /** 櫃門：選取的櫃子打開（看櫃內格局），或是全部打開 */
   applyInterior() {
-    const picked = this.ui.cabinetOpen ? this.ui.selectedId : null
+    const sel = this.ui.cabinetOpen ? this.selected() : undefined
+    const picked = sel && hasInterior(sel) ? sel.id : null
     for (const [id, entry] of this.items) {
       const open = this.ui.openAllCabinets || id === picked
       entry.obj.traverse((o) => {

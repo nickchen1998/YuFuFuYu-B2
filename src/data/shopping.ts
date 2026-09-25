@@ -10,6 +10,14 @@ export interface ShopPick {
   price?: string
   url?: string
   source?: string
+  /** 計入總花費的金額（不填 = 從 price 文字抓；範圍取中間值） */
+  cost?: number
+  /** 金額的補充說明，例如「含在一對二組合價」、「兩片」 */
+  costNote?: string
+  /** 最推薦的選項：預設勾選 */
+  rec?: boolean
+  /** 預算分類（不填 = 依家具種類） */
+  category?: string
 }
 export interface ShopVendor {
   name: string
@@ -106,15 +114,6 @@ export const shopping: Record<string, ShopInfo> = {
       '懸空離地至少 12～15 cm（依掃地機高度）；櫃腳方案用可調腳＋踢腳板，較便宜',
     ],
   },
-  mns1: {
-    summary: '主臥兩個小床頭櫃；放投影機的那個要穩、有電、通風。',
-    material: [
-      '18 mm 桶身；放投影機那個頂板用 25 mm，減少晃動',
-      '上抽屜＋下開放格，抽屜全展緩衝；30 寬的抽屜內寬只有約 20～23 cm',
-      '背板開線孔，側邊預留插座／USB；投影機進出風口前後保持淨空',
-    ],
-    notes: ['投影機要對準投影牆，50 cm 高度不夠時用可調角度支架', '做懸空壁掛需要牆內補強，比較好清掃；落地版用小踢腳'],
-  },
   scab: {
     summary: '書房長矮櫃：放文件、線材和印表機，抽屜滑軌選耐重型。',
     material: [
@@ -152,6 +151,7 @@ export const shopping: Record<string, ShopInfo> = {
           picks: [
             {
               name: '櫻花 SAKURA E5650A 嵌入式變頻微波烤箱',
+              rec: true,
               detail: '機體寬 59.5 × 深 41 × 高 38.8；安裝寬 56 × 深 55 × 高 38；25L、110V、1450W',
               price: '約 NT$15,570（2026/09 PChome，含部分地區基本安裝）',
               url: 'https://24h.pchome.com.tw/prod/DPAL33-A900GRZRR',
@@ -188,6 +188,7 @@ export const shopping: Record<string, ShopInfo> = {
           picks: [
             {
               name: '國際牌 Panasonic DUFN2200T-1 鋁合金地板插座',
+              rec: true,
               detail: '面板 13 × 13、埋入深約 7.8 cm；接地雙插座，附金屬接線盒和保護蓋',
               price: '約 NT$1,116（2026/09 水電材料網）',
               url: 'https://pstw.panasonic.com.tw/catalog/files/dc_shiyou/DUFN2200T-1.pdf',
@@ -228,6 +229,7 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: 'IKEA SANDSBERG 軟坐墊餐椅',
+        rec: true,
         detail: '寬 45 × 深 45 × 高 76、座高 46；鋼腳＋軟墊，寬、深、座高都剛好符合',
         price: '約 NT$599／張（2026/09 IKEA 官網）',
         url: 'https://www.ikea.com.tw/zh/products/dining-seating/upholstered-chairs/sandsberg-art-50605257',
@@ -262,6 +264,7 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: '大同 TATUNG 6 人份不鏽鋼電鍋 TAC-06L-MCW',
+        rec: true,
         detail: '寬 30.8 × 深 26 × 高 22、600W、304 不鏽鋼內鍋；兩人煮飯蒸菜夠用',
         price: '約 NT$2,690（2026/09 PChome）',
         url: 'https://24h.pchome.com.tw/prod/DMBI4K-A900INYCB',
@@ -294,6 +297,7 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: '國際牌 Panasonic 4L 多功能氣炸鍋 NF-HC100',
+        rec: true,
         detail: '寬 24 × 深 32.5 × 高 30.7、1200W、觸控 8 種模式；尺寸最寬裕',
         price: '約 NT$1,580（2026/09 PChome）',
         url: 'https://24h.pchome.com.tw/prod/DMAG5E-A900K9RDG',
@@ -334,6 +338,7 @@ export const shopping: Record<string, ShopInfo> = {
       },
       {
         name: 'BOSCH 博世 SPV4IMX00X 4 系列 45 cm 全嵌式洗碗機',
+        rec: true,
         detail: '10 人份、110V、48 dB、AquaStop 防漏、餐具抽屜；外型尺寸和 2 系列相同',
         price: '約 NT$44,000（2026/09 甫佳電器；建議售價 NT$52,000）',
         url: 'https://www.bosch-home.com.tw/zh/mkt-product/dishwashers/built-in-dishwashers/bifulldishwashers45width/SPV4IMX00X',
@@ -398,6 +403,7 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: '三菱重工 DXK50ZST2-W／DXC50ZST2-W（晴空二代）',
+        rec: true,
         detail: '室內機寬 87 × 高 29 × 深 23；室外機寬 78（含蓋 84.2）× 高 59.5 × 深 29，放得進平台；5.0 kW 一級能效',
         price: '約 NT$54,900（2026/09 PChome，含運送定位，安裝另計）',
         url: 'https://24h.pchome.com.tw/prod/DPAFGD-A900IDE8A',
@@ -431,6 +437,7 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: '大金 FTHF20ZVLT（接 2MXP50ZVLT）',
+        rec: true,
         detail: '寬 77 × 高 28.5 × 深 24.2，左右各約 4 cm；和 FTHF30 一起接時約 2.0 kW',
         price: '一對二組合（FTHF20＋FTHF30）約 NT$59,800（2026/09 玉明，含 10 m 基本安裝）',
         url: 'https://www.3uo.tw/ecommerce/2MXP50ZVLT_2030/',
@@ -453,8 +460,11 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: '大金 FTHF30ZVLT（接 2MXP50ZVLT）',
+        rec: true,
         detail: '寬 77 × 高 28.5 × 深 24.2，左右各約 1.5 cm；和 FTHF20 一起接時約 3.0 kW',
         price: '含在一對二組合價裡（見主臥冷氣）',
+        cost: 0,
+        costNote: '含在主臥冷氣的一對二組合價',
         url: 'https://www.3uo.tw/ecommerce/2MXP50ZVLT_2030/',
         source: '玉明電器',
       },
@@ -462,6 +472,8 @@ export const shopping: Record<string, ShopInfo> = {
         name: '國際牌 CS-UJ28BA2（接 CU-2J52FHA2）',
         detail: '寬 79.8，預留 80 幾乎沒有餘裕，建議放寬到 85 以上；2.8 kW',
         price: '含在一對二組合價裡（見主臥冷氣）',
+        cost: 0,
+        costNote: '含在主臥冷氣的一對二組合價',
         url: 'https://www.momoshop.com.tw/product/13675918',
         source: 'momo',
       },
@@ -479,15 +491,21 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: 'B 台：大金 2MXP50ZVLT（一對二）',
+        rec: true,
         detail: '寬 67.5 × 高 55 × 深 28.4，放得進平台；額定 5.0 kW，一級能效，年耗電約 1,024 度',
         price: '組合約 NT$59,800～71,000（2026/09 玉明／PChome，含基本安裝）',
+        cost: 0,
+        costNote: '室外機含在室內機的價錢裡（見客餐廳、主臥冷氣）',
         url: 'https://24h.pchome.com.tw/prod/DPAF5Z-A900J5BWC',
         source: 'PChome',
       },
       {
         name: 'A 台：三菱重工 DXC50ZST2-W（1 對 1）',
+        rec: true,
         detail: '寬 78（含蓋 84.2）× 高 59.5 × 深 29，放得進但很貼；最長配管 25 m',
         price: '約 NT$54,900（2026/09 PChome，安裝另計）',
+        cost: 0,
+        costNote: '室外機含在室內機的價錢裡（見客餐廳、主臥冷氣）',
         url: 'https://24h.pchome.com.tw/prod/DPAFGD-A900IDE8A',
         source: 'PChome',
       },
@@ -495,6 +513,8 @@ export const shopping: Record<string, ShopInfo> = {
         name: '全國際牌：CU-UJ50BHA2＋CU-2J52FHA2',
         detail: '1 對 1 為寬 78 × 高 66.6、一對二為寬 86 × 高 66.6，高度都超過 60，要先確認平台淨高',
         price: '兩台合計約 NT$97,000～114,000（2026/09，含安裝）',
+        cost: 0,
+        costNote: '室外機含在室內機的價錢裡（見客餐廳、主臥冷氣）',
         source: '玉明電器／克拉家電／momo',
       },
     ],
@@ -519,6 +539,7 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: 'LG WD-S13VBW（13 kg 蒸洗脫）',
+        rec: true,
         detail: '寬 60 × 高 85 × 深 61.5；AI DD 直驅馬達，外型和 LG WR-100VW 乾衣機同系列，可並排',
         price: '約 NT$26,000（2026/09 PChome）',
         url: 'https://www.lg.com/tw/washer-dryers/front-loading-washing-machines/wd-s13vbw/',
@@ -553,6 +574,7 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: 'LG WR-100VW',
+        rec: true,
         detail: '官網：寬 60 × 高 85 × 深 66，開門深 111.5，110V，門不能換邊；雙變頻熱泵',
         price: '約 NT$28,900（2026/09 PChome）',
         url: 'https://www.lg.com/tw/washer-dryers/dryers/wr-100vw/',
@@ -610,6 +632,7 @@ export const shopping: Record<string, ShopInfo> = {
       },
       {
         name: '國際牌 DL-PSTK09TWW',
+        rec: true,
         detail: '瞬熱式，110V；安裝板可以調整，適合各種孔距，機板防水，不鏽鋼噴嘴',
         price: '約 NT$8,990（2026/09 PChome，含基本安裝）',
         url: 'https://24h.pchome.com.tw/prod/DMBM0M-A900GSFE9',
@@ -633,6 +656,7 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: '國際牌 FV-30BD1W（220V）／FV-30BD1R（110V）',
+        rec: true,
         detail: 'DC 馬達、陶瓷加熱；暖房／乾燥／換氣／涼風，無線遙控；本體 27 × 29 × 18，1,650 W',
         price: '約 NT$7,280～7,400（2026/09 PChome，不含安裝）',
         url: 'https://24h.pchome.com.tw/prod/DPAL4U-A900K3YMA',
@@ -661,6 +685,7 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: 'IKEA LANDSKRONA 三人座沙發（Gunnared 布）',
+        rec: true,
         detail: '204 × 89 × 78，座深 61、座高 44；高回彈泡棉，扶手可拆，10 年保固',
         price: '約 NT$22,990（2026/09 IKEA）；皮面款約 NT$24,990',
         url: 'https://www.ikea.com.tw/zh/products/sofas/sofas/landskrona-spr-29270322',
@@ -700,6 +725,7 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: 'IKEA LACK 茶几 90 × 55（黑棕色）',
+        rec: true,
         detail: '90 × 55 × 45，附下層置物板；輕巧好搬，桌面承重 20 kg',
         price: '約 NT$999（2026/09 IKEA）',
         url: 'https://www.ikea.com.tw/zh/products/sofa-tables/sofa-tables-and-side-tables/lack-art-20352987',
@@ -729,6 +755,7 @@ export const shopping: Record<string, ShopInfo> = {
       },
       {
         name: 'IKEA STOENSE 短毛地毯 133 × 195',
+        rec: true,
         detail: '短毛 15 mm，柔軟吸音；不可水洗，建議加 STOPP FILT 止滑墊',
         price: '約 NT$2,499（2026/09 IKEA）',
         url: 'https://www.ikea.com.tw/zh/products/home-furnishing-rugs/rugs/stoense-art-20427006',
@@ -758,6 +785,7 @@ export const shopping: Record<string, ShopInfo> = {
       },
       {
         name: 'LG OLED55C5PTA（C5，2025）',
+        rec: true,
         detail: 'OLED 自發光、120Hz、144Hz VRR、webOS 25；前代降價，CP 值高',
         price: '約 NT$39,900（2026/09 PChome）',
         url: 'https://24h.pchome.com.tw/prod/DPADYE-A900JC4LM',
@@ -790,6 +818,7 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: '日立 HITACHI PV-XH4P',
+        rec: true,
         detail: '日本製、1.95 kg、225AW、續航 60 分；附壁掛／直立兩用充電座，機身 25 × 23 × 122',
         price: '約 NT$8,730（2026/09 momo）',
         url: 'https://www.momoshop.com.tw/product/14784090',
@@ -823,8 +852,11 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: 'IKEA SKÅDIS 收納壁板 76 × 56（黑）',
+        rec: true,
         detail: '纖維板，可橫放、直放或拼接；附上牆桿，螺絲另購。直放兩片 = 112 × 76',
         price: '約 NT$599／片（2026/09 IKEA）',
+        cost: 1198,
+        costNote: '要兩片',
         url: 'https://www.ikea.com.tw/zh/products/wall-organisers/boards-and-wall-organisers/skadis-art-30534379',
         source: 'IKEA',
       },
@@ -856,6 +888,7 @@ export const shopping: Record<string, ShopInfo> = {
       },
       {
         name: "De'Longhi Dedica Arte EC885.M（半自動）",
+        rec: true,
         detail: '15 × 33 × 31，15 bar，手動蒸氣管可打奶泡；新手入門',
         price: '約 NT$7,990～8,490（2026/09 PChome）',
         url: 'https://24h.pchome.com.tw/prod/DMAT03-A900H1735',
@@ -883,6 +916,7 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: '日立 HITACHI RV41C（394L 三門）',
+        rec: true,
         detail: '60 × 65.5 × 181，自動製冰、鋼板門；散熱左右 1、上方與背面 5',
         price: '約 NT$33,488（2026/09 momo）',
         url: 'https://www.momoshop.com.tw/product/8120538',
@@ -908,6 +942,253 @@ export const shopping: Record<string, ShopInfo> = {
       'Panasonic 官方：壓縮機在上方要留上 5、左右 0.5；在下方要留上 10、左右 2',
       'Panasonic NR-C454HV（450L）寬 67.5、深 69.5，70 寬留不出散熱空間',
       '日立 RG41B 有左開版 RG41BL，可以依牆的位置選開門方向',
+    ],
+  },
+
+  // ───────────── 臥室、書房（2026/09 查詢） ─────────────
+  mbed: {
+    summary: '台規 6 × 6.2 尺（182 × 188）床墊，配同規格後掀床底（主臥衣櫃小，床底收納很有用）；床頭片 12 cm 以內才放得進 182 × 200。',
+    specs: ['床墊 182 × 188（台規雙人加大 6 × 6.2 尺）', '床架含床頭 ≤ 182 × 200', '主臥衣櫃小 → 選掀床收納'],
+    picks: [
+      {
+        name: 'Lunio Quantum Max 石墨烯高碳錳獨立筒床墊 6 尺',
+        rec: true,
+        detail: '180 × 188 台規；乳膠＋高碳錳獨立筒、5 區支撐、床沿加固，中等偏硬',
+        price: '約 NT$17,540（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DEBRCH-A900HTG5G',
+        source: 'PChome',
+      },
+      {
+        name: 'Serta 舒達 SleepTrue 卡羅爾頓 乳膠獨立筒床墊 6 × 6.2 尺',
+        detail: '182 × 188 × 29；天然乳膠＋袋裝獨立筒，偏硬',
+        price: '約 NT$30,480（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DEBRG7-A900H4ATC',
+        source: 'PChome',
+      },
+      {
+        name: '德泰 歐蒂斯系列 B2 獨立筒床墊 雙人加大 6 尺',
+        detail: '182 × 188 × 22；蜂巢式獨立筒、台灣手工製，適中偏硬',
+        price: '約 NT$35,599（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/CDAC3G-A77578008',
+        source: 'PChome',
+      },
+      {
+        name: 'ASSARI 強化加厚收納後掀床架 雙大 6 尺',
+        rec: true,
+        detail: '後掀床底（無床頭）、木芯板、整床底收納；可另配薄床頭片',
+        price: '約 NT$9,162（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DQBU7T-A900JNS4O',
+        source: 'PChome',
+      },
+      {
+        name: 'ASSARI 利佩貓抓皮耐重電動掀床架 雙大 6 尺',
+        detail: '電動掀起，重床墊也不必硬推；貓抓皮包覆',
+        price: '約 NT$28,466（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DQBU4T-A900JPKT1',
+        source: 'PChome',
+      },
+    ],
+    search: ['Lunio Quantum Max 6尺', '德泰 歐蒂斯 B2 雙人加大', 'ASSARI 後掀床架 雙大6尺'],
+    vendors: [
+      {
+        name: 'Lunio 官網',
+        detail: '旗艦 Gen4 石墨烯乳膠床墊 6 尺約 NT$33,990（2026/09 官網）',
+        url: 'https://lunio.com.tw/product/lunio-latex-mattress/',
+      },
+    ],
+    notes: [
+      '床墊一張＋床架一張各勾一個；台規雙人加大 182 × 188，Sealy 台灣 183 × 190、IKEA 180 × 200，床墊和床架要同一規格',
+      '後掀床床尾要能站人操作；下單時告知床墊厚度與重量，好配對應的氣壓棒',
+      'ASSARI 床架的外尺寸在賣場圖片上，下單前請跟賣家確認',
+    ],
+  },
+  massage: {
+    summary: '選前滑式零靠牆機種；OSIM 大天王直立 122、躺平 179，最貼合 80 × 140（躺平 180）的預留。',
+    specs: ['佔地 80 W × 140 D（直立）', '零靠牆前滑，躺平長約 180 以內', '椅側要有 110V 插座'],
+    picks: [
+      {
+        name: 'OSIM 大天王 uDeluxe Max OS-8210',
+        rec: true,
+        detail: '直立 74 × 122、後仰 179、81 kg；零重力（零牆距請到門市確認）',
+        price: '約 NT$72,888（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DMAD6Q-A900FOSC9',
+        source: 'PChome',
+      },
+      {
+        name: 'tokuyo 花美椅 2 All-in TC-696',
+        detail: '正座 77 × 143（比預留深 3 cm）、躺平 173、76 kg；零靠牆、台灣製',
+        price: '約 NT$76,900（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DMADFP-A900JTAIY',
+        source: 'PChome',
+      },
+      {
+        name: 'JHT i芯深捏臀感按摩椅 K-323',
+        detail: '直立 74 × 135、平躺 168、71 kg；離牆 5 cm 自動前滑',
+        price: '約 NT$32,600（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DMADC2-A900HALLF',
+        source: 'PChome',
+      },
+    ],
+    search: ['OSIM OS-8210', 'tokuyo TC-696', 'JHT K-323'],
+    vendors: [
+      {
+        name: 'tokuyo 客服',
+        detail: '詢問 TC-696 門市試坐與實際離牆距離',
+        phone: '0800-369963',
+      },
+    ],
+    notes: [
+      'OSIM 旗艦 uLove 3（OS-8218）後仰 185、建議後方留 10，超過預留（約 NT$169,800）',
+      '躺平時前方要淨空到約 180；機身 70～105 kg，先量次臥門寬，地板加保護墊',
+    ],
+  },
+  bdesk1: {
+    summary: '選三節式雙馬達、桌板 120 × 60；坐姿可以降到約 63、站姿升到 125 以上。',
+    specs: ['桌面 120 × 60 × 2 張並排（共 240 寬）', '雙馬達、三節式', '面牆擺放，要預留插座'],
+    picks: [
+      {
+        name: 'FUNTE Prime 電動升降桌 三節式（桌板 120 × 60）',
+        detail: 'SGS 雙馬達、耐重 120 kg、63.7～128（含桌板）；桌架與馬達保固 5 年',
+        price: '約 NT$12,990～18,600／張（2026/09 官網，依節數與桌板）',
+        url: 'https://www.funtetw.com/products/standing-desk-1',
+        source: 'FUNTE 官網',
+      },
+      {
+        name: 'FlexiSpot 三節式磁吸收納電動升降桌 120 × 60（升級款）',
+        rec: true,
+        detail: '雙電機、63.5～129、承重 125 kg、4 組記憶；需自行安裝',
+        price: '約 NT$10,900／張（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DQBK8K-A900GCK4Y',
+        source: 'PChome',
+      },
+      {
+        name: '樂歌 Loctek DF1 電動升降桌 120 × 60',
+        detail: '三節雙馬達、約 62.5～127.5、承重 100 kg、4 組記憶、USB-A/C',
+        price: '約 NT$14,999／張（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DQCB9N-A900HAZBU',
+        source: 'PChome',
+      },
+    ],
+    search: ['FUNTE Prime 三節式 120x60', 'Flexispot 三節式 120*60', '樂歌 DF1 120x60'],
+    vendors: [
+      {
+        name: 'FUNTE 新莊思源店',
+        detail: '新北市新莊區思源路 686 號，週三公休，可以試升降桌和工學椅',
+        phone: '(02) 8521-5798',
+        url: 'https://www.funtetw.com/pages/xinzhuang-appointment',
+      },
+      {
+        name: 'FUNTE 台北概念店',
+        detail: '台北市大安區通安街 8 號，信義安和站步行 2 分鐘',
+        phone: '(02) 2325-5688',
+      },
+    ],
+    notes: [
+      '兩張並排時兩桌之間留 1～2 cm，升降速度不一樣才不會互刮',
+      '插座設在桌下（約 30～40 cm 高），電源線要留足升降行程（約 65 cm）',
+      '樂歌安裝完成後不適用 7 天鑑賞期；FUNTE 客製尺寸也不能無條件退',
+    ],
+  },
+  bchair1: {
+    summary: '入門選西昊 M57C、中階選 Backbone Kabuto、高階選 Aeron；椅腳實際佔地約 65～70。',
+    specs: ['預留 50 × 50（實際椅腳直徑約 65～70）', '頭枕、腰靠、扶手可調'],
+    picks: [
+      {
+        name: '西昊 SIHOO M57C 仿生舒適椅',
+        detail: '分體仿生椅背、3D 頭枕、座高可調 10 cm、耐重 125 kg、保固 3 年',
+        price: '約 NT$6,900／張（2026/09 FUNTE 官網）',
+        url: 'https://www.funtetw.com/products/ergonomic-chairs-sihoo-m57c',
+        source: 'FUNTE 官網',
+      },
+      {
+        name: 'Backbone Kabuto 人體工學椅（經典黑框）',
+        rec: true,
+        detail: '台灣品牌；網背、頭枕升降、3D 扶手、椅背傾仰；結構保固 2 年',
+        price: '約 NT$12,880／張（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DEBHC3-A900BVNLC',
+        source: 'PChome',
+      },
+      {
+        name: 'Herman Miller Aeron 全功能 B Size',
+        detail: '寬 65.8 × 深 59.8、腳座直徑 69.9；前傾、PostureFit 腰靠；原廠授權',
+        price: '約 NT$38,900／張（2026/09 PChome 世代家具）',
+        url: 'https://24h.pchome.com.tw/prod/DCBV09-A900IUC2J',
+        source: 'PChome',
+      },
+    ],
+    search: ['西昊 M57C', 'Backbone Kabuto', 'Herman Miller Aeron B Size'],
+    vendors: [
+      {
+        name: 'FUNTE 直營門市',
+        detail: '新莊、台北、台中三家門市都能試坐西昊等工學椅',
+        phone: '(02) 8521-5798',
+        url: 'https://www.funtetw.com/pages/xinzhuang-appointment',
+      },
+      {
+        name: '世代家具（Herman Miller 授權）',
+        detail: 'Aeron 原廠授權經銷，PChome 賣場客服',
+        phone: '(02) 2659-1799',
+      },
+    ],
+    notes: [
+      '50 × 50 只算座面；五爪椅腳約 65～70，兩張並排時椅間走道要留夠',
+      'Aeron 分 A／B／C 三個尺寸，B 適合身高 160～179、體重 50～80 kg',
+      '平行輸入的 Aeron 約 NT$25,990 起，但沒有台灣原廠保固',
+    ],
+  },
+  projector: {
+    summary:
+      '依你給的尺寸（19 × 19 × 24.8、4 kg）找不到完全吻合的型號，請告訴我品牌型號就能精算投影距離；一般投射比 1.2 在 2.7 m 會投出約 100 吋。',
+    specs: ['機身 19 × 19 × 24.8（含鏡頭）／24.9（含支架）、4 kg', '床頭櫃到牆約 2.7 m、目標 80 吋', '80 吋 @ 2.7 m 需要投射比約 1.52'],
+    picks: [
+      {
+        name: 'Hisense 海信 小魔方 M2 Pro（最接近的候選，不是完全吻合）',
+        detail: '21.8 × 19.3 × 23.0、3.5 kg、光學變焦 1.0～1.3；80 吋需 1.8～2.3 m',
+        price: '約 NT$36,900（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DPAE9I-A900JHPBK',
+        source: 'PChome',
+      },
+    ],
+    search: ['Hisense M2 Pro', '雲台 雷射投影機 4K', '投影機 光學變焦'],
+    notes: [
+      '比對過 XGIMI、Dangbei、JMGO、Hisense、BenQ、Epson 等，都不符合 19 × 19 × 24.8／4 kg',
+      '在 2.7 m：投射比 1.2 約 102 吋（寬 225），1.0 約 122 吋，1.3 約 94 吋',
+      '要 80 吋：投射比 1.2 的機種要放在約 2.1 m，或在 2.7 m 用數位縮放（解析度和亮度會打折）',
+      '床頭櫃偏低要往上仰，梯形校正會吃掉畫素；可以墊高到接近畫面下緣',
+    ],
+  },
+  projection: {
+    summary: '80 吋直接投平光白牆最省；要更好的畫質可以加 84 吋手拉幕或 Elite 80 吋地拉幕。',
+    specs: ['80 吋 16:9 = 177 × 100', '投在床尾白牆', '畫面下緣要高於床尾'],
+    picks: [
+      {
+        name: '白牆＋虹牌 458 全效乳膠漆 平光（1 加侖）',
+        rec: true,
+        detail: '批土磨平後刷平光白，不要用亮光漆以免反光；最省錢',
+        price: '約 NT$1,077（2026/09 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DEDQ0A-A900F7SB0',
+        source: 'PChome',
+      },
+      {
+        name: 'Elite Screens 億立 80 吋 16:9 可攜式彈簧地拉幕 F80XWH1',
+        detail: '白塑布，從地面往上拉、免打孔，不用時收起來',
+        price: '約 NT$7,919（2026/09 momo）',
+        url: 'https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=8206444',
+        source: 'momo',
+      },
+      {
+        name: 'DYT 84 吋 16:9 手拉自鎖式布幕（白玻纖）',
+        detail: '壁掛或吊掛、手拉升降；畫面 186 × 105，比 80 吋略大',
+        price: '約 NT$2,558（2026/09 momo）',
+        url: 'https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=14696352',
+        source: 'momo',
+      },
+    ],
+    search: ['Elite Screens F80XWH1', '84吋 16:9 手拉幕', '虹牌 458 平光'],
+    notes: [
+      '專用投影漆在 PChome、momo 幾乎找不到；投 80 吋用平光白牆就夠了',
+      '畫面下緣要高於床尾和棉被，腳才不會擋到畫面',
+      '手拉幕和電動幕的盒身比畫面寬，買之前先量牆寬',
     ],
   },
 }
@@ -998,9 +1279,49 @@ export const cabinetVendors: ShopVendor[] = [
 ]
 export const cabinetSearch: string[] = ['系統櫃 土城', '系統櫃 土城 展示中心', '系統板 P3 防潮 EN312', 'CNS 2215 F1 板材 甲醛']
 
-export function shopInfo(it: FurnitureItem): ShopInfo | undefined {
-  return shopping[it.id] ?? shopping[alias[it.id] ?? '']
+/** 家具對應的選購資料 key（同款家具共用） */
+export function shopKey(it: FurnitureItem): string | undefined {
+  if (shopping[it.id]) return it.id
+  const a = alias[it.id]
+  return a && shopping[a] ? a : undefined
 }
+
+export function shopInfo(it: FurnitureItem): ShopInfo | undefined {
+  const k = shopKey(it)
+  return k ? shopping[k] : undefined
+}
+
+/** 商品的參考金額：price 文字裡第一個 NT$ 金額，範圍（a～b）取中間值；抓不到回傳 null */
+export function pickCost(p: ShopPick): number | null {
+  if (p.cost !== undefined) return p.cost
+  const m = p.price?.match(/NT\$\s*([\d,]+)(?:\s*[～~–-]\s*([\d,]+))?/)
+  if (!m) return null
+  const a = Number(m[1].replace(/,/g, ''))
+  const b = m[2] ? Number(m[2].replace(/,/g, '')) : null
+  return b ? Math.round((a + b) / 2) : a
+}
+
+/** 一組可以勾選的商品：家具本身的建議商品，或附屬設備（中島的微波爐、插座…） */
+export interface PickGroup {
+  key: string
+  title: string
+  picks: ShopPick[]
+  /** 同款家具的數量（例如餐椅 ×4），金額要乘上 */
+  qty: number
+}
+
+/** 一件家具（同款共用）底下所有可以勾選的商品群組 */
+export function pickGroups(key: string, qty: number): PickGroup[] {
+  const info = shopping[key]
+  if (!info) return []
+  const out: PickGroup[] = []
+  if (info.picks?.length) out.push({ key, title: '建議商品', picks: info.picks, qty })
+  for (const r of info.related ?? [])
+    if (r.info.picks?.length) out.push({ key: `${key}/${r.title}`, title: r.title, picks: r.info.picks, qty: 1 })
+  return out
+}
+
+export const money = (n: number) => `NT$${Math.round(n).toLocaleString('en-US')}`
 
 export const pchomeUrl = (q: string) => `https://24h.pchome.com.tw/search/?q=${encodeURIComponent(q)}`
 export const momoUrl = (q: string) => `https://www.momoshop.com.tw/search/searchShop.jsp?keyword=${encodeURIComponent(q)}`

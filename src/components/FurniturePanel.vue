@@ -13,8 +13,11 @@ import {
   cabinetFrame, faceDepths, frontKinds, hasInterior, interiorOf, interiorStats, interiorWarnings, layoutFace, partKind,
 } from '../cabinet'
 import {
-  cabinetMaterials, cabinetSearch, cabinetVendors, googleUrl, itemCategory, momoUrl, pchomeUrl, shopInfo, type ShopVendor,
+  cabinetMaterials, cabinetSearch, cabinetVendors, googleUrl, itemCategory, momoUrl, money, pchomeUrl, shopInfo, shopKey,
+  type ShopVendor,
 } from '../data/shopping'
+import { budget, furnitureGroups } from '../budget'
+import { resetPicks } from '../purchases'
 import CabinetElevation from './CabinetElevation.vue'
 import ShopPicks from './ShopPicks.vue'
 import ShopVendors from './ShopVendors.vue'
@@ -43,6 +46,18 @@ const grouped = computed(() => {
 })
 
 const info = computed(() => (selected.value ? shopInfo(selected.value) : undefined))
+/** 選購資料的 key 與同款數量（餐椅 ×4 之類，金額要乘上） */
+const infoKey = computed(() => (selected.value ? shopKey(selected.value) : undefined))
+const infoQty = computed(() => (infoKey.value ? (furnitureGroups(design.furniture).get(infoKey.value)?.qty ?? 1) : 1))
+const itemSpend = computed(() => (infoKey.value ? (budget.value.byRoot.get(infoKey.value) ?? 0) : 0))
+const rowSpend = (it: FurnitureItem) => {
+  const k = shopKey(it)
+  return k ? (budget.value.byRoot.get(k) ?? 0) : 0
+}
+const showLines = ref(false)
+function openItem(id: string) {
+  ui.selectedId = id
+}
 const category = computed(() => (selected.value ? itemCategory(selected.value) : ''))
 const custom = computed(() => category.value === '系統櫃' || category.value === '訂製')
 
@@ -131,6 +146,7 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
       </div>
     </div>
     <p v-if="info?.summary" class="detail-summary">{{ info.summary }}</p>
+    <p v-if="itemSpend" class="detail-spend">這件已勾選 <b>{{ money(itemSpend) }}</b></p>
 
     <div class="detail-sec">
       <h3><Ruler />尺寸規格</h3>
@@ -216,8 +232,9 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
 
     <!-- 建議商品 -->
     <div v-if="info?.picks?.length" class="detail-sec">
-      <h3><ShoppingBag />建議商品</h3>
-      <ShopPicks :picks="info.picks" />
+      <h3><ShoppingBag />建議商品<small v-if="infoQty > 1" class="h3-note">×{{ infoQty }}</small></h3>
+      <p class="muted tight pick-hint">勾選的商品會計入總花費，標「推薦」的是預設組合。</p>
+      <ShopPicks :picks="info.picks" :group="infoKey!" :qty="infoQty" />
     </div>
 
     <!-- 搜尋 -->
@@ -248,7 +265,7 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
       <ul v-if="r.info.specs?.length" class="bullets">
         <li v-for="x in r.info.specs" :key="x">{{ x }}</li>
       </ul>
-      <div v-if="r.info.picks?.length" class="sec-gap"><ShopPicks :picks="r.info.picks" /></div>
+      <div v-if="r.info.picks?.length" class="sec-gap"><ShopPicks :picks="r.info.picks" :group="`${infoKey}/${r.title}`" :qty="1" /></div>
       <div v-for="k in r.info.search ?? []" :key="k" class="search-row">
         <span>{{ k }}</span>
         <a class="chip" :href="pchomeUrl(k)" target="_blank" rel="noopener noreferrer">PChome</a>
@@ -273,13 +290,48 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
 
   <!-- 家具清單 -->
   <div v-else class="fl">
+    <!-- 預算 -->
+    <section class="budget">
+      <div class="budget-head">
+        <span>目前總花費</span>
+        <small>預估</small>
+      </div>
+      <b class="budget-total">{{ money(budget.total) }}</b>
+      <div v-if="budget.byCat.length" class="budget-cats">
+        <div v-for="c in budget.byCat" :key="c.name">
+          <span>{{ c.name }}</span>
+          <b>{{ money(c.total) }}</b>
+        </div>
+      </div>
+      <p class="budget-note">
+        已勾選 {{ budget.lines.length }} 項<template v-if="budget.unknown">（{{ budget.unknown }} 項沒有價格，未計入）</template>。
+        依網路參考價估算，運費、安裝費另計；點家具可以改勾選。
+      </p>
+      <div class="budget-actions">
+        <button class="btn sm soft" @click="showLines = !showLines">{{ showLines ? '收起明細' : '看明細' }}</button>
+        <button class="btn sm ghost" title="回到每件家具的推薦商品" @click="resetPicks">回到推薦組合</button>
+      </div>
+      <div v-if="showLines" class="budget-lines">
+        <button v-for="(l, i) in budget.lines" :key="i" class="bl-row" @click="openItem(l.furnitureId)">
+          <span>
+            {{ l.item }}<template v-if="l.title !== '建議商品'">・{{ l.title }}</template>
+            <small>{{ l.pick }}{{ l.qty > 1 ? ` × ${l.qty}` : '' }}</small>
+          </span>
+          <b>{{ l.total == null ? '—' : l.total === 0 ? '不另計' : money(l.total) }}</b>
+        </button>
+      </div>
+    </section>
+
     <section v-for="g in grouped" :key="g.room" class="fl-room">
       <h3>{{ g.room }}</h3>
       <button v-for="r in g.rows" :key="r.it.id" class="fl-item" @click="ui.selectedId = r.it.id">
         <span class="fl-icon"><component :is="furnitureIcon(r.it.type)" /></span>
         <span class="fl-text">
           <b>{{ r.it.name }}<i v-if="r.count > 1"> ×{{ r.count }}</i></b>
-          <small>{{ fmt(r.it.w) }} × {{ fmt(r.it.d) }} × {{ fmt(r.it.h) }} 公分</small>
+          <small>
+            {{ fmt(r.it.w) }} × {{ fmt(r.it.d) }} × {{ fmt(r.it.h) }} 公分
+            <span v-if="rowSpend(r.it)" class="fl-spend">・{{ money(rowSpend(r.it)) }}</span>
+          </small>
         </span>
         <em class="cat-tag" :data-cat="itemCategory(r.it)">{{ itemCategory(r.it) }}</em>
         <ChevronRight class="fl-go" />

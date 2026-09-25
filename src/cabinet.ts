@@ -13,7 +13,8 @@ export const DOOR = 1.8
 /** 欄寬超過這個數字時做兩扇對開門 */
 export const DOUBLE_DOOR_OVER = 62
 
-export const INTERIOR_TYPES = ['wardrobe', 'cabinet', 'nightstand', 'tvstand', 'coffeebar', 'bookshelf', 'peninsula']
+/** 有櫃內規劃（系統櫃／訂製）的種類；床頭櫃改用買的，不列在這裡（3D 仍照抽屜＋開放格畫） */
+export const INTERIOR_TYPES = ['wardrobe', 'cabinet', 'tvstand', 'coffeebar', 'bookshelf', 'peninsula']
 export const hasInterior = (it: FurnitureItem) => INTERIOR_TYPES.includes(it.type)
 
 export const partKinds: { id: PartKind; name: string; color: string; hint: string }[] = [

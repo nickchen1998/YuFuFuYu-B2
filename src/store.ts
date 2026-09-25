@@ -4,13 +4,15 @@ import { CEILING_DEFAULT, rooms } from './data/house'
 import { defaultFurniture } from './data/catalog'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 8
+const REV = 9
 /** 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整 */
 const FURNITURE_PATCHES: [number, string[]][] = [
   // rev 7：加大雙人床、半島型中島餐桌與四張椅、三人沙發、咖啡櫃
   [7, ['mbed', 'mns1', 'mns2', 'mward', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'rice', 'fryer', 'sofa', 'coffeebar', 'espresso']],
   // rev 8：中島餐桌加寬到 90，電鍋與氣炸鍋橫向並排
   [8, ['dining', 'rice', 'fryer']],
+  // rev 9：咖啡櫃改矮櫃、主臥投影機與投影畫面、鞋櫃上方洞洞板
+  [9, ['coffeebar', 'espresso', 'projector', 'projection', 'pegboard']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */
 const LAYOUT_REV = 6

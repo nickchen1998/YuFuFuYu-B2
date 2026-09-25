@@ -24,6 +24,8 @@ export const catalog: CatalogEntry[] = [
   { type: 'desk', name: '化妝台', category: '臥室', w: 100, d: 45, h: 75, color: '#e8e2d8' },
   { type: 'chair', name: '椅子', category: '臥室', w: 45, d: 50, h: 85, color: '#5b5f63' },
   { type: 'bookshelf', name: '書櫃', category: '臥室', w: 80, d: 30, h: 180, color: '#dcd0bd' },
+  { type: 'projector', name: '投影機（小型方塊）', category: '臥室', w: 19, d: 19, h: 25, elev: 50, color: '#e9e9e6' },
+  { type: 'projection', name: '投影畫面（80 吋示意）', category: '臥室', w: 177, d: 1, h: 100, elev: 95, color: '#e6eefb' },
   { type: 'standingdesk', name: '升降桌 120', category: '臥室', w: 120, d: 60, h: 73, color: '#d8c3a5' },
   { type: 'chair', name: '辦公椅', category: '臥室', w: 50, d: 50, h: 100, color: '#5b5f63' },
   // 客廳
@@ -53,8 +55,8 @@ export const catalog: CatalogEntry[] = [
     features: ['microwave', 'tableout'],
   },
   { type: 'peninsula', name: '訂製中島餐桌（半島型）', category: '餐廚', w: 220, d: 70, h: 76, color: '#ece6dc', features: ['microwave'] },
-  { type: 'coffeebar', name: '咖啡櫃（零食櫃）', category: '餐廚', w: 100, d: 40, h: 200, color: '#ece6dc' },
-  { type: 'coffeemaker', name: '咖啡機', category: '餐廚', w: 25, d: 35, h: 35, elev: 88, color: '#3a3a3d' },
+  { type: 'coffeebar', name: '咖啡櫃（零食櫃）', category: '餐廚', w: 100, d: 40, h: 90, color: '#ece6dc' },
+  { type: 'coffeemaker', name: '咖啡機', category: '餐廚', w: 25, d: 35, h: 35, elev: 90, color: '#3a3a3d' },
   { type: 'microwave', name: '微波爐', category: '餐廚', w: 50, d: 40, h: 30, elev: 90, color: '#d4d7db' },
   { type: 'airfryer', name: '氣炸鍋', category: '餐廚', w: 30, d: 36, h: 33, elev: 90, color: '#2d2d30' },
   { type: 'ricecooker', name: '電鍋', category: '餐廚', w: 32, d: 32, h: 30, elev: 90, color: '#e9e4da' },
@@ -63,6 +65,7 @@ export const catalog: CatalogEntry[] = [
   { type: 'cabinet', name: '收納櫃', category: '其他', w: 80, d: 40, h: 90, color: '#ece6dc' },
   { type: 'washer', name: '洗衣機', category: '其他', w: 60, d: 65, h: 100, color: '#eef0f2' },
   { type: 'vacuum', name: '直立式吸塵器', category: '其他', w: 30, d: 25, h: 115, color: '#8a5cc2' },
+  { type: 'pegboard', name: '洞洞板', category: '其他', w: 120, d: 2, h: 100, elev: 130, color: '#f4f1ea' },
   { type: 'acindoor', name: '冷氣室內機', category: '其他', w: 85, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
   { type: 'toilet', name: '馬桶', category: '其他', w: 40, d: 68, h: 76, color: '#f7f7f5' },
   { type: 'vanity', name: '洗手台', category: '其他', w: 70, d: 48, h: 85, color: '#b8916a' },
@@ -87,10 +90,12 @@ const seeds: Seed[] = [
   { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 110, color: '#ece6dc' },
   // 鞋櫃右側保留吸塵器位置
   { id: 'vacuum', type: 'vacuum', name: '吸塵器', x: 262, y: 15, rot: 0, w: 30, d: 25, h: 115, color: '#8a5cc2' },
+  // 洞洞板：鞋櫃與吸塵器上方一整片（130～230 公分，上方留 20 公分給冷氣）
+  { id: 'pegboard', type: 'pegboard', name: '洞洞板', x: 222.5, y: 1, rot: 0, w: 125, d: 2, h: 100, elev: 130, color: '#f4f1ea' },
   { id: 'sofa', type: 'sofa', name: '三人沙發', x: 243, y: 185, rot: 270, w: 210, d: 90, h: 80, color: '#8e9ca8' },
-  // 咖啡櫃（零食櫃）：沙發旁、與冰箱斜對面；中段檯面放咖啡機（建議預留插座）
-  { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃）', x: 268, y: 345, rot: 270, w: 100, d: 40, h: 200, color: '#ece6dc' },
-  { id: 'espresso', type: 'coffeemaker', name: '咖啡機', x: 266, y: 345, rot: 270, w: 25, d: 35, h: 35, elev: 88, color: '#3a3a3d' },
+  // 咖啡櫃（零食櫃）：沙發旁、與冰箱斜對面；90 公分高的矮櫃，咖啡機放檯面（建議預留插座）
+  { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃）', x: 268, y: 345, rot: 270, w: 100, d: 40, h: 90, color: '#ece6dc' },
+  { id: 'espresso', type: 'coffeemaker', name: '咖啡機', x: 266, y: 345, rot: 270, w: 25, d: 35, h: 35, elev: 90, color: '#3a3a3d' },
   { id: 'rug', type: 'rug', name: '地毯', x: 130, y: 185, rot: 90, w: 200, d: 150, h: 1, color: '#cfc5b4' },
   { id: 'coffee', type: 'coffeetable', name: '茶几', x: 145, y: 185, rot: 90, w: 100, d: 50, h: 40, color: '#a67c52' },
   { id: 'tvstand', type: 'tvstand', name: '電視櫃', x: 20, y: 185, rot: 90, w: 180, d: 40, h: 50, color: '#ece6dc' },
@@ -122,6 +127,9 @@ const seeds: Seed[] = [
   { id: 'mbed', type: 'bed', name: '加大雙人床 6尺', x: -186.5, y: 478.5, rot: 90, w: 182, d: 200, h: 100, color: '#c9d3dc' },
   { id: 'mns1', type: 'nightstand', name: '床頭櫃', x: -269, y: 372.5, rot: 90, w: 30, d: 35, h: 50, color: '#b8916a' },
   { id: 'mns2', type: 'nightstand', name: '床頭櫃', x: -269, y: 584.5, rot: 90, w: 30, d: 35, h: 50, color: '#b8916a' },
+  // 投影機：靠窗側床頭櫃上，斜向對準床尾那面牆（投影畫面中心對齊床的中線）
+  { id: 'projector', type: 'projector', name: '投影機', x: -269, y: 584.5, rot: 110, w: 19, d: 19, h: 25, elev: 50, color: '#e9e9e6' },
+  { id: 'projection', type: 'projection', name: '投影畫面（80 吋示意）', x: -15.5, y: 490, rot: 270, w: 177, d: 1, h: 100, elev: 95, color: '#e6eefb' },
   { id: 'mward', type: 'wardrobe', name: '衣櫃（薄型 45 深）', x: -219, y: 282.5, rot: 0, w: 135, d: 45, h: 240, color: '#e4dccf' },
   // 冷氣：窗戶上方（窗外就是冷氣平台，管線最短）；導風板往上調，避免直吹床
   { id: 'ac-master', type: 'acindoor', name: '冷氣（主臥）', x: -130, y: 587, rot: 180, w: 85, d: 25, h: 30, elev: 250, color: '#f4f4f2' },

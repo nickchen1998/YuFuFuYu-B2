@@ -56,7 +56,7 @@ const keys: { k: string[]; t: string }[] = [
       <input v-model="ui.mainDoorOpen" type="checkbox" class="switch" />
     </label>
     <label class="switch-row">
-      <span><AirVent />冷氣出風示意</span>
+      <span><AirVent />冷氣出風、投影光線示意</span>
       <input v-model="ui.showAirflow" type="checkbox" class="switch" />
     </label>
     <label class="switch-row">

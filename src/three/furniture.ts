@@ -493,14 +493,18 @@ function peninsula(g: G, it: FurnitureItem) {
   for (const sx of [-1, 1]) bx(g, 1.4, 14, 2, scx + sx * 4, bodyTop - 24, pz + 0.8, METAL())
 }
 
-/** 咖啡櫃（零食櫃）：下櫃門片＋抽屜、中段開放檯面放咖啡機（木背板＋層板燈）、上櫃門片 */
+/**
+ * 咖啡櫃（零食櫃）：下櫃門片＋抽屜。
+ * 高 110 以下是矮櫃，咖啡機直接放檯面；更高時多一段開放檯面（木背板＋層板燈）與上櫃。
+ */
 function coffeebar(g: G, it: FurnitureItem) {
   const { w, d, h } = it
   const body = mat(it.color, 0.6)
   const line = mat(shadeHex(it.color, 0.55), 0.8)
   const front = d / 2 + 0.15
   const base = 8
-  const lowH = 88
+  const tall = h > 110
+  const lowH = tall ? 88 : h
   const nicheH = 50
   const upY = lowH + nicheH
   bx(g, w - 2, base, d - 4, 0, 0, -2, line)
@@ -512,6 +516,7 @@ function coffeebar(g: G, it: FurnitureItem) {
     bx(g, 16, 1.4, 2, sx * (w / 4), lowH - 13, front + 0.8, METAL())
     bx(g, 1.4, 14, 2, sx * 4, lowH - 40, front + 0.8, METAL())
   }
+  if (!tall) return
   bx(g, w, nicheH, 2, 0, lowH, -d / 2 + 1, mat('#b08560', 0.5))
   for (const sx of [-1, 1]) bx(g, 2, nicheH, d, sx * (w / 2 - 1), lowH, 0, body)
   bx(g, w, h - upY, d, 0, upY, 0, body)
@@ -526,6 +531,100 @@ function coffeemaker(g: G, it: FurnitureItem) {
   bx(g, w, 4, d * 0.3, 0, 0, d * 0.35, mat('#2b2b2e', 0.4))
   bx(g, w * 0.5, 8, 6, 0, h * 0.55, d * 0.22, mat('#1b1b1d', 0.3))
   cyl(g, 3.2, 2.8, 8, 0, 4, d * 0.3, mat('#f4f1ea', 0.3), 16)
+}
+
+/** 小型方塊投影機：鏡頭朝正面（+z），附投影光線示意（與冷氣出風示意同一個開關） */
+function projector(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  bx(g, w * 0.7, 1.5, d * 0.7, 0, 0, 0, DARK())
+  bx(g, w, h - 1.5, d, 0, 1.5, 0, mat(it.color, 0.4))
+  bx(g, w - 4, 0.4, d - 4, 0, h - 0.2, 0, mat(shadeHex(it.color, 0.85), 0.6))
+  const lensY = h * 0.55
+  const lens = new THREE.Mesh(new THREE.CylinderGeometry(3.2, 3.2, 1.6, 32), mat('#1c2530', 0.1, 0.4))
+  lens.rotation.x = Math.PI / 2
+  lens.position.set(0, lensY, d / 2 + 0.8)
+  g.add(lens)
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(3.6, 0.5, 8, 32), mat('#9aa0a6', 0.3, 0.7))
+  ring.position.set(0, lensY, d / 2 + 0.3)
+  g.add(ring)
+  // 光線：從鏡頭往前 240 公分展開，越遠越淡
+  const reach = 240
+  const geo = new THREE.BufferGeometry()
+  const z0 = d / 2 + 1.5
+  geo.setAttribute(
+    'position',
+    new THREE.Float32BufferAttribute([0, lensY, z0, -85, 35, reach, 85, 35, reach, 85, 136, reach, -85, 136, reach], 3),
+  )
+  const c = new THREE.Color('#fff4c8')
+  geo.setAttribute('color', new THREE.Float32BufferAttribute([c.r, c.g, c.b, 0.3, ...[1, 2, 3, 4].flatMap(() => [c.r, c.g, c.b, 0.03])], 4))
+  geo.setIndex([0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 1])
+  airflowMat ??= new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+  const beam = new THREE.Mesh(geo, airflowMat)
+  beam.userData.airflow = true
+  beam.raycast = () => {}
+  beam.renderOrder = 5
+  g.add(beam)
+}
+
+/** 投影畫面示意：貼在牆上的發光矩形（elev = 畫面下緣高度） */
+function projection(g: G, it: FurnitureItem) {
+  const { w, h } = it
+  const screen = bx(g, w, h, 0.3, 0, 0, 0, mat('#e6eefb', 0.9, 0, '#c4d8ff'))
+  screen.castShadow = false
+  const edge = mat('#9fb4d6', 0.8)
+  for (const sy of [0, h - 0.8]) bx(g, w, 0.8, 0.5, 0, sy, 0.1, edge).castShadow = false
+  for (const sx of [-1, 1]) bx(g, 0.8, h, 0.5, sx * (w / 2 - 0.4), 0, 0.1, edge).castShadow = false
+}
+
+let pegTex: THREE.CanvasTexture | null = null
+
+/** 洞洞板貼圖：白底、每 2.5 公分一個孔（一張貼圖 = 25 × 25 公分） */
+function pegboardTexture() {
+  if (pegTex) return pegTex
+  const c = document.createElement('canvas')
+  c.width = c.height = 256
+  const x = c.getContext('2d')!
+  x.fillStyle = '#ffffff'
+  x.fillRect(0, 0, 256, 256)
+  x.fillStyle = 'rgba(40,36,32,0.55)'
+  for (let i = 0; i < 10; i++)
+    for (let j = 0; j < 10; j++) {
+      x.beginPath()
+      x.arc(12.8 + i * 25.6, 12.8 + j * 25.6, 3.4, 0, Math.PI * 2)
+      x.fill()
+    }
+  pegTex = new THREE.CanvasTexture(c)
+  pegTex.wrapS = pegTex.wrapT = THREE.RepeatWrapping
+  pegTex.colorSpace = THREE.SRGBColorSpace
+  pegTex.anisotropy = 8
+  return pegTex
+}
+
+/** 洞洞板：貼牆的孔板（背面 -z 靠牆），附層板、掛勾、包包、鑰匙等收納示意 */
+function pegboard(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const tex = pegboardTexture().clone()
+  tex.repeat.set(w / 25, h / 25)
+  tex.needsUpdate = true
+  bx(g, w, h, d, 0, 0, 0, new THREE.MeshStandardMaterial({ color: it.color, map: tex, roughness: 0.75 }))
+  const f = d / 2
+  const wood = mat('#c49a6c', 0.6)
+  // 層板與小物
+  bx(g, w * 0.4, 1.5, 14, -w * 0.22, h * 0.48, f + 7, wood)
+  bx(g, 10, 12, 8, -w * 0.32, h * 0.48 + 1.5, f + 6, mat('#e8e2d8', 0.6))
+  cyl(g, 4, 3.5, 9, -w * 0.18, h * 0.48 + 1.5, f + 7, mat('#c07a55', 0.8), 16)
+  cyl(g, 5, 4, 7, -w * 0.18, h * 0.48 + 10.5, f + 7, mat('#6c8f5c', 0.9), 12)
+  // 掛勾
+  const hooks = [-0.4, -0.1, 0.12, 0.3].map((r) => r * w)
+  for (const hx of hooks) {
+    const hook = cyl(g, 0.5, 0.5, 6, hx, h * 0.82, f + 3, METAL(), 8)
+    hook.rotation.x = Math.PI / 2
+  }
+  // 包包、鑰匙、帽子
+  bx(g, 24, 28, 7, hooks[2], h * 0.82 - 32, f + 4.5, mat('#b5a27e', 0.9))
+  bx(g, 4, 6, 1, hooks[1], h * 0.82 - 9, f + 3, mat('#d4b24c', 0.3, 0.8))
+  const hat = cyl(g, 13, 13, 1.2, hooks[3], h * 0.82 - 14, f + 2, mat('#3f4a5a', 0.9), 24)
+  hat.rotation.x = Math.PI / 2
 }
 
 /** 直立式吸塵器掛在充電座上 */
@@ -667,6 +766,9 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   peninsula,
   coffeebar,
   coffeemaker,
+  projector,
+  projection,
+  pegboard,
   diningisland,
   standingdesk,
   massagechair,

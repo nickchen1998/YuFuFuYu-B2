@@ -134,7 +134,6 @@ const seeds: Seed[] = [
   { id: 'mns2', type: 'nightstand', name: '床頭櫃', x: -269, y: 584.5, rot: 90, w: 30, d: 35, h: 50, color: '#b8916a' },
   // 投影機：靠窗側床頭櫃上，斜向對準床尾那面牆（投影畫面中心對齊床的中線）
   { id: 'projector', type: 'projector', name: '投影機', x: -269, y: 584.5, rot: 110, w: 19, d: 19, h: 25, elev: 50, color: '#e9e9e6' },
-  { id: 'projection', type: 'projection', name: '投影畫面（80 吋示意）', x: -15.5, y: 490, rot: 270, w: 177, d: 1, h: 100, elev: 95, color: '#e6eefb' },
   // 衣櫃做到頂（300）；內部規劃見 interiors.ts
   { id: 'mward', type: 'wardrobe', name: '衣櫃（薄型 45 深）', x: -219, y: 282.5, rot: 0, w: 135, d: 45, h: 300, color: '#e4dccf' },
   // 冷氣：窗戶上方（窗外就是冷氣平台，管線最短）；導風板往上調，避免直吹床

@@ -1184,40 +1184,6 @@ export const shopping: Record<string, ShopInfo> = {
       '床頭櫃偏低要往上仰，梯形校正會吃掉畫素；可以墊高到接近畫面下緣',
     ],
   },
-  projection: {
-    summary: '80 吋直接投平光白牆最省；要更好的畫質可以加 84 吋手拉幕或 Elite 80 吋地拉幕。',
-    specs: ['80 吋 16:9 = 177 × 100', '投在床尾白牆', '畫面下緣要高於床尾'],
-    picks: [
-      {
-        name: '白牆＋虹牌 458 全效乳膠漆 平光（1 加侖）',
-        rec: true,
-        detail: '批土磨平後刷平光白，不要用亮光漆以免反光；最省錢',
-        price: '約 NT$1,077（2026/09 PChome）',
-        url: 'https://24h.pchome.com.tw/prod/DEDQ0A-A900F7SB0',
-        source: 'PChome',
-      },
-      {
-        name: 'Elite Screens 億立 80 吋 16:9 可攜式彈簧地拉幕 F80XWH1',
-        detail: '白塑布，從地面往上拉、免打孔，不用時收起來',
-        price: '約 NT$7,919（2026/09 momo）',
-        url: 'https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=8206444',
-        source: 'momo',
-      },
-      {
-        name: 'DYT 84 吋 16:9 手拉自鎖式布幕（白玻纖）',
-        detail: '壁掛或吊掛、手拉升降；畫面 186 × 105，比 80 吋略大',
-        price: '約 NT$2,558（2026/09 momo）',
-        url: 'https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=14696352',
-        source: 'momo',
-      },
-    ],
-    search: ['Elite Screens F80XWH1', '84吋 16:9 手拉幕', '虹牌 458 平光'],
-    notes: [
-      '專用投影漆在 PChome、momo 幾乎找不到；投 80 吋用平光白牆就夠了',
-      '畫面下緣要高於床尾和棉被，腳才不會擋到畫面',
-      '手拉幕和電動幕的盒身比畫面寬，買之前先量牆寬',
-    ],
-  },
 
   // 床頭櫃（買現成的，2026/09 查詢）
   mns1: {

@@ -491,7 +491,8 @@ function peninsula(g: G, it: FurnitureItem) {
   const ls = peninsulaStorageLen(it)
   const bodyTop = h - PENINSULA_TOP
   peninsulaStorage(g, it)
-  bx(g, w, PENINSULA_TOP, d + 2, 0, bodyTop, 0, mat('#dcd8d1', 0.3))
+  // 檯面：woodtop = 白橡木實木，否則人造石
+  bx(g, w, PENINSULA_TOP, d + 2, 0, bodyTop, 0, has(it, 'woodtop') ? mat('#cfae84', 0.55) : mat('#dcd8d1', 0.3))
   // 餐桌段：末端兩支腳＋中間橫樑
   const legM = mat('#8a8680', 0.5, 0.3)
   for (const sz of [-1, 1]) bx(g, 5, bodyTop, 5, w / 2 - 5, 0, sz * (d / 2 - 5), legM)

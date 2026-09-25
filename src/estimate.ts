@@ -27,6 +27,11 @@ export const RATES = {
   /** 人造石、石英石檯面（深 60）元/公分 */
   stone: 102,
   quartz: 178,
+  /** 北美白橡木 3 cm 拼板一片（4 × 8 尺，220 × 90 檯面一片就夠；2026/09 三十一號木工廠含稅價） */
+  oakStraight: 33600,
+  oakFinger: 9030,
+  /** 木作裁切、倒角、木蠟油塗裝、安裝（約 1.5 工＋材料） */
+  woodWork: 6000,
   /** 檯面深度超過約 68 cm（中島）的倍數 */
   deepTop: 1.5,
   /** 鐵件桌腳 元/組 */
@@ -96,8 +101,23 @@ export function cabinetEstimate(it: FurnitureItem): ShopPick[] {
     const deepText = deep > 1 ? `，深 ${it.d} 加價 ×${deep}` : ''
     return [
       estPick('收納段櫃體（估價）', body, bodyText),
-      estPick('人造石檯面（估價）', it.w * RATES.stone * deep, `${it.w} 公分 × ${RATES.stone} 元${deepText}；可無縫、刮傷可修補，怕熱鍋`),
-      estPick('石英石檯面（估價）', it.w * RATES.quartz * deep, `${it.w} 公分 × ${RATES.quartz} 元${deepText}；比人造石耐刮耐熱`, false),
+      estPick(
+        '白橡木實木檯面・直拼板（估價）',
+        RATES.oakStraight + RATES.woodWork,
+        `北美白橡木 3 cm 直拼板一片（4 × 8 尺）${fmt(RATES.oakStraight)} ＋ 裁切、倒角、木蠟油塗裝、安裝約 ${fmt(RATES.woodWork)}；長條紋路最乾淨，最適合無印風`,
+      ),
+      estPick(
+        '白橡木實木檯面・指拼板（估價）',
+        RATES.oakFinger + RATES.woodWork,
+        `北美白橡木 3 cm 指拼板一片 ${fmt(RATES.oakFinger)} ＋ 加工塗裝安裝約 ${fmt(RATES.woodWork)}；看得到短木塊的鋸齒接縫，比較便宜`,
+        false,
+      ),
+      estPick(
+        '人造石檯面（估價）',
+        it.w * RATES.stone * deep,
+        `${it.w} 公分 × ${RATES.stone} 元${deepText}；可無縫、刮傷可修補，怕熱鍋`,
+        false,
+      ),
       estPick('餐桌段鐵件桌腳（估價）', RATES.ironLegs, 'ㄇ字鐵腳一組（90 深），另一端靠收納段支撐'),
     ]
   }

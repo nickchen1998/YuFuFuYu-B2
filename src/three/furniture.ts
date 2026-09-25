@@ -749,6 +749,17 @@ function canisters(g: G, it: FurnitureItem) {
     }
 }
 
+/** 全身鏡（貼在牆面或櫃子側板）：淺橡木細框＋鏡面，正面朝 +z */
+function mirror(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const frame = mat(it.color, 0.55)
+  const fw = 1.5
+  bx(g, w, h, d * 0.4, 0, 0, -d * 0.3, frame)
+  for (const sx of [-1, 1]) bx(g, fw, h, d, (sx * (w - fw)) / 2, 0, 0, frame)
+  for (const y of [0, h - fw]) bx(g, w - fw * 2, fw, d, 0, y, 0, frame)
+  bx(g, w - fw * 2, h - fw * 2, 0.3, 0, fw, d / 2 - 0.35, mat('#dde4e8', 0.04, 0.35))
+}
+
 /** 咖啡櫃：櫃體照櫃內規劃；'outlets' 時檯面上方牆面加兩組雙連插座（磨豆機、咖啡機、奶泡機＋備用） */
 function coffeebar(g: G, it: FurnitureItem) {
   interiorCabinet(g, it)
@@ -925,6 +936,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   grinder,
   frother,
   canisters,
+  mirror,
   person,
   coathooks,
   towerfan,

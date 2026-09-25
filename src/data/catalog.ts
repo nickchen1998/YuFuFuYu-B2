@@ -158,6 +158,8 @@ const seeds: Seed[] = [
   { id: 'projector', type: 'projector', name: '投影機', x: -269, y: 584.5, rot: 110, w: 19, d: 19, h: 25, elev: 50, color: '#e9e9e6' },
   // 衣櫃做到頂（300）；內部規劃見 interiors.ts
   { id: 'mward', type: 'wardrobe', name: '衣櫃（薄型 45 深）', x: -219, y: 282.5, rot: 0, w: 135, d: 45, h: 300, color: '#efe9df' },
+  // 全身鏡 40 × 160：貼在主臥衣櫃右側板（朝房門那側，不對床、開門也不會擋到），下緣離地 25；拿了衣服轉身就能照
+  { id: 'mirror', type: 'mirror', name: '全身鏡（衣櫃側板）', x: -151, y: 282.5, rot: 90, w: 40, d: 1, h: 160, elev: 25, color: '#d8c09c' },
   // 冷氣：窗戶上方（窗外就是冷氣平台，管線最短）；導風板往上調，避免直吹床
   { id: 'ac-master', type: 'acindoor', name: '冷氣（主臥）', x: -130, y: 587, rot: 180, w: 85, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 

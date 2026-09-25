@@ -5,6 +5,9 @@ import { P } from '../cabinet'
 // 高度都是淨高；沒寫的自動分配。衣櫃做到頂（300），上櫃另外一扇短門。
 
 export const seedInteriors: Record<string, CabinetInterior> = {
+  // 兩個衣櫃的分工（依使用頻率）：
+  //   主臥（每天開）＝當季、每天穿的：內衣褲、襪子、睡衣、當季上衣褲子、常穿外套、配件、常用包包、主臥床的寢具
+  //   次臥（換季才開）＝換季衣物、長大衣、正式服、行李箱、客用寢具、燙衣板；每年 4 月、11 月換季時兩邊對調
   // 次臥主衣櫃 241.5 × 60 × 300：IKEA ELVARLI 頂天立地鋁柱＋鋼層板、鋼衣桿（不用木板），外面整面拉門。
   // ELVARLI 每格只有 80 或 40 寬：80＋80＋40，剩下約 20 放燙衣板；格子對齊三片拉門（每片約 82）
   bward1: {
@@ -16,44 +19,46 @@ export const seedInteriors: Record<string, CabinetInterior> = {
           {
             w: 80,
             parts: [
-              P('storage', 58, 'open', '登機箱 ×2（直立並排）・旁邊放包包'),
-              P('hang', 135, 'open', '長大衣・洋裝'),
-              P('shelf', null, 'open', '帽子・圍巾'),
-              P('storage', 70, 'open', '最上層：備用寢具・不常用收納箱'),
+              P('storage', 58, 'open', '登機箱 ×2（直立並排）・旁邊放旅行包'),
+              P('hang', 135, 'open', '長大衣・羽絨衣・長洋裝'),
+              P('shelf', null, 'open', '圍巾・手套・毛帽（冬季）'),
+              P('storage', 70, 'open', '最上層：客用寢具'),
             ],
           },
-          // 80 格：28 吋行李箱橫躺在最下面（約 76 × 50 × 30；實際可用深度扣掉拉門軌道約 51），上面收納箱，再上面短衣吊掛
+          // 80 格：28 吋行李箱橫躺在最下面（約 76 × 50 × 30；實際可用深度扣掉拉門軌道約 51），上面換季收納箱，再上面正式服、換季外套
           {
             w: 80,
             parts: [
               P('storage', 33, 'open', '28 吋行李箱（橫躺）'),
-              P('storage', 45, 'open', '收納箱'),
-              P('hang', null, 'open', '襯衫・外套・褲子'),
-              P('shelf', 28, 'open', '包包'),
-              P('storage', 70, 'open', '最上層：棉被・換季衣物'),
+              P('storage', 45, 'open', '收納箱：換季衣物'),
+              P('hang', null, 'open', '西裝・正式服・換季外套'),
+              P('shelf', 28, 'open', '不常用的包包'),
+              P('storage', 70, 'open', '最上層：換季衣物（壓縮袋）'),
             ],
           },
-          // 40 格：鋼層板放摺疊衣物（內衣、襪子用有蓋的金屬或 PP 收納盒）
+          // 40 格：鋼層板放換季的摺疊衣物（用有蓋的收納盒防塵）
           {
             w: 40,
             parts: [
-              P('storage', null, 'open', '收納盒：內衣・襪子'),
-              P('shelf', null, 'open', '運動服・睡衣'),
-              P('shelf', null, 'open', 'T 恤'),
-              P('shelf', null, 'open', '毛衣'),
-              P('shelf', null, 'open', '牛仔褲・長褲'),
+              P('storage', null, 'open', '收納盒：換季上衣'),
+              P('shelf', null, 'open', '換季褲子'),
+              P('shelf', null, 'open', '換季毛衣・針織衫'),
+              P('shelf', null, 'open', '泳衣・登山等季節運動服'),
+              P('shelf', null, 'open', '正式場合配件：領帶・絲巾・手拿包'),
               P('storage', 70, 'open', '最上層：換季衣物'),
             ],
           },
-          // 剩下的空間：燙衣板、長柄工具
-          { parts: [P('empty', null, 'open', '燙衣板・長柄工具')] },
+          // 剩下的空間：燙衣板、掛燙機、長柄工具（正式服在這個衣櫃，燙衣服也在這裡）
+          { parts: [P('empty', null, 'open', '燙衣板・掛燙機・長柄工具')] },
         ],
       },
     ],
   },
 
-  // 主臥薄衣櫃 135 × 45 × 300：只放常穿的；深度 45 吊不下一般衣架，改用前後拉桿。
-  // 兩欄各約 65 淨寬、對開門（每扇約 34 寬，開門不會卡到床頭櫃）
+  // 主臥薄衣櫃 135 × 45 × 300：只放當季、每天穿的；深度 45 吊不下一般衣架，改用前後拉桿。
+  // 兩欄各約 65 淨寬、對開門（每扇約 34 寬，開門不會卡到床頭櫃）。
+  // 每天拿的都在 50～180 公分（154 公分的人也拿得到）；拉桿頂端約 176；180 以上放包包帽子，228 以上的上櫃放主臥床的寢具
+  // 右側板貼全身鏡（見 catalog.ts 的 mirror）
   mward: {
     faces: [
       {
@@ -61,22 +66,22 @@ export const seedInteriors: Record<string, CabinetInterior> = {
           {
             parts: [
               P('drawer', 20, 'drawer', '內衣褲'),
-              P('drawer', 20, 'drawer', '襪子'),
-              P('pullrod', null, 'door', '常穿外套・襯衫（前後拉桿）'),
-              P('shelf', 30, 'door', '帽子・包包'),
-              P('storage', 70, 'door', '上櫃：換季被', true),
+              P('drawer', 20, 'drawer', '襪子・內搭'),
+              P('pullrod', 125, 'door', '當季襯衫・外套・洋裝（前後拉桿）'),
+              P('shelf', null, 'door', '常用包包・帽子'),
+              P('storage', 70, 'door', '上櫃：主臥換季被（夏被／冬被輪替）', true),
             ],
           },
           {
             parts: [
-              P('drawer', 20, 'drawer', '配件・皮帶'),
+              P('drawer', 20, 'drawer', '皮帶・領帶・手錶・飾品'),
               P('drawer', 20, 'drawer', '運動服'),
               P('shelf', null, 'door', '睡衣・居家服'),
               P('shelf', null, 'door', '明天要穿的'),
-              P('shelf', null, 'door', 'T 恤・上衣'),
-              P('shelf', null, 'door', '毛衣'),
-              P('shelf', null, 'door', '包包'),
-              P('storage', 70, 'door', '上櫃：枕頭・被子', true),
+              P('shelf', null, 'door', '當季 T 恤・上衣'),
+              P('shelf', null, 'door', '當季褲子（摺疊）'),
+              P('shelf', null, 'door', '當季毛衣・針織衫'),
+              P('storage', 70, 'door', '上櫃：主臥備用床單・枕頭', true),
             ],
           },
         ],

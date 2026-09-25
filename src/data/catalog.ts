@@ -147,12 +147,9 @@ const seeds: Seed[] = [
   { id: 'bdesk2', type: 'standingdesk', name: '升降桌', x: 514.5, y: 460, rot: 270, w: 120, d: 60, h: 73, color: '#d8c3a5' },
   { id: 'bchair1', type: 'chair', name: '辦公椅', x: 452, y: 340, rot: 90, w: 50, d: 50, h: 100, color: '#5b5f63' },
   { id: 'bchair2', type: 'chair', name: '辦公椅', x: 452, y: 460, rot: 90, w: 50, d: 50, h: 100, color: '#5b5f63' },
-  // 椅子背後（靠客廳的輕隔間）：全部落地、不做到頂，最高 210 對齊次臥門框上緣。
-  // 從衣櫃往下留 65（衣櫃最左邊那扇門要開）、到次臥門前 5 公分為止。
-  // 矮櫃放文件、線材、印表機，上方書櫃疊在矮櫃上；按摩椅前方那段改成落地書櫃（層板高度和旁邊對齊）
+  // 椅子背後（靠客廳的輕隔間）：矮櫃放文件、線材、印表機（落地，高 90）；到次臥門前 5 公分為止、避開按摩椅前方。
+  // 上方書櫃先拿掉（住戶覺得太高），之後再決定
   { id: 'scab', type: 'cabinet', name: '書房矮櫃（文件・印表機）', x: 323, y: 340, rot: 90, w: 250, d: 40, h: 90, color: '#e4dccf' },
-  { id: 'sshelf', type: 'bookshelf', name: '書櫃（矮櫃上方）', x: 318, y: 340, rot: 90, w: 250, d: 30, h: 120, elev: 90, color: '#e4dccf' },
-  { id: 'sshelf2', type: 'bookshelf', name: '書櫃（落地）', x: 318, y: 170, rot: 90, w: 90, d: 30, h: 210, color: '#e4dccf' },
   // 冷氣：窗戶上方，沿長邊往衣櫃方向吹，風從桌子側邊經過
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 395, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 

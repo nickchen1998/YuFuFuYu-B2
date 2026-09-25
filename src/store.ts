@@ -5,7 +5,7 @@ import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 15
+const REV = 16
 /**
  * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
  * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
@@ -29,6 +29,8 @@ const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   [14, ['sshelf', 'sshelf2']],
   // rev 15：中島餐桌兩端各一組雙連三孔插座
   [15, ['dining'], ['features']],
+  // rev 16：書櫃太高，先拿掉（只留下排印表機那排矮櫃）
+  [16, ['sshelf', 'sshelf2']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */
 const LAYOUT_REV = 6
@@ -154,8 +156,7 @@ export const ui = reactive({
   doorsOpen: true,
   mainDoorOpen: false,
   showAirflow: true,
-  /** 櫃內規劃面板；打開時選取的櫃子在 3D 裡打開櫃門（cabinetOpen） */
-  cabinetEditor: false,
+  /** 選取的櫃子在 3D 裡打開櫃門，看得到櫃內格局 */
   cabinetOpen: true,
   /** 所有櫃子都打開櫃門 */
   openAllCabinets: false,

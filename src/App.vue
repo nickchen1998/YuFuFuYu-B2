@@ -12,7 +12,6 @@ import { rooms } from './data/house'
 import FurniturePanel from './components/FurniturePanel.vue'
 import RoomsPanel from './components/RoomsPanel.vue'
 import ViewPanel from './components/ViewPanel.vue'
-import CabinetEditor from './components/CabinetEditor.vue'
 import type { Tool, ViewMode } from './types'
 
 const host = ref<HTMLElement>()
@@ -31,7 +30,7 @@ const tools: { id: Tool; name: string; tip: string; icon: Component }[] = [
   { id: 'measure', name: '量尺', tip: '量兩點之間的距離', icon: Ruler },
 ]
 const panels = [
-  { id: 'furniture', name: '家具', icon: Sofa },
+  { id: 'furniture', name: '家具清單', icon: Sofa },
   { id: 'rooms', name: '空間材質', icon: Palette },
   { id: 'view', name: '顯示', icon: SlidersHorizontal },
 ] as const
@@ -144,7 +143,7 @@ onMounted(() => {
   watch(() => ui.tool, () => v.clearMeasure())
   watch(() => design.mirrored, () => v.applyMirror())
   watch(() => ui.showAirflow, () => v.applyAirflow())
-  watch(() => [ui.cabinetEditor, ui.cabinetOpen, ui.openAllCabinets], () => v.applyInterior())
+  watch(() => [ui.cabinetOpen, ui.openAllCabinets], () => v.applyInterior())
 })
 
 onBeforeUnmount(() => {
@@ -282,8 +281,6 @@ onBeforeUnmount(() => {
         <div v-if="ui.measure" class="measure-pill"><Ruler />{{ ui.measure }}</div>
       </div>
     </footer>
-
-    <CabinetEditor />
 
     <Transition name="toast">
       <div v-if="toast" class="toast"><Check />{{ toast }}</div>

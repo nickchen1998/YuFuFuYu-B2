@@ -170,27 +170,4 @@ export const seedInteriors: Record<string, CabinetInterior> = {
       },
     ],
   },
-
-  // 矮櫃上方的書櫃 250 × 30 × 120（90 → 210）：四欄各約 60 淨寬、三層各約 37.6
-  sshelf: {
-    faces: [{ cols: Array.from({ length: 4 }, () => ({ parts: [P('books', null, 'open'), P('books', null, 'open'), P('books', null, 'open')] })) }],
-  },
-
-  // 按摩椅前方的落地書櫃 90 × 30 × 210：兩欄（跨距不超過 45）；90 以上三層和旁邊的書櫃對齊，下面三層約 28
-  sshelf2: {
-    faces: [
-      {
-        cols: Array.from({ length: 2 }, () => ({
-          parts: [
-            P('books', null, 'open'),
-            P('books', null, 'open'),
-            P('books', null, 'open'),
-            P('books', 37.6, 'open'),
-            P('books', 37.6, 'open'),
-            P('books', 37.6, 'open'),
-          ],
-        })),
-      },
-    ],
-  },
 }

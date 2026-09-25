@@ -311,3 +311,36 @@ export function defaultInterior(it: FurnitureItem): CabinetInterior {
 export function interiorOf(it: FurnitureItem): CabinetInterior {
   return it.interior?.faces?.length ? it.interior : defaultInterior(it)
 }
+
+// ───────────────────────── 提醒 ─────────────────────────
+
+/** 尺寸上的提醒（衣桿太高、淺櫃橫吊、層板跨距太大…）；mirrored = A6・B6 畫面左右相反，欄號照畫面數 */
+export function interiorWarnings(it: FurnitureItem, mirrored = false): string[] {
+  const inter = interiorOf(it)
+  const fr = cabinetFrame(it)
+  const depths = faceDepths(it, inter)
+  const out: string[] = []
+  inter.faces.forEach((face, fi) => {
+    const L = layoutFace(face, fr.innerW, fr.innerH)
+    const dp = depths[fi] ?? depths[0]
+    const faceName = inter.faces.length > 1 ? `${face.name ?? `第 ${fi + 1} 面`}・` : ''
+    const colNo = (i: number) => (mirrored ? L.cols.length - i : i + 1)
+    if (Math.abs(L.over) > 0.5) out.push(`${faceName}欄寬加總和內寬差 ${Math.round(Math.abs(L.over) * 10) / 10} 公分`)
+    for (const c of L.cols) {
+      const n = `${faceName}第 ${colNo(c.i)} 欄`
+      if (Math.abs(c.over) > 0.5) out.push(`${n}：格子高度加總和內高差 ${Math.round(Math.abs(c.over) * 10) / 10} 公分`)
+      for (const p of c.parts) {
+        const k = p.part.kind
+        if (k === 'hang' || k === 'pullrod') {
+          const rod = it.elev + fr.y0 + p.y + p.h - 5
+          if (rod > 195) out.push(`${n}的衣桿離地約 ${Math.round(rod)} 公分，不太好拿（建議 190 以下，或改下拉式衣桿）`)
+        }
+        if (k === 'hang' && dp.clear < 52) out.push(`${n}：淨深只有 ${Math.round(dp.clear * 10) / 10}，一般衣架橫吊會卡到門，建議改前後拉桿`)
+        if (k === 'pullrod' && c.w < 45) out.push(`${n}：欄寬不到 45，前後拉桿吊的衣服會卡到側板`)
+        if ((k === 'books' || k === 'shelf') && c.w > 80) out.push(`${n}：層板跨距 ${Math.round(c.w)} 超過 80，放重物久了會彎，建議加立板`)
+        if (k === 'pants' && (p.h < 60 || dp.clear < 50)) out.push(`${n}：褲架需要淨高 60、淨深 50 以上`)
+      }
+    }
+  })
+  return [...new Set(out)]
+}

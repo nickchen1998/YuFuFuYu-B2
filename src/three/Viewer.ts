@@ -301,11 +301,11 @@ export class Viewer {
     this.updateSelection()
   }
 
-  /** 櫃門：櫃內規劃面板打開時，選取的櫃子打開；或是全部打開 */
+  /** 櫃門：選取的櫃子打開（看櫃內格局），或是全部打開 */
   applyInterior() {
-    const editing = this.ui.cabinetEditor && this.ui.cabinetOpen ? this.ui.selectedId : null
+    const picked = this.ui.cabinetOpen ? this.ui.selectedId : null
     for (const [id, entry] of this.items) {
-      const open = this.ui.openAllCabinets || id === editing
+      const open = this.ui.openAllCabinets || id === picked
       entry.obj.traverse((o) => {
         if (o.userData.front) o.visible = !open
         else if (o.userData.interior) o.visible = open
@@ -717,13 +717,6 @@ export class Viewer {
     }
     const it = this.selected()
     if (!it) return
-    if (e.code === 'Delete' || e.code === 'Backspace') {
-      e.preventDefault()
-      if (it.locked) return
-      this.design.furniture.splice(this.design.furniture.indexOf(it), 1)
-      this.ui.selectedId = null
-      return
-    }
     if (it.locked) return
     const step = e.shiftKey ? 10 : 1
     // 翻轉戶別時畫面上下顛倒，上下鍵與旋轉方向要反過來，操作起來才跟畫面一致

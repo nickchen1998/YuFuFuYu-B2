@@ -171,7 +171,7 @@ export const shopping: Record<string, ShopInfo> = {
   },
   coffeebar: {
     summary:
-      '咖啡櫃加寬到 120：左邊零食門片櫃和咖啡豆抽屜，右邊玻璃門馬克杯展示（上下兩層，單排約 24 個、前後兩排約 48 個）；檯面耐水耐熱，放咖啡機、磨豆機。',
+      '咖啡櫃 120 寬：檯面由左到右放豆罐 ×4、磨豆機、義式咖啡機、奶泡機，右邊留出杯區；下面左欄是茶包抽屜、咖啡配件抽屜和零食門片櫃，右欄玻璃門馬克杯展示（單排約 24 個、前後兩排約 48 個）。',
     material: [
       '檯面建議人造石、石英石或 HPL 美耐板，不用一般系統板檯面（封邊怕水）',
       '桶身指定 P3 防潮板；抽屜三節全展緩衝，膠囊、咖啡豆放淺抽',
@@ -181,6 +181,63 @@ export const shopping: Record<string, ShopInfo> = {
       '櫃深 40 cm：確認咖啡機深度，加上背後 5～10 cm 散熱與插頭空間',
       '玻璃門：木框（淺橡木）＋5 mm 強化清玻璃或長虹玻璃，玻璃門專用緩衝鉸鏈；地震時要有門扣',
       '馬克杯層板用 25 mm 板或加厚玻璃層板，放 20～30 個陶瓷杯不下彎；可以在頂板內嵌 LED 層板燈',
+      '最上面的茶包抽屜淨高約 12，放高 8.6 的收納盒剛好；下面抽屜放填壓器、布粉器、清潔錠和豆子存貨',
+    ],
+    related: [
+      {
+        title: '茶包收納盒（左邊最上層抽屜）',
+        info: {
+          summary: '抽屜內約 48 × 33 × 12：用高度 10 公分以下的分隔盒，茶包直立排，一眼看到口味。',
+          specs: ['盒高 ≤ 10', '無印 1/2 橫型：橫排 4 個 × 前後 2 排，最多 8 個'],
+          picks: [
+            {
+              name: '無印良品 PP 化妝盒 1/2 橫型・附隔板 × 4',
+              rec: true,
+              detail: '15 × 11 × 8.6；茶包直立剛好；先買 4 個，放滿再加到 8 個',
+              price: '約 NT$69／個，4 個 NT$276（2026/09 momo）',
+              cost: 276,
+              url: 'https://www.momoshop.com.tw/product/13219674',
+              source: 'momo',
+            },
+            {
+              name: 'IKEA UPPDATERA 收納盒 白色 × 2',
+              detail: '24 × 17 × 10，前面較低好拿；兩個轉 17 寬擺放約 34 × 24',
+              price: '約 NT$59／個，2 個 NT$118（2026/09 IKEA）',
+              cost: 118,
+              url: 'https://www.ikea.com.tw/zh/products/boxes-and-organisers/boxes-and-baskets/uppdatera-art-00546468',
+              source: 'IKEA',
+            },
+          ],
+        },
+      },
+      {
+        title: '咖啡角插座與迴路',
+        info: {
+          summary: '檯面上方兩組雙連插座：左邊接 110V 20A 專用迴路（磨豆機＋咖啡機），右邊接一般迴路（奶泡機＋備用），同時開也不會跳電。',
+          specs: ['插座離地約 108（檯面上 18）', '左：20A 專用迴路；右：客廳一般迴路', '不要用延長線'],
+          picks: [
+            {
+              name: '新增 110V 20A 專用迴路＋雙插座（估價）',
+              rec: true,
+              detail: '從電箱拉一條新迴路到左邊插座；雙北行情每迴路約 NT$2,500～3,500，裝潢前做比較便宜',
+              price: '約 NT$3,000（2026/09 第一水電、100室內設計價目推算）',
+              cost: 3000,
+              url: 'https://first111.com.tw/plumbingprice/',
+              source: '第一水電',
+            },
+            {
+              name: '一般迴路加一組雙插座（估價）',
+              rec: true,
+              detail: '從附近既有迴路接出右邊插座；若這面牆原本就有插座，這項可以不用',
+              price: '約 NT$2,500（2026/09 行情約 NT$2,000～3,000）',
+              cost: 2500,
+              url: 'https://www.100.com.tw/article/8596',
+              source: '100室內設計',
+            },
+          ],
+          notes: ['同時開的最大用電約 1,900～2,200 W；一般 15A 插座上限約 1,650 W，所以要分兩個迴路'],
+        },
+      },
     ],
   },
   tvstand: {
@@ -1031,8 +1088,8 @@ export const shopping: Record<string, ShopInfo> = {
     ],
   },
   espresso: {
-    summary: '25 × 35 放得下膠囊機或窄身半自動機；半自動機另外要留磨豆機的位置。',
-    specs: ['機身寬 ≤ 25、深 ≤ 35（檯面深 40，留插頭空間）', '110V、約 1,200 W，建議用獨立插座'],
+    summary: '咖啡櫃檯面由左到右照沖煮順序：豆罐 ×4 → 磨豆機 → 義式咖啡機 → 奶泡機 → 出杯區（下面就是馬克杯櫃）；咖啡機建議 Dedica 窄身半自動機，另外搭磨豆機和奶泡機。',
+    specs: ['機身寬 ≤ 25、深 ≤ 35（檯面深 40，後面留 2～3 cm 插頭空間）', '110V、約 1,300 W：和磨豆機一起接左邊的 20A 專用迴路插座'],
     picks: [
       {
         name: 'Nespresso Essenza Mini（膠囊機）',
@@ -1058,7 +1115,101 @@ export const shopping: Record<string, ShopInfo> = {
       },
     ],
     search: ['Nespresso Essenza Mini', 'EC885.M', 'Breville BES450'],
-    notes: ['Nespresso Vertuo 系列機身多半深超過 40，這個檯面放不下', '半自動機要搭磨豆機（寬約 12～15），咖啡櫃檯面寬 100 放得下兩台'],
+    notes: [
+      'Nespresso Vertuo 系列機身多半深超過 40，這個檯面放不下',
+      '咖啡機 1,300 W＋奶泡機約 450 W＋磨豆機 150～300 W 同時開約 1,900～2,200 W，超過一般 15A 插座（約 1,650 W）：咖啡機和磨豆機接專用迴路，奶泡機接另一個迴路，不要用延長線',
+      '檯面上方沒有吊櫃，水箱從上面拿出來加水沒問題',
+    ],
+  },
+  grinder: {
+    summary: '放在豆罐和咖啡機中間；要磨得到義式的細度，機身窄、不高，檯面上方沒有吊櫃也不會擋到豆倉。',
+    specs: ['寬 ≤ 15、深 ≤ 25（檯面深 40）', '可以磨義式細粉，最好無段調整，方便配 Dedica 微調', '110V，接左邊專用迴路插座'],
+    picks: [
+      {
+        name: 'FELLOW Opus 2 錐刀磨豆機 磨砂黑（1222MB-TW）',
+        rec: true,
+        detail: '13 × 20.6 × 26.7；48 mm 錐刀、無段調整，義式到冷萃都能磨；豆倉 100 g；十億國際總代理、保固 2 年',
+        price: '約 NT$8,980（2026/09 PChome，定價 NT$9,980；官網寫黑色 10 月下旬到貨）',
+        url: 'https://24h.pchome.com.tw/prod/DMATJN-A900KAHUU',
+        source: 'PChome',
+      },
+      {
+        name: 'BARATZA Encore ESP 咖啡磨豆機',
+        detail: '12 × 16 × 35；40 mm 錐刀、40 段（20 段給義式）；110V 100 W；公司貨保固 1 年；最便宜、佔地最小',
+        price: '約 NT$6,777（2026/09 momo；PChome 約 NT$7,288）',
+        url: 'https://www.momoshop.com.tw/product/12151872',
+        source: 'momo',
+      },
+      {
+        name: 'TIMEMORE 泰摩 雕刻家 064S',
+        detail: '10 × 22.5 × 25.6；64 mm 平刀、可調轉速；110V 250 W；約 4.1 kg；風味更乾淨，價格約兩倍',
+        price: '約 NT$16,800（2026/09 momo 泰摩官方直營）',
+        url: 'https://www.momoshop.com.tw/TP/TP0002233/goodsDetail/TP00022330000182',
+        source: 'momo',
+      },
+    ],
+    notes: ['磨完豆直接把粉碗拿到右邊的咖啡機，動線不回頭', 'Opus 2 的豆倉在上面，加豆時旁邊的豆罐順手打開就好'],
+  },
+  frother: {
+    summary: '放在咖啡機右邊；選可以打冷熱奶泡的全自動奶泡機，佔地一個馬克杯大小。',
+    specs: ['底座直徑約 10～15', '冷奶泡、熱奶泡、熱牛奶', '約 450～600 W，接右邊插座（和咖啡機不同迴路）'],
+    picks: [
+      {
+        name: 'Nespresso Aeroccino 4 全自動奶泡機',
+        rec: true,
+        detail: 'Ø10.4 × 高 19；冷奶泡、綿密熱奶泡、輕盈熱奶泡、熱牛奶 4 種；奶泡 120 ml、熱牛奶 240 ml；保固 2 年',
+        price: '約 NT$4,080（2026/09 PChome；momo 同價）',
+        url: 'https://24h.pchome.com.tw/prod/DMBN1I-A900GDXDB',
+        source: 'PChome',
+      },
+      {
+        name: 'Nespresso Aeroccino 3',
+        detail: '約 Ø10 × 高 18；冷熱奶泡＋熱牛奶，一顆按鈕切換；奶泡 120 ml、熱牛奶 240 ml；保固 2 年',
+        price: '約 NT$3,080（2026/09 momo）',
+        url: 'https://www.momoshop.com.tw/product/7055038',
+        source: 'momo',
+      },
+      {
+        name: 'illy 全自動冷熱電動奶泡機 F280G',
+        detail: '15 × 12 × 18.7；冷熱奶泡、熱飲；100～250 ml；磁吸底座；600 W；保固 1 年',
+        price: '約 NT$3,980（2026/09 PChome，定價 NT$4,200）',
+        url: 'https://24h.pchome.com.tw/prod/DMATID-A900JA5DQ',
+        source: 'PChome',
+      },
+    ],
+    notes: ['Dedica 本身也有蒸氣管，奶泡機是打冷奶泡、懶得清蒸氣管的時候用'],
+  },
+  beans: {
+    summary: '4 罐排成 2 × 2 放在檯面最左邊、磨豆機旁邊；選真空密封罐，每罐裝得下一包 200～250 g 的豆子。',
+    specs: ['每罐約 0.6～0.7 L（200～250 g 豆子）', '2 × 2 排約 22 × 22 公分', '遠離咖啡機的熱氣和直射陽光'],
+    picks: [
+      {
+        name: 'FELLOW ATMOS 真空密封罐 玻璃 0.7L × 4',
+        rec: true,
+        detail: 'Ø11 × 高 12.5；旋轉上蓋就抽真空、有真空指示；約 285 g（深焙 250、淺焙 315 g）',
+        price: '約 NT$1,290／個，4 個約 NT$5,160（2026/09 PChome）',
+        cost: 5160,
+        url: 'https://24h.pchome.com.tw/prod/DEAA9B-A9009OEUM',
+        source: 'PChome',
+      },
+      {
+        name: 'Ankomn Turn-N-Seal 真空儲豆罐 600 ml × 4（台灣品牌）',
+        detail: 'Ø10 × 高 16；旋轉抽真空；約 180 g，一包 250 g 的豆子裝不完',
+        price: '約 NT$890／個，4 個約 NT$3,560（2026/09 PChome）',
+        cost: 3560,
+        url: 'https://24h.pchome.com.tw/prod/DEAA7S-A900H35A6',
+        source: 'PChome',
+      },
+      {
+        name: 'HARIO 咖啡保鮮罐 M MCN-200B × 4',
+        detail: '9.9 × 9.9 × 14.2；密封但不抽真空；約 200 g；最便宜',
+        price: '約 NT$540／個，4 個約 NT$2,160（2026/09 PChome）',
+        cost: 2160,
+        url: 'https://24h.pchome.com.tw/prod/DEAABE-B900B0GJ6',
+        source: 'PChome',
+      },
+    ],
+    notes: ['罐子上貼烘焙日期，先開的先喝；多買的豆子放左邊抽屜當存貨'],
   },
   fridge: {
     summary:

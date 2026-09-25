@@ -2108,6 +2108,10 @@ input[type='color']::-moz-color-swatch {
   font-size: 13.5px;
   font-variant-numeric: tabular-nums;
 }
+.fl-spend.muted-spend {
+  color: var(--ink-3);
+  font-weight: 500;
+}
 .fl-spend {
   color: var(--accent-ink);
   font-weight: 600;

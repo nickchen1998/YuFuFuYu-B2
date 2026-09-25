@@ -71,6 +71,12 @@ const rowSpend = (it: FurnitureItem) => {
   if (!k) return 0
   return budget.value.lines.filter((l) => l.root === k && (l.title === '建議商品' || l.title === '估價')).reduce((s, l) => s + (l.total ?? 0), 0)
 }
+/** 有勾選、但金額是 0（含在別的組合價裡，例如室外機、次臥冷氣） */
+const rowBundled = (it: FurnitureItem) => {
+  const k = shopKey(it)
+  if (!k || rowSpend(it)) return false
+  return budget.value.lines.some((l) => l.root === k && l.title === '建議商品' && l.total === 0)
+}
 /** 附屬設備（中島的微波爐、檯面插座，廚具的洗碗機…）：列在清單的家具下面，不用點進去才看得到 */
 const rowRelated = (it: FurnitureItem) => {
   const k = shopKey(it)
@@ -385,6 +391,7 @@ const hasShared = computed(() => custom.value && !!(cabinetMaterials.boards?.len
             <small>
               {{ fmt(r.it.w) }} × {{ fmt(r.it.d) }} × {{ fmt(r.it.h) }} 公分
               <span v-if="rowSpend(r.it)" class="fl-spend">・{{ money(rowSpend(r.it)) }}</span>
+              <span v-else-if="rowBundled(r.it)" class="fl-spend muted-spend">・已含在冷氣組合價</span>
             </small>
           </span>
           <em class="cat-tag" :data-cat="itemCategory(r.it)">{{ itemCategory(r.it) }}</em>

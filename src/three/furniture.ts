@@ -444,6 +444,90 @@ function windowisland(g: G, it: FurnitureItem) {
   }
 }
 
+/**
+ * 訂製中島餐桌（半島型）：-x 端靠牆是收納段，+x 端是餐桌段，檯面連續同高。
+ * 收納段 -z 側（朝廚房）嵌微波爐與抽屜、+z 側是門片櫃；餐桌段兩側都能放椅子並收進桌下。
+ */
+function peninsula(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const ls = Math.min(100, Math.round(w * 0.45))
+  const body = mat(it.color, 0.6)
+  const line = mat(shadeHex(it.color, 0.55), 0.8)
+  const topH = 4
+  const base = 8
+  const bodyTop = h - topH
+  const sx0 = -w / 2
+  const sx1 = -w / 2 + ls
+  const scx = (sx0 + sx1) / 2
+  bx(g, ls - 2, base, d - 8, scx, 0, 0, line)
+  bx(g, ls, bodyTop - base, d, scx, base, 0, body)
+  bx(g, w, topH, d + 2, 0, bodyTop, 0, mat('#dcd8d1', 0.3))
+  // 餐桌段：末端兩支腳＋中間橫樑
+  const legM = mat('#8a8680', 0.5, 0.3)
+  for (const sz of [-1, 1]) bx(g, 5, bodyTop, 5, w / 2 - 5, 0, sz * (d / 2 - 5), legM)
+  bx(g, w - ls - 8, 6, 3, (sx1 + w / 2) / 2, bodyTop - 6, 0, mat(shadeHex(it.color, 0.85), 0.6))
+  // -z 側（朝廚房）：微波爐＋抽屜
+  const kz = -d / 2 - 0.15
+  const mw = has(it, 'microwave')
+  const mwW = 45
+  const mh = 28
+  const mwCx = sx1 - 4 - mwW / 2
+  const mwY = bodyTop - 6 - mh
+  if (mw) {
+    bx(g, mwW, mh, 1.2, mwCx, mwY, kz - 0.45, mat('#c7cace', 0.3, 0.7))
+    bx(g, mwW * 0.68, mh - 7, 0.4, mwCx + mwW * 0.12, mwY + 3.5, kz - 1.2, mat('#14171b', 0.1, 0.3))
+    bx(g, mwW * 0.18, mh - 7, 0.4, mwCx - mwW / 2 + mwW * 0.11 + 1, mwY + 3.5, kz - 1.2, mat('#2b2f34', 0.4))
+    bx(g, mwW, 0.6, 0.4, mwCx, (base + mwY) / 2, kz, line)
+    bx(g, 16, 1.4, 2, mwCx, (base + mwY) / 2 + (mwY - base) / 4, kz - 0.8, METAL())
+    bx(g, 0.6, bodyTop - base, 0.4, sx1 - 8 - mwW, base, kz, line)
+  }
+  const dx1 = mw ? sx1 - 8 - mwW : sx1
+  const dcx = (sx0 + dx1) / 2
+  const ddw = dx1 - sx0
+  const rh = (bodyTop - base) / 3
+  for (let r = 1; r < 3; r++) bx(g, ddw - 2, 0.6, 0.4, dcx, base + r * rh, kz, line)
+  for (let r = 0; r < 3; r++) bx(g, Math.min(22, ddw / 3), 1.4, 2, dcx, base + (r + 0.5) * rh, kz - 0.8, METAL())
+  // +z 側（朝走道）：兩扇門片
+  const pz = d / 2 + 0.15
+  bx(g, 0.6, bodyTop - base - 2, 0.4, scx, base + 1, pz, line)
+  for (const sx of [-1, 1]) bx(g, 1.4, 14, 2, scx + sx * 4, bodyTop - 24, pz + 0.8, METAL())
+}
+
+/** 咖啡櫃（零食櫃）：下櫃門片＋抽屜、中段開放檯面放咖啡機（木背板＋層板燈）、上櫃門片 */
+function coffeebar(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const body = mat(it.color, 0.6)
+  const line = mat(shadeHex(it.color, 0.55), 0.8)
+  const front = d / 2 + 0.15
+  const base = 8
+  const lowH = 88
+  const nicheH = 50
+  const upY = lowH + nicheH
+  bx(g, w - 2, base, d - 4, 0, 0, -2, line)
+  bx(g, w, lowH - base - 3, d, 0, base, 0, body)
+  bx(g, w + 1, 3, d + 1, 0, lowH - 3, 0.5, mat('#dcd8d1', 0.3))
+  bx(g, w - 2, 0.6, 0.4, 0, lowH - 20, front, line)
+  bx(g, 0.6, lowH - 21 - base, 0.4, 0, base, front, line)
+  for (const sx of [-1, 1]) {
+    bx(g, 16, 1.4, 2, sx * (w / 4), lowH - 13, front + 0.8, METAL())
+    bx(g, 1.4, 14, 2, sx * 4, lowH - 40, front + 0.8, METAL())
+  }
+  bx(g, w, nicheH, 2, 0, lowH, -d / 2 + 1, mat('#b08560', 0.5))
+  for (const sx of [-1, 1]) bx(g, 2, nicheH, d, sx * (w / 2 - 1), lowH, 0, body)
+  bx(g, w, h - upY, d, 0, upY, 0, body)
+  bx(g, 0.6, h - upY - 2, 0.4, 0, upY + 1, front, line)
+  for (const sx of [-1, 1]) bx(g, 1.4, 14, 2, sx * 4, upY + 3, front + 0.8, METAL())
+  bx(g, w - 10, 1, 3, 0, upY - 1, 0, mat('#fff2d6', 0.3, 0, '#fff2d6'))
+}
+
+function coffeemaker(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  bx(g, w, h, d * 0.7, 0, 0, -d * 0.15, mat(it.color, 0.35, 0.3))
+  bx(g, w, 4, d * 0.3, 0, 0, d * 0.35, mat('#2b2b2e', 0.4))
+  bx(g, w * 0.5, 8, 6, 0, h * 0.55, d * 0.22, mat('#1b1b1d', 0.3))
+  cyl(g, 3.2, 2.8, 8, 0, 4, d * 0.3, mat('#f4f1ea', 0.3), 16)
+}
+
 /** 直立式吸塵器掛在充電座上 */
 function vacuum(g: G, it: FurnitureItem) {
   const { w, d, h } = it
@@ -580,6 +664,9 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   acindoor,
   vacuum,
   windowisland,
+  peninsula,
+  coffeebar,
+  coffeemaker,
   diningisland,
   standingdesk,
   massagechair,

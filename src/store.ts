@@ -4,7 +4,12 @@ import { CEILING_DEFAULT, rooms } from './data/house'
 import { defaultFurniture } from './data/catalog'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 6
+const REV = 7
+/** rev 7：只替換這些家具（加大雙人床、半島型中島餐桌與四張椅、三人沙發、咖啡櫃），其他家具保留使用者的調整 */
+const PATCH_REV7 = [
+  'mbed', 'mns1', 'mns2', 'mward', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'rice', 'fryer',
+  'sofa', 'coffeebar', 'espresso',
+]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */
 const LAYOUT_REV = 6
 
@@ -59,6 +64,12 @@ function load(): Design | null {
         /* 存不了就算了 */
       }
       parsed.furniture = defaultFurniture()
+    } else if (rev < 7) {
+      const seeds = new Map(defaultFurniture().map((f) => [f.id, f]))
+      parsed.furniture = [
+        ...parsed.furniture.filter((f) => !PATCH_REV7.includes(f.id)),
+        ...PATCH_REV7.flatMap((id) => seeds.get(id) ?? []),
+      ]
     }
     const base = defaultDesign()
     return { ...base, ...parsed, roomFloors: { ...base.roomFloors, ...parsed.roomFloors } }

@@ -52,6 +52,9 @@ export const catalog: CatalogEntry[] = [
     type: 'windowisland', name: '窗下訂製中島（抽拉餐桌）', category: '餐廚', w: 110, d: 50, h: 78, color: '#ece6dc',
     features: ['microwave', 'tableout'],
   },
+  { type: 'peninsula', name: '訂製中島餐桌（半島型）', category: '餐廚', w: 220, d: 70, h: 76, color: '#ece6dc', features: ['microwave'] },
+  { type: 'coffeebar', name: '咖啡櫃（零食櫃）', category: '餐廚', w: 100, d: 40, h: 200, color: '#ece6dc' },
+  { type: 'coffeemaker', name: '咖啡機', category: '餐廚', w: 25, d: 35, h: 35, elev: 88, color: '#3a3a3d' },
   { type: 'microwave', name: '微波爐', category: '餐廚', w: 50, d: 40, h: 30, elev: 90, color: '#d4d7db' },
   { type: 'airfryer', name: '氣炸鍋', category: '餐廚', w: 30, d: 36, h: 33, elev: 90, color: '#2d2d30' },
   { type: 'ricecooker', name: '電鍋', category: '餐廚', w: 32, d: 32, h: 30, elev: 90, color: '#e9e4da' },
@@ -78,28 +81,34 @@ type Seed = Omit<FurnitureItem, 'id' | 'elev'> & { id: string; elev?: number }
 
 // 預設擺設（家具可拖曳；locked = 固定設備，要先解鎖才能移動）
 // 住戶需求（2026-09）：兩人住；次臥當書房＋主要衣櫃＋按摩椅；主臥只放睡眠相關；
-// 窗下訂製一件式中島（內藏抽拉餐桌）；沙發對齊電視；鞋櫃右側留吸塵器；烘碗機（建商附）＋洗碗機（待確認改櫃）
+// 訂製半島型中島餐桌（一端靠窗下的牆、四張椅）；沙發對齊電視；鞋櫃右側留吸塵器；烘碗機（建商附）＋洗碗機（待確認改櫃）
 const seeds: Seed[] = [
   // 客餐廳：電視、雙人沙發、茶几、地毯中心線對齊（y = 185）
   { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 110, color: '#ece6dc' },
   // 鞋櫃右側保留吸塵器位置
   { id: 'vacuum', type: 'vacuum', name: '吸塵器', x: 262, y: 15, rot: 0, w: 30, d: 25, h: 115, color: '#8a5cc2' },
-  { id: 'sofa', type: 'sofa', name: '雙人沙發', x: 245.5, y: 185, rot: 270, w: 160, d: 85, h: 80, color: '#8e9ca8' },
+  { id: 'sofa', type: 'sofa', name: '三人沙發', x: 243, y: 185, rot: 270, w: 210, d: 90, h: 80, color: '#8e9ca8' },
+  // 咖啡櫃（零食櫃）：沙發旁、與冰箱斜對面；中段檯面放咖啡機（建議預留插座）
+  { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃）', x: 268, y: 345, rot: 270, w: 100, d: 40, h: 200, color: '#ece6dc' },
+  { id: 'espresso', type: 'coffeemaker', name: '咖啡機', x: 266, y: 345, rot: 270, w: 25, d: 35, h: 35, elev: 88, color: '#3a3a3d' },
   { id: 'rug', type: 'rug', name: '地毯', x: 130, y: 185, rot: 90, w: 200, d: 150, h: 1, color: '#cfc5b4' },
   { id: 'coffee', type: 'coffeetable', name: '茶几', x: 145, y: 185, rot: 90, w: 100, d: 50, h: 40, color: '#a67c52' },
   { id: 'tvstand', type: 'tvstand', name: '電視櫃', x: 20, y: 185, rot: 90, w: 180, d: 40, h: 50, color: '#ece6dc' },
   { id: 'tv', type: 'tv', name: '電視 55吋', x: 16, y: 185, rot: 90, w: 123, d: 8, h: 72, elev: 50, color: '#1b1b1d' },
   { id: 'fridge', type: 'fridge', name: '冰箱', x: 35, y: 414, rot: 90, w: 70, d: 70, h: 180, color: '#d4d8dc' },
-  // 窗下訂製中島（一件式，請師傅訂做）：高 78 壓在窗台下；靠瓦斯爐端嵌微波爐，檯面放電鍋、氣炸鍋；
-  // 檯面下藏抽拉式餐桌，用餐時拉出，兩人並肩面窗坐。左留瓦斯爐站位 55、右留陽台門通道 63
+  // 訂製中島餐桌（半島型，一件式）：一端靠窗下的牆，檯面連續高 76（壓在窗台 80 下）。
+  // 靠窗 100 公分是收納（朝廚房嵌微波爐＋抽屜，另一側門片櫃；檯面放電鍋、氣炸鍋），往室內 120 公分是餐桌。
+  // 四張椅子兩側各兩張，圖上是收進桌下的樣子；收起時廚房側走道 60、次臥門與陽台門側走道 68
   {
-    id: 'dining', type: 'windowisland', name: '窗下訂製中島（抽拉餐桌）', x: 170, y: 640, rot: 180, w: 110, d: 50, h: 78,
-    color: '#ece6dc', features: ['microwave', 'tableout'],
+    id: 'dining', type: 'peninsula', name: '訂製中島餐桌', x: 170, y: 555, rot: 90, w: 220, d: 70, h: 76,
+    color: '#ece6dc', features: ['microwave'],
   },
-  { id: 'dchair1', type: 'chair', name: '餐椅', x: 145, y: 500, rot: 0, w: 45, d: 50, h: 85, color: '#6b5a4a' },
-  { id: 'dchair2', type: 'chair', name: '餐椅', x: 195, y: 500, rot: 0, w: 45, d: 50, h: 85, color: '#6b5a4a' },
-  { id: 'rice', type: 'ricecooker', name: '電鍋', x: 205, y: 640, rot: 180, w: 32, d: 32, h: 30, elev: 78, color: '#e9e4da' },
-  { id: 'fryer', type: 'airfryer', name: '氣炸鍋', x: 140, y: 640, rot: 180, w: 30, d: 36, h: 33, elev: 78, color: '#2d2d30' },
+  { id: 'dchair1', type: 'chair', name: '餐椅', x: 145, y: 475, rot: 90, w: 45, d: 50, h: 85, color: '#6b5a4a' },
+  { id: 'dchair2', type: 'chair', name: '餐椅', x: 145, y: 535, rot: 90, w: 45, d: 50, h: 85, color: '#6b5a4a' },
+  { id: 'dchair3', type: 'chair', name: '餐椅', x: 195, y: 475, rot: 270, w: 45, d: 50, h: 85, color: '#6b5a4a' },
+  { id: 'dchair4', type: 'chair', name: '餐椅', x: 195, y: 535, rot: 270, w: 45, d: 50, h: 85, color: '#6b5a4a' },
+  { id: 'rice', type: 'ricecooker', name: '電鍋', x: 170, y: 640, rot: 90, w: 32, d: 32, h: 30, elev: 76, color: '#e9e4da' },
+  { id: 'fryer', type: 'airfryer', name: '氣炸鍋', x: 170, y: 598, rot: 90, w: 30, d: 36, h: 33, elev: 76, color: '#2d2d30' },
   {
     id: 'kitchen', type: 'kitchen', name: '一字型廚具', x: 30, y: 558.5, rot: 90, w: 213, d: 60, h: 85,
     color: '#f1eee8', locked: true, features: ['dishdryer', 'dishwasher'],
@@ -107,11 +116,11 @@ const seeds: Seed[] = [
   // 冷氣：鞋櫃上方，沿長邊往廚房吹（冷媒管需經天花板接回冷氣平台，約 7 米）
   { id: 'ac-living', type: 'acindoor', name: '冷氣（客餐廳）', x: 200, y: 12.5, rot: 0, w: 90, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
-  // 主臥：床頭靠左牆，兩側床頭櫃；衣櫃在上牆左段（建議用推拉門）
-  { id: 'mbed', type: 'bed', name: '雙人床 5尺', x: -186.5, y: 486, rot: 90, w: 152, d: 200, h: 100, color: '#c9d3dc' },
-  { id: 'mns1', type: 'nightstand', name: '床頭櫃', x: -269, y: 391, rot: 90, w: 35, d: 35, h: 50, color: '#b8916a' },
-  { id: 'mns2', type: 'nightstand', name: '床頭櫃', x: -269, y: 581.5, rot: 90, w: 35, d: 35, h: 50, color: '#b8916a' },
-  { id: 'mward', type: 'wardrobe', name: '衣櫃', x: -219, y: 290, rot: 0, w: 135, d: 60, h: 240, color: '#e4dccf' },
+  // 主臥：加大雙人床 6 尺床頭靠左牆，兩側 30 公分床頭櫃；上牆左段是 45 公分深的薄型衣櫃（推拉門，前方留 52 公分）
+  { id: 'mbed', type: 'bed', name: '加大雙人床 6尺', x: -186.5, y: 478.5, rot: 90, w: 182, d: 200, h: 100, color: '#c9d3dc' },
+  { id: 'mns1', type: 'nightstand', name: '床頭櫃', x: -269, y: 372.5, rot: 90, w: 30, d: 35, h: 50, color: '#b8916a' },
+  { id: 'mns2', type: 'nightstand', name: '床頭櫃', x: -269, y: 584.5, rot: 90, w: 30, d: 35, h: 50, color: '#b8916a' },
+  { id: 'mward', type: 'wardrobe', name: '衣櫃（薄型 45 深）', x: -219, y: 282.5, rot: 0, w: 135, d: 45, h: 240, color: '#e4dccf' },
   // 冷氣：窗戶上方（窗外就是冷氣平台，管線最短）；導風板往上調，避免直吹床
   { id: 'ac-master', type: 'acindoor', name: '冷氣（主臥）', x: -130, y: 587, rot: 180, w: 85, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 

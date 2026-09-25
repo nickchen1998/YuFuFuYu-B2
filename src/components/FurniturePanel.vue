@@ -95,6 +95,7 @@ const featureNames: Record<string, string> = {
   microwave: '嵌入微波爐',
   tableout: '抽拉式餐桌',
   outlets: '雙連三孔插座 ×2：餐桌外端牙板、靠窗檯面平面嵌入',
+  sixdoor: '六門（上層對開、製冰室獨立）',
 }
 const features = computed(() => (selected.value?.features ?? []).map((f) => featureNames[f] ?? f))
 

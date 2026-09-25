@@ -226,6 +226,22 @@ function fridge(g: G, it: FurnitureItem) {
   const { w, d, h } = it
   bx(g, w, h, d, 0, 0, 0, mat(it.color, 0.3, 0.3))
   const line = mat(shadeHex(it.color, 0.6), 0.5)
+  if (has(it, 'sixdoor')) {
+    // 六門：上面對開冷藏；下面左邊製冰室、右邊上段冷凍，再來冷凍、蔬果室
+    const f = d / 2 + 0.2
+    const top = h * 0.47
+    const ice = top - 17
+    const frz = ice - 30
+    bx(g, 0.6, h - top - 1, 0.4, 0, top, f, line)
+    for (const y of [top, ice, frz]) bx(g, w - 1, 0.6, 0.4, 0, y, f, line)
+    bx(g, 0.6, top - ice, 0.4, 0, ice, f, line)
+    for (const sx of [-1, 1]) {
+      bx(g, 1.5, 24, 3, sx * 3.5, top + 14, d / 2 + 1.5, METAL())
+      bx(g, w / 2 - 12, 1.4, 2.5, sx * (w / 4), ice + 13, d / 2 + 1.2, METAL())
+    }
+    for (const y of [frz + 25, 32]) bx(g, w - 20, 1.4, 2.5, 0, y, d / 2 + 1.2, METAL())
+    return
+  }
   bx(g, w - 1, 0.6, 0.4, 0, h * 0.62, d / 2 + 0.2, line)
   bx(g, 1.5, h * 0.25, 3, w / 2 - 6, h * 0.66, d / 2 + 1.5, METAL())
   bx(g, 1.5, h * 0.2, 3, w / 2 - 6, h * 0.35, d / 2 + 1.5, METAL())

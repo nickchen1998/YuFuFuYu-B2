@@ -184,6 +184,14 @@ function coffeetable(g: G, it: FurnitureItem) {
 
 function tv(g: G, it: FurnitureItem) {
   const { w, h } = it
+  if (has(it, 'wallmount')) {
+    // 壁掛：背面（-z）貼牆，中間一片壁掛架
+    const d = it.d
+    bx(g, 40, 30, 2.5, 0, h / 2 - 15, -d / 2 + 1.25, DARK())
+    bx(g, w, h, 3, 0, 0, d / 2 - 1.5, mat(it.color, 0.35))
+    bx(g, w - 2, h - 2, 0.3, 0, 1, d / 2 + 0.1, mat('#0d1117', 0.12, 0.3))
+    return
+  }
   bx(g, 32, 1.5, 20, 0, 0, 0, DARK())
   bx(g, 6, 8, 3, 0, 1.5, -1, DARK())
   bx(g, w, h - 8, 3, 0, 8, 0, mat(it.color, 0.35))

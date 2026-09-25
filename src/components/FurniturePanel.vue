@@ -130,6 +130,7 @@ const featureNames: Record<string, string> = {
   tableout: '抽拉式餐桌',
   outlets: '雙連三孔插座 ×2：餐桌外端牙板、靠窗檯面平面嵌入',
   sixdoor: '六門（上層對開、製冰室獨立）',
+  wallmount: '壁掛（畫面下緣離地 70、中心約 106，下方保留電視櫃）',
 }
 const features = computed(() => (selected.value?.features ?? []).map((f) => featureNames[f] ?? f))
 

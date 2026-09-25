@@ -103,7 +103,8 @@ const seeds: Seed[] = [
   { id: 'rug', type: 'rug', name: '地毯', x: 130, y: 185, rot: 90, w: 200, d: 150, h: 1, color: '#cfc5b4' },
   { id: 'coffee', type: 'coffeetable', name: '茶几', x: 145, y: 185, rot: 90, w: 100, d: 50, h: 40, color: '#a67c52' },
   { id: 'tvstand', type: 'tvstand', name: '電視櫃', x: 20, y: 185, rot: 90, w: 180, d: 40, h: 50, color: '#ece6dc' },
-  { id: 'tv', type: 'tv', name: '電視 55吋', x: 16, y: 185, rot: 90, w: 123, d: 8, h: 72, elev: 50, color: '#1b1b1d' },
+  // 電視壁掛：下緣離地 70（坐在沙發上視線約在畫面中心），下方保留電視櫃
+  { id: 'tv', type: 'tv', name: '電視 55吋（壁掛）', x: 3, y: 185, rot: 90, w: 123, d: 6, h: 72, elev: 70, color: '#1b1b1d', features: ['wallmount'] },
   // 冰箱：六門、製冰室獨立（國際牌 NR-F552YT 等，65 × 69.9 × 185），背面貼牆、上方沒有櫃子
   { id: 'fridge', type: 'fridge', name: '冰箱（六門）', x: 35, y: 414, rot: 90, w: 65, d: 70, h: 185, color: '#d4d8dc', features: ['sixdoor'] },
   // 訂製中島餐桌（半島型，一件式）：一端靠窗下的牆，檯面連續高 76（壓在窗台 80 下）。

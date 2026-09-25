@@ -870,6 +870,23 @@ function towerfan(g: G, it: FurnitureItem) {
 /** 外套掛勾（MUJI 壁掛家具 三連掛鉤）：掛勾橫條在最上面，下面畫兩件掛著的外套；背面（-z）貼牆 */
 function coathooks(g: G, it: FurnitureItem) {
   const { w, d, h } = it
+  if (has(it, 'ploga')) {
+    // IKEA PLOGA 垂直掛鉤架：櫸木直條（高 60、上緣 = h）＋ 5 支和牆平行、可左右滑動的鋁桿
+    const z0 = -d / 2
+    bx(g, 4.5, 60, 3, 0, h - 60, z0 + 1.5, mat(it.color, 0.55))
+    const rodM = mat('#f2f2f0', 0.35, 0.3)
+    ;[4, 17, 31, 42, 56].forEach((off, i) => {
+      const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, w - 8, 12), rodM)
+      rod.rotation.z = Math.PI / 2
+      rod.position.set(i % 2 ? 4 : -4, h - off, z0 + 4.5)
+      g.add(rod)
+    })
+    // 掛著的長大衣（最上面那支）、短外套（中間）、包包（最下面）
+    bx(g, 32, 100, 6, -5, h - 104, z0 + 8, mat('#6d6a66', 0.95))
+    bx(g, 30, 70, 6, 6, h - 101, z0 + 14, mat('#b89a76', 0.95))
+    bx(g, 22, 26, 7, 2, h - 84, z0 + 17.5, mat('#3d3a36', 0.8))
+    return
+  }
   const bar = mat(it.color, 0.55)
   bx(g, w, 10, 2.5, 0, h - 10, -d / 2 + 1.25, bar)
   for (let i = 0; i < 3; i++) bx(g, 1.6, 1.6, 5, -w / 2 + w * (i + 0.5) / 3, h - 7, -d / 2 + 4, bar)

@@ -140,8 +140,9 @@ const seeds: Seed[] = [
     id: 'kitchen', type: 'kitchen', name: '一字型廚具', x: 30, y: 558.5, rot: 90, w: 213, d: 60, h: 85,
     color: '#f1eee8', locked: true, features: ['dishdryer', 'dishwasher'],
   },
-  // 外套掛勾：進門右手邊、沙發和吸塵器之間的牆（輕隔間），MUJI 壁掛家具三連掛鉤，掛勾高 170
-  { id: 'coathooks', type: 'coathooks', name: '外套掛勾（壁掛）', x: 282, y: 57, rot: 270, w: 44, d: 12, h: 100, elev: 70, color: '#c9a57a' },
+  // 外套掛架：進門右手邊、沙發旁 45 公分寬的牆（輕隔間）掛 IKEA PLOGA 垂直掛鉤架（37 × 6 × 60），上緣離地 190：
+  // 5 支鋁桿約在 186／173／159／148／134，上面掛長大衣（184 公分）、中間掛外套（154 公分）、最下面掛包包
+  { id: 'coathooks', type: 'coathooks', name: '外套掛架（IKEA PLOGA）', x: 278, y: 57, rot: 270, w: 37, d: 20, h: 120, elev: 70, color: '#d9b98f', features: ['ploga'] },
   // Dyson 直立式涼風扇（Purifier Cool TP11，高 105、底座 22）：三個房間各一台
   // 客廳這台靠牆放在咖啡櫃靠餐廳那一側（沙發那側只剩 5 公分），斜朝客廳、出風避開咖啡櫃；離次臥門約 28 公分
   { id: 'fan-living', type: 'towerfan', name: 'Dyson 直立式電扇（客廳）', x: 273, y: 431, rot: 250, w: 22, d: 22, h: 105, color: '#eef0f2' },

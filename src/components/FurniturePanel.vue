@@ -22,7 +22,7 @@ const featureDefs: Record<string, { key: string; label: string }[]> = {
   ],
   island: [{ key: 'microwave', label: '嵌入微波爐' }],
   diningisland: [{ key: 'microwave', label: '中島嵌入微波爐' }],
-  peninsula: [{ key: 'outlets', label: '餐桌兩端各一組雙連三孔插座' }],
+  peninsula: [{ key: 'outlets', label: '雙連三孔插座（餐桌外端＋靠窗檯面彈出式）' }],
   windowisland: [
     { key: 'microwave', label: '嵌入微波爐' },
     { key: 'tableout', label: '抽拉餐桌拉出（用餐時）' },

@@ -419,30 +419,51 @@ function windowisland(g: G, it: FurnitureItem) {
   }
 }
 
-/** 雙連三孔插座（橫式面板 12 × 7，台灣兩平腳＋下方接地孔）：(x, y, z) = 面板背面中心，rotY 決定朝向（0 = 朝 +z） */
+/** 兩個台灣三孔插座（兩平腳＋下方接地孔），畫在 z = 0 的平面上、朝 +z；(0, 0) = 兩插座中心 */
+function sockets(p: G, z: number) {
+  const hole = mat('#2a2b2e', 0.6)
+  for (const sx of [-1, 1]) {
+    const cx = sx * 2.9
+    bx(p, 4.6, 5.2, 0.3, cx, -2.6, z + 0.15, mat('#ebeae5', 0.4))
+    for (const s of [-1, 1]) bx(p, 0.32, 1.3, 0.2, cx + s * 0.63, 0.1, z + 0.26, hole)
+    const ground = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.38, 0.2, 16), hole)
+    ground.rotation.x = Math.PI / 2
+    ground.position.set(cx, -1.3, z + 0.26)
+    p.add(ground)
+  }
+}
+
+/** 雙連三孔插座（橫式面板 12 × 7）：(x, y, z) = 面板背面中心，rotY 決定朝向（0 = 朝 +z） */
 function outletPlate(g: G, x: number, y: number, z: number, rotY: number) {
   const p = new THREE.Group()
   p.position.set(x, y, z)
   p.rotation.y = rotY
   g.add(p)
-  const hole = mat('#2a2b2e', 0.6)
   bx(p, 12, 7, 0.8, 0, -3.5, 0.4, mat('#f6f5f1', 0.35))
-  for (const sx of [-1, 1]) {
-    const cx = sx * 2.9
-    bx(p, 4.6, 5.2, 0.3, cx, -2.6, 0.95, mat('#ebeae5', 0.4))
-    for (const s of [-1, 1]) bx(p, 0.32, 1.3, 0.2, cx + s * 0.63, 0.1, 1.06, hole)
-    const ground = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.38, 0.2, 16), hole)
-    ground.rotation.x = Math.PI / 2
-    ground.position.set(cx, -1.3, 1.06)
-    p.add(ground)
-  }
+  sockets(p, 0.8)
+}
+
+/** 檯面彈出式插座（升起的樣子，雙連三孔）：(x, y, z) = 檯面上的中心點，插座朝 rotY 方向（0 = 朝 +z） */
+function popupOutlet(g: G, x: number, y: number, z: number, rotY: number) {
+  const p = new THREE.Group()
+  p.position.set(x, y, z)
+  p.rotation.y = rotY
+  g.add(p)
+  const steel = mat('#b9bcc0', 0.3, 0.7)
+  bx(p, 16, 0.3, 9, 0, 0, 0, mat('#8e9296', 0.35, 0.7))
+  bx(p, 14, 9, 6, 0, 0.3, 0, steel)
+  bx(p, 14.4, 0.7, 6.4, 0, 9.3, 0, mat('#9a9ea3', 0.3, 0.7))
+  const face = new THREE.Group()
+  face.position.set(0, 4.8, 0)
+  p.add(face)
+  sockets(face, 3)
 }
 
 /**
  * 訂製中島餐桌（半島型）：-x 端靠牆是收納段，+x 端是餐桌段，檯面連續同高。
  * 收納段是雙面櫃（內部規劃見 interiors.ts）：-z 側朝廚房、+z 側朝走道；餐桌段兩側都能放椅子並收進桌下。
- * 'outlets'：餐桌段兩端各一組雙連三孔插座——外端兩支腳之間加牙板裝插座，另一端裝在收納段朝餐桌的側板
- * （避開桌下橫樑，裝低一點）；電從窗下牆面進收納段，再沿桌下橫樑走到外端。
+ * 'outlets'：兩組雙連三孔插座——餐桌外端兩支腳之間加牙板裝一組；靠窗那端的檯面裝彈出式插座
+ * （在電鍋、氣炸鍋後面，插座朝它們）。電從窗下牆面進收納段，再沿桌下橫樑走到外端。
  */
 function peninsula(g: G, it: FurnitureItem) {
   const { w, d, h } = it
@@ -457,7 +478,7 @@ function peninsula(g: G, it: FurnitureItem) {
   if (has(it, 'outlets')) {
     bx(g, 2, 12, d - 15, w / 2 - 3.5, bodyTop - 12, 0, mat(shadeHex(it.color, 0.85), 0.6))
     outletPlate(g, w / 2 - 2.5, bodyTop - 6, 0, Math.PI / 2)
-    outletPlate(g, -w / 2 + ls, bodyTop - 14, 0, Math.PI / 2)
+    popupOutlet(g, -w / 2 + 15, h, 0, Math.PI / 2)
   }
 }
 

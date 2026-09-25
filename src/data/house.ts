@@ -55,14 +55,14 @@ export const walls: Wall[] = [
   {
     id: 'part-bath-living', x1: -15, y1: 0, x2: 0, y2: 146,
     openings: [
-      { id: 'bath-door', kind: 'door', offset: 5, width: 75, sill: 0, height: 210, hinge: 'start', swing: 'a', label: '浴室門' },
+      { id: 'bath-door', kind: 'door', offset: 5, width: 75, sill: 0, height: 210, hinge: 'start', swing: 'a', label: '浴室門', hidden: true, gap: 1.5 },
     ],
   },
   { id: 'part-wc-living', x1: -15, y1: 146, x2: 0, y2: 252.5 },
   {
     id: 'part-master-living', x1: -15, y1: 252.5, x2: 0, y2: 607,
     openings: [
-      { id: 'master-door', kind: 'door', offset: 35.5, width: 80, sill: 0, height: 210, hinge: 'start', swing: 'a', label: '主臥門' },
+      { id: 'master-door', kind: 'door', offset: 35.5, width: 80, sill: 0, height: 210, hinge: 'start', swing: 'a', label: '主臥門', hidden: true },
     ],
   },
   { id: 'part-ac-living', x1: -15, y1: 607, x2: 0, y2: 700 },
@@ -75,7 +75,7 @@ export const walls: Wall[] = [
     id: 'part-wc-master', x1: -286.5, y1: 245, x2: -15, y2: 260,
     openings: [
       // 圖上是推拉門：開口約 80，門片掛在半套衛浴那側、往左拉開
-      { id: 'wc-door', kind: 'pocket', offset: 139, width: 80, sill: 0, height: 210, hinge: 'start', swing: 'a', label: '半套衛浴拉門' },
+      { id: 'wc-door', kind: 'door', offset: 139, width: 80, sill: 0, height: 210, hinge: 'end', swing: 'a', label: '半套衛浴門', hidden: true, gap: 1.5 },
     ],
   },
 
@@ -101,7 +101,7 @@ export const walls: Wall[] = [
   {
     id: 'part-living-bed2', x1: 288, y1: 0, x2: 303, y2: 561.5,
     openings: [
-      { id: 'bed2-door', kind: 'door', offset: 470, width: 80, sill: 0, height: 210, hinge: 'end', swing: 'b', label: '次臥門' },
+      { id: 'bed2-door', kind: 'door', offset: 470, width: 80, sill: 0, height: 210, hinge: 'end', swing: 'b', label: '次臥門', hidden: true },
     ],
   },
   // 客餐廳 / 工作陽台（延伸到陽台外緣）：陽台門在瓦斯爐正對面，往陽台外開

@@ -817,6 +817,15 @@ function pullbin(g: G, it: FurnitureItem) {
   }
 }
 
+/** 隱形門（規劃項目）：門片由牆面那邊畫（會跟著門的開關），這裡只放一個透明的點選框 */
+let hitMat: THREE.MeshBasicMaterial | undefined
+function hiddendoor(g: G, it: FurnitureItem) {
+  hitMat ??= new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })
+  const m = new THREE.Mesh(new THREE.BoxGeometry(it.w, it.h, it.d), hitMat)
+  m.position.y = it.h / 2
+  g.add(m)
+}
+
 /** 全身鏡（貼在牆面或櫃子側板）：淺橡木細框＋鏡面，正面朝 +z */
 function mirror(g: G, it: FurnitureItem) {
   const { w, d, h } = it
@@ -1024,6 +1033,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   mirror,
   pullbin,
   mirrorcab,
+  hiddendoor,
   person,
   coathooks,
   towerfan,

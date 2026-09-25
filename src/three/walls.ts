@@ -3,7 +3,7 @@ import type { Opening, Wall } from '../types'
 import { walls } from '../data/house'
 import { DEFAULT_WALL } from '../data/materials'
 import { wallAxis, wallPieces } from '../geometry'
-import { mat, glassMat } from './mats'
+import { mat, glassMat, shadeHex } from './mats'
 
 export interface WallBuildOptions {
   ceiling: number
@@ -60,19 +60,23 @@ function buildLouver(g: THREE.Group, w: Wall, top: number) {
 
 const JAMB = 4 // 門框寬
 
+/** 門框寬：隱形門的鋁框藏在牆裡，只看得到一圈細細的陰影縫 */
+const jambOf = (o: Opening) => (o.hidden ? 0.8 : JAMB)
+
 function buildDoorFrame(g: THREE.Group, w: Wall, o: Opening, T: number, cut: number) {
   const { horizontal } = wallAxis(w)
-  const frame = mat(FRAME, 0.6)
+  const frame = o.hidden ? mat(shadeHex(DEFAULT_WALL, 0.72), 0.8) : mat(FRAME, 0.6)
+  const jw = jambOf(o)
   const top = Math.min(o.height, cut)
-  const depth = T + 2
-  for (const s of [o.offset + JAMB / 2, o.offset + o.width - JAMB / 2]) {
+  const depth = o.hidden ? T + 0.2 : T + 2
+  for (const s of [o.offset + jw / 2, o.offset + o.width - jw / 2]) {
     const [px, pz] = along(w, s)
-    const m = addBox(g, horizontal ? JAMB : depth, top, horizontal ? depth : JAMB, px, 0, pz, frame)
+    const m = addBox(g, horizontal ? jw : depth, top, horizontal ? depth : jw, px, 0, pz, frame)
     m.raycast = noRaycast
   }
   if (o.height <= cut) {
     const [px, pz] = along(w, o.offset + o.width / 2)
-    const m = addBox(g, horizontal ? o.width : depth, JAMB, horizontal ? depth : o.width, px, o.height - JAMB, pz, frame)
+    const m = addBox(g, horizontal ? o.width : depth, jw, horizontal ? depth : o.width, px, o.height - jw, pz, frame)
     m.raycast = noRaycast
   }
 }
@@ -112,13 +116,15 @@ function buildPocketDoor(g: THREE.Group, w: Wall, o: Opening, T: number, cut: nu
 
 function buildDoor(g: THREE.Group, w: Wall, o: Opening, T: number, cut: number, open: boolean) {
   const { horizontal } = wallAxis(w)
-  const leafColor = o.id === 'main-door' ? '#4a4540' : o.id === 'balcony-door' ? '#9aa0a6' : '#efebe4'
+  // 隱形門：門片和牆同色（跟牆一起批土油漆）
+  const leafColor = o.hidden ? DEFAULT_WALL : o.id === 'main-door' ? '#4a4540' : o.id === 'balcony-door' ? '#9aa0a6' : '#efebe4'
   const leafMat = mat(leafColor, 0.5, o.id === 'balcony-door' ? 0.5 : 0)
-  const jw = JAMB
+  const jw = jambOf(o)
+  const gap = o.gap ?? 0
   buildDoorFrame(g, w, o, T, cut)
   // 門片：以鉸鏈為軸旋轉
   const leafW = o.width - jw * 2
-  const leafH = Math.min(o.height - jw - 1, cut)
+  const leafH = Math.min(o.height - jw - 1, cut) - gap
   if (leafH <= 1) return
   const hingeS = o.hinge === 'end' ? o.offset + o.width - jw : o.offset + jw
   const [hx, hz] = along(w, hingeS)
@@ -135,9 +141,15 @@ function buildDoor(g: THREE.Group, w: Wall, o: Opening, T: number, cut: number, 
   // three: 本地 +x 經 rotation.y=φ 後 = (cosφ, 0, -sinφ)
   pivot.rotation.y = Math.atan2(-dir.y, dir.x)
   const leafT = 4
-  const leaf = addBox(pivot, leafW, leafH, leafT, leafW / 2, 0, 0, leafMat)
+  const leaf = addBox(pivot, leafW, leafH, leafT, leafW / 2, gap, 0, leafMat)
   leaf.raycast = noRaycast
-  if (leafH > 105) {
+  if (o.hidden) {
+    // 隱形門：細長的平把手（磁吸靜音鎖），不用大門把
+    if (leafH > 105) {
+      const handle = addBox(pivot, 1.4, 16, leafT + 3, leafW - 7, 92, 0, mat('#8d9094', 0.3, 0.8))
+      handle.raycast = noRaycast
+    }
+  } else if (leafH > 105) {
     const handle = addBox(pivot, 12, 2.5, leafT + 7, leafW - 9, 98, 0, mat('#a9a9a9', 0.3, 0.8))
     handle.raycast = noRaycast
   }

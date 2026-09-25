@@ -43,6 +43,7 @@ const alias: Record<string, string> = {
   'fan-master': 'fan-living',
   'fan-bed2': 'fan-living',
   dchair2: 'dchair1',
+  'door-bed2': 'door-master',
   bdesk2: 'bdesk1',
   bchair2: 'bchair1',
   mns2: 'mns1',
@@ -157,7 +158,8 @@ export const shopping: Record<string, ShopInfo> = {
     ],
   },
   shoe: {
-    summary: '落地鞋櫃（高 128、不做踢腳）：最下面一格開放放室內拖鞋；上面全部在門片裡，拖鞋上面那層放常穿的鞋，可調層板，頂層抽屜放鑰匙、口罩。',
+    summary:
+      '落地鞋櫃（高 128、不做踢腳）：最下面一格開放放室內拖鞋；上面全部在門片裡，拖鞋上面那層放常穿的鞋，可調層板，頂層抽屜放鑰匙、口罩。',
     material: [
       '桶身指定 P3 防潮板；層板打 32 mm 排孔可調，每層 15～18 cm（短靴 25～30）',
       '對開門約 2 × 40 cm；門片下緣留縫，或背板上下開通風孔形成對流',
@@ -272,13 +274,15 @@ export const shopping: Record<string, ShopInfo> = {
       {
         title: '掃地機器人（放矮櫃最右邊的家）',
         info: {
-          summary: '基座要矮、水箱從上面直接拿、集塵袋從正面拿，才放得進 56 公分高的格子：ECOVACS DEEBOT mini 系列是查到唯一符合的；一般全能基座 45～52 高、要上掀蓋，石頭官方要求上方淨空 90。',
+          summary:
+            '基座要矮、水箱從上面直接拿、集塵袋從正面拿，才放得進 56 公分高的格子：ECOVACS DEEBOT mini 系列是查到唯一符合的；一般全能基座 45～52 高、要上掀蓋，石頭官方要求上方淨空 90。',
           specs: ['基座 寬 ≤ 40、深 ≤ 42、高 ≤ 40', '水箱從基座頂上直接拿起（不能是上掀蓋）', '不用接水（清水、污水箱）'],
           picks: [
             {
               name: 'ECOVACS 科沃斯 DEEBOT mini 2',
               rec: true,
-              detail: '機器人 Ø28.6 × 10；基座 32 × 40 × 38.5（含斜坡）；10,000 Pa、雙旋轉拖布、自動集塵、洗拖布、45°C 烘乾；水箱從上面拿、集塵袋從前門拿',
+              detail:
+                '機器人 Ø28.6 × 10；基座 32 × 40 × 38.5（含斜坡）；10,000 Pa、雙旋轉拖布、自動集塵、洗拖布、45°C 烘乾；水箱從上面拿、集塵袋從前門拿',
               price: '約 NT$10,799（2026/09 PChome；官網 NT$11,999）',
               url: 'https://24h.pchome.com.tw/prod/DMBL0L-A900K0EOR',
               source: 'PChome',
@@ -292,7 +296,8 @@ export const shopping: Record<string, ShopInfo> = {
             },
             {
               name: '小米 Xiaomi 掃拖機器人 H40（只自動集塵）',
-              detail: '機器人 Ø34 × 9.7；基座 34 × 16 × 32.6；10,000 Pa、4 L 集塵袋、拖地只是拖布；機器人停在基座前面，總深約 50，會凸出櫃子',
+              detail:
+                '機器人 Ø34 × 9.7；基座 34 × 16 × 32.6；10,000 Pa、4 L 集塵袋、拖地只是拖布；機器人停在基座前面，總深約 50，會凸出櫃子',
               price: '約 NT$6,459（2026/09 PChome）',
               url: 'https://24h.pchome.com.tw/prod/DMBL53-A900J1M46',
               source: 'PChome',
@@ -1142,7 +1147,8 @@ export const shopping: Record<string, ShopInfo> = {
     ],
   },
   espresso: {
-    summary: '咖啡櫃檯面由左到右照沖煮順序：豆罐 ×4 → 磨豆機 → 義式咖啡機 → 奶泡機 → 出杯區（下面就是馬克杯櫃）；咖啡機建議 Dedica 窄身半自動機，另外搭磨豆機和奶泡機。',
+    summary:
+      '咖啡櫃檯面由左到右照沖煮順序：豆罐 ×4 → 磨豆機 → 義式咖啡機 → 奶泡機 → 出杯區（下面就是馬克杯櫃）；咖啡機建議 Dedica 窄身半自動機，另外搭磨豆機和奶泡機。',
     specs: ['機身寬 ≤ 25、深 ≤ 35（檯面深 40，後面留 2～3 cm 插頭空間）', '110V、約 1,300 W：和磨豆機一起接左邊的 20A 專用迴路插座'],
     picks: [
       {
@@ -1175,9 +1181,144 @@ export const shopping: Record<string, ShopInfo> = {
       '檯面上方沒有吊櫃，水箱從上面拿出來加水沒問題',
     ],
   },
+  'door-master': {
+    summary:
+      '房門做木作隱形門：往房間裡開，客廳那面和牆齊平、跟牆一起批土油漆，關起來就像一面牆；隱藏鉸鏈＋磁吸靜音鎖，門下裝自動落地氣密條隔音。',
+    specs: [
+      '開口 80 × 210，門片厚 4 cm 以上',
+      '3D 隱藏鉸鏈 × 3（TECTUS TE240 約 NT$4,300／個、LAMP HES3D-120 約 NT$3,200／個）',
+      '磁吸靜音鎖（九宏 RUB370 約 NT$2,363～2,888）；隱藏式門把或細長平把手',
+      '門下自動落地氣密條（約 NT$590～690），關門時才降下來擋風擋聲',
+    ],
+    picks: [
+      {
+        name: '木作隱形門（和牆同色）＋隱藏鉸鏈 × 3＋磁吸鎖＋氣密條（估價）',
+        rec: true,
+        detail: '含門框、門片、五金、安裝和油漆；不含牆面不平要做的覆牆',
+        price: '約 NT$20,000～35,000（2026/09 行情推算：木作隱形門約 2 萬起，鉸鏈、鎖另計）',
+        category: '系統櫃・訂製',
+        url: 'https://www.945.com.tw/articles/detail/1420',
+        source: '945 找師傅',
+      },
+    ],
+    vendors: [
+      {
+        name: '萬安木門（中和）',
+        detail: '服務範圍含土城；一般木門、浴室門，隱形門要問',
+        phone: '02-2240-1473',
+        url: 'https://www.wan-an.com.tw/about-us.html',
+      },
+      { name: '錦宥興業（新店）', detail: '鋁框門，服務新北；可以問鋁框隱形門', url: 'http://www.jyl-co.com.tw/' },
+      { name: '九宏五金（台北）', detail: '隱藏鉸鏈、磁吸鎖、浴廁鎖現貨', phone: '02-2375-3797', url: 'https://www.j-home.com.tw/' },
+      { name: '美德亞（TECTUS 代理）', detail: 'SIMONSWERK TECTUS 隱藏鉸鏈', phone: '02-2515-7057', url: 'https://www.meideya.com.tw/' },
+    ],
+    notes: [
+      '施工順序：輕隔間做到門口時先補強立柱（鉸鏈那側加實木或鋼骨），隱形門框在封板、批土、油漆之前裝好，門片跟牆一起批土油漆',
+      '只有推的那面和牆齊平；從房間裡面看，門會比牆面凹進去（牆厚減門厚）',
+      '門片厚 4 cm 以上才能用 TECTUS 這類 3D 隱藏鉸鏈；210 高裝 3 個，門太重裝 4 個',
+      '進口門框、鉸鏈常要預訂，抓 2～6 週；現場請 2～3 家報價（多半是木作師傅配合隔間師傅做）',
+      '房間門不用留門縫，改用落地氣密條，冷氣比較不會漏',
+    ],
+  },
+  'door-bath': {
+    summary:
+      '全套浴室有淋浴，門要防水：鋁框隱形門（框藏在牆裡）配防水門片（鋁蜂巢或 PVC 發泡板），外面和牆齊平同色；門下留 1.5 cm 讓抽風機進氣。',
+    specs: [
+      '開口 75 × 210，往浴室裡開，客廳那面齊平',
+      '鋁框（不怕潮）＋鋁蜂巢／PVC 發泡板門片，兩面都要封好',
+      '浴廁鎖：裡面轉扭上鎖、外面可以緊急開（九宏 LS-S6-1 約 NT$504、Castle TWS-002 約 NT$1,155）',
+      '門下留 1～2 cm（不裝氣密條），抽風機才有空氣進來',
+    ],
+    picks: [
+      {
+        name: '鋁框隱形門＋防水門片＋隱藏鉸鏈 × 3＋浴廁鎖（估價）',
+        rec: true,
+        detail: '台灣鋁框隱形門的完整價格沒查到，先照木作隱形門行情抓；國外 ECLISSE 門框本身約 £385、交期 4～6 週',
+        price: '約 NT$20,000～35,000（2026/09 推估，鋁框價格未確認）',
+        category: '系統櫃・訂製',
+        url: 'https://www.eclisse.co.uk/syntesis-flush-hinged-single/',
+        source: 'ECLISSE',
+      },
+      {
+        name: '木作隱形門（雙面美耐板或烤漆、四邊封邊）（估價）',
+        detail: '找不到鋁框廠商時的做法；乾濕分離要做好，門片下緣要封',
+        price: '約 NT$20,000～35,000（2026/09 行情推算）',
+        category: '系統櫃・訂製',
+        url: 'https://www.100.com.tw/article/10718',
+        source: '100室內設計',
+      },
+    ],
+    vendors: [
+      {
+        name: '萬安木門（中和）',
+        detail: '服務範圍含土城；一般木門、浴室門，隱形門要問',
+        phone: '02-2240-1473',
+        url: 'https://www.wan-an.com.tw/about-us.html',
+      },
+      { name: '錦宥興業（新店）', detail: '鋁框門，服務新北；可以問鋁框隱形門', url: 'http://www.jyl-co.com.tw/' },
+      { name: '九宏五金（台北）', detail: '隱藏鉸鏈、磁吸鎖、浴廁鎖現貨', phone: '02-2375-3797', url: 'https://www.j-home.com.tw/' },
+      { name: '美德亞（TECTUS 代理）', detail: 'SIMONSWERK TECTUS 隱藏鉸鏈', phone: '02-2515-7057', url: 'https://www.meideya.com.tw/' },
+    ],
+    notes: [
+      '施工順序：輕隔間做到門口時先補強立柱（鉸鏈那側加實木或鋼骨），隱形門框在封板、批土、油漆之前裝好，門片跟牆一起批土油漆',
+      '只有推的那面和牆齊平；從房間裡面看，門會比牆面凹進去（牆厚減門厚）',
+      '門片厚 4 cm 以上才能用 TECTUS 這類 3D 隱藏鉸鏈；210 高裝 3 個，門太重裝 4 個',
+      '進口門框、鉸鏈常要預訂，抓 2～6 週；現場請 2～3 家報價（多半是木作師傅配合隔間師傅做）',
+      '浴室牆可能是磚牆或 RC：鋁框要在泥作粉光時一起埋進去',
+    ],
+  },
+  'door-wc': {
+    summary:
+      '半套衛浴原本是穿牆拉門，改成往廁所裡開的木作隱形門：主臥那面和牆齊平，從房間看起來就是一面牆；比拉門更擋味道、聲音，也能裝一般浴廁鎖。',
+    specs: [
+      '開口 80 × 210，鉸鏈在洗臉盆那側，往廁所裡開：80 公分的門轉得開（廁所深 93），打開後貼著洗臉盆側邊，不擋馬桶',
+      '3D 隱藏鉸鏈 × 3＋浴廁鎖；門下留 1～2 cm 讓抽風進氣',
+      '門片兩面封好（美耐板或烤漆），廁所這面會碰到水氣',
+    ],
+    picks: [
+      {
+        name: '木作隱形門（往廁所內開）＋隱藏鉸鏈 × 3＋浴廁鎖（估價）',
+        rec: true,
+        detail: '主臥那面批土油漆和牆同色；廁所那面封美耐板或烤漆',
+        price: '約 NT$20,000～35,000（2026/09 行情推算）',
+        category: '系統櫃・訂製',
+        url: 'https://www.945.com.tw/articles/detail/1420',
+        source: '945 找師傅',
+      },
+      {
+        name: '保留穿牆拉門（隱藏式）（估價）',
+        detail: '拉門片藏進衣櫃後面的牆裡；比較不佔空間，但氣味、聲音擋得比較差，鎖也比較簡單',
+        price: '約 NT$15,000～23,000（2026/09 行情推算：木拉門一組 1～1.5 萬，隱藏式多約五成）',
+        category: '系統櫃・訂製',
+        url: 'https://www.pro360.com.tw/price/sliding_door',
+        source: 'PRO360',
+      },
+    ],
+    vendors: [
+      {
+        name: '萬安木門（中和）',
+        detail: '服務範圍含土城；一般木門、浴室門，隱形門要問',
+        phone: '02-2240-1473',
+        url: 'https://www.wan-an.com.tw/about-us.html',
+      },
+      { name: '錦宥興業（新店）', detail: '鋁框門，服務新北；可以問鋁框隱形門', url: 'http://www.jyl-co.com.tw/' },
+      { name: '九宏五金（台北）', detail: '隱藏鉸鏈、磁吸鎖、浴廁鎖現貨', phone: '02-2375-3797', url: 'https://www.j-home.com.tw/' },
+      { name: '美德亞（TECTUS 代理）', detail: 'SIMONSWERK TECTUS 隱藏鉸鏈', phone: '02-2515-7057', url: 'https://www.meideya.com.tw/' },
+    ],
+    notes: [
+      '施工順序：輕隔間做到門口時先補強立柱（鉸鏈那側加實木或鋼骨），隱形門框在封板、批土、油漆之前裝好，門片跟牆一起批土油漆',
+      '只有推的那面和牆齊平；從房間裡面看，門會比牆面凹進去（牆厚減門厚）',
+      '門片厚 4 cm 以上才能用 TECTUS 這類 3D 隱藏鉸鏈；210 高裝 3 個，門太重裝 4 個',
+      '進口門框、鉸鏈常要預訂，抓 2～6 週；現場請 2～3 家報價（多半是木作師傅配合隔間師傅做）',
+    ],
+  },
   mcab1: {
     summary: '全套衛浴有淋浴，鏡子容易起霧：選和成 80 公分除霧鏡櫃，寬度對齊下面的洗手台，雙門、裡面放牙刷、保養品。',
-    specs: ['寬 80（對齊洗手台）、深 ≤ 16、高約 66', '離地約 118～184：龍頭上方留空間，184 公分照得到頭頂', '除霧要 110V 電源：水電在鏡櫃後面預留出線'],
+    specs: [
+      '寬 80（對齊洗手台）、深 ≤ 16、高約 66',
+      '離地約 118～184：龍頭上方留空間，184 公分照得到頭頂',
+      '除霧要 110V 電源：水電在鏡櫃後面預留出線',
+    ],
     picks: [
       {
         name: '和成 HCG LAG8066BF 除霧鏡櫃（貝登系列）',
@@ -2186,7 +2327,7 @@ export function itemCategory(it: FurnitureItem): string {
   if (it.type === 'person') return '參考'
   if (it.type === 'vanity' || it.type === 'mirrorcab') return '衛浴'
   if (it.type === 'kitchen' || (it.locked && it.type !== 'acunit')) return '建商附'
-  if (it.type === 'peninsula') return '訂製'
+  if (it.type === 'peninsula' || it.type === 'hiddendoor') return '訂製'
   if (hasInterior(it)) return '系統櫃'
   if (it.type === 'projection') return '示意'
   if (APPLIANCES.includes(it.type)) return '家電'

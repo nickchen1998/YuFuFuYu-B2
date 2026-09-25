@@ -193,12 +193,13 @@ const columns = computed(() => {
 // ───────────────────────── 購買資訊 ─────────────────────────
 
 /** 廠商只給系統櫃／訂製家具（沒有商品卡片，要找廠商報價）；買現成的家具看商品卡片上的連結就好 */
-const isSteel = computed(() => !!selected.value?.features?.includes('steel'))
+/** 鋼管衣櫃、隱形門不是系統板做的：不列系統櫃的板材和廠商 */
+const notBoard = computed(() => !!selected.value?.features?.includes('steel') || selected.value?.type === 'hiddendoor')
 const vendors = computed<ShopVendor[]>(() =>
-  custom.value ? [...(info.value?.vendors ?? []), ...(isSteel.value ? [] : cabinetVendors)] : [],
+  custom.value ? [...(info.value?.vendors ?? []), ...(notBoard.value ? [] : cabinetVendors)] : [],
 )
 const hasShared = computed(
-  () => custom.value && !isSteel.value && !!(cabinetMaterials.boards?.length || cabinetMaterials.hardware?.length),
+  () => custom.value && !notBoard.value && !!(cabinetMaterials.boards?.length || cabinetMaterials.hardware?.length),
 )
 </script>
 

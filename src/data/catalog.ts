@@ -164,6 +164,10 @@ const seeds: Seed[] = [
   { id: 'projector', type: 'projector', name: '投影機', x: -269, y: 584.5, rot: 110, w: 19, d: 19, h: 25, elev: 50, color: '#e9e9e6' },
   // 衣櫃做到頂（300）；內部規劃見 interiors.ts
   { id: 'mward', type: 'wardrobe', name: '衣櫃（薄型 45 深）', x: -219, y: 282.5, rot: 0, w: 135, d: 45, h: 300, color: '#efe9df' },
+  // 隱形門（原本建商的門都退掉了）：四扇都往房間裡開，推的那面（客廳／主臥）和牆齊平、和牆同色。
+  // 門片畫在牆上（跟著門的開關），這裡的項目放規格和估價
+  { id: 'door-master', type: 'hiddendoor', name: '主臥門（隱形門）', x: -16, y: 328, rot: 90, w: 80, d: 1.5, h: 210, color: '#f2efea' },
+  { id: 'door-wc', type: 'hiddendoor', name: '半套衛浴門（隱形門）', x: -107.5, y: 244, rot: 0, w: 80, d: 1.5, h: 210, color: '#f2efea' },
   // 全身鏡 40 × 150（IKEA NISSEDAL 白框）：鎖在主臥衣櫃右側板（朝房門那側，不對床、開門也不會擋到）；
   // 離地 30～180：154 公分看得到腳、184 公分看得到頭頂；拿了衣服轉身就能照
   { id: 'mirror', type: 'mirror', name: '全身鏡（衣櫃側板）', x: -150.25, y: 282.5, rot: 90, w: 40, d: 2.5, h: 150, elev: 30, color: '#f2f0eb' },
@@ -182,6 +186,7 @@ const seeds: Seed[] = [
   // 椅子背後（靠客廳的輕隔間）：矮櫃放文件、線材、印表機（落地，高 90）；到次臥門前 5 公分為止、避開按摩椅前方。
   // 上方書櫃先拿掉（住戶覺得太高），之後再決定。
   // 最右邊（靠衣櫃那端）是掃地機器人的家：那格不做底板，櫃深加到 45（基座 40＋機器人不凸出），整座不做踢腳；前方淨空 80 以上
+  { id: 'door-bed2', type: 'hiddendoor', name: '次臥門（隱形門）', x: 304, y: 510, rot: 90, w: 80, d: 1.5, h: 210, color: '#f2efea' },
   { id: 'scab', type: 'cabinet', name: '書房矮櫃（文件・印表機・掃地機器人）', x: 325.5, y: 340, rot: 90, w: 250, d: 45, h: 90, color: '#d9c2a0', features: ['noplinth'] },
   // 冷氣：窗戶上方，沿長邊往衣櫃方向吹，風從桌子側邊經過
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 395, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
@@ -193,6 +198,7 @@ const seeds: Seed[] = [
 
   // 全套衛浴（固定設備）：淋浴間 + 馬桶 + 洗手台
   { id: 'shower', type: 'shower', name: '淋浴間', x: -239.25, y: 70, rot: 0, w: 94.5, d: 140, h: 200, color: '#e8e8e6', locked: true },
+  { id: 'door-bath', type: 'hiddendoor', name: '浴室門（隱形門）', x: -16, y: 42.5, rot: 90, w: 75, d: 1.5, h: 210, color: '#f2efea' },
   { id: 'toilet', type: 'toilet', name: '馬桶', x: -150, y: 106, rot: 180, w: 40, d: 68, h: 76, color: '#f7f7f5', locked: true },
   // 全套衛浴洗手台：柯林斯 ST-R-80（盆 80 × 48、壁掛櫃高 60），靠右邊牆；朝馬桶那端（左邊）26.5 寬開放格放衛生紙，
   // 正面和側面都拿得到，坐在馬桶上伸手就拿到（開放格離馬桶約 30）

@@ -20,6 +20,10 @@ export interface Opening {
   /** 門往哪一側開：a = 座標較小的那側、b = 座標較大的那側 */
   swing?: 'a' | 'b'
   label?: string
+  /** 隱形門：門框藏在牆裡、門片和牆同色、隱藏鉸鏈（推的那面和牆齊平） */
+  hidden?: boolean
+  /** 門片下緣離地（浴室門留縫讓抽風進氣） */
+  gap?: number
 }
 
 export type WallStyle = 'solid' | 'louver' | 'column'

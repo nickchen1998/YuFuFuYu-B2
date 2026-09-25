@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch, type Component } from 'vue'
 import {
-  Box, Check, ChevronDown, DoorOpen, Footprints, House, Info, Layers, ListRestart, Map as MapIcon, MapPin,
-  MousePointer2, Move, PaintRoller, Palette, Redo2, Ruler, SlidersHorizontal, Sofa, Tag, Undo2,
+  Box, Check, DoorOpen, Footprints, House, Info, Layers, Map as MapIcon, MapPin,
+  MousePointer2, Move, PaintRoller, Palette, Ruler, SlidersHorizontal, Sofa, Tag,
 } from '@lucide/vue'
 import { Viewer } from './three/Viewer'
-import { defaultDesign, design, replaceDesign, ui } from './store'
+import { design, ui } from './store'
 import { viewerRef } from './viewerRef'
-import { history, redo, undo } from './history'
+import { redo, undo } from './history'
 import { rooms } from './data/house'
 import FurniturePanel from './components/FurniturePanel.vue'
 import RoomsPanel from './components/RoomsPanel.vue'
@@ -79,28 +79,6 @@ function doRedo() {
   if (redo()) {
     clearMissingSelection()
     flash('已重做下一步')
-  }
-}
-
-type ResetKind = 'all' | 'furniture' | 'finish'
-const resetOpen = ref(false)
-
-/** 還原預設（可以用「上一步」復原，所以不再跳確認視窗）；戶別設定保留 */
-function resetDesign(kind: ResetKind) {
-  resetOpen.value = false
-  const base = defaultDesign()
-  if (kind === 'all') {
-    replaceDesign({ ...base, mirrored: design.mirrored })
-    ui.selectedId = null
-    flash('已全部還原預設，按「上一步」可以復原')
-  } else if (kind === 'furniture') {
-    design.furniture = base.furniture
-    ui.selectedId = null
-    flash('已還原家具擺設，按「上一步」可以復原')
-  } else {
-    design.wallPaint = {}
-    design.roomFloors = base.roomFloors
-    flash('已還原牆色與地板，按「上一步」可以復原')
   }
 }
 
@@ -184,41 +162,6 @@ onBeforeUnmount(() => {
         </div>
       </div>
 
-      <div class="top-actions glass">
-        <button class="icon-btn tip tip-bottom" data-tip="上一步（⌘Z）" :disabled="!history.canUndo" @click="doUndo">
-          <Undo2 />
-        </button>
-        <button class="icon-btn tip tip-bottom" data-tip="下一步（⌘⇧Z）" :disabled="!history.canRedo" @click="doRedo">
-          <Redo2 />
-        </button>
-        <div class="vr"></div>
-        <div class="menu">
-          <button class="menu-btn" :class="{ on: resetOpen }" @click="resetOpen = !resetOpen">
-            <ListRestart />
-            <span>還原預設</span>
-            <ChevronDown class="chev" />
-          </button>
-          <div v-if="resetOpen" class="menu-backdrop" @click="resetOpen = false"></div>
-          <div v-if="resetOpen" class="menu-list">
-            <button class="menu-item" @click="resetDesign('all')">
-              <ListRestart />
-              <b>全部還原</b>
-              <small>家具、牆色、地板、天花板高度</small>
-            </button>
-            <button class="menu-item" @click="resetDesign('furniture')">
-              <Sofa />
-              <b>只還原家具擺設</b>
-              <small>保留牆色與地板</small>
-            </button>
-            <button class="menu-item" @click="resetDesign('finish')">
-              <Palette />
-              <b>只還原牆色與地板</b>
-              <small>保留家具擺設</small>
-            </button>
-            <p class="menu-note">還原後可以按「上一步」復原</p>
-          </div>
-        </div>
-      </div>
     </header>
 
     <!-- 左側工具列 -->

@@ -147,10 +147,10 @@ const seeds: Seed[] = [
   // 冷氣：窗戶上方，沿長邊往衣櫃方向吹，風從桌子側邊經過
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 395, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
-  // 工作陽台：洗衣機、乾衣機並排靠柱子那側（不堆疊，避開次臥窗戶），門朝陽台內
-  { id: 'washer', type: 'washer', name: '洗衣機', x: 459, y: 645, rot: 270, w: 60, d: 65, h: 100, color: '#eef0f2' },
+  // 工作陽台：洗衣機、乾衣機並排靠柱子那側（不堆疊），整組推到次臥窗下那面牆，離女兒牆遠、不易淋雨；門朝陽台內
+  { id: 'washer', type: 'washer', name: '洗衣機', x: 459, y: 600, rot: 270, w: 60, d: 65, h: 100, color: '#eef0f2' },
   // 乾衣機：參考 LG WR-100VW（60 × 85 × 66，110V）或國際牌 NH-VS100HP（約 59.6 × 84.5 × 66.7）
-  { id: 'dryer', type: 'dryer', name: '乾衣機 10kg', x: 458.5, y: 710.5, rot: 270, w: 60, d: 66, h: 85, color: '#f1f2f0' },
+  { id: 'dryer', type: 'dryer', name: '乾衣機 10kg', x: 458.5, y: 665.5, rot: 270, w: 60, d: 66, h: 85, color: '#f1f2f0' },
 
   // 全套衛浴（固定設備）：淋浴間 + 馬桶 + 洗手台
   { id: 'shower', type: 'shower', name: '淋浴間', x: -239.25, y: 70, rot: 0, w: 94.5, d: 140, h: 200, color: '#e8e8e6', locked: true },

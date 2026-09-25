@@ -111,6 +111,15 @@ const fronts = computed(() => {
   })
 })
 
+/** 整面拉門（片數和 3D 一樣：每片約 85） */
+const sliding = computed(() => {
+  if (!(props.item.features ?? []).includes('sliding')) return []
+  const fr = frame.value
+  const n = Math.max(2, Math.round(fr.w / 85))
+  const pw = fr.w / n
+  return Array.from({ length: n }, (_, i) => ({ i, x0: X(i * pw), x1: X((i + 1) * pw), y0: Y(fr.h - 1), y1: Y(1) }))
+})
+
 const colDims = computed(() =>
   layout.value.cols.map((c) => ({ key: c.i, x: X(PANEL + dispX(c.x, c.w) + c.w / 2), text: fmt(c.w), w: c.w * geo.value.s })),
 )
@@ -161,6 +170,11 @@ const colDims = computed(() =>
           </template>
           <line v-else :x1="f.cx - f.hw" :x2="f.cx + f.hw" :y1="f.y0 + 4" :y2="f.y0 + 4" class="pull" />
         </g>
+      </g>
+
+      <g v-for="s in sliding" :key="`sl${s.i}`" class="fronts">
+        <rect :x="s.x0 + 1" :y="s.y0" :width="s.x1 - s.x0 - 2" :height="s.y1 - s.y0" class="slide" />
+        <text :x="(s.x0 + s.x1) / 2" :y="s.y0 + 14" text-anchor="middle" class="dim-text">⟷ 拉門</text>
       </g>
 
       <text v-for="d in colDims" :key="d.key" :x="d.x" :y="geo.H - 8" text-anchor="middle" class="dim-text">

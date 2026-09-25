@@ -32,6 +32,15 @@ export function glassMat() {
   return glass
 }
 
+let frosted: THREE.MeshPhysicalMaterial | null = null
+/** 霧面玻璃（拉門） */
+export function frostedMat() {
+  if (!frosted) {
+    frosted = new THREE.MeshPhysicalMaterial({ color: '#eef1f3', roughness: 0.55, transparent: true, opacity: 0.62, depthWrite: false })
+  }
+  return frosted
+}
+
 /** 把顏色調暗 / 調亮（f < 1 變暗） */
 export function shadeHex(hex: string, f: number) {
   const c = new THREE.Color(hex)

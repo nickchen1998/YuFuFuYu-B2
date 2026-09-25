@@ -5,7 +5,7 @@ import {
   BACK, DOOR, PANEL, STONE, cabinetFrame, faceDepths, frontPieces, frontRect, interiorOf, layoutFace, peninsulaStorageLen,
   type CabFrame,
 } from '../cabinet'
-import { glassMat, mat, shadeHex } from './mats'
+import { frostedMat, glassMat, mat, shadeHex } from './mats'
 import { hashStr } from './textures'
 
 // 依「櫃內規劃」建出櫃子：櫃體（側板、底板、頂板、背板、立板、層板）＋門片＋櫃內物品示意。
@@ -100,6 +100,12 @@ const BOXES = ['#e8e6e1', '#d9d4ca', '#cfd6dc', '#e2d8c8']
 const ROD = '#a9adb2'
 const HANGER = '#8f7a63'
 const TRAY = '#efe9df'
+const STEEL = '#b5b8bc'
+const WIRE = '#9ea2a7'
+
+const hasF = (it: FurnitureItem, f: string) => (it.features ?? []).includes(f)
+/** 拉門片數：每片約 80～85 寬 */
+export const slidingPanels = (w: number) => Math.max(2, Math.round(w / 85))
 
 interface Cell {
   /** 左緣、寬、底面高度、淨高、淨深（z 從 -D/2 到 D/2，正面 +z） */
@@ -111,7 +117,7 @@ interface Cell {
 }
 
 /** 一格裡的東西（示意） */
-function contents(b: Batch, part: CabinetPart, c: Cell, clothes: boolean, rand: () => number) {
+function contents(b: Batch, part: CabinetPart, c: Cell, clothes: boolean, rand: () => number, metal = false) {
   const pick = (a: string[]) => a[Math.floor(rand() * a.length)]
   const xc = c.x0 + c.w / 2
   const back = -c.D / 2
@@ -202,11 +208,13 @@ function contents(b: Batch, part: CabinetPart, c: Cell, clothes: boolean, rand: 
       const dw = c.w - 1.6
       const dd = c.D - 3
       const zc = 0.5
-      b.box(dw, 0.8, dd, xc, c.y0 + 0.4, zc, TRAY)
-      b.box(0.8, th, dd, c.x0 + 1.2, c.y0 + 0.4, zc, TRAY)
-      b.box(0.8, th, dd, c.x0 + c.w - 1.2, c.y0 + 0.4, zc, TRAY)
-      b.box(dw, th, 0.8, xc, c.y0 + 0.4, zc - dd / 2 + 0.4, TRAY)
-      b.box(dw, th, 0.8, xc, c.y0 + 0.4, zc + dd / 2 - 0.4, TRAY)
+      // 木抽屜；鋼管衣櫃改成金屬網籃
+      const tray = metal ? WIRE : TRAY
+      b.box(dw, 0.8, dd, xc, c.y0 + 0.4, zc, tray)
+      b.box(0.8, th, dd, c.x0 + 1.2, c.y0 + 0.4, zc, tray)
+      b.box(0.8, th, dd, c.x0 + c.w - 1.2, c.y0 + 0.4, zc, tray)
+      b.box(dw, th, 0.8, xc, c.y0 + 0.4, zc - dd / 2 + 0.4, tray)
+      b.box(dw, th, 0.8, xc, c.y0 + 0.4, zc + dd / 2 - 0.4, tray)
       const n = 3 + Math.floor(rand() * 5)
       for (let i = 0; i < n; i++) {
         const iw = Math.min(5 + rand() * 9, dw - 3)
@@ -352,21 +360,27 @@ function buildFace(fg: G, it: FurnitureItem, face: CabinetFace, fr: CabFrame, D:
   const x0 = -fr.innerW / 2
   const body = mat(it.color, 0.6)
   const clothes = it.type === 'wardrobe'
+  const steel = hasF(it, 'steel')
+  const shelfM = steel ? mat(STEEL, 0.35, 0.7) : body
   const hidden = new Batch()
   const shown = new Batch()
   for (const c of fl.cols) {
     const cx0 = x0 + c.x
-    if (c.i > 0) box(fg, T, fr.innerH, D, cx0 - T / 2, fr.y0, 0, body)
+    if (c.i > 0 && !steel) box(fg, T, fr.innerH, D, cx0 - T / 2, fr.y0, 0, body)
     for (const p of c.parts) {
       const py = fr.y0 + p.y
       if (p.i > 0) {
         const prev = c.parts[p.i - 1].part
-        const drawers = prev.kind === 'drawer' && p.part.kind === 'drawer' && prev.front === 'drawer' && p.part.front === 'drawer'
-        if (!drawers) box(fg, c.w, T, D, cx0 + c.w / 2, py - T, 0, body)
+        const drawers = prev.kind === 'drawer' && p.part.kind === 'drawer' && (steel || (prev.front === 'drawer' && p.part.front === 'drawer'))
+        // 鋼管衣櫃：層板改成細的金屬層板
+        if (!drawers) {
+          if (steel) box(fg, c.w, 1.2, D - 4, cx0 + c.w / 2, py - 1.2, 0, shelfM)
+          else box(fg, c.w, T, D, cx0 + c.w / 2, py - T, 0, body)
+        }
       }
       const rand = rng(hashStr(`${it.id}:${fi}:${c.i}:${p.i}:${p.part.kind}:${p.part.label ?? ''}`))
       const visible = p.part.front === 'open' || p.part.front === 'glass'
-      contents(visible ? shown : hidden, p.part, { x0: cx0, w: c.w, y0: py, h: p.h, D }, clothes, rand)
+      contents(visible ? shown : hidden, p.part, { x0: cx0, w: c.w, y0: py, h: p.h, D }, clothes, rand, steel)
     }
   }
   hidden.flush(fg, true)
@@ -443,17 +457,72 @@ export function interiorCabinet(g: G, it: FurnitureItem) {
     }
     b.flush(g, false)
   }
-  const cd = d - DOOR
-  const cz = -DOOR / 2
-  for (const sx of [-1, 1]) box(g, T, h - base, cd, sx * (w / 2 - T / 2), base, cz, body)
-  box(g, w - T * 2, T, cd, 0, base, cz, body)
-  if (fr.top === 'panel') box(g, w - T * 2, T, cd, 0, h - T, cz, body)
-  else if (fr.top === 'stone') box(g, w + 1, STONE, d + 1, 0, h - STONE, 0.5, mat('#dcd8d1', 0.3))
-  box(g, w - T * 2, fr.innerH, BACK, 0, fr.y0, -d / 2 + BACK / 2, mat(shadeHex(it.color, 0.93), 0.75))
-  const fg = new THREE.Group()
-  fg.position.z = -d / 2 + BACK + dp.clear / 2
-  g.add(fg)
-  buildFace(fg, it, inter.faces[0], fr, dp.clear, 0)
+  const sliding = hasF(it, 'sliding')
+  if (hasF(it, 'steel')) {
+    // 鋼管衣櫃：不鎖木板，立管落地頂天（前後兩排），上下橫管；前面留 8 cm 給拉門軌道
+    const steel = mat(STEEL, 0.35, 0.7)
+    const front = sliding ? 8 : 0
+    const zb = -d / 2 + 4
+    const zf = d / 2 - front - 4
+    const L = layoutFace(inter.faces[0], fr.innerW, fr.innerH)
+    const xs = [-w / 2 + 2, ...L.cols.slice(1).map((c) => -fr.innerW / 2 + c.x - T / 2), w / 2 - 2]
+    for (const x of xs) for (const z of [zb, zf]) cylY(g, 1.3, h, x, 0, z, steel)
+    for (const y of [3, h - 4]) for (const z of [zb, zf]) cylX(g, 1.1, w - 4, 0, y, z, steel)
+    const clear = d - front - BACK
+    const fg = new THREE.Group()
+    fg.position.z = -d / 2 + BACK + clear / 2
+    g.add(fg)
+    buildFace(fg, it, inter.faces[0], fr, clear, 0)
+  } else {
+    const cd = d - DOOR
+    const cz = -DOOR / 2
+    for (const sx of [-1, 1]) box(g, T, h - base, cd, sx * (w / 2 - T / 2), base, cz, body)
+    box(g, w - T * 2, T, cd, 0, base, cz, body)
+    if (fr.top === 'panel') box(g, w - T * 2, T, cd, 0, h - T, cz, body)
+    else if (fr.top === 'stone') box(g, w + 1, STONE, d + 1, 0, h - STONE, 0.5, mat('#dcd8d1', 0.3))
+    box(g, w - T * 2, fr.innerH, BACK, 0, fr.y0, -d / 2 + BACK / 2, mat(shadeHex(it.color, 0.93), 0.75))
+    const fg = new THREE.Group()
+    fg.position.z = -d / 2 + BACK + dp.clear / 2
+    g.add(fg)
+    buildFace(fg, it, inter.faces[0], fr, dp.clear, 0)
+  }
+  if (sliding) slidingDoors(g, it, w, d, h)
+}
+
+/** 整面落地頂天拉門：上吊式軌道，前後兩軌交錯，鋁框＋霧面玻璃（門片群組標 front，打開櫃門時隱藏） */
+function slidingDoors(g: G, it: FurnitureItem, w: number, d: number, h: number) {
+  const doors = new THREE.Group()
+  doors.userData.front = true
+  g.add(doors)
+  const n = slidingPanels(w)
+  const overlap = 4
+  const pw = (w + overlap * (n - 1)) / n
+  const frame = mat('#d9dbdd', 0.35, 0.6)
+  box(doors, w, 4, 8, 0, h - 4, d / 2 - 4, mat('#9fa3a8', 0.4, 0.6))
+  for (let i = 0; i < n; i++) {
+    const x = -w / 2 + pw / 2 + i * (pw - overlap)
+    const z = d / 2 - (i % 2 === 0 ? 2 : 5.5)
+    const ph = h - 6
+    const f = 3.5
+    for (const sx of [-1, 1]) box(doors, f, ph, 2.4, x + sx * (pw / 2 - f / 2), 1, z, frame)
+    for (const y of [1, 1 + ph - f]) box(doors, pw - f * 2, f, 2.4, x, y, z, frame)
+    const pane = box(doors, pw - f * 2, ph - f * 2, 0.5, x, 1 + f, z, frostedMat())
+    pane.castShadow = false
+    box(doors, 1.2, 30, 1.2, x + (i % 2 === 0 ? 1 : -1) * (pw / 2 - f - 3), 95, z + 1.6, frame)
+  }
+}
+
+function cylY(g: G, r: number, h: number, x: number, y: number, z: number, m: THREE.Material) {
+  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 12), m)
+  mesh.position.set(x, y + h / 2, z)
+  mesh.castShadow = true
+  g.add(mesh)
+}
+function cylX(g: G, r: number, len: number, x: number, y: number, z: number, m: THREE.Material) {
+  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 12), m)
+  mesh.rotation.z = Math.PI / 2
+  mesh.position.set(x, y, z)
+  g.add(mesh)
 }
 
 /** 半島型中島的收納段（-x 端）：兩面櫃，第一面朝 -z（廚房）、第二面朝 +z（走道） */

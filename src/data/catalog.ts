@@ -156,7 +156,8 @@ const seeds: Seed[] = [
   { id: 'ac-master', type: 'acindoor', name: '冷氣（主臥）', x: -130, y: 587, rot: 180, w: 85, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
   // 次臥（書房＋主要衣櫃＋按摩椅）：衣櫃整排貼上牆；按摩椅靠分戶牆、面向房內；兩張升降桌並排靠分戶牆
-  { id: 'bward1', type: 'wardrobe', name: '衣櫃', x: 423.75, y: 30, rot: 0, w: 241.5, d: 60, h: 300, color: '#efe9df' },
+  // 次臥主衣櫃：不鏽鋼色鋼管收納（不用木板、合成板）＋整面落地頂天拉門（鋁框霧面玻璃，上吊軌道），前方不用留開門空間
+  { id: 'bward1', type: 'wardrobe', name: '衣櫃（鋼管＋拉門）', x: 423.75, y: 30, rot: 0, w: 241.5, d: 60, h: 300, color: '#efe9df', features: ['steel', 'sliding', 'noplinth'] },
   // 按摩椅：選零靠牆機型（背後留 5 公分），躺平時往前滑到約 180 公分
   { id: 'massage', type: 'massagechair', name: '按摩椅', x: 469.5, y: 170, rot: 270, w: 80, d: 140, h: 115, color: '#4a4541' },
   { id: 'bdesk1', type: 'standingdesk', name: '升降桌', x: 514.5, y: 340, rot: 270, w: 120, d: 60, h: 73, color: '#d8c3a5' },

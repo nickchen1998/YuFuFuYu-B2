@@ -2239,6 +2239,12 @@ input[type='color']::-moz-color-swatch {
   stroke-width: 1;
   stroke-dasharray: 4 3;
 }
+.cab-svg .slide {
+  fill: rgba(220, 226, 232, 0.28);
+  stroke: #6b7a86;
+  stroke-width: 1.1;
+  stroke-dasharray: 6 3;
+}
 .cab-svg .glass {
   fill: rgba(170, 205, 225, 0.22);
   stroke: #5f7f95;

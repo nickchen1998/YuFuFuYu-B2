@@ -132,6 +132,9 @@ const featureNames: Record<string, string> = {
   sixdoor: '六門（上層對開、製冰室獨立）',
   wallmount: '壁掛（畫面下緣離地 70、中心約 106，下方保留電視櫃）',
   floating: '懸浮壁掛（離地 18，底下可以掃地、放掃地機器人）',
+  steel: '鋼管收納（不鏽鋼色立管、衣桿、金屬層板與網籃，不用木板、合成板）',
+  sliding: '整面落地頂天拉門（上吊軌道、鋁框霧面玻璃）',
+  noplinth: '不做踢腳，底板直接貼地',
   woodtop: '檯面：北美白橡木實木（3 cm 拼板、木蠟油塗裝）',
 }
 const features = computed(() => (selected.value?.features ?? []).map((f) => featureNames[f] ?? f))
@@ -162,6 +165,7 @@ const stats = computed(() => {
   if (s.pants) out.push(`褲架 ${s.pants} 組`)
   if (s.mugs) out.push(`馬克杯約 ${s.mugs} 個（單排、3 個一疊）`)
   if (s.doors) out.push(`門片 ${s.doors} 扇`)
+  if (selected.value.features?.includes('sliding')) out.push(`整面拉門 ${Math.max(2, Math.round(selected.value.w / 85))} 片`)
   return out
 })
 const warnings = computed(() => (selected.value && isCab.value ? interiorWarnings(selected.value, !!design.mirrored) : []))

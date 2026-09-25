@@ -5,49 +5,49 @@ import { P } from '../cabinet'
 // 高度都是淨高；沒寫的自動分配。衣櫃做到頂（300），上櫃另外一扇短門。
 
 export const seedInteriors: Record<string, CabinetInterior> = {
-  // 次臥主衣櫃 241.5 × 60 × 300：四欄各約 58 淨寬，兩人衣服以這裡為主
+  // 次臥主衣櫃 241.5 × 60 × 300：鋼管收納（不用木板）＋整面拉門；四欄各約 58 淨寬，兩人衣服以這裡為主
   bward1: {
     faces: [
       {
         cols: [
-          // 長衣區：整扇長門
+          // 長衣區
           {
             parts: [
-              P('storage', 45, 'door', '收納箱・包包'),
-              P('hang', 140, 'door', '長大衣・洋裝'),
-              P('shelf', null, 'door', '帽子・圍巾'),
-              P('storage', 70, 'door', '上櫃：棉被', true),
+              P('storage', 45, 'open', '收納箱・包包'),
+              P('hang', 140, 'open', '長大衣・洋裝'),
+              P('shelf', null, 'open', '帽子・圍巾'),
+              P('storage', 70, 'open', '最上層：棉被'),
             ],
           },
           // 上下雙層吊掛
           {
             parts: [
-              P('hang', 90, 'door', '下層：褲子・裙子'),
-              P('hang', 95, 'door', '上層：襯衫・外套'),
-              P('shelf', null, 'door', '包包'),
-              P('storage', 70, 'door', '上櫃：換季衣物', true),
+              P('hang', 90, 'open', '下層：褲子・裙子'),
+              P('hang', 95, 'open', '上層：襯衫・外套'),
+              P('shelf', null, 'open', '包包'),
+              P('storage', 70, 'open', '最上層：換季衣物'),
             ],
           },
-          // 外抽屜＋短衣吊掛
+          // 網籃抽屜＋短衣吊掛
           {
             parts: [
-              P('drawer', 20, 'drawer', '內衣'),
-              P('drawer', 20, 'drawer', '襪子'),
-              P('drawer', 20, 'drawer', '運動服・睡衣'),
-              P('hang', null, 'door', '襯衫・T 恤'),
-              P('shelf', 28, 'door', '摺疊衣物'),
-              P('storage', 70, 'door', '上櫃：換季衣物', true),
+              P('drawer', 20, 'open', '網籃：內衣'),
+              P('drawer', 20, 'open', '網籃：襪子'),
+              P('drawer', 20, 'open', '網籃：運動服・睡衣'),
+              P('hang', null, 'open', '襯衫・T 恤'),
+              P('shelf', 28, 'open', '摺疊衣物'),
+              P('storage', 70, 'open', '最上層：換季衣物'),
             ],
           },
-          // 下面放大行李箱（獨立短門），上面層板放摺疊衣物
+          // 下面放大行李箱，上面層板放摺疊衣物
           {
             parts: [
-              P('storage', 80, 'door', '28 吋行李箱'),
-              P('shelf', null, 'door', '毛衣', true),
-              P('shelf', null, 'door', '牛仔褲・長褲'),
-              P('shelf', null, 'door', 'T 恤'),
-              P('shelf', null, 'door', '包包'),
-              P('storage', 70, 'door', '上櫃：登機箱', true),
+              P('storage', 80, 'open', '28 吋行李箱'),
+              P('shelf', null, 'open', '毛衣'),
+              P('shelf', null, 'open', '牛仔褲・長褲'),
+              P('shelf', null, 'open', 'T 恤'),
+              P('shelf', null, 'open', '包包'),
+              P('storage', 70, 'open', '最上層：登機箱'),
             ],
           },
         ],

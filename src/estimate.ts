@@ -83,6 +83,11 @@ function estPick(name: string, cost: number, detail: string, rec = true): ShopPi
   return { name, detail, cost: v, price: `約 ${money(v)}（依行情平均推算）`, rec, category: '系統櫃・訂製' }
 }
 
+/** 鋼管衣櫃＋整面拉門（行情查詢中，先回傳空的） */
+function steelEstimate(_it: FurnitureItem): ShopPick[] {
+  return []
+}
+
 /** 一件家具的估價項目（系統櫃、訂製中島、洗碗機改櫃）；不需要估價的回傳空陣列 */
 export function cabinetEstimate(it: FurnitureItem): ShopPick[] {
   if (it.type === 'kitchen') {
@@ -92,6 +97,7 @@ export function cabinetEstimate(it: FurnitureItem): ShopPick[] {
     ]
   }
   if (!hasInterior(it)) return []
+  if ((it.features ?? []).includes('steel')) return steelEstimate(it)
   const c = counts(it)
   const deep = it.d > 68 ? RATES.deepTop : 1
 

@@ -40,6 +40,8 @@ export interface ShopInfo {
 
 /** 同款家具共用一份資料 */
 const alias: Record<string, string> = {
+  'fan-master': 'fan-living',
+  'fan-bed2': 'fan-living',
   dchair2: 'dchair1',
   dchair3: 'dchair1',
   dchair4: 'dchair1',
@@ -1611,6 +1613,41 @@ export const shopping: Record<string, ShopInfo> = {
     ],
     notes: ['插座請水電做在櫃內離地約 30～40，電線從背板開孔穿', '吸塵器集塵盒倒完再收，櫃內比較不會有灰塵味'],
   },
+
+  // Dyson 直立式電扇（三個房間共用一組資料，2026/09 查詢）
+  'fan-living': {
+    summary: '三個房間各一台 Dyson 直立式涼風扇；預設 Purifier Cool TP11（涼風＋空氣清淨，高 105、底座 22），新家剛裝潢完也能順便濾空氣。',
+    specs: ['高 105 × 底座 22 × 22、4.73 kg', '每台旁邊要有插座', '客廳放電視櫃旁吹向沙發；主臥放床尾角落；次臥放書桌旁窗邊角落吹向座位'],
+    picks: [
+      {
+        name: 'Dyson Purifier Cool TP11 二合一涼風智能空氣清淨機',
+        detail: '105 × 22 × 22、4.73 kg、最大風量 290 L/s；HEPA 濾網＋涼風、可擺頭、App 控制',
+        price: '約 NT$10,900／台（2026/09 Dyson 台灣、恆隆行）',
+        url: 'https://shop.dyson.tw/fans-and-heaters/purifiers/dyson-purifier-cool-tp11-purifying-fan-white-silver-544907-01',
+        source: 'Dyson 台灣',
+        rec: true,
+      },
+      {
+        name: 'Dyson Hot+Cool HF1（AM15）智能涼暖風扇',
+        detail: '夏天涼風、冬天暖風；沒有空氣清淨',
+        price: '約 NT$15,900／台（2026/09 Dyson 台灣）',
+        url: 'https://shop.dyson.tw/fans-and-heaters',
+        source: 'Dyson 台灣',
+      },
+      {
+        name: 'Dyson Purifier Cool De-NOx TP12（甲醛 NOx 偵測）',
+        detail: '可以偵測並分解甲醛，新家、系統櫃剛裝好時最有感',
+        price: '約 NT$20,900～25,900／台（2026/09 Dyson 台灣）',
+        url: 'https://shop.dyson.tw/fans-and-heaters',
+        source: 'Dyson 台灣',
+      },
+    ],
+    search: ['Dyson TP11', 'Dyson HF1', 'Dyson TP12'],
+    notes: [
+      'TP11 的濾網約 12 個月換一次，三台一起買可以問恆隆行或 Dyson 官網的多件優惠',
+      '想要冬天也能用，可以客廳改 Hot+Cool，臥室維持 TP11',
+    ],
+  },
 }
 
 /** 系統櫃共用的板材、五金建議 */
@@ -1758,6 +1795,7 @@ const APPLIANCES = [
   'coffeemaker',
   'ricecooker',
   'ecooker',
+  'towerfan',
   'airfryer',
   'microwave',
   'projector',

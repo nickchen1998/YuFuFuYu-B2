@@ -50,6 +50,7 @@ const map: Record<string, Component> = {
   ecooker: CookingPot,
   person: PersonStanding,
   coathooks: Shirt,
+  towerfan: Fan,
   box: Box,
 }
 

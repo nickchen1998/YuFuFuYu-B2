@@ -712,6 +712,38 @@ function ecooker(g: G, it: FurnitureItem) {
   bx(g, w * 0.5, 1.6, 3, 0, h, -d * 0.1, DARK())
 }
 
+/** Dyson 直立式涼風扇（Purifier Cool TP11 造型）：下面圓柱濾網、上面長橢圓出風環；正面（+z）出風，附風向示意 */
+function towerfan(g: G, it: FurnitureItem) {
+  const { w, h } = it
+  const r = w / 2
+  const white = mat(it.color, 0.35, 0.3)
+  cyl(g, r, r, 4, 0, 0, 0, mat(shadeHex(it.color, 0.9), 0.4, 0.3), 32)
+  const bodyH = h * 0.4
+  cyl(g, r * 0.95, r * 0.95, bodyH, 0, 4, 0, white, 32)
+  cyl(g, r * 0.96, r * 0.96, bodyH * 0.55, 0, 4 + bodyH * 0.2, 0, mat('#8f949a', 0.6, 0.4), 32)
+  const loopH = h - bodyH - 4
+  const loop = new THREE.Mesh(new THREE.TorusGeometry(r * 0.85, 2.2, 12, 40), white)
+  loop.scale.y = loopH / (r * 1.7 + 4.4)
+  loop.position.set(0, 4 + bodyH + loopH / 2, 0)
+  loop.castShadow = true
+  g.add(loop)
+  // 出風範圍示意（和冷氣一樣可以用「冷氣出風」開關隱藏）
+  const reach = 220
+  const geo = new THREE.BufferGeometry()
+  const y0 = 4 + bodyH + loopH * 0.25
+  const y1 = 4 + bodyH + loopH * 0.75
+  geo.setAttribute('position', new THREE.Float32BufferAttribute([-r, y0, 3, r, y0, 3, 55, y0 - 25, reach, -55, y0 - 25, reach, -r, y1, 3, r, y1, 3, 55, y1 + 10, reach, -55, y1 + 10, reach], 3))
+  const c = new THREE.Color('#9ad0ff')
+  geo.setAttribute('color', new THREE.Float32BufferAttribute([...[0, 1].flatMap(() => [c.r, c.g, c.b, 0.35]), ...[0, 1].flatMap(() => [c.r, c.g, c.b, 0]), ...[0, 1].flatMap(() => [c.r, c.g, c.b, 0.35]), ...[0, 1].flatMap(() => [c.r, c.g, c.b, 0])], 4))
+  geo.setIndex([0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 0, 4, 7, 0, 7, 3, 1, 5, 6, 1, 6, 2])
+  airflowMat ??= new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+  const flow = new THREE.Mesh(geo, airflowMat)
+  flow.userData.airflow = true
+  flow.raycast = () => {}
+  flow.renderOrder = 5
+  g.add(flow)
+}
+
 /** 外套掛勾（MUJI 壁掛家具 三連掛鉤）：掛勾橫條在最上面，下面畫兩件掛著的外套；背面（-z）貼牆 */
 function coathooks(g: G, it: FurnitureItem) {
   const { w, d, h } = it
@@ -848,6 +880,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   ecooker,
   person,
   coathooks,
+  towerfan,
   microwave,
   box: plainBox,
 }

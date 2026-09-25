@@ -138,6 +138,10 @@ const seeds: Seed[] = [
   },
   // 外套掛勾：進門右手邊、沙發和吸塵器之間的牆（輕隔間），MUJI 壁掛家具三連掛鉤，掛勾高 170
   { id: 'coathooks', type: 'coathooks', name: '外套掛勾（壁掛）', x: 282, y: 57, rot: 270, w: 44, d: 12, h: 100, elev: 70, color: '#c9a57a' },
+  // Dyson 直立式涼風扇（Purifier Cool TP11，高 105、底座 22）：三個房間各一台
+  { id: 'fan-living', type: 'towerfan', name: 'Dyson 直立式電扇（客廳）', x: 22, y: 300, rot: 90, w: 22, d: 22, h: 105, color: '#eef0f2' },
+  { id: 'fan-master', type: 'towerfan', name: 'Dyson 直立式電扇（主臥）', x: -30, y: 320, rot: 270, w: 22, d: 22, h: 105, color: '#eef0f2' },
+  { id: 'fan-bed2', type: 'towerfan', name: 'Dyson 直立式電扇（次臥）', x: 526, y: 537, rot: 225, w: 22, d: 22, h: 105, color: '#eef0f2' },
   // 身高參考：184 與 154 公分的人，站在電視區和冰箱之間，看人和家具的高低比例（不是家具）
   { id: 'person184', type: 'person', name: '身高參考 184 公分', x: 95, y: 315, rot: 0, w: 46, d: 26, h: 184, color: '#5f7488' },
   { id: 'person154', type: 'person', name: '身高參考 154 公分', x: 150, y: 315, rot: 0, w: 38, d: 22, h: 154, color: '#c9a98a' },

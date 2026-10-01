@@ -90,9 +90,6 @@ type Seed = Omit<FurnitureItem, 'id' | 'elev'> & { id: string; elev?: number }
 // 住戶需求（2026-09）：兩人住；次臥當書房＋主要衣櫃＋按摩椅；主臥只放睡眠相關；
 // 訂製半島型中島餐桌（一端靠窗下的牆、兩張椅）；沙發對齊電視；鞋櫃右側留吸塵器；烘碗機（建商附）＋洗碗機（待確認改櫃）
 const seeds: Seed[] = [
-  // 客餐廳天花板燈光（精簡、柔和、不要燈飾）：平釘天花板＋兩面長牆、窗簾盒懸浮燈溝（整體柔光）＋8 盞深杯防眩嵌燈，
-  // 位置見 data/lighting.ts；這個項目只用來畫燈和放規格、估價
-  { id: 'livinglights', type: 'lightplan', name: '客餐廳燈光（燈溝＋嵌燈）', x: 144, y: 332.5, rot: 0, w: 286, d: 663, h: 3, elev: 297, color: '#fff3dc', locked: true },
   // 客餐廳：電視、沙發、茶几中心線對齊（y = 185）；不鋪地毯
   // 鞋櫃落地（不懸浮、不做踢腳）：最下面一格開放放室內拖鞋，腳一踢就收進去；上緣 128 和旁邊的吸塵器櫃齊平，上面是洞洞板
   { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 128, color: '#efe9df', features: ['noplinth', 'edgepull'] },

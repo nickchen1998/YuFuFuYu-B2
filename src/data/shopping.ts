@@ -2277,7 +2277,6 @@ const APPLIANCES = [
 export function itemCategory(it: FurnitureItem): string {
   if (it.type === 'person') return '參考'
   if (it.type === 'vanity' || it.type === 'mirrorcab') return '衛浴'
-  if (it.type === 'lightplan') return '訂製'
   if (it.type === 'kitchen' || (it.locked && it.type !== 'acunit')) return '建商附'
   if (it.type === 'peninsula' || it.type === 'hiddendoor') return '訂製'
   if (hasInterior(it)) return '系統櫃'

@@ -200,13 +200,7 @@ export class Viewer {
       ceil.userData = { kind: 'ceiling' }
       this.ceilings.add(ceil)
       if (!r.outdoor) {
-        // 吸頂燈（只在漫遊模式顯示）；已經另外規劃燈光的房間（嵌燈、燈溝）不畫
-        if (!r.plannedLights) {
-          const fixture = new THREE.Mesh(new THREE.CylinderGeometry(18, 18, 4, 32), mat('#ffffff', 0.5, 0, '#fff6e8'))
-          fixture.position.set((r.x1 + r.x2) / 2, -2, (r.y1 + r.y2) / 2)
-          fixture.userData = { kind: 'ceiling', offset: -2 }
-          this.ceilings.add(fixture)
-        }
+        // 天花板不畫燈具；只留看不見的光源，漫遊模式才夠亮
         const light = new THREE.PointLight('#fff1dc', 9, 0, 2)
         light.position.set((r.x1 + r.x2) / 2, -30, (r.y1 + r.y2) / 2)
         light.userData = { kind: 'ceiling', offset: -30 }
@@ -270,7 +264,6 @@ export class Viewer {
     })
     this.world.add(this.wallsGroup)
     this.collide = blockingRects(H)
-    this.applyCeilingLights()
     for (const c of this.ceilings.children) c.position.y = H + ((c.userData.offset as number | undefined) ?? 0)
   }
 
@@ -302,7 +295,6 @@ export class Viewer {
       }
     }
     this.applyAirflow()
-    this.applyCeilingLights()
     this.applyPeople()
     this.updateSelection()
   }
@@ -383,15 +375,6 @@ export class Viewer {
     const show = this.ui.showAirflow && this.ui.mode !== 'walk'
     this.furnitureGroup.traverse((o) => {
       if (o.userData.airflow) o.visible = show
-    })
-  }
-
-  /** 天花板燈光規劃：漫遊、平面圖、或牆面拉到全高時才顯示（牆切低的時候不要浮在半空中） */
-  applyCeilingLights() {
-    const H = this.design.ceilingHeight
-    const show = this.ui.mode !== 'orbit' || Math.min(this.ui.wallCut, H) >= H - 5
-    this.furnitureGroup.traverse((o) => {
-      if (o.userData.ceilingLight) o.visible = show
     })
   }
 

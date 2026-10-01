@@ -844,6 +844,17 @@ function wallshelf(g: G, it: FurnitureItem) {
   }
 }
 
+/** 壓克力附蓋抽屜盒（無印 2 層）：上層掀蓋放手錶、下層抽屜放飾品，透明看得到裡面 */
+function jewelrybox(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const acrylic = new THREE.MeshStandardMaterial({ color: '#eef3f5', roughness: 0.05, transparent: true, opacity: 0.45 })
+  const velvet = mat('#8d8f92', 0.95)
+  bx(g, w - 1, 0.6, d - 1, 0, 0.3, 0, velvet)
+  bx(g, w - 1, 0.6, d - 1, 0, h * 0.5, 0, velvet)
+  for (const x of [-w / 4, w / 4]) cyl(g, 2, 2, 1, x, h * 0.5 + 0.6, 0, mat('#3a3a3d', 0.4, 0.5), 20)
+  bx(g, w, h, d, 0, 0, 0, acrylic)
+}
+
 /** 抽拉式分類垃圾桶（Hailo Tandem 這類）：鋁框上前後兩個桶（前面一般垃圾、後面回收），收在下櫃門片後面 */
 function pullbin(g: G, it: FurnitureItem) {
   const { w, d, h } = it
@@ -1093,6 +1104,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   mirrorcab,
   hiddendoor,
   wallshelf,
+  jewelrybox,
   person,
   coathooks,
   towerfan,

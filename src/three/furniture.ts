@@ -879,6 +879,12 @@ function towerfan(g: G, it: FurnitureItem) {
 /** 外套掛勾（MUJI 壁掛家具 三連掛鉤）：掛勾橫條在最上面，下面畫兩件掛著的外套；背面（-z）貼牆 */
 function coathooks(g: G, it: FurnitureItem) {
   const { w, d, h } = it
+  if (has(it, 'minihooks')) {
+    // 九宏 RD0481 可收折掛勾 × 3：收起來每個只有 2.4 × 7.3、凸出牆面 1.2（磁吸收合），一排、間距 13
+    const body = mat(it.color, 0.4)
+    for (let i = 0; i < 3; i++) bx(g, 2.4, h, d, (i - 1) * 13, 0, 0, body)
+    return
+  }
   if (has(it, 'foldhooks')) {
     // MUJI 壁掛家具 三連掛鉤 × 2（上排掛外套、下排掛包包）：掛勾平常收進板子裡，只剩 2.5 cm 厚的木板（板面上看得到掛勾的細縫）
     const z0 = -d / 2

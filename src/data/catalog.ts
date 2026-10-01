@@ -144,7 +144,7 @@ const seeds: Seed[] = [
   },
   // 外套掛勾：進門右手邊、沙發旁 45 公分寬的牆（輕隔間，加夾板補強）上下掛兩條 MUJI 壁掛家具三連掛鉤（橡木，44 × 2.5 × 10）：
   // 掛勾平常收進板子裡，要用才翻下來；上排掛勾約離地 170 掛外套，下排約 140 掛包包、圍巾
-  { id: 'coathooks', type: 'coathooks', name: '外套掛勾（MUJI 三連掛鉤 × 2，可收起）', x: 279, y: 57.5, rot: 270, w: 44, d: 18, h: 105, elev: 70, color: '#c9a57a', features: ['foldhooks'] },
+  { id: 'coathooks', type: 'coathooks', name: '外套掛勾（MUJI 三連掛鉤 × 2，可收起）', x: 286.5, y: 57.5, rot: 270, w: 44, d: 3, h: 40, elev: 135, color: '#c9a57a', features: ['foldhooks'] },
   // Dyson 直立式涼風扇（Purifier Cool TP11，高 105、底座 22）：三個房間各一台
   // 客廳這台靠牆放在咖啡櫃靠餐廳那一側（沙發那側只剩 5 公分），斜朝客廳、出風避開咖啡櫃；離次臥門約 28 公分
   { id: 'fan-living', type: 'towerfan', name: 'Dyson 直立式電扇（客廳）', x: 273, y: 431, rot: 250, w: 22, d: 22, h: 105, color: '#eef0f2' },

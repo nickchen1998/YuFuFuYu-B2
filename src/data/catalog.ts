@@ -187,8 +187,8 @@ const seeds: Seed[] = [
   // 最右邊（靠衣櫃那端）是掃地機器人的家：那格不做底板，櫃深加到 45（基座 40＋機器人不凸出），整座不做踢腳；前方淨空 80 以上
   { id: 'door-bed2', type: 'hiddendoor', name: '次臥門（建商附）', x: 304, y: 510, rot: 90, w: 80, d: 1.5, h: 210, color: '#f2efea', locked: true },
   // 行李箱櫃：接在書房矮櫃靠衣櫃那端（同高 90、同深 45、不做踢腳），兩格各一片門：登機箱 ×2、28 吋，都直立收好
-  { id: 'lugcab', type: 'cabinet', name: '行李箱櫃', x: 325.5, y: 162, rot: 90, w: 106, d: 45, h: 90, color: '#d9c2a0', features: ['noplinth'] },
-  { id: 'scab', type: 'cabinet', name: '書房矮櫃（文件・印表機・掃地機器人）', x: 325.5, y: 340, rot: 90, w: 250, d: 45, h: 90, color: '#d9c2a0', features: ['noplinth'] },
+  { id: 'lugcab', type: 'cabinet', name: '行李箱櫃', x: 325.5, y: 162, rot: 90, w: 106, d: 45, h: 90, color: '#d9c2a0', features: ['noplinth', 'edgepull'] },
+  { id: 'scab', type: 'cabinet', name: '書房矮櫃（文件・印表機・掃地機器人）', x: 325.5, y: 340, rot: 90, w: 250, d: 45, h: 90, color: '#d9c2a0', features: ['noplinth', 'edgepull'] },
   // 冷氣：窗戶上方，沿長邊往衣櫃方向吹，風從桌子側邊經過
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 395, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 

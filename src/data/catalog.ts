@@ -95,8 +95,6 @@ const seeds: Seed[] = [
   { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 128, color: '#efe9df', features: ['noplinth', 'edgepull'] },
   // L 型鞋櫃：鞋櫃（矮，128）＋右邊吸塵器高櫃，高櫃做滿到右邊牆壁（寬 48，不留縫）、頂天 300。
   // 下門收吸塵器（上緣和鞋櫃齊平 128），中門 3 層換季鞋、備品，最上面上櫃放鞋盒、雨具；冷氣往左移，和高櫃之間留 5 公分
-  // 手錶、飾品：鞋櫃上靠右、靠牆放一個無印壓克力附蓋抽屜盒（25.5 × 17 × 9.5），出門前順手戴；上面是洞洞板
-  { id: 'jewel', type: 'jewelrybox', name: '手錶・飾品收納盒（鞋櫃上）', x: 225, y: 12, rot: 0, w: 25.5, d: 17, h: 9.5, elev: 128, color: '#eef3f5' },
   { id: 'vaccab', type: 'cabinet', name: '吸塵器櫃＋上櫃（和鞋櫃組成 L 型，頂天）', x: 264, y: 17.5, rot: 0, w: 48, d: 35, h: 300, color: '#efe9df', features: ['noplinth', 'edgepull'] },
   { id: 'vacuum', type: 'vacuum', name: '吸塵器（收在櫃內）', x: 264, y: 17, rot: 0, w: 30, d: 25, h: 115, elev: 1.8, color: '#8a5cc2' },
   // 洞洞板：只在鞋櫃上方（右邊是吸塵器高櫃），IKEA SKÅDIS 76 × 56 一片橫放，離地 150～206（鑰匙、口罩掛在順手的高度）

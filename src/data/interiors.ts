@@ -74,7 +74,7 @@ export const seedInteriors: Record<string, CabinetInterior> = {
         cols: [
           {
             parts: [
-              // 手錶、飾品改放玄關鞋櫃上的壓克力盒（出門順手戴）；皮帶不多，和內搭放同一格
+              // 皮帶不多，和內搭放同一格
               P('drawer', 20, 'drawer', '運動內衣・運動襪・運動配件'),
               P('drawer', 20, 'drawer', '內搭・絲襪・皮帶'),
               P('pullrod', 125, 'door', '夏季襯衫・洋裝・薄外套（前後拉桿）'),

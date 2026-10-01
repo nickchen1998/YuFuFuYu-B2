@@ -90,7 +90,7 @@ type Seed = Omit<FurnitureItem, 'id' | 'elev'> & { id: string; elev?: number }
 // 住戶需求（2026-09）：兩人住；次臥當書房＋主要衣櫃＋按摩椅；主臥只放睡眠相關；
 // 訂製半島型中島餐桌（一端靠窗下的牆、兩張椅）；沙發對齊電視；鞋櫃右側留吸塵器；烘碗機（建商附）＋洗碗機（待確認改櫃）
 const seeds: Seed[] = [
-  // 客餐廳：電視、雙人沙發、茶几、地毯中心線對齊（y = 185）
+  // 客餐廳：電視、沙發、茶几中心線對齊（y = 185）；不鋪地毯
   // 鞋櫃落地（不懸浮、不做踢腳）：最下面一格開放放室內拖鞋，腳一踢就收進去；上緣 128 和旁邊的吸塵器櫃齊平，上面是洞洞板
   { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 128, color: '#efe9df', features: ['noplinth', 'edgepull'] },
   // L 型鞋櫃：鞋櫃（矮，128）＋右邊吸塵器高櫃（230）。高櫃下門收吸塵器（上緣和鞋櫃齊平 128），上門是上櫃放換季鞋、備品；
@@ -107,7 +107,6 @@ const seeds: Seed[] = [
   { id: 'grinder', type: 'grinder', name: '磨豆機', x: 276, y: 331, rot: 270, w: 13, d: 21, h: 27, elev: 90, color: '#2f3033' },
   { id: 'espresso', type: 'coffeemaker', name: '義式咖啡機', x: 268.5, y: 350, rot: 270, w: 15, d: 33, h: 31, elev: 90, color: '#c4c6c8' },
   { id: 'frother', type: 'frother', name: '奶泡機', x: 276, y: 370, rot: 270, w: 10.4, d: 10.4, h: 19, elev: 90, color: '#3a3a3d' },
-  { id: 'rug', type: 'rug', name: '地毯', x: 130, y: 185, rot: 90, w: 200, d: 150, h: 1, color: '#e0d6c4' },
   // 圓形小茶几（直徑 70、高 42，白橡木），離沙發約 38、離電視櫃約 50
   { id: 'coffee', type: 'coffeetable', name: '圓形小茶几', x: 125, y: 185, rot: 90, w: 70, d: 70, h: 42, color: '#c9a57a', features: ['round'] },
   // 電視櫃：實木美腿（錐形腳高 18，掃地機器人進得去），櫃體高 35，上緣 53 到壁掛電視下緣留 17

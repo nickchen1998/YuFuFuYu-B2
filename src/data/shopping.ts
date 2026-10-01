@@ -975,36 +975,6 @@ export const shopping: Record<string, ShopInfo> = {
       'hoi! 的源氏木語、Linsy 是網購、要自己組裝，組好後不能退，下單前先量好尺寸',
     ],
   },
-  rug: {
-    summary: '200 × 150 不是 IKEA 標準尺寸，可以選 155 × 220 或 133 × 195；短毛比較好吸、好清。',
-    specs: ['約 150 × 200（±10）', '毛長 ≤ 15 mm，方便吸塵器', '地磚或木地板要加止滑墊'],
-    picks: [
-      {
-        name: 'IKEA TIPHEDE 平織地毯 155 × 220',
-        detail: '100% 棉平織，可機洗 40°C；輕薄好收，夏天適用',
-        price: '約 NT$699（2026/09 IKEA）',
-        url: 'https://www.ikea.com.tw/zh/products/home-furnishing-rugs/rugs/tiphede-art-60470045',
-        source: 'IKEA',
-      },
-      {
-        name: 'IKEA STOENSE 短毛地毯 133 × 195',
-        rec: true,
-        detail: '短毛 15 mm，柔軟吸音；不可水洗，建議加 STOPP FILT 止滑墊',
-        price: '約 NT$2,499（2026/09 IKEA）',
-        url: 'https://www.ikea.com.tw/zh/products/home-furnishing-rugs/rugs/stoense-art-20427006',
-        source: 'IKEA',
-      },
-      {
-        name: 'IKEA PELARKÖRSBÄR 短毛地毯 160 × 230',
-        detail: '短毛 14 mm，米色葉紋，可以蓋到沙發前腳；不可水洗',
-        price: '約 NT$5,499（2026/09 IKEA）',
-        url: 'https://www.ikea.com.tw/zh/products/home-furnishing-rugs/rugs/pelarkorsbar-art-70625773',
-        source: 'IKEA',
-      },
-    ],
-    search: ['地毯 150x200', '短毛地毯 140x200', '可機洗地毯 150x200'],
-    notes: ['地毯前緣壓進沙發前腳 10～20 cm，看起來比較整齊'],
-  },
   tv: {
     summary: '180 cm 看 55 吋 4K 剛好；白天光線強選 Mini LED，晚上看片選 OLED。',
     specs: [

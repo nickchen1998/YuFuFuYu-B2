@@ -120,14 +120,14 @@ const seeds: Seed[] = [
   { id: 'fridge', type: 'fridge', name: '冰箱（六門）', x: 35, y: 414, rot: 90, w: 65, d: 70, h: 185, color: '#d4d8dc', features: ['sixdoor'] },
   // 訂製中島餐桌（半島型，一件式）：一端靠窗下的牆，檯面連續高 76（壓在窗台 80 下）。
   // 靠窗 99 公分是收納（朝廚房嵌微波爐＋電子鍋抽拉層板＋抽屜，另一側電鍋、氣炸鍋抽拉層板＋門片櫃，見 interiors.ts），
-  // 往室內 71 公分是餐桌（兩人面對面，一側一張），總長 170；圖上是椅子收進桌下的樣子；
+  // 往室內 106 公分是餐桌（兩人面對面，一側一張；比一人寬多一半，腳比較好伸），總長 205；圖上是椅子收進桌下的樣子；
   // 收起時廚房側走道 60、次臥門與陽台門側走道 68；瓦斯爐前站位 65
   {
-    id: 'dining', type: 'peninsula', name: '訂製中島餐桌', x: 170, y: 580, rot: 90, w: 170, d: 90, h: 76,
+    id: 'dining', type: 'peninsula', name: '訂製中島餐桌', x: 170, y: 562.5, rot: 90, w: 205, d: 90, h: 76,
     color: '#efe9df', features: ['outlets', 'woodtop'],
   },
-  { id: 'dchair1', type: 'chair', name: '餐椅', x: 145, y: 533, rot: 90, w: 45, d: 50, h: 85, color: '#c49a6c' },
-  { id: 'dchair2', type: 'chair', name: '餐椅', x: 195, y: 533, rot: 270, w: 45, d: 50, h: 85, color: '#c49a6c' },
+  { id: 'dchair1', type: 'chair', name: '餐椅', x: 145, y: 515, rot: 90, w: 45, d: 50, h: 85, color: '#c49a6c' },
+  { id: 'dchair2', type: 'chair', name: '餐椅', x: 195, y: 515, rot: 270, w: 45, d: 50, h: 85, color: '#c49a6c' },
   // 電鍋、氣炸鍋收在中島走道側的抽拉開放層板上（離地約 39.5），用的時候拉出來；
   // 氣炸鍋橫放（走道側淨深只有 29），炸籃朝餐桌那頭
   { id: 'rice', type: 'ricecooker', name: '電鍋（抽拉層板）', x: 198.5, y: 639.8, rot: 90, w: 31, d: 26, h: 26, elev: 39.5, color: '#e9e4da' },

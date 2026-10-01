@@ -48,11 +48,12 @@ export const frontKinds: { id: FrontKind; name: string }[] = [
 ]
 
 /** 格子 helper：P('hang', 140, 'door', '長大衣') */
-export function P(kind: PartKind, h?: number | null, front: FrontKind = 'door', label?: string, split?: boolean): CabinetPart {
+export function P(kind: PartKind, h?: number | null, front: FrontKind = 'door', label?: string, split?: boolean, single?: boolean): CabinetPart {
   const p: CabinetPart = { kind, front }
   if (h != null) p.h = h
   if (label) p.label = label
   if (split) p.split = true
+  if (single) p.single = true
   return p
 }
 
@@ -203,9 +204,11 @@ export function frontPieces(fl: FaceLayout): FrontPiece[] {
     for (const p of c.parts) {
       if (p.part.front === 'door' || p.part.front === 'glass') {
         const kind = p.part.front
-        if (cur && cur.kind === kind && !p.part.split) cur.parts.push(p.i)
-        else {
-          cur = { kind, col: c.i, parts: [p.i], leaves, hinge }
+        if (cur && cur.kind === kind && !p.part.split) {
+          cur.parts.push(p.i)
+          if (p.part.single) cur.leaves = 1
+        } else {
+          cur = { kind, col: c.i, parts: [p.i], leaves: p.part.single ? 1 : leaves, hinge }
           out.push(cur)
         }
       } else {

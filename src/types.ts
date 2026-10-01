@@ -102,6 +102,8 @@ export interface CabinetPart {
   label?: string
   /** 門片和下面那一格分開（例如上櫃另外一扇短門） */
   split?: boolean
+  /** 單開門：欄寬超過雙開門的門檻也只做一扇 */
+  single?: boolean
 }
 
 export interface CabinetColumn {

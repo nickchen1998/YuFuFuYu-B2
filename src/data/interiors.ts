@@ -66,7 +66,8 @@ export const seedInteriors: Record<string, CabinetInterior> = {
 
   // 主臥薄衣櫃 135 × 45 × 300：放夏天衣物、運動服、睡衣和每天用的；深度 45 吊不下一般衣架，改用前後拉桿。
   // 兩欄各約 65 淨寬、對開門（每扇約 34 寬，開門不會卡到床頭櫃）。
-  // 每天拿的都在 50～180 公分（154 公分的人也拿得到）；拉桿頂端約 176；180 以上放包包帽子，228 以上的上櫃放主臥床的寢具
+  // 每天拿的都在 50～180 公分（154 公分的人也拿得到）；拉桿頂端約 176；180 以上放包包帽子，228 以上的上櫃放主臥床的寢具；
+  // 上櫃每欄一扇單開門（左欄鉸鏈在左、右欄鉸鏈在右，把手都在中間）
   mward: {
     faces: [
       {
@@ -77,7 +78,7 @@ export const seedInteriors: Record<string, CabinetInterior> = {
               P('drawer', 20, 'drawer', '襪子'),
               P('pullrod', 125, 'door', '夏季襯衫・洋裝・薄外套（前後拉桿）'),
               P('shelf', null, 'door', '常用包包・遮陽帽'),
-              P('storage', 70, 'door', '上櫃：主臥夏被・涼被', true),
+              P('storage', 70, 'door', '上櫃：主臥夏被・涼被', true, true),
             ],
           },
           {
@@ -89,7 +90,7 @@ export const seedInteriors: Record<string, CabinetInterior> = {
               P('shelf', null, 'door', '夏季 T 恤・上衣'),
               P('shelf', null, 'door', '夏季短褲・薄長褲（摺疊）'),
               P('shelf', null, 'door', '明天要穿的'),
-              P('storage', 70, 'door', '上櫃：主臥備用床單・枕頭', true),
+              P('storage', 70, 'door', '上櫃：主臥備用床單・枕頭', true, true),
             ],
           },
         ],

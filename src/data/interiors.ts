@@ -109,7 +109,8 @@ export const seedInteriors: Record<string, CabinetInterior> = {
   },
 
   // 吸塵器收納櫃 36 × 35 × 128（落地、沒有踢腳）：單門，裡面放直立吸塵器＋充電座，背板預留插座、門片或側板開通風孔
-  // 吸塵器高櫃 36 × 35 × 230（和鞋櫃組成 L 型）：下門收吸塵器（淨高 124，上緣和鞋櫃齊平），上門 3 層放換季鞋、備品
+  // 吸塵器高櫃 48 × 35 × 300（和鞋櫃組成 L 型，做滿到右邊牆壁、頂天）：下門收吸塵器（淨高 124，上緣和鞋櫃齊平），
+  // 中門 3 層放換季鞋、備品，最上面上櫃（要踩椅子）放不常用的鞋盒、雨具
   vaccab: {
     faces: [
       {
@@ -120,6 +121,7 @@ export const seedInteriors: Record<string, CabinetInterior> = {
               P('shelf', null, 'door', '換季鞋', true),
               P('shelf', null, 'door', '換季鞋・靴子'),
               P('shelf', null, 'door', '鞋油・鞋撐・口罩備品'),
+              P('storage', 70, 'door', '上櫃：鞋盒・雨具・不常用的備品', true),
             ],
           },
         ],

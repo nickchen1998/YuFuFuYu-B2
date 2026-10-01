@@ -93,10 +93,10 @@ const seeds: Seed[] = [
   // 客餐廳：電視、沙發、茶几中心線對齊（y = 185）；不鋪地毯
   // 鞋櫃落地（不懸浮、不做踢腳）：最下面一格開放放室內拖鞋，腳一踢就收進去；上緣 128 和旁邊的吸塵器櫃齊平，上面是洞洞板
   { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 128, color: '#efe9df', features: ['noplinth', 'edgepull'] },
-  // L 型鞋櫃：鞋櫃（矮，128）＋右邊吸塵器高櫃（230）。高櫃下門收吸塵器（上緣和鞋櫃齊平 128），上門是上櫃放換季鞋、備品；
-  // 頂在 230，冷氣底部 250，留 20 公分不擋冷氣（不做到頂）
-  { id: 'vaccab', type: 'cabinet', name: '吸塵器櫃＋上櫃（和鞋櫃組成 L 型）', x: 259, y: 17.5, rot: 0, w: 36, d: 35, h: 230, color: '#efe9df', features: ['noplinth', 'edgepull'] },
-  { id: 'vacuum', type: 'vacuum', name: '吸塵器（收在櫃內）', x: 259, y: 17, rot: 0, w: 30, d: 25, h: 115, elev: 1.8, color: '#8a5cc2' },
+  // L 型鞋櫃：鞋櫃（矮，128）＋右邊吸塵器高櫃，高櫃做滿到右邊牆壁（寬 48，不留縫）、頂天 300。
+  // 下門收吸塵器（上緣和鞋櫃齊平 128），中門 3 層換季鞋、備品，最上面上櫃放鞋盒、雨具；冷氣往左移，和高櫃之間留 5 公分
+  { id: 'vaccab', type: 'cabinet', name: '吸塵器櫃＋上櫃（和鞋櫃組成 L 型，頂天）', x: 264, y: 17.5, rot: 0, w: 48, d: 35, h: 300, color: '#efe9df', features: ['noplinth', 'edgepull'] },
+  { id: 'vacuum', type: 'vacuum', name: '吸塵器（收在櫃內）', x: 264, y: 17, rot: 0, w: 30, d: 25, h: 115, elev: 1.8, color: '#8a5cc2' },
   // 洞洞板：只在鞋櫃上方（右邊是吸塵器高櫃），IKEA SKÅDIS 76 × 56 一片橫放，離地 150～206（鑰匙、口罩掛在順手的高度）
   { id: 'pegboard', type: 'pegboard', name: '洞洞板', x: 200, y: 1, rot: 0, w: 76, d: 2, h: 56, elev: 150, color: '#f4f1ea' },
   { id: 'sofa', type: 'sofa', name: '三人沙發', x: 243, y: 185, rot: 270, w: 210, d: 90, h: 80, color: '#cfc4b2' },
@@ -152,8 +152,8 @@ const seeds: Seed[] = [
   // 身高參考：184 與 154 公分的人，站在電視區和冰箱之間，看人和家具的高低比例（不是家具）
   { id: 'person184', type: 'person', name: '身高參考 184 公分', x: 95, y: 315, rot: 0, w: 46, d: 26, h: 184, color: '#5f7488' },
   { id: 'person154', type: 'person', name: '身高參考 154 公分', x: 150, y: 315, rot: 0, w: 38, d: 22, h: 154, color: '#c9a98a' },
-  // 冷氣：鞋櫃上方，沿長邊往廚房吹（冷媒管需經天花板接回冷氣平台，約 7 米）
-  { id: 'ac-living', type: 'acindoor', name: '冷氣（客餐廳）', x: 200, y: 12.5, rot: 0, w: 90, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
+  // 冷氣：鞋櫃上方，沿長邊往廚房吹（冷媒管需經天花板接回冷氣平台，約 7 米）；右邊是頂天高櫃，往左移 10 公分留 5 公分側邊空間
+  { id: 'ac-living', type: 'acindoor', name: '冷氣（客餐廳）', x: 190, y: 12.5, rot: 0, w: 90, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
   // 主臥：加大雙人床 6 尺床頭靠左牆，兩側 30 公分床頭櫃（買現成的，靠窗那側只有 30 寬）；上牆左段是 45 公分深的薄型衣櫃（對開窄門，前方留 52 公分）
   { id: 'mbed', type: 'bed', name: '加大雙人床 6尺', x: -186.5, y: 478.5, rot: 90, w: 182, d: 200, h: 100, color: '#ece6da' },

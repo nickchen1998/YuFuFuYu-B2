@@ -233,6 +233,20 @@ export function buildWalls(opts: WallBuildOptions): THREE.Group {
       else if (o.kind === 'pocket') buildPocketDoor(group, w, o, T, opts.cut, opts.doorsOpen)
       else buildWindow(group, w, o, T, opts.cut)
     }
+
+    // 電燈開關：牆面上一片小白面板＋按鍵（被牆面切掉的高度就不畫）
+    for (const sw of w.switches ?? []) {
+      if (sw.height + 6 > opts.cut) continue
+      const [px, pz] = along(w, sw.offset)
+      const n = sw.side === 'b' ? 1 : -1
+      const at = (d: number): [number, number] => (horizontal ? [px, pz + n * d] : [px + n * d, pz])
+      const [ax, az] = at(T / 2 + 0.4)
+      const plate = addBox(group, horizontal ? 7 : 0.8, 12, horizontal ? 0.8 : 7, ax, sw.height - 6, az, mat('#f7f6f2', 0.4))
+      plate.raycast = noRaycast
+      const [kx, kz] = at(T / 2 + 1)
+      const key = addBox(group, horizontal ? 4 : 0.6, 6, horizontal ? 0.6 : 4, kx, sw.height - 3, kz, mat('#e3e0d9', 0.4))
+      key.raycast = noRaycast
+    }
   }
   return group
 }

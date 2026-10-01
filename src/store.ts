@@ -5,7 +5,7 @@ import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 69
+const REV = 70
 /**
  * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
  * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
@@ -153,6 +153,8 @@ const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   [68, ['scab'], ['name', 'h', 'interior']],
   // rev 69：外套掛勾改九宏 RD0481 可收折掛勾 × 3（一排）
   [69, ['coathooks'], ['name', 'x', 'w', 'd', 'h', 'elev', 'color', 'features']],
+  // rev 70：次臥書櫃回到上一步（矮櫃 90，房門口的電燈開關不被擋住）
+  [70, ['scab'], ['name', 'h', 'interior']],
   [25, ['shoe', 'sofa', 'coffeebar', 'rug', 'coffee', 'tvstand', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'mbed', 'mns1', 'mns2', 'mward', 'bward1', 'scab', 'vanity', 'vanity2'], ['color']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */

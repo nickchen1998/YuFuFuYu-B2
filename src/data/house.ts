@@ -64,6 +64,8 @@ export const walls: Wall[] = [
     openings: [
       { id: 'master-door', kind: 'door', offset: 35.5, width: 80, sill: 0, height: 210, hinge: 'start', swing: 'a', label: '主臥門', hidden: true },
     ],
+    // 主臥電燈開關：房門口門把那側（主臥裡面），離地約 120
+    switches: [{ offset: 127.5, side: 'a', height: 120, label: '主臥電燈開關' }],
   },
   { id: 'part-ac-living', x1: -15, y1: 607, x2: 0, y2: 700 },
 
@@ -103,6 +105,8 @@ export const walls: Wall[] = [
     openings: [
       { id: 'bed2-door', kind: 'door', offset: 470, width: 80, sill: 0, height: 210, hinge: 'end', swing: 'b', label: '次臥門' },
     ],
+    // 次臥電燈開關：房門口門把那側（次臥裡面），離地約 120，在書房矮櫃（高 90）正上方，矮櫃不要加高擋住
+    switches: [{ offset: 458, side: 'b', height: 120, label: '次臥電燈開關' }],
   },
   // 客餐廳 / 工作陽台（延伸到陽台外緣）：陽台門在瓦斯爐正對面，往陽台外開
   {

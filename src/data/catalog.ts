@@ -183,10 +183,10 @@ const seeds: Seed[] = [
   { id: 'bchair1', type: 'chair', name: '辦公椅', x: 452, y: 340, rot: 90, w: 50, d: 50, h: 100, color: '#5b5f63' },
   { id: 'bchair2', type: 'chair', name: '辦公椅', x: 452, y: 460, rot: 90, w: 50, d: 50, h: 100, color: '#5b5f63' },
   // 椅子背後（靠客廳的輕隔間）：矮櫃放文件、線材、印表機（落地，高 90）；到次臥門前 5 公分為止、避開按摩椅前方。
-  // 原本 210 的書櫃太高，改成整座 150（下段 90 維持原本的矮櫃，上段兩層放書、展示、3C 備品），不做到頂。
+  // 上方書櫃先拿掉（住戶覺得太高），之後再決定。
   // 最右邊（靠衣櫃那端）是掃地機器人的家：那格不做底板，櫃深加到 45（基座 40＋機器人不凸出），整座不做踢腳；前方淨空 80 以上
   { id: 'door-bed2', type: 'hiddendoor', name: '次臥門（建商附）', x: 304, y: 510, rot: 90, w: 80, d: 1.5, h: 210, color: '#f2efea', locked: true },
-  { id: 'scab', type: 'cabinet', name: '書房書櫃（文件・印表機・書・掃地機器人）', x: 325.5, y: 340, rot: 90, w: 250, d: 45, h: 150, color: '#d9c2a0', features: ['noplinth'] },
+  { id: 'scab', type: 'cabinet', name: '書房矮櫃（文件・印表機・掃地機器人）', x: 325.5, y: 340, rot: 90, w: 250, d: 45, h: 90, color: '#d9c2a0', features: ['noplinth'] },
   // 冷氣：窗戶上方，沿長邊往衣櫃方向吹，風從桌子側邊經過
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 395, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 

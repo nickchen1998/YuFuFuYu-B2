@@ -193,51 +193,29 @@ export const seedInteriors: Record<string, CabinetInterior> = {
     ],
   },
 
-  // 次臥書房：椅子背後的書櫃 250 × 45 × 150（下段文件、線材、印表機、掃地機器人；上段書、展示、3C 備品），避開按摩椅前方
+  // 次臥書房：椅子背後的矮櫃 250 × 45 × 90（文件、線材、印表機、掃地機器人），避開按摩椅前方
   scab: {
     faces: [
       {
         cols: [
-          // 下段（離地 0～90）維持原本的東西；上段（90～150）兩層，每層淨高約 28，櫃深 45：書可以前後兩排，或前面放書、後面放收納盒
-          // 靠次臥門那欄：印表機上面放常看的書，最上層收納盒
-          {
-            w: 55,
-            parts: [
-              P('storage', 30, 'open', '紙張・碳粉'),
-              P('appliance', 54.6, 'open', '印表機・路由器（預留插座、網路孔）'),
-              P('books', 28.2, 'open', '常看的書・雜誌'),
-              P('storage', null, 'open', '收納盒：相簿・紀念品'),
-            ],
-          },
+          { w: 55, parts: [P('storage', 30, 'open', '紙張・碳粉'), P('appliance', null, 'open', '印表機・路由器（預留插座、網路孔）')] },
           {
             w: 50,
             parts: [
-              P('drawer', 20.25, 'drawer', '雜物'),
-              P('drawer', 20.25, 'drawer', '工具'),
-              P('drawer', 20.25, 'drawer', '充電線・轉接頭'),
-              P('drawer', 20.25, 'drawer', '文具'),
-              P('books', 28.2, 'open', '書'),
-              P('books', null, 'open', '書'),
+              P('drawer', null, 'drawer', '雜物'),
+              P('drawer', null, 'drawer', '工具'),
+              P('drawer', null, 'drawer', '充電線・轉接頭'),
+              P('drawer', null, 'drawer', '文具'),
             ],
           },
-          {
-            parts: [
-              P('shelf', 42.3, 'door', '文件・說明書・線材收納盒'),
-              P('shelf', 42.3, 'door', 'A4 文件夾（直立）'),
-              P('books', 28.2, 'open', '大開本・工具書'),
-              P('shelf', null, 'open', '展示：植物・相框・公仔'),
-            ],
-          },
+          { parts: [P('shelf', null, 'door', '文件・說明書・線材收納盒'), P('shelf', null, 'door', 'A4 文件夾（直立）')] },
           // 最右邊：掃地機器人的家（沒有底板，離地淨高約 56）＋上面一格放耗材；
-          // 一片長門從上面蓋到離地 12：看過去看不到基座，機器人從門下進出，開門就能倒集塵袋、加水。
-          // 上段另一片門：3C 備品、桌遊（門片收起來比較整齊）
+          // 一片長門從上面蓋到離地 12：看過去看不到基座，機器人從門下進出，開門就能倒集塵袋、加水
           {
             w: 58,
             parts: [
               P('robot', 54, 'door', '掃地機器人的家（DEEBOT mini 2 基座；門片下緣離地 12，機器人從門下進出）'),
-              P('storage', 30.6, 'door', '掃地機耗材：集塵袋・清潔液・備用刷'),
-              P('shelf', null, 'door', '3C 備品：耳機・行動電源・相機', true),
-              P('shelf', null, 'door', '桌遊・拼圖'),
+              P('storage', null, 'door', '掃地機耗材：集塵袋・清潔液・備用刷'),
             ],
           },
         ],

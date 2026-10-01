@@ -39,6 +39,16 @@ export interface Wall {
   height?: number
   style?: WallStyle
   openings?: Opening[]
+  /** 牆上的電燈開關 */
+  switches?: WallSwitch[]
+}
+
+/** 電燈開關：沿牆量起的位置、在牆的哪一面（a = 座標較小的那側、b = 較大的那側）、面板中心離地高度 */
+export interface WallSwitch {
+  offset: number
+  side: 'a' | 'b'
+  height: number
+  label?: string
 }
 
 export interface Room {

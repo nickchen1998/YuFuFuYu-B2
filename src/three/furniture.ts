@@ -391,7 +391,10 @@ function vanityNiche(g: G, it: FurnitureItem) {
   for (const z of [-9, 10]) for (const k of [0, 1]) bx(g, 11, 7, 18, nx, y0 + cabH / 2 + 0.9 + k * 7.2, z, paper)
 }
 
-/** 浴室鏡櫃：白色防水櫃體＋鏡門（寬 60 以上對開）；'openshelf' 時最下面一格開放層板 */
+/**
+ * 浴室鏡櫃：白色防水櫃體＋鏡門（寬 60 以上對開）；'openshelf' 時最下面一格開放層板；
+ * 'sideshelves' 時中間一扇 50 寬鏡門、左右各一欄開放層板（3 層）
+ */
 function mirrorcab(g: G, it: FurnitureItem) {
   const { w, d, h } = it
   const body = mat(it.color, 0.4)
@@ -400,6 +403,21 @@ function mirrorcab(g: G, it: FurnitureItem) {
   for (const sx of [-1, 1]) bx(g, 1.5, h, d - 2, sx * (w / 2 - 0.75), 0, -1, body)
   bx(g, w - 3, 1.5, d - 2, 0, 0, -1, body)
   bx(g, w - 3, 1.5, d - 2, 0, h - 1.5, -1, body)
+  if (has(it, 'sideshelves')) {
+    const mw = 50
+    const sw = (w - mw) / 2
+    for (const sx of [-1, 1]) {
+      bx(g, 1.5, h, d - 2, sx * (mw / 2 + 0.75), 0, -1, body)
+      const cx = sx * (mw / 2 + sw / 2)
+      for (const k of [1, 2]) bx(g, sw - 3, 1.2, d - 2, cx, (h * k) / 3, -1, body)
+      cyl(g, 3, 3, 10, cx, 1.5, -1, mat('#cfe0e6', 0.3), 16)
+      cyl(g, 2.2, 2.2, 15, cx, h / 3 + 1.2, -1, mat('#e8d9c4', 0.4), 16)
+      bx(g, sw - 8, 6, d - 6, cx, (h * 2) / 3 + 1.2, -1, mat('#efe9df', 0.6))
+    }
+    bx(g, mw - 0.4, h, 1.8, 0, 0, d / 2 - 0.9, body)
+    bx(g, mw - 1.6, h - 1.2, 0.3, 0, 0.6, d / 2 + 0.15, mirrorM)
+    return
+  }
   const shelfH = has(it, 'openshelf') ? Math.round(h * 0.22) : 0
   if (shelfH) {
     bx(g, w - 3, 1.5, d - 2, 0, shelfH, -1, body)

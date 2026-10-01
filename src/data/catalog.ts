@@ -214,9 +214,9 @@ const seeds: Seed[] = [
   // 主臥半套衛浴（固定設備）：馬桶 + 洗臉盆
   { id: 'toilet2', type: 'toilet', name: '馬桶', x: -216, y: 198.5, rot: 90, w: 40, d: 68, h: 76, color: '#f7f7f5', locked: true },
   { id: 'vanity2', type: 'vanity', name: '洗臉盆浴櫃（半套衛浴）', x: -39, y: 198.5, rot: 270, w: 70, d: 48, h: 85, color: '#efe9df', locked: true },
-  // 鏡櫃（半套）：大巨光 1450 50 × 14 × 60（上面單門鏡門、下面一格開放層板），對齊 51 寬的洗臉盆；離地 120～180；
-  // 鉸鏈在靠裡面那側（面對鏡子的左手邊），開門不擋門口
-  { id: 'mcab2', type: 'mirrorcab', name: '鏡櫃（半套衛浴）', x: -22, y: 198.5, rot: 270, w: 50, d: 14, h: 60, elev: 120, color: '#f4f3ef', features: ['openshelf'] },
+  // 鏡櫃（半套）：訂做 92 × 14 × 60，左右做滿到兩邊牆（廁所寬 93，兩邊各留 0.5 收邊）；中間一扇 50 寬單開鏡門對齊洗臉盆，
+  // 左右各約 21 寬開放層板 3 層（牙刷杯、洗手乳、保養品，通風好乾）；離地 120～180；鏡門鉸鏈在靠裡面那側
+  { id: 'mcab2', type: 'mirrorcab', name: '鏡櫃（半套衛浴・左右開放層板）', x: -22, y: 198.5, rot: 270, w: 92, d: 14, h: 60, elev: 120, color: '#f4f3ef', features: ['sideshelves'] },
 
   // 冷氣平台
   { id: 'ac1', type: 'acunit', name: '冷氣室外機', x: -196, y: 660, rot: 0, w: 85, d: 32, h: 60, color: '#e3e5e7', locked: true },

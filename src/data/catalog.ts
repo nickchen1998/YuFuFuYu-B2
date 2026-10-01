@@ -167,9 +167,6 @@ const seeds: Seed[] = [
   // 次臥門、半套衛浴拉門用建商原本的門（建商附，不列預算）。門片畫在牆上（跟著門的開關），這裡的項目放規格和估價
   { id: 'door-master', type: 'hiddendoor', name: '主臥門（隱形門）', x: -16, y: 328, rot: 90, w: 80, d: 1.5, h: 210, color: '#f2efea' },
   { id: 'door-wc', type: 'hiddendoor', name: '半套衛浴拉門（建商附）', x: -107.5, y: 244, rot: 0, w: 80, d: 1.5, h: 210, color: '#f2efea', locked: true },
-  // 全身鏡 40 × 150（IKEA NISSEDAL 白框）：鎖在主臥衣櫃右側板（朝房門那側，不對床、開門也不會擋到）；
-  // 離地 30～180：154 公分看得到腳、184 公分看得到頭頂；拿了衣服轉身就能照
-  { id: 'mirror', type: 'mirror', name: '全身鏡（衣櫃側板）', x: -150.25, y: 282.5, rot: 90, w: 40, d: 2.5, h: 150, elev: 30, color: '#f2f0eb' },
   // 冷氣：窗戶上方（窗外就是冷氣平台，管線最短）；導風板往上調，避免直吹床
   { id: 'ac-master', type: 'acindoor', name: '冷氣（主臥）', x: -130, y: 587, rot: 180, w: 85, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 

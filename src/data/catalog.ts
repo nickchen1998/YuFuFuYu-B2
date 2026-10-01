@@ -183,6 +183,12 @@ const seeds: Seed[] = [
   // 上方書櫃先拿掉（住戶覺得太高），之後再決定。
   // 最右邊（靠衣櫃那端）是掃地機器人的家：那格不做底板，櫃深加到 45（基座 40＋機器人不凸出），整座不做踢腳；前方淨空 80 以上
   { id: 'door-bed2', type: 'hiddendoor', name: '次臥門（建商附）', x: 304, y: 510, rot: 90, w: 80, d: 1.5, h: 210, color: '#f2efea', locked: true },
+  // 書房矮櫃上方的牆（輕隔間，加夾板補強）：衣櫃那端兩條浮動層板（IKEA LACK 190 × 26，白），上緣離地 125、165，
+  // 放書、植物、相框，也是視訊時的背景；印表機那段上方一塊 SKÅDIS 洞洞板（36 × 56，離地 135～191）收線材、耳機，
+  // 不擋到房門口的電燈開關（離地約 120）
+  { id: 'bshelf1', type: 'wallshelf', name: '浮動層板（書・植物）', x: 316, y: 310, rot: 90, w: 190, d: 26, h: 5, elev: 120, color: '#f4f2ee', features: ['books'] },
+  { id: 'bshelf2', type: 'wallshelf', name: '浮動層板（展示・相框）', x: 316, y: 310, rot: 90, w: 190, d: 26, h: 5, elev: 160, color: '#f4f2ee', features: ['display'] },
+  { id: 'pegboard2', type: 'pegboard', name: '洞洞板（線材・耳機）', x: 304, y: 428, rot: 90, w: 36, d: 2, h: 56, elev: 135, color: '#d2b48c', features: ['study'] },
   { id: 'scab', type: 'cabinet', name: '書房矮櫃（文件・印表機・掃地機器人）', x: 325.5, y: 340, rot: 90, w: 250, d: 45, h: 90, color: '#d9c2a0', features: ['noplinth', 'edgepull'] },
   // 冷氣：窗戶上方，沿長邊往衣櫃方向吹，風從桌子側邊經過
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 395, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },

@@ -43,6 +43,7 @@ const alias: Record<string, string> = {
   'fan-master': 'fan-living',
   'fan-bed2': 'fan-living',
   dchair2: 'dchair1',
+  bshelf2: 'bshelf1',
   bdesk2: 'bdesk1',
   bchair2: 'bchair1',
   mns2: 'mns1',
@@ -259,6 +260,52 @@ export const shopping: Record<string, ShopInfo> = {
       '網路設備格預留插座與網路孔，前面不裝門或改用格柵門',
       '懸空離地至少 12～15 cm（依掃地機高度）；櫃腳方案用可調腳＋踢腳板，較便宜',
     ],
+  },
+  bshelf1: {
+    summary:
+      '書房矮櫃上方衣櫃那段掛兩條浮動層板（隱藏托架，看不到支架）：下面那條放常看的書和植物，上面那條放相框、展示品；視訊開會時就是背景。',
+    specs: [
+      '190 × 26 × 5，白色，兩條上緣離地約 125、165（中間淨空約 35，一般書放得下）',
+      '從衣櫃那端做到印表機那段前面停，房門口的電燈開關旁邊留空',
+      '每條最多 15 kg：書不要放太滿，重的書放下面那條',
+    ],
+    picks: [
+      {
+        name: 'IKEA LACK 層板/層架 白色 190 × 26（302.821.83）× 2',
+        rec: true,
+        detail: '190 × 26 × 5；隱藏式懸掛支撐架；最大承重 15 kg；上牆螺絲另購',
+        price: '約 NT$890／條（2026/10 IKEA）',
+        url: 'https://www.ikea.com.tw/zh/products/storage/wall-shelves/lack-art-30282183',
+        source: 'IKEA',
+      },
+      {
+        name: 'IKEA LACK 層板/層架 染白橡木紋 110 × 26 × 2',
+        detail: '110 × 26 × 5；顏色比較接近矮櫃的木色；最大承重 10 kg；只有 110 長，層板會比較短',
+        price: '約 NT$599／條（2026/10 IKEA）',
+        url: 'https://www.ikea.com.tw/zh/products/sideboards/wall-shelves/lack-art-50418213',
+        source: 'IKEA',
+      },
+    ],
+    notes: [
+      '牆是輕隔間：趁隔間施工時在石膏板後面加夾板補強（離地約 110～180、寬 200），托架用木螺絲鎖進夾板',
+      '坐在升降桌前時層板在背後約 1 公尺，起身不會撞到頭',
+    ],
+  },
+  pegboard2: {
+    summary:
+      '書房矮櫃印表機那段上方掛一塊 SKÅDIS 洞洞板：小層板放行動電源和充電器，掛勾掛耳機，下面小籃子收線材；寬 36，不會擋到房門口的電燈開關。',
+    specs: ['36 × 56（直放），離地約 135～191', '開關在離地約 120、靠門那邊：洞洞板下緣和側邊都留空，掛的東西不要垂到開關前面'],
+    picks: [
+      {
+        name: 'IKEA SKÅDIS 收納壁板 木質 36 × 56',
+        rec: true,
+        detail: '纖維板、壓克力亮光漆；附牆面安裝桿，上牆螺絲另購；掛勾、層板、小籃子是 SKÅDIS 配件另外買',
+        price: '約 NT$399（2026/10 IKEA，原價 NT$499）',
+        url: 'https://www.ikea.com.tw/zh/products/wall-organisers/boards-and-wall-organisers/skadis-art-00347176',
+        source: 'IKEA',
+      },
+    ],
+    notes: ['和浮動層板一起加夾板補強'],
   },
   scab: {
     summary:

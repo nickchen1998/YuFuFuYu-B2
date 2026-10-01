@@ -654,6 +654,21 @@ function pegboard(g: G, it: FurnitureItem) {
   bx(g, w, h, d, 0, 0, 0, new THREE.MeshStandardMaterial({ color: it.color, map: tex, roughness: 0.75 }))
   const f = d / 2
   const wood = mat('#c49a6c', 0.6)
+  if (has(it, 'study')) {
+    // 書房洞洞板：小層板放行動電源、充電器，掛勾掛耳機，下面小籃子收線材
+    bx(g, w * 0.75, 1.5, 12, 0, h * 0.58, f + 6, wood)
+    bx(g, 8, 4, 6, -w * 0.15, h * 0.58 + 1.5, f + 6, mat('#2f3033', 0.5))
+    bx(g, 5, 4, 4, w * 0.2, h * 0.58 + 1.5, f + 5, mat('#f2f2f0', 0.5))
+    const hookY = h * 0.92
+    const hook = cyl(g, 0.5, 0.5, 6, -w * 0.2, hookY, f + 3, METAL(), 8)
+    hook.rotation.x = Math.PI / 2
+    const band = new THREE.Mesh(new THREE.TorusGeometry(8, 1.1, 8, 24, Math.PI), mat('#3a3a3d', 0.5))
+    band.position.set(-w * 0.2, hookY - 8.5, f + 5)
+    g.add(band)
+    for (const sx of [-1, 1]) bx(g, 4, 6, 3.5, -w * 0.2 + sx * 8, hookY - 15, f + 5, mat('#3a3a3d', 0.5))
+    bx(g, w * 0.6, 9, 9, 0, h * 0.12, f + 5, mat('#cfc8bb', 0.8))
+    return
+  }
   // 層板與小物
   bx(g, w * 0.4, 1.5, 14, -w * 0.22, h * 0.48, f + 7, wood)
   bx(g, 10, 12, 8, -w * 0.32, h * 0.48 + 1.5, f + 6, mat('#e8e2d8', 0.6))
@@ -801,6 +816,32 @@ function canisters(g: G, it: FurnitureItem) {
       cyl(g, r, r, h - 2.5, x, 0, z, mat(it.color, 0.35, 0.3), 28)
       cyl(g, r + 0.2, r + 0.2, 2.5, x, h - 2.5, z, mat(shadeHex(it.color, 0.45), 0.4, 0.3), 28)
     }
+}
+
+/** 浮動層板（隱藏托架鎖牆）：'books' 放一排書和植物，'display' 放相框、橫放的書和小植物 */
+const BOOK_COLORS = ['#8a5a44', '#3f4a5a', '#c9b48f', '#6c7a5a', '#a8443a', '#2f3033', '#d8d2c4', '#5b6f82']
+function wallshelf(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  bx(g, w, h, d, 0, 0, 0, mat(it.color, 0.5))
+  const pot = (x: number) => {
+    cyl(g, 5, 4, 10, x, h, 0, mat('#e8e2d8', 0.6), 16)
+    cyl(g, 7, 5, 12, x, h + 10, 0, mat('#6c8f5c', 0.9), 12)
+  }
+  if (has(it, 'books')) {
+    let x = -w / 2 + 8
+    for (let i = 0; i < 26; i++) {
+      const bw = 2.4 + (i % 3) * 0.8
+      bx(g, bw, 21 + ((i * 7) % 6), d * 0.7, x + bw / 2, h, -d * 0.1, mat(BOOK_COLORS[i % BOOK_COLORS.length], 0.8))
+      x += bw + 0.2
+    }
+    pot(w / 2 - 20)
+  }
+  if (has(it, 'display')) {
+    bx(g, 18, 23, 1.5, -w / 2 + 25, h, -d / 2 + 4, mat('#c9a77c', 0.6))
+    bx(g, 14, 18, 1.5, -w / 2 + 46, h, -d / 2 + 4, mat('#2f3033', 0.6))
+    for (let i = 0; i < 4; i++) bx(g, 22, 2.5, 16, -w * 0.05, h + i * 2.5, 0, mat(BOOK_COLORS[(i + 2) % BOOK_COLORS.length], 0.8))
+    pot(w / 2 - 30)
+  }
 }
 
 /** 抽拉式分類垃圾桶（Hailo Tandem 這類）：鋁框上前後兩個桶（前面一般垃圾、後面回收），收在下櫃門片後面 */
@@ -1051,6 +1092,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   pullbin,
   mirrorcab,
   hiddendoor,
+  wallshelf,
   person,
   coathooks,
   towerfan,

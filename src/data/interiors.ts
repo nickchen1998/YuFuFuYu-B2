@@ -46,15 +46,15 @@ export const seedInteriors: Record<string, CabinetInterior> = {
               P('storage', 70, 'open', '最上層：換季衣物'),
             ],
           },
-          // 最右邊剩下的窄格（約 20～30 寬）：層架做滿到右邊牆壁，放換季小物；燙衣板改收在工作陽台洗衣機旁
+          // 最右邊剩下的窄格（約 20～30 寬）：層架做滿到右邊牆壁，放換季小物；分層和旁邊 40 格一樣（下面 5 層等高、最上層 70），層板高度切齊；
+          // 燙衣板改收在工作陽台洗衣機旁
           {
             parts: [
               P('storage', null, 'open', '收納盒：備用衣架・防塵套'),
               P('shelf', null, 'open', '掛燙機（手持式）'),
               P('shelf', null, 'open', '換季帽子'),
               P('shelf', null, 'open', '圍巾・手套'),
-              P('shelf', null, 'open', '絲巾・領帶'),
-              P('shelf', null, 'open', '腰帶・襪子備品'),
+              P('shelf', null, 'open', '絲巾・領帶・腰帶'),
               P('storage', 70, 'open', '最上層：換季小物'),
             ],
           },

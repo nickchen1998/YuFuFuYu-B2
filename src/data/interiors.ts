@@ -74,8 +74,8 @@ export const seedInteriors: Record<string, CabinetInterior> = {
         cols: [
           {
             parts: [
-              P('drawer', 20, 'drawer', '內衣褲'),
-              P('drawer', 20, 'drawer', '襪子'),
+              P('drawer', 20, 'drawer', '皮帶・手錶・每天戴的飾品'),
+              P('drawer', 20, 'drawer', '運動內衣・運動襪'),
               P('pullrod', 125, 'door', '夏季襯衫・洋裝・薄外套（前後拉桿）'),
               P('shelf', null, 'door', '常用包包・遮陽帽'),
               P('storage', 70, 'door', '上櫃：主臥夏被・涼被', true, true),
@@ -83,13 +83,14 @@ export const seedInteriors: Record<string, CabinetInterior> = {
           },
           {
             parts: [
-              P('drawer', 20, 'drawer', '皮帶・手錶・每天戴的飾品'),
-              P('drawer', 20, 'drawer', '運動內衣・運動襪'),
+              // 洗澡前一次拿齊：內衣褲抽屜正上方就是毛巾，再上面睡衣
+              P('drawer', 20, 'drawer', '內衣褲'),
+              P('drawer', 20, 'drawer', '襪子'),
+              P('shelf', null, 'door', '毛巾・浴巾'),
               P('shelf', null, 'door', '睡衣・居家服'),
               P('shelf', null, 'door', '運動服・瑜珈服'),
               P('shelf', null, 'door', '夏季 T 恤・上衣'),
               P('shelf', null, 'door', '夏季短褲・薄長褲（摺疊）'),
-              P('shelf', null, 'door', '明天要穿的'),
               P('storage', 70, 'door', '上櫃：主臥備用床單・枕頭', true, true),
             ],
           },

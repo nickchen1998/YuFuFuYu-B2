@@ -206,12 +206,12 @@ const seeds: Seed[] = [
   { id: 'shower', type: 'shower', name: '淋浴間', x: -239.25, y: 70, rot: 0, w: 94.5, d: 140, h: 200, color: '#e8e8e6', locked: true },
   { id: 'door-bath', type: 'hiddendoor', name: '浴室門（隱形門）', x: -16, y: 42.5, rot: 90, w: 75, d: 1.5, h: 210, color: '#f2efea' },
   { id: 'toilet', type: 'toilet', name: '馬桶', x: -150, y: 106, rot: 180, w: 40, d: 68, h: 76, color: '#f7f7f5', locked: true },
-  // 全套衛浴洗手台：柯林斯 ST-R-80（盆 80 × 48、壁掛櫃高 60），靠右邊牆；朝馬桶那端（左邊）26.5 寬開放格放衛生紙，
-  // 正面和側面都拿得到，坐在馬桶上伸手就拿到（開放格離馬桶約 30）
-  { id: 'vanity', type: 'vanity', name: '洗臉盆浴櫃（全套衛浴・側邊開放格）', x: -60, y: 116, rot: 180, w: 80, d: 48, h: 85, color: '#efe9df', locked: true, features: ['sideniche'] },
-  // 鏡櫃（全套）：昊鑫 KLS-DR55 單門鏡櫃 55 × 15 × 80，置中在洗手台上方；離地 110～190（龍頭上方留空間，184 公分照得到頭頂）；
-  // 鉸鏈在靠牆那側（面對鏡子的左手邊），門往牆那邊開
-  { id: 'mcab1', type: 'mirrorcab', name: '鏡櫃（全套衛浴・單門）', x: -60, y: 132.5, rot: 180, w: 55, d: 15, h: 80, elev: 110, color: '#f4f3ef' },
+  // 全套衛浴洗手台：柯林斯 ST-R-80（盆 80 × 48、壁掛櫃高 60），貼緊右邊牆（不留難清潔的縫）；朝馬桶那端（左邊）26.5 寬開放格放衛生紙，
+  // 正面和側面都拿得到，坐在馬桶上伸手就拿到（開放格離馬桶約 35）
+  { id: 'vanity', type: 'vanity', name: '洗臉盆浴櫃（全套衛浴・側邊開放格）', x: -55, y: 116, rot: 180, w: 80, d: 48, h: 85, color: '#efe9df', locked: true, features: ['sideniche'] },
+  // 鏡櫃（全套）：訂做 80 × 15 × 80，左右和洗手台切齊（右邊也貼牆）；中間一扇 50 寬單開鏡門（鉸鏈在靠牆那側），
+  // 左右各約 15 寬開放層板 3 層補齊；離地 110～190（龍頭上方留空間，184 公分照得到頭頂）
+  { id: 'mcab1', type: 'mirrorcab', name: '鏡櫃（全套衛浴・左右開放層板）', x: -55, y: 132.5, rot: 180, w: 80, d: 15, h: 80, elev: 110, color: '#f4f3ef', features: ['sideshelves'] },
   // 主臥半套衛浴（固定設備）：馬桶 + 洗臉盆
   { id: 'toilet2', type: 'toilet', name: '馬桶', x: -216, y: 198.5, rot: 90, w: 40, d: 68, h: 76, color: '#f7f7f5', locked: true },
   // 洗臉盆照建議的和成 LCS4175（盆 51 × 41）畫，置中；兩邊各剩約 21 公分

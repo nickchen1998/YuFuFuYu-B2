@@ -879,6 +879,23 @@ function towerfan(g: G, it: FurnitureItem) {
 /** 外套掛勾（MUJI 壁掛家具 三連掛鉤）：掛勾橫條在最上面，下面畫兩件掛著的外套；背面（-z）貼牆 */
 function coathooks(g: G, it: FurnitureItem) {
   const { w, d, h } = it
+  if (has(it, 'foldhooks')) {
+    // MUJI 壁掛家具 三連掛鉤 × 2（上排掛外套、下排掛包包）：掛勾平常收進板子裡，只剩 2.5 cm 厚的木板；
+    // 上排左邊那支翻開、掛著一件外套
+    const z0 = -d / 2
+    const oak = mat(it.color, 0.55)
+    const slot = mat(shadeHex(it.color, 0.6), 0.6)
+    for (const top of [h, h - 30]) {
+      bx(g, w, 10, 2.5, 0, top - 10, z0 + 1.25, oak)
+      for (let i = 0; i < 3; i++) {
+        const x = -w / 2 + (w * (i + 0.5)) / 3
+        if (top === h && i === 0) bx(g, 1.6, 1.6, 6, x, top - 7, z0 + 5.5, oak)
+        else bx(g, 1.2, 7, 0.2, x, top - 8.5, z0 + 2.6, slot)
+      }
+    }
+    bx(g, 30, 92, 6, -w / 3, h - 100, z0 + 8, mat('#6d6a66', 0.95))
+    return
+  }
   if (has(it, 'ploga')) {
     // IKEA PLOGA 垂直掛鉤架：櫸木直條（高 60、上緣 = h）＋ 5 支和牆平行、可左右滑動的鋁桿
     const z0 = -d / 2

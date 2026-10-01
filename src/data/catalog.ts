@@ -102,6 +102,9 @@ const seeds: Seed[] = [
   { id: 'sofa', type: 'sofa', name: '三人沙發', x: 243, y: 185, rot: 270, w: 210, d: 90, h: 80, color: '#cfc4b2' },
   // 咖啡櫃（零食櫃）：沙發旁、與冰箱斜對面；90 公分高的矮櫃，檯面上方牆面兩組雙連插座
   { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃＋馬克杯展示）', x: 268, y: 355, rot: 270, w: 120, d: 40, h: 90, color: '#d9c2a0', features: ['outlets', 'edgepull'] },
+  // 咖啡櫃上方不做櫃子：牆上掛一塊 SKÅDIS 洞洞板（76 × 56 白，離地 140～196），只放摔不壞的：手沖濾杯、咖啡秤、拉花杯、清潔刷、擦布；
+  // 下緣離檯面 50，咖啡機水箱、磨豆機豆倉往上拿不會卡到，下面的插座也不擋
+  { id: 'pegboard3', type: 'pegboard', name: '洞洞板（咖啡角）', x: 287, y: 355, rot: 270, w: 76, d: 2, h: 56, elev: 140, color: '#f4f1ea', features: ['coffee'] },
   // 咖啡櫃檯面（寬 120、深 40），面對咖啡櫃由左到右照沖煮順序：豆罐 ×4 → 磨豆機 → 義式咖啡機 → 奶泡機 → 右邊約 35 公分出杯區（下面就是馬克杯櫃）
   { id: 'beans', type: 'canisters', name: '咖啡豆密封罐 ×4', x: 275.5, y: 309, rot: 270, w: 23, d: 23, h: 12.5, elev: 90, color: '#e3e5e2' },
   { id: 'grinder', type: 'grinder', name: '磨豆機', x: 276, y: 331, rot: 270, w: 13, d: 21, h: 27, elev: 90, color: '#2f3033' },

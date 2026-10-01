@@ -672,6 +672,21 @@ function pegboard(g: G, it: FurnitureItem) {
   bx(g, w, h, d, 0, 0, 0, new THREE.MeshStandardMaterial({ color: it.color, map: tex, roughness: 0.75 }))
   const f = d / 2
   const wood = mat('#c49a6c', 0.6)
+  if (has(it, 'coffee')) {
+    // 咖啡角洞洞板：小層板放手沖濾杯、咖啡秤，掛勾掛不鏽鋼拉花杯、清潔刷、擦布（都是摔不壞的）
+    bx(g, w * 0.45, 1.5, 12, -w * 0.2, h * 0.42, f + 6, wood)
+    bx(g, 13, 2, 11, -w * 0.3, h * 0.42 + 1.5, f + 6, mat('#2f3033', 0.4))
+    cyl(g, 5.5, 3, 7, -w * 0.08, h * 0.42 + 1.5, f + 6, mat('#f2f2f0', 0.5), 18)
+    const hy = h * 0.88
+    for (const hx of [w * 0.12, w * 0.25, w * 0.38]) {
+      const hk = cyl(g, 0.5, 0.5, 6, hx, hy, f + 3, METAL(), 8)
+      hk.rotation.x = Math.PI / 2
+    }
+    cyl(g, 4, 4.5, 11, w * 0.12, hy - 13, f + 5, mat('#c9ccd0', 0.25, 0.8), 18)
+    bx(g, 2, 14, 1, w * 0.25, hy - 15, f + 3.5, mat('#8a6a4f', 0.6))
+    bx(g, 12, 18, 0.6, w * 0.38, hy - 19, f + 3.5, mat('#e8e2d8', 0.9))
+    return
+  }
   if (has(it, 'study')) {
     // 書房洞洞板：小層板放行動電源、充電器，掛勾掛耳機，下面小籃子收線材
     bx(g, w * 0.75, 1.5, 12, 0, h * 0.58, f + 6, wood)

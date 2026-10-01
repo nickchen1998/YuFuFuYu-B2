@@ -197,8 +197,8 @@ export function frontPieces(fl: FaceLayout): FrontPiece[] {
   const out: FrontPiece[] = []
   for (const c of fl.cols) {
     const leaves = c.w > DOUBLE_DOOR_OVER ? 2 : 1
-    // 相鄰兩欄的單門成對打開（把手在中間）
-    const hinge: 'l' | 'r' = fl.cols.length > 1 && c.i % 2 === 1 ? 'r' : 'l'
+    // 相鄰兩欄的單門成對打開（把手在中間）；最右欄的門鉸鏈一律在右（把手朝內，例如中間開放、左右門片）
+    const hinge: 'l' | 'r' = fl.cols.length > 1 && (c.i % 2 === 1 || c.i === fl.cols.length - 1) ? 'r' : 'l'
     let cur: FrontPiece | null = null
     for (const p of c.parts) {
       if (p.part.front === 'door' || p.part.front === 'glass') {

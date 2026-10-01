@@ -135,14 +135,15 @@ export const seedInteriors: Record<string, CabinetInterior> = {
     ],
   },
 
-  // 電視櫃 180 × 40 × 50：左邊開放放網路設備（遙控器訊號、散熱），中間抽屜，右邊門片
+  // 電視櫃 180 × 40 × 53（美腿）：中間開放格放網路設備、遊戲機（在電視正下方，壁掛電視的線從這格走、遙控器訊號不擋、好散熱），
+  // 左右兩邊門片櫃（把手都在靠中間那側）；左邊門內上面一個內抽屜放遙控器電池
   tvstand: {
     faces: [
       {
         cols: [
-          { w: 55, parts: [P('appliance', null, 'open', 'Wi-Fi 分享器・遊戲機')] },
-          { parts: [P('drawer', null, 'drawer', '雜物'), P('drawer', null, 'drawer', '遙控器・電池')] },
-          { w: 55, parts: [P('shelf', null, 'door', '藥品・文件')] },
+          { w: 58, parts: [P('shelf', null, 'door', '雜物'), P('drawer', 12, 'door', '遙控器・電池（內抽屜）')] },
+          { parts: [P('appliance', null, 'open', 'Wi-Fi 分享器・遊戲機（電視線材從這格走）')] },
+          { w: 58, parts: [P('shelf', null, 'door', '藥品・文件')] },
         ],
       },
     ],

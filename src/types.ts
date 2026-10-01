@@ -50,6 +50,8 @@ export interface Room {
   y2: number
   floor: string
   outdoor?: boolean
+  /** 天花板另外規劃了燈光（嵌燈、燈溝），漫遊模式不畫預設的吸頂燈 */
+  plannedLights?: boolean
 }
 
 export interface FurnitureItem {

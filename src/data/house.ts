@@ -21,7 +21,7 @@ import type { Room, Wall } from '../types'
 export const CEILING_DEFAULT = 300
 
 export const rooms: Room[] = [
-  { id: 'living', name: '客餐廳・廚房', x1: 0, y1: 0, x2: 288, y2: 665, floor: 'white-oak' },
+  { id: 'living', name: '客餐廳・廚房', x1: 0, y1: 0, x2: 288, y2: 665, floor: 'white-oak', plannedLights: true },
   { id: 'master', name: '主臥室', x1: -286.5, y1: 260, x2: -15, y2: 599.5, floor: 'white-oak' },
   { id: 'bed2', name: '次臥室', x1: 303, y1: 0, x2: 544.5, y2: 554, floor: 'white-oak' },
   { id: 'bath', name: '衛浴（全套）', x1: -286.5, y1: 0, x2: -15, y2: 140, floor: 'bath-tile' },

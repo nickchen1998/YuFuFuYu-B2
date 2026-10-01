@@ -4,6 +4,7 @@ import { mat, glassMat, shadeHex } from './mats'
 import { hashStr } from './textures'
 import { interiorCabinet, peninsulaStorage } from './cabinet3d'
 import { PENINSULA_TOP, peninsulaStorageLen } from '../cabinet'
+import { lightPlans } from '../data/lighting'
 
 // 每個家具都在自己的座標系（公分）建模：
 //   原點 = 平面外框中心、地面；寬沿 x、深沿 z、正面朝 +z
@@ -817,6 +818,43 @@ function pullbin(g: G, it: FurnitureItem) {
   }
 }
 
+/**
+ * 天花板燈光規劃（平面座標見 data/lighting.ts）：深杯嵌燈＝平平的白色燈框＋暖光圓；懸浮燈溝＝貼著牆的暖光條，
+ * 底下一片淡淡的洗牆光。整組標 ceilingLight，只在漫遊、平面圖、牆面全高時顯示（Viewer.applyCeilingLights）
+ */
+let washMat: THREE.MeshBasicMaterial | undefined
+function lightplan(g: G, it: FurnitureItem) {
+  const plan = lightPlans[it.id]
+  if (!plan) return
+  const { h } = it
+  const glow = mat('#fff3dc', 0.4, 0, '#ffe9c4')
+  const trim = mat('#efede8', 0.4)
+  washMat ??= new THREE.MeshBasicMaterial({ color: '#ffe2b0', transparent: true, opacity: 0.16, depthWrite: false, side: THREE.DoubleSide })
+  const lx = (x: number) => x - it.x
+  const lz = (y: number) => y - it.y
+  for (const d of plan.downlights) {
+    cyl(g, 4.6, 4.6, 0.5, lx(d.x), h - 0.6, lz(d.y), trim, 24)
+    cyl(g, 3.2, 3.2, 0.5, lx(d.x), h - 0.9, lz(d.y), glow, 24)
+  }
+  for (const c of plan.coves) {
+    const len = Math.hypot(c.x2 - c.x1, c.y2 - c.y1)
+    const alongX = Math.abs(c.x2 - c.x1) > Math.abs(c.y2 - c.y1)
+    const cx = lx((c.x1 + c.x2) / 2)
+    const cz = lz((c.y1 + c.y2) / 2)
+    // 燈槽在牆和懸浮天花板邊緣之間（離牆 0～12）
+    const inward = alongX ? (c.y1 > it.y ? -6.5 : 6.5) : c.x1 > it.x ? -6.5 : 6.5
+    const sx = alongX ? cx : cx + inward
+    const sz = alongX ? cz + inward : cz
+    bx(g, alongX ? len : 12, 1, alongX ? 12 : len, sx, h - 1.2, sz, glow)
+    const wash = new THREE.Mesh(new THREE.PlaneGeometry(len, 45), washMat)
+    wash.position.set(alongX ? cx : cx + Math.sign(inward) * 0.6, h - 24, alongX ? cz + Math.sign(inward) * 0.6 : cz)
+    if (!alongX) wash.rotation.y = Math.PI / 2
+    wash.raycast = () => {}
+    g.add(wash)
+  }
+  g.traverse((o) => (o.userData.ceilingLight = true))
+}
+
 /** 隱形門（規劃項目）：門片由牆面那邊畫（會跟著門的開關），這裡只放一個透明的點選框 */
 let hitMat: THREE.MeshBasicMaterial | undefined
 function hiddendoor(g: G, it: FurnitureItem) {
@@ -1051,6 +1089,7 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   pullbin,
   mirrorcab,
   hiddendoor,
+  lightplan,
   person,
   coathooks,
   towerfan,

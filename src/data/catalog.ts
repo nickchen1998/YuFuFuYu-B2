@@ -206,6 +206,11 @@ const seeds: Seed[] = [
   { id: 'shower', type: 'shower', name: '淋浴間', x: -239.25, y: 70, rot: 0, w: 94.5, d: 140, h: 200, color: '#e8e8e6', locked: true },
   { id: 'door-bath', type: 'hiddendoor', name: '浴室門（隱形門）', x: -16, y: 42.5, rot: 90, w: 75, d: 1.5, h: 210, color: '#f2efea' },
   { id: 'toilet', type: 'toilet', name: '馬桶', x: -150, y: 106, rot: 180, w: 40, d: 68, h: 76, color: '#f7f7f5', locked: true },
+  // 全套衛浴毛巾：浴室門往裡開，打開時門片貼著門那端的牆（約 75 寬）；抽風機在乾區天花板，空氣從門下縫進來往抽風機走。
+  // 浴巾架（雙桿 60）掛在淋浴間玻璃和馬桶之間那面牆、開門掃不到的地方，桿子離地約 140，出淋浴間就拿得到，也在通風路線上乾得快；
+  // 擦手巾環掛在洗手台右邊牆（門框旁），離地約 95～125，毛巾不碰檯面、不擋門和鏡櫃
+  { id: 'towelbar1', type: 'towelbar', name: '浴巾架（全套衛浴・雙桿）', x: -155, y: 6, rot: 0, w: 60, d: 12, h: 40, elev: 105, color: '#c9ccd0' },
+  { id: 'towelring1', type: 'towelring', name: '擦手巾環（全套衛浴）', x: -20, y: 100, rot: 270, w: 16, d: 10, h: 30, elev: 95, color: '#c9ccd0' },
   // 全套衛浴洗手台：柯林斯 ST-R-80（盆 80 × 48、壁掛櫃高 60），貼緊右邊牆（不留難清潔的縫）；朝馬桶那端（左邊）26.5 寬開放格放衛生紙，
   // 正面和側面都拿得到，坐在馬桶上伸手就拿到（開放格離馬桶約 35）
   { id: 'vanity', type: 'vanity', name: '洗臉盆浴櫃（全套衛浴・側邊開放格）', x: -55, y: 116, rot: 180, w: 80, d: 48, h: 85, color: '#efe9df', locked: true, features: ['sideniche'] },

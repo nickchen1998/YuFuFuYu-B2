@@ -5,7 +5,7 @@ import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 93
+const REV = 94
 /**
  * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
  * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
@@ -209,6 +209,8 @@ const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   // rev 93：全套衛浴洗手台貼牆；鏡櫃改和洗手台同寬 80（中間鏡門、左右開放層板）
   [93, ['vanity'], ['x']],
   [93, ['mcab1'], ['name', 'x', 'w', 'd', 'h', 'elev', 'features']],
+  // rev 94：全套衛浴加浴巾架（雙桿）和擦手巾環
+  [94, ['towelbar1', 'towelring1']],
   [25, ['shoe', 'sofa', 'coffeebar', 'rug', 'coffee', 'tvstand', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'mbed', 'mns1', 'mns2', 'mward', 'bward1', 'scab', 'vanity', 'vanity2'], ['color']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */

@@ -877,6 +877,34 @@ function wallshelf(g: G, it: FurnitureItem) {
   }
 }
 
+/** 浴巾架（雙桿，鎖牆）：兩支桿子＋掛著的浴巾，正面朝 +z */
+function towelbar(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const z0 = -d / 2
+  const metal = mat('#c9ccd0', 0.3, 0.8)
+  for (const sx of [-1, 1]) bx(g, 2, 3, 12, sx * (w / 2 - 1), h - 4, z0 + 6, metal)
+  for (const zz of [4, 10]) {
+    const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, w - 2, 12), metal)
+    rod.rotation.z = Math.PI / 2
+    rod.position.set(0, h - 2.5, z0 + zz)
+    g.add(rod)
+  }
+  bx(g, w * 0.42, h - 4, 1.2, -w * 0.22, 0, z0 + 4, mat('#e9e4da', 0.95))
+  bx(g, w * 0.42, h - 6, 1.2, w * 0.22, 2, z0 + 10, mat('#c9d3d6', 0.95))
+}
+
+/** 擦手巾環：牆上一個圓環＋掛著的小毛巾，正面朝 +z */
+function towelring(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  const z0 = -d / 2
+  const metal = mat('#c9ccd0', 0.3, 0.8)
+  bx(g, 4, 4, 2, 0, h - 5, z0 + 1, metal)
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(w / 2 - 1, 0.6, 8, 32), metal)
+  ring.position.set(0, h - w / 2 - 2, z0 + 4)
+  g.add(ring)
+  bx(g, w * 0.7, h * 0.65, 1.2, 0, h * 0.05, z0 + 4.5, mat('#e9e4da', 0.95))
+}
+
 /** 有蓋洗衣籃（布面、可折）：籃身＋上蓋（後側鉸鏈）、側邊提把 */
 function hamper(g: G, it: FurnitureItem) {
   const { w, d, h } = it
@@ -1136,6 +1164,8 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   hiddendoor,
   wallshelf,
   hamper,
+  towelbar,
+  towelring,
   person,
   coathooks,
   towerfan,

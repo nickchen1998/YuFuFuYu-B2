@@ -57,6 +57,8 @@ const map: Record<string, Component> = {
   hiddendoor: DoorClosed,
   wallshelf: Library,
   hamper: Archive,
+  towelbar: Rows3,
+  towelring: Circle,
   person: PersonStanding,
   coathooks: Shirt,
   towerfan: Fan,

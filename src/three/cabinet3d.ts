@@ -256,7 +256,20 @@ function contents(b: Batch, part: CabinetPart, c: Cell, clothes: boolean, rand: 
       break
     }
     case 'storage': {
-      if (label.includes('橫躺')) {
+      if (label.includes('行李箱 ×3')) {
+        // 28 吋＋兩個登機箱直立並排、側面（窄邊）朝外：28 吋厚 30 × 深 50 × 高 76，登機箱 23 × 38 × 55
+        const items: [number, number, number, string][] = [
+          [30, Math.min(c.h - 2, 76), Math.min(c.D - 4, 50), '#3b4652'],
+          [23, 55, Math.min(c.D - 4, 38), '#9c6b4e'],
+          [23, 55, Math.min(c.D - 4, 38), '#5d6f7d'],
+        ]
+        let x = c.x0 + 1
+        for (const [sw, sh, sd, col] of items) {
+          b.box(sw - 1, sh, sd, x + sw / 2, c.y0, back + sd / 2 + 2, col)
+          b.box(3, 2, 12, x + sw / 2, c.y0 + sh, back + sd / 2 + 2, '#222428')
+          x += sw + 1
+        }
+      } else if (label.includes('橫躺')) {
         // 行李箱橫躺疊放：28 吋（約 76 × 50 × 30）在下，登機箱（約 55 × 38 × 23）疊在上面；側邊提把朝外
         const stack: [number, number, number, string][] = []
         if (label.includes('28')) stack.push([Math.min(c.w - 4, 76), 30, Math.min(c.D - 6, 50), '#3b4652'])

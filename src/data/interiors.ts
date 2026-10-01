@@ -143,7 +143,8 @@ export const seedInteriors: Record<string, CabinetInterior> = {
   },
 
   // 咖啡櫃 120 × 40 × 90：左邊零食門片櫃＋兩個抽屜（上：茶包，下：咖啡配件、豆子存貨）；
-  // 右邊 60 寬玻璃門馬克杯展示，上下兩層，星巴克 BTS 杯 3 個一疊，單排 4 疊 × 2 層 = 24 個，前後兩排約 48 個
+  // 右邊 60 寬：上層玻璃門馬克杯展示（星巴克 BTS 杯 3 個一疊，單排 4 疊 = 12 個、前後兩排約 24 個），
+  // 下層一個深抽屜放保溫瓶（淨高 31，500 ml 保溫瓶直立放、用隔板分格）
   coffeebar: {
     faces: [
       {
@@ -158,7 +159,7 @@ export const seedInteriors: Record<string, CabinetInterior> = {
               P('drawer', 12, 'drawer', '茶包（分格收納盒）'),
             ],
           },
-          { parts: [P('mugs', 31, 'glass', '馬克杯（3 個一疊）'), P('mugs', null, 'glass', '馬克杯（3 個一疊）')] },
+          { parts: [P('drawer', 31, 'drawer', '保溫瓶（直立放，用隔板分格）'), P('mugs', null, 'glass', '馬克杯（3 個一疊）')] },
         ],
       },
     ],

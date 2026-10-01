@@ -1417,6 +1417,47 @@ export const shopping: Record<string, ShopInfo> = {
     specs: ['開口 80 × 210，門片往衣櫃那側滑進牆裡'],
     notes: ['門袋在衣櫃背後的牆裡：衣櫃背板不能鎖進門袋那段牆，請系統櫃廠商避開'],
   },
+  hamper: {
+    summary:
+      '洗完澡的髒衣服、毛巾丟進主臥半套廁所的有蓋洗衣籃：放在拉門對面那面牆、偏洗臉盆那側，不擋馬桶和走道；內袋可以整袋提起來拿到陽台洗衣機。',
+    specs: [
+      '42 × 32 × 67、60 L（約 8 kg），兩個人 2～3 天的量',
+      '放在拉門對面牆邊，前面走道還有約 61；上蓋後側鉸鏈往上掀，上方約 100 以內不要裝層板、毛巾桿',
+      '廁所潮濕：選 PE 覆膜布面，濕毛巾先晾乾再丟，避免悶出味道',
+    ],
+    picks: [
+      {
+        name: 'ELPHECO 60L 單格洗衣籃 ELPH060BA（米白）',
+        rec: true,
+        detail: '42 × 32 × 67；纖維桿骨架＋細緻麻布覆 PE（防潑水）；掀蓋；內袋可拆、有提把；可折平',
+        price: '約 NT$1,690（2026/10 ELPHECO 官網，原價 NT$1,890）',
+        url: 'https://www.elpheco.com.tw/products/elph060ba',
+        source: 'ELPHECO 官網',
+      },
+      {
+        name: 'ELPHECO 40L 單格洗衣籃 ELPH040BA（米白）',
+        detail: '40 × 22 × 67；同款比較薄，最不佔走道，但只裝 40 L（約 6 kg）',
+        price: '約 NT$1,280（2026/10 ELPHECO 官網）',
+        url: 'https://www.elpheco.com.tw/products/elph040ba',
+        source: 'ELPHECO 官網',
+      },
+      {
+        name: 'Joseph Joseph Tota 60L 分類洗衣籃（雙格）',
+        detail: '39.5 × 39.5 × 71；兩格各 30 L，衣服、毛巾分開；兩個可拆袋；比較深，走道剩約 54',
+        price: '約 NT$2,990（2026/10 momo，原價 NT$4,100）',
+        url: 'https://www.momoshop.com.tw/product/14873098',
+        source: 'momo',
+      },
+      {
+        name: 'NITORI 洗衣籃 YT05 GY（最便宜）',
+        detail: '33 × 35 × 63、30 L；鋁框尼龍網很透氣，但沒有蓋子；網購限定、約 28～30 個工作天',
+        price: '約 NT$599（2026/10 NITORI）',
+        url: 'https://www.nitori-net.tw/product/8501222s',
+        source: 'NITORI',
+      },
+    ],
+    notes: ['想把衣服、毛巾分開又不想換雙格款：籃子裡放一個洗衣網袋裝毛巾'],
+  },
   mcab1: {
     summary: '全套衛浴改單門鏡櫃：昊鑫 KLS-DR55（55 × 15 × 80），置中在洗手台上方，鏡面比單門除霧款大；防水發泡板，左開右開都能訂。',
     specs: [

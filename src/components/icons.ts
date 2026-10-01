@@ -56,6 +56,7 @@ const map: Record<string, Component> = {
   mirrorcab: RectangleVertical,
   hiddendoor: DoorClosed,
   wallshelf: Library,
+  hamper: Archive,
   person: PersonStanding,
   coathooks: Shirt,
   towerfan: Fan,

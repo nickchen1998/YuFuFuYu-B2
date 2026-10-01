@@ -114,10 +114,10 @@ function buildPocketDoor(g: THREE.Group, w: Wall, o: Opening, T: number, cut: nu
   }
 }
 
-function buildDoor(g: THREE.Group, w: Wall, o: Opening, T: number, cut: number, open: boolean) {
+function buildDoor(g: THREE.Group, w: Wall, o: Opening, T: number, cut: number, open: boolean, pushColor = DEFAULT_WALL) {
   const { horizontal } = wallAxis(w)
-  // 隱形門：門片和牆同色（跟牆一起批土油漆）
-  const leafColor = o.hidden ? DEFAULT_WALL : o.id === 'main-door' ? '#4a4540' : o.id === 'balcony-door' ? '#9aa0a6' : '#efebe4'
+  // 隱形門：門片和推的那面（客廳）牆同色（跟牆一起批土油漆）
+  const leafColor = o.hidden ? pushColor : o.id === 'main-door' ? '#4a4540' : o.id === 'balcony-door' ? '#9aa0a6' : '#efebe4'
   const leafMat = mat(leafColor, 0.5, o.id === 'balcony-door' ? 0.5 : 0)
   const jw = jambOf(o)
   const gap = o.gap ?? 0
@@ -136,17 +136,20 @@ function buildDoor(g: THREE.Group, w: Wall, o: Opening, T: number, cut: number, 
   const n = horizontal ? new THREE.Vector2(0, nSign) : new THREE.Vector2(nSign, 0)
   const ang = open ? (80 * Math.PI) / 180 : 0
   const dir = d0.clone().multiplyScalar(Math.cos(ang)).add(n.clone().multiplyScalar(Math.sin(ang)))
+  const leafT = 4
   const pivot = new THREE.Group()
-  pivot.position.set(hx, 0, hz)
+  // 隱形門：門片外面和推的那面（客廳）牆面齊平，鉸鏈軸往推的那側移
+  const flush = o.hidden ? T / 2 - leafT / 2 : 0
+  pivot.position.set(hx - n.x * flush, 0, hz - n.y * flush)
   // three: 本地 +x 經 rotation.y=φ 後 = (cosφ, 0, -sinφ)
   pivot.rotation.y = Math.atan2(-dir.y, dir.x)
-  const leafT = 4
   const leaf = addBox(pivot, leafW, leafH, leafT, leafW / 2, gap, 0, leafMat)
   leaf.raycast = noRaycast
   if (o.hidden) {
-    // 隱形門：細長的平把手（磁吸靜音鎖），不用大門把
+    // 隱形門：客廳那面不裝把手（推一下就開），只有房內那面裝細長平把手
     if (leafH > 105) {
-      const handle = addBox(pivot, 1.4, 16, leafT + 3, leafW - 7, 92, 0, mat('#8d9094', 0.3, 0.8))
+      const zIn = (horizontal ? sign * nSign : -sign * nSign) * (leafT / 2 + 0.8)
+      const handle = addBox(pivot, 1.4, 16, 1.6, leafW - 7, 92, zIn, mat('#8d9094', 0.3, 0.8))
       handle.raycast = noRaycast
     }
   } else if (leafH > 105) {
@@ -229,7 +232,11 @@ export function buildWalls(opts: WallBuildOptions): THREE.Group {
     }
 
     for (const o of w.openings ?? []) {
-      if (o.kind === 'door') buildDoor(group, w, o, T, opts.cut, o.id === 'main-door' ? opts.mainDoorOpen : opts.doorsOpen)
+      if (o.kind === 'door') {
+        const pushSide = o.swing === 'a' ? 'b' : 'a'
+        const pushColor = opts.paint[`${w.id}:${pushSide}`] ?? DEFAULT_WALL
+        buildDoor(group, w, o, T, opts.cut, o.id === 'main-door' ? opts.mainDoorOpen : opts.doorsOpen, pushColor)
+      }
       else if (o.kind === 'pocket') buildPocketDoor(group, w, o, T, opts.cut, opts.doorsOpen)
       else buildWindow(group, w, o, T, opts.cut)
     }

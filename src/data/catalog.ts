@@ -92,7 +92,7 @@ type Seed = Omit<FurnitureItem, 'id' | 'elev'> & { id: string; elev?: number }
 const seeds: Seed[] = [
   // 客餐廳：電視、雙人沙發、茶几、地毯中心線對齊（y = 185）
   // 鞋櫃落地（不懸浮、不做踢腳）：最下面一格開放放室內拖鞋，腳一踢就收進去；上緣 128 和旁邊的吸塵器櫃齊平，上面是洞洞板
-  { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 128, color: '#efe9df', features: ['noplinth'] },
+  { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 128, color: '#efe9df', features: ['noplinth', 'edgepull'] },
   // 鞋櫃右側保留吸塵器位置
   // 吸塵器收在鞋櫃右邊的吸塵器櫃裡（落地、單門、櫃內預留插座充電）
   { id: 'vaccab', type: 'cabinet', name: '吸塵器收納櫃', x: 259, y: 17.5, rot: 0, w: 36, d: 35, h: 128, color: '#efe9df', features: ['noplinth'] },
@@ -101,7 +101,7 @@ const seeds: Seed[] = [
   { id: 'pegboard', type: 'pegboard', name: '洞洞板', x: 222.5, y: 1, rot: 0, w: 125, d: 2, h: 98, elev: 132, color: '#f4f1ea' },
   { id: 'sofa', type: 'sofa', name: '三人沙發', x: 243, y: 185, rot: 270, w: 210, d: 90, h: 80, color: '#cfc4b2' },
   // 咖啡櫃（零食櫃）：沙發旁、與冰箱斜對面；90 公分高的矮櫃，檯面上方牆面兩組雙連插座
-  { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃＋馬克杯展示）', x: 268, y: 355, rot: 270, w: 120, d: 40, h: 90, color: '#d9c2a0', features: ['outlets'] },
+  { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃＋馬克杯展示）', x: 268, y: 355, rot: 270, w: 120, d: 40, h: 90, color: '#d9c2a0', features: ['outlets', 'edgepull'] },
   // 咖啡櫃檯面（寬 120、深 40），面對咖啡櫃由左到右照沖煮順序：豆罐 ×4 → 磨豆機 → 義式咖啡機 → 奶泡機 → 右邊約 35 公分出杯區（下面就是馬克杯櫃）
   { id: 'beans', type: 'canisters', name: '咖啡豆密封罐 ×4', x: 275.5, y: 309, rot: 270, w: 23, d: 23, h: 12.5, elev: 90, color: '#e3e5e2' },
   { id: 'grinder', type: 'grinder', name: '磨豆機', x: 276, y: 331, rot: 270, w: 13, d: 21, h: 27, elev: 90, color: '#2f3033' },
@@ -111,7 +111,7 @@ const seeds: Seed[] = [
   // 圓形小茶几（直徑 70、高 42，白橡木），離沙發約 38、離電視櫃約 50
   { id: 'coffee', type: 'coffeetable', name: '圓形小茶几', x: 125, y: 185, rot: 90, w: 70, d: 70, h: 42, color: '#c9a57a', features: ['round'] },
   // 電視櫃：實木美腿（錐形腳高 18，掃地機器人進得去），櫃體高 35，上緣 53 到壁掛電視下緣留 17
-  { id: 'tvstand', type: 'tvstand', name: '電視櫃（美腿）', x: 20, y: 185, rot: 90, w: 180, d: 40, h: 53, color: '#d9c2a0', features: ['prettylegs'] },
+  { id: 'tvstand', type: 'tvstand', name: '電視櫃（美腿）', x: 20, y: 185, rot: 90, w: 180, d: 40, h: 53, color: '#d9c2a0', features: ['prettylegs', 'edgepull'] },
   // 電視壁掛：下緣離地 70（坐在沙發上視線約在畫面中心），下方保留電視櫃
   { id: 'tv', type: 'tv', name: '電視 55吋（壁掛）', x: 3, y: 185, rot: 90, w: 123, d: 6, h: 72, elev: 70, color: '#1b1b1d', features: ['wallmount'] },
   // 冰箱：六門、製冰室獨立（國際牌 NR-F552YT 等，65 × 69.9 × 185），背面貼牆、上方沒有櫃子

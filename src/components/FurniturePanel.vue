@@ -135,6 +135,7 @@ const featureNames: Record<string, string> = {
   steel: '鋼管收納（不鏽鋼色立管、衣桿、金屬層板與網籃，不用木板、合成板）',
   sliding: '整面落地頂天拉門（上吊軌道、鋁框霧面玻璃）',
   noplinth: '不做踢腳，底板直接貼地',
+  edgepull: '無把手：門片開門那側、抽屜上緣做 45° 斜切取手',
   prettylegs: '實木美腿（錐形櫃腳高 18，底下可以掃地、掃地機器人進得去）',
   woodtop: '檯面：北美白橡木實木（3 cm 拼板、木蠟油塗裝）',
 }

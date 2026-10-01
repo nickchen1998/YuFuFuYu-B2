@@ -87,6 +87,9 @@ const cells = computed(() => {
   )
 })
 
+/** 無把手（斜切取手）：門片開門那側、抽屜上緣畫一條粗線 */
+const edgePull = computed(() => (props.item.features ?? []).includes('edgepull'))
+
 const fronts = computed(() => {
   const fr = frame.value
   const L = layout.value
@@ -105,7 +108,7 @@ const fronts = computed(() => {
       const lx1 = lx0 + lw
       const tip = hinge === 'l' ? lx0 + 2 : lx1 - 2
       const far = hinge === 'l' ? lx1 - 2 : lx0 + 2
-      return { k, x: lx0, swing: `${far},${y0 + 2} ${tip},${(y0 + y1) / 2} ${far},${y1 - 2}` }
+      return { k, x: lx0, far, swing: `${far},${y0 + 2} ${tip},${(y0 + y1) / 2} ${far},${y1 - 2}` }
     })
     return { key: n, kind: pc.kind, x0, x1, y0, y1, leaves, cx: (x0 + x1) / 2, hw: Math.min(8, (x1 - x0) / 4) }
   })
@@ -167,7 +170,11 @@ const colDims = computed(() =>
           <template v-if="f.kind !== 'drawer'">
             <line v-for="l in f.leaves.slice(1)" :key="l.k" :x1="l.x" :x2="l.x" :y1="f.y0" :y2="f.y1" class="door" />
             <polyline v-for="l in f.leaves" :key="`s${l.k}`" :points="l.swing" class="swing" />
+            <template v-if="edgePull">
+              <line v-for="l in f.leaves" :key="`e${l.k}`" :x1="l.far" :x2="l.far" :y1="f.y0 + 2" :y2="f.y1 - 2" class="edge-pull" />
+            </template>
           </template>
+          <line v-else-if="edgePull" :x1="f.x0 + 2" :x2="f.x1 - 2" :y1="f.y0 + 2" :y2="f.y0 + 2" class="edge-pull" />
           <line v-else :x1="f.cx - f.hw" :x2="f.cx + f.hw" :y1="f.y0 + 4" :y2="f.y0 + 4" class="pull" />
         </g>
       </g>

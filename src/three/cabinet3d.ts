@@ -428,6 +428,9 @@ function buildFace(fg: G, it: FurnitureItem, face: CabinetFace, fr: CabFrame, D:
   const doorM = mat(it.color, 0.55)
   const seamM = mat(shadeHex(it.color, 0.5), 0.8)
   const metal = mat('#9d9fa2', 0.35, 0.8)
+  // 'edgepull'：不裝把手，門片開門那側、抽屜上緣 45° 斜切（斜面吃到陰影，畫一條深色細邊）
+  const edgePull = hasF(it, 'edgepull')
+  const bevelM = mat(shadeHex(it.color, 0.7), 0.7)
   const gap = 0.35
   const zDoor = D / 2 + 0.3
   const zFace = D / 2 + DOOR
@@ -456,10 +459,17 @@ function buildFace(fg: G, it: FurnitureItem, face: CabinetFace, fr: CabFrame, D:
         pane.castShadow = false
       } else box(fronts, lx1 - lx0, fh - gap * 2, DOOR - 0.3, (lx0 + lx1) / 2, fy0 + gap, zDoor + (DOOR - 0.3) / 2, doorM)
       if (piece.kind === 'drawer') {
-        const hw = Math.min(16, fw / 3)
-        box(fronts, hw, 1.2, 1.6, (fx0 + fx1) / 2, fy1 - Math.min(5, fh * 0.3) - 0.6, zFace + 0.8, metal)
+        if (edgePull) box(fronts, lx1 - lx0, 1.6, 0.4, (lx0 + lx1) / 2, fy1 - gap - 1.6, zFace + 0.1, bevelM)
+        else {
+          const hw = Math.min(16, fw / 3)
+          box(fronts, hw, 1.2, 1.6, (fx0 + fx1) / 2, fy1 - Math.min(5, fh * 0.3) - 0.6, zFace + 0.8, metal)
+        }
       } else {
         const handleRight = piece.leaves === 2 ? k === 0 : piece.hinge === 'l'
+        if (edgePull) {
+          box(fronts, 1.6, fh - gap * 2, 0.4, handleRight ? lx1 - 0.8 : lx0 + 0.8, fy0 + gap, zFace + 0.1, bevelM)
+          continue
+        }
         const hx = handleRight ? lx1 - 3.5 : lx0 + 3.5
         const hh = fh > 120 ? 24 : Math.min(12, fh * 0.35)
         const hy = clamp(100, fy0 + 5, Math.max(fy0 + 5, fy1 - 5 - hh))

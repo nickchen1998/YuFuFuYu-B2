@@ -417,28 +417,85 @@ export const shopping: Record<string, ShopInfo> = {
     ],
     notes: ['和浮動層板一起加夾板補強'],
   },
-  pegboard3: {
+  coffeeshelf: {
     summary:
-      '咖啡櫃上方不做櫃子，掛一塊白色 SKÅDIS 洞洞板，和牆面同色很輕盈；只放摔不壞的咖啡小物：小層板放手沖濾杯和咖啡秤，掛勾掛不鏽鋼拉花杯、清潔刷、擦布。',
+      '咖啡櫃上方不做櫃子，掛一條 120 白橡木色浮動層板（看不到支架），放咖啡豆、咖啡秤、手沖濾杯和濾紙；下面再搭一條不鏽鋼掛桿，收納量約洞洞板的 1.6 倍。',
     specs: [
-      '76 × 56 橫放，離地約 140～196、置中在咖啡櫃上方',
-      '下緣離檯面 50：咖啡機水箱、磨豆機豆倉從上面拿不會卡到，下面兩組插座也不擋',
-      '陶瓷杯、玻璃壺不要掛在上面，馬克杯還是放下面的玻璃門',
+      '120 × 24 × 4.2，上緣離地約 185，和咖啡櫃同寬',
+      '隱藏托架，約 18 kg；牆是輕隔間，鎖在夾板補強上',
+      '濾紙、擦布放兩側，不要放在咖啡機正上方（蒸氣會讓板子吸濕）',
     ],
     picks: [
       {
-        name: 'IKEA SKÅDIS 收納壁板組 76 × 56（白）',
+        name: '特力屋 超厚棚板附托架 白橡木色 120 cm',
         rec: true,
-        detail: '含壁板、連接件、夾子、置物籃 3 件；可以再加掛勾、層架；附上牆桿，螺絲另購',
-        price: '約 NT$1,099（2026/09 IKEA）',
-        url: 'https://www.ikea.com.tw/zh/products/wall-organisers/boards/skadis-spr-69515978',
+        detail: '120 × 24 × 4.2；隱藏式鋼托架；塑合板貼皮；約 18 kg；也有白色',
+        price: '約 NT$749（2026/10 特力屋，原價 NT$799）',
+        url: 'https://www.trplus.com.tw/p/016780663',
+        source: '特力屋',
+      },
+      {
+        name: 'IKEA KUNGSFORS 層板 梣木貼皮 60 × 30 × 2',
+        detail: '兩片並排 120；真木貼皮、深 30、每片 22 kg；和掛桿同一套，IKEA 一次買齊（2 片 NT$1,598）',
+        price: '約 NT$799／片（2026/10 IKEA）',
+        url: 'https://www.ikea.com.tw/zh/products/wall-organisers/boards-and-wall-organisers/kungsfors-art-70371224',
+        source: 'IKEA',
+      },
+      {
+        name: 'IKEA LACK 層板 染白橡木紋 110 × 26',
+        detail: '110 × 26 × 5；隱藏托架；只有 10 kg',
+        price: '約 NT$599（2026/10 IKEA）',
+        url: 'https://www.ikea.com.tw/zh/products/sideboards/wall-shelves/lack-art-50418213',
         source: 'IKEA',
       },
     ],
-    notes: [
-      '這面牆是和次臥之間的輕隔間：施工時加夾板補強；牆的另一面（次臥）也有層板、洞洞板，兩邊鑽孔位置錯開',
-      '咖啡機的蒸氣會往上飄，擦布、紙類放在洞洞板兩側，不要正對咖啡機上方',
+    notes: ['原本的 SKÅDIS 洞洞板（76 × 56）只能放小籃子，改成層板＋掛桿空間大很多'],
+  },
+  coffeerail: {
+    summary:
+      '層板下面掛一條 IKEA KUNGSFORS 不鏽鋼掛桿（兩支 56 並排約 112），S 掛勾掛拉花杯、填壓器、刷子、擦布，再掛一個收納筒放濾紙、一個收納盒放小工具；不鏽鋼和咖啡機很搭。',
+    specs: [
+      '掛桿離地約 168；掛的東西最低到約 140（離檯面 50），水箱、豆倉往上拿不會卡到',
+      '約 10 個 S 掛勾（每個 4 kg）＋收納筒＋收納盒',
+      '擦布掛在右邊（遠離咖啡機蒸氣）',
     ],
+    picks: [
+      {
+        name: 'IKEA KUNGSFORS 壁掛桿 56 cm × 2',
+        rec: true,
+        detail: 'Ø1.3 不鏽鋼；兩支並排約 112',
+        price: '約 NT$179 × 2 = NT$358（2026/10 IKEA）',
+        cost: 358,
+        url: 'https://www.ikea.com.tw/zh/products/wall-organisers/boards-and-wall-organisers/kungsfors-art-70334934',
+        source: 'IKEA',
+      },
+      {
+        name: 'IKEA KUNGSFORS S 形掛勾 5 入 × 2',
+        rec: true,
+        detail: '每個 4 kg',
+        price: '約 NT$59 × 2 = NT$118（2026/10 IKEA）',
+        cost: 118,
+        url: 'https://www.ikea.com.tw/zh/products/wall-organisers/boards-and-wall-organisers/kungsfors-art-70334929',
+        source: 'IKEA',
+      },
+      {
+        name: 'IKEA KUNGSFORS 收納筒 Ø12 × 26.5',
+        rec: true,
+        detail: '放濾紙、攪拌棒',
+        price: '約 NT$279（2026/10 IKEA）',
+        url: 'https://www.ikea.com.tw/zh/products/wall-organisers/boards-and-wall-organisers/kungsfors-art-30334926',
+        source: 'IKEA',
+      },
+      {
+        name: 'IKEA KUNGSFORS 收納盒 24 × 12 × 26.5',
+        rec: true,
+        detail: '放填壓器、布粉器、清潔刷',
+        price: '約 NT$599（2026/10 IKEA）',
+        url: 'https://www.ikea.com.tw/zh/products/wall-organisers/boards-and-wall-organisers/kungsfors-art-30334931',
+        source: 'IKEA',
+      },
+    ],
+    notes: ['IKEA 都不附上牆螺絲，用木螺絲鎖進夾板補強', '這面牆另一邊是次臥的層板和洞洞板，兩邊鑽孔位置錯開'],
   },
   scab: {
     summary:

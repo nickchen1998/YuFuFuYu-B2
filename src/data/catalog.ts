@@ -147,8 +147,8 @@ const seeds: Seed[] = [
   { id: 'fan-living', type: 'towerfan', name: 'Dyson 直立式電扇（客廳）', x: 273, y: 431, rot: 250, w: 22, d: 22, h: 105, color: '#eef0f2' },
   // 主臥這台放窗邊的牆角（床尾那側，另一個窗邊角落是床頭櫃），斜朝床
   { id: 'fan-master', type: 'towerfan', name: 'Dyson 直立式電扇（主臥）', x: -31, y: 583, rot: 235, w: 22, d: 22, h: 105, color: '#eef0f2' },
-  // 次臥這台靠牆放在書房矮櫃靠衣櫃那一端（離衣櫃拉門約 1.2 m），斜朝升降桌和按摩椅中間，擺頭兩邊都吹得到
-  { id: 'fan-bed2', type: 'towerfan', name: 'Dyson 直立式電扇（次臥）', x: 320, y: 198, rot: 60, w: 22, d: 22, h: 105, color: '#eef0f2' },
+  // 次臥這台靠牆放在行李箱櫃（接在書房矮櫃旁）和衣櫃中間的角落，斜朝升降桌和按摩椅中間，擺頭兩邊都吹得到
+  { id: 'fan-bed2', type: 'towerfan', name: 'Dyson 直立式電扇（次臥）', x: 320, y: 92, rot: 60, w: 22, d: 22, h: 105, color: '#eef0f2' },
   // 身高參考：184 與 154 公分的人，站在電視區和冰箱之間，看人和家具的高低比例（不是家具）
   { id: 'person184', type: 'person', name: '身高參考 184 公分', x: 95, y: 315, rot: 0, w: 46, d: 26, h: 184, color: '#5f7488' },
   { id: 'person154', type: 'person', name: '身高參考 154 公分', x: 150, y: 315, rot: 0, w: 38, d: 22, h: 154, color: '#c9a98a' },
@@ -186,6 +186,8 @@ const seeds: Seed[] = [
   // 上方書櫃先拿掉（住戶覺得太高），之後再決定。
   // 最右邊（靠衣櫃那端）是掃地機器人的家：那格不做底板，櫃深加到 45（基座 40＋機器人不凸出），整座不做踢腳；前方淨空 80 以上
   { id: 'door-bed2', type: 'hiddendoor', name: '次臥門（建商附）', x: 304, y: 510, rot: 90, w: 80, d: 1.5, h: 210, color: '#f2efea', locked: true },
+  // 行李箱櫃：接在書房矮櫃靠衣櫃那端（同高 90、同深 45、不做踢腳），兩格各一片門：登機箱 ×2、28 吋，都直立收好
+  { id: 'lugcab', type: 'cabinet', name: '行李箱櫃', x: 325.5, y: 162, rot: 90, w: 106, d: 45, h: 90, color: '#d9c2a0', features: ['noplinth'] },
   { id: 'scab', type: 'cabinet', name: '書房矮櫃（文件・印表機・掃地機器人）', x: 325.5, y: 340, rot: 90, w: 250, d: 45, h: 90, color: '#d9c2a0', features: ['noplinth'] },
   // 冷氣：窗戶上方，沿長邊往衣櫃方向吹，風從桌子側邊經過
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 395, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },

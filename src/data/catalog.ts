@@ -219,8 +219,10 @@ const seeds: Seed[] = [
   { id: 'mcab1', type: 'mirrorcab', name: '鏡櫃（全套衛浴・左右開放層板）', x: -55, y: 132.5, rot: 180, w: 80, d: 15, h: 80, elev: 110, color: '#f4f3ef', features: ['sideshelves'] },
   // 主臥半套衛浴（固定設備）：馬桶 + 洗臉盆
   { id: 'toilet2', type: 'toilet', name: '馬桶', x: -216, y: 198.5, rot: 90, w: 40, d: 68, h: 76, color: '#f7f7f5', locked: true },
-  // 洗臉盆照建議的和成 LCS4175（盆 51 × 41）畫，置中；兩邊各剩約 21 公分
-  { id: 'vanity2', type: 'vanity', name: '洗臉盆浴櫃（半套衛浴）', x: -35.5, y: 198.5, rot: 270, w: 51, d: 41, h: 85, color: '#efe9df', locked: true },
+  // 洗臉盆換寬版：聯德爾 珍妮浴櫃 90（WY-900D，90 × 46，壁掛），左右只剩約 1.5 用矽利康收邊，和上面 92 寬鏡櫃對齊
+  { id: 'vanity2', type: 'vanity', name: '洗臉盆浴櫃（半套衛浴・90 寬）', x: -38, y: 198.5, rot: 270, w: 90, d: 46, h: 85, color: '#efe9df', locked: true },
+  // 擦手巾環：掛在洗臉盆靠裡面那面側牆，鏡櫃前面（離地約 95～125），毛巾在檯面上方約 10
+  { id: 'towelring2', type: 'towelring', name: '擦手巾環（半套衛浴）', x: -45, y: 155.5, rot: 0, w: 20, d: 6.5, h: 30, elev: 95, color: '#c9ccd0' },
   // 髒衣籃：半套衛浴拉門對面那面牆、靠馬桶那側（住戶自己擺的位置），ELPHECO 40L 有蓋 40 × 22 × 67（薄款）；
   // 前面走道還有約 71；上蓋往上掀，上方約 100 以內不要裝層板或毛巾桿
   { id: 'hamper', type: 'hamper', name: '髒衣籃（半套衛浴）', x: -165, y: 163, rot: 0, w: 40, d: 22, h: 67, color: '#e7e1d6' },

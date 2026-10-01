@@ -44,6 +44,7 @@ const alias: Record<string, string> = {
   'fan-bed2': 'fan-living',
   dchair2: 'dchair1',
   bshelf2: 'bshelf1',
+  towelring2: 'towelring1',
   bdesk2: 'bdesk1',
   bchair2: 'bchair1',
   mns2: 'mns1',
@@ -1483,17 +1484,59 @@ export const shopping: Record<string, ShopInfo> = {
     notes: ['想把衣服、毛巾分開又不想換雙格款：籃子裡放一個洗衣網袋裝毛巾'],
   },
   towelbar1: {
-    summary: '全套衛浴的浴巾架掛在淋浴間玻璃和馬桶之間那面牆：出淋浴間就拿得到；浴室門往裡開會掃到門那端約 75 公分的牆，這個位置掃不到；抽風機從門下縫抽風，空氣經過這裡，浴巾乾得快。',
+    summary:
+      '全套衛浴的浴巾架掛在淋浴間玻璃和馬桶之間那面牆：出淋浴間就拿得到；浴室門往裡開會掃到門那端約 75 公分的牆，這個位置掃不到；抽風機從門下縫抽風，空氣經過這裡，浴巾乾得快。',
     specs: [
       '雙桿約 60 寬、離牆約 12，桿子離地約 140（154 公分也拿得到）',
       '304 不鏽鋼或鋁、霧面，鎖牆（浴室牆多半是磚牆或 RC，用壁虎）',
       '抽風機實際位置以現場為準：浴巾架要在門下縫到抽風機的路線上，不要在淋浴間裡面',
     ],
+    picks: [
+      {
+        name: '大巨光 D-13008 304 不鏽鋼雙桿毛巾架（霧面刷線）',
+        rec: true,
+        detail: '60 × 11.5 × 2.8；304 霧面刷線；和擦手巾環 D-13002 同系列',
+        price: '約 NT$1,950（2026/10 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DECB77-A900H1YY0',
+        source: 'PChome',
+      },
+      {
+        name: 'BOSS PND-3608 304 雙桿毛巾架 60 cm（毛絲面）',
+        detail: '60 cm；304 毛絲面、台灣製',
+        price: '約 NT$1,388（2026/10 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/QFAX0P-A900624O4',
+        source: 'PChome',
+      },
+      {
+        name: '大巨光 TAP-537106 304 毛巾架 60 cm（預算款）',
+        detail: '60 cm；304 刷線',
+        price: '約 NT$1,040（2026/10 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DECB77-A900HA7VT',
+        source: 'PChome',
+      },
+    ],
     notes: ['浴巾用完攤開掛在兩支桿子上，比折起來乾得快'],
   },
   towelring1: {
     summary: '洗完手的擦手巾掛在洗手台右邊牆上的毛巾環，伸手就擦；位置在門框旁、鏡櫃下方，不擋門也不碰鏡櫃。',
-    specs: ['毛巾環直徑約 16，離地約 95～125：毛巾下緣在檯面上方約 10 公分，不會被水濺濕'],
+    specs: ['離地約 95～125：毛巾下緣在檯面上方約 10 公分，不會被水濺濕', '兩間衛浴用同一款（半套衛浴掛在洗臉盆靠裡面那面側牆）'],
+    picks: [
+      {
+        name: '大巨光 D-13002 304 不鏽鋼毛巾環（霧面）',
+        rec: true,
+        detail: '22 × 6.5 × 2.8；304 霧面；和雙桿毛巾架 D-13008 同系列',
+        price: '約 NT$900（2026/10 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DECB77-A900H1YY5',
+        source: 'PChome',
+      },
+      {
+        name: 'BOSS PZ-11002 304 L 型毛巾環',
+        detail: '20 × 7.6 × 9.2；304；台灣品牌',
+        price: '約 NT$780（2026/10 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/QFAX0S-A90096XD0',
+        source: 'PChome',
+      },
+    ],
   },
   mcab1: {
     summary:
@@ -2145,45 +2188,49 @@ export const shopping: Record<string, ShopInfo> = {
     ],
   },
   vanity2: {
-    summary: '半套廁所選寬約 50、深 45 以內的壁掛吊櫃組，底下懸空，不佔地板也不擠走道。',
+    summary:
+      '半套廁所換寬版壁掛浴櫃：聯德爾 珍妮浴櫃 90（90 × 46），左右幾乎貼牆、和上面 92 寬鏡櫃對齊；檯面和下面的櫃子都變大，衛生紙存貨、清潔用品收得進去，兩邊也不會留難用的窄縫。',
     specs: [
-      '空間上限寬 70 × 深 48；廁所 235 × 93，要保留走道',
-      '建議寬 48～51、深 ≤ 45 的壁掛吊櫃組',
-      '單孔龍頭；櫃體以 PVC 防水發泡板為佳',
+      '兩面牆之間 93：浴櫃 90 寬，左右各約 1.5，用矽利康收邊不留卡髒的縫',
+      '深 46：前面到拉門那面牆還有約 47；盆緣離地約 85',
+      '100% 白色 PVC 防水發泡板櫃體、陶瓷盆，含 304 龍頭、軟管、下水器',
       '排水：牆排用 P 管、地排用 S 管，先量現場',
     ],
     picks: [
       {
-        name: '和成 HCG LCS4175-3132E',
-        detail: '整組寬 51 × 深 41 × 高 66、櫃 48 × 27.5 × 60 壁掛；陶瓷盆 4.3L；結晶鋼烤櫃；含 LF3132E 龍頭與 P 管（牆排）',
+        name: '聯德爾 LANDER 珍妮浴櫃 90（WY-900D）',
+        rec: true,
+        detail: '90 × 46 × 62 壁掛；陶瓷盆＋100% 白色 PVC 發泡板櫃、304 緩衝鉸鏈；含 304 龍頭、304 軟管、下水器；不含安裝',
+        price: '約 NT$9,565（2026/10 PChome，定價 NT$17,600）',
+        url: 'https://24h.pchome.com.tw/prod/DECB0Y-A900AUGOR',
+        source: 'PChome',
+      },
+      {
+        name: '新沐 NEWBATH 90 公分浴櫃 全配',
+        detail: 'PVC 防水發泡板；台灣製龍頭、下水器、L 管、三角凡爾；系列深 47 × 高 62（90 寬這款網頁沒標尺寸，下單前確認）',
+        price: '約 NT$9,217（2026/10 PChome）',
+        url: 'https://24h.pchome.com.tw/prod/DEDW26-A900IILP7',
+        source: 'PChome',
+      },
+      {
+        name: '和成 HCG LCS3408 ＋ LF2921（一體盆）',
+        detail: '整組 81 × 50 × 46.2；品牌盆和龍頭，但比牆窄、左右各留約 6',
+        price: '約 NT$24,800（2026/10 特力屋，定價 NT$49,600；安裝另計）',
+        url: 'https://www.trplus.com.tw/p/026037743',
+        source: '特力屋',
+      },
+      {
+        name: '和成 HCG LCS4175-3132E（原本的方案，51 寬）',
+        detail: '整組寬 51 × 深 41 × 高 66；左右各剩約 21 公分要另外放窄櫃',
         price: '約 NT$12,749（2026/09 特力屋線上；含龍頭，安裝另計）',
         url: 'https://www.trplus.com.tw/p/016156904',
         source: '特力屋',
-        rec: true,
-      },
-      {
-        name: '凱撒 CAESAR LF5263 ＋ EH05263AP（純白壁掛）',
-        detail: '盆寬 48 × 深 45、櫃 47 × 44 × 40 壁掛；陶瓷盆；防水發泡板櫃配結晶鋼烤門；另購 B380C 單孔龍頭（約 NT$2,446）與 P／S 管',
-        price: '約 NT$6,596（2026/09 PChome，不含龍頭）；加龍頭合計約 NT$9,042',
-        url: 'https://24h.pchome.com.tw/prod/DEDW1I-A900IWPE1',
-        source: 'PChome',
-        cost: 9042,
-        costNote: '含另購的 B380C 龍頭',
-      },
-      {
-        name: 'TOTO L710CSRETW 50 cm 浴櫃組（TLS04301PD 龍頭＋聯德爾櫃）',
-        detail: '盆寬 50 × 深 45；櫃 50 × 45 × 57 PVC 防水發泡板吊櫃；含 TOTO 單槍龍頭、下水器、P 管（牆排）、三角凡爾',
-        price: '約 NT$17,550（2026/09 PChome；含龍頭，不含安裝）',
-        url: 'https://24h.pchome.com.tw/prod/DEDW26-A900HWWXT',
-        source: 'PChome',
       },
     ],
-    search: ['和成 LCS4175-3132E', '凱撒 LF5263 EH05263AP', 'TOTO L710CSRETW'],
     notes: [
-      '廁所寬 93：臉盆靠長牆放、深 45 的盆還留約 48 cm 走道；想更寬鬆可以選凱撒 LF5239（盆 50 × 25，約 NT$6,596）',
-      '先量現場：牆排出口高度、三角凡爾位置；吊櫃櫃高 40～60，管線要落在櫃內（背板開孔）或櫃下',
-      '鏡櫃：凱撒 EM0150 單門鏡櫃 50 × 15 × 80（約 NT$5,150）',
-      '可以先去看：特力屋 中和店（中山路二段 291 號）、TOTO 德固展示中心（板橋瑞安街 53 號，02-2967-5359）、電光 ALEX（樹林中山路二段 131 號，02-8684-3345）',
+      '先量現場：兩面牆之間實際寬度、牆排出口高度、三角凡爾位置；90 寬吊櫃要鎖在牆裡的補強上',
+      '想要剛好 92 一體做滿：好德 90 公分防水抽屜浴櫃可訂做尺寸（只有櫃體 NT$26,500～32,200，另加盆和龍頭）',
+      '可以先去看：特力屋 中和店（中山路二段 291 號）、TOTO 德固展示中心（板橋瑞安街 53 號，02-2967-5359）',
     ],
     related: [
       {

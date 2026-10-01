@@ -1422,22 +1422,22 @@ export const shopping: Record<string, ShopInfo> = {
     summary:
       '洗完澡的髒衣服、毛巾丟進主臥半套廁所的有蓋洗衣籃：放在拉門對面那面牆、偏洗臉盆那側，不擋馬桶和走道；內袋可以整袋提起來拿到陽台洗衣機。',
     specs: [
-      '42 × 32 × 67、60 L（約 8 kg），兩個人 2～3 天的量',
-      '放在拉門對面牆邊，前面走道還有約 61；上蓋後側鉸鏈往上掀，上方約 100 以內不要裝層板、毛巾桿',
+      '40 × 22 × 67、40 L（約 6 kg）：薄款，兩個人約 1～2 天倒一次',
+      '放在拉門對面牆邊，前面走道還有約 71；上蓋後側鉸鏈往上掀，上方約 100 以內不要裝層板、毛巾桿',
       '廁所潮濕：選 PE 覆膜布面，濕毛巾先晾乾再丟，避免悶出味道',
     ],
     picks: [
       {
         name: 'ELPHECO 60L 單格洗衣籃 ELPH060BA（米白）',
-        rec: true,
-        detail: '42 × 32 × 67；纖維桿骨架＋細緻麻布覆 PE（防潑水）；掀蓋；內袋可拆、有提把；可折平',
+        detail: '42 × 32 × 67、60 L；同款大一號，走道剩約 61',
         price: '約 NT$1,690（2026/10 ELPHECO 官網，原價 NT$1,890）',
         url: 'https://www.elpheco.com.tw/products/elph060ba',
         source: 'ELPHECO 官網',
       },
       {
         name: 'ELPHECO 40L 單格洗衣籃 ELPH040BA（米白）',
-        detail: '40 × 22 × 67；同款比較薄，最不佔走道，但只裝 40 L（約 6 kg）',
+        rec: true,
+        detail: '40 × 22 × 67、40 L；纖維桿骨架＋細緻麻布覆 PE（防潑水）；掀蓋；內袋可拆、有提把；可折平；最薄、不佔走道',
         price: '約 NT$1,280（2026/10 ELPHECO 官網）',
         url: 'https://www.elpheco.com.tw/products/elph040ba',
         source: 'ELPHECO 官網',

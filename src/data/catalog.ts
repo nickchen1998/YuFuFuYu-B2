@@ -93,12 +93,12 @@ const seeds: Seed[] = [
   // 客餐廳：電視、雙人沙發、茶几、地毯中心線對齊（y = 185）
   // 鞋櫃落地（不懸浮、不做踢腳）：最下面一格開放放室內拖鞋，腳一踢就收進去；上緣 128 和旁邊的吸塵器櫃齊平，上面是洞洞板
   { id: 'shoe', type: 'cabinet', name: '鞋櫃', x: 200, y: 17.5, rot: 0, w: 80, d: 35, h: 128, color: '#efe9df', features: ['noplinth', 'edgepull'] },
-  // 鞋櫃右側保留吸塵器位置
-  // 吸塵器收在鞋櫃右邊的吸塵器櫃裡（落地、單門、櫃內預留插座充電）
-  { id: 'vaccab', type: 'cabinet', name: '吸塵器收納櫃', x: 259, y: 17.5, rot: 0, w: 36, d: 35, h: 128, color: '#efe9df', features: ['noplinth'] },
+  // L 型鞋櫃：鞋櫃（矮，128）＋右邊吸塵器高櫃（230）。高櫃下門收吸塵器（上緣和鞋櫃齊平 128），上門是上櫃放換季鞋、備品；
+  // 頂在 230，冷氣底部 250，留 20 公分不擋冷氣（不做到頂）
+  { id: 'vaccab', type: 'cabinet', name: '吸塵器櫃＋上櫃（和鞋櫃組成 L 型）', x: 259, y: 17.5, rot: 0, w: 36, d: 35, h: 230, color: '#efe9df', features: ['noplinth', 'edgepull'] },
   { id: 'vacuum', type: 'vacuum', name: '吸塵器（收在櫃內）', x: 259, y: 17, rot: 0, w: 30, d: 25, h: 115, elev: 1.8, color: '#8a5cc2' },
-  // 洞洞板：鞋櫃與吸塵器上方一整片（130～230 公分，上方留 20 公分給冷氣）
-  { id: 'pegboard', type: 'pegboard', name: '洞洞板', x: 222.5, y: 1, rot: 0, w: 125, d: 2, h: 98, elev: 132, color: '#f4f1ea' },
+  // 洞洞板：只在鞋櫃上方（右邊是吸塵器高櫃），IKEA SKÅDIS 76 × 56 一片橫放，離地 150～206（鑰匙、口罩掛在順手的高度）
+  { id: 'pegboard', type: 'pegboard', name: '洞洞板', x: 200, y: 1, rot: 0, w: 76, d: 2, h: 56, elev: 150, color: '#f4f1ea' },
   { id: 'sofa', type: 'sofa', name: '三人沙發', x: 243, y: 185, rot: 270, w: 210, d: 90, h: 80, color: '#cfc4b2' },
   // 咖啡櫃（零食櫃）：沙發旁、與冰箱斜對面；90 公分高的矮櫃，檯面上方牆面兩組雙連插座
   { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃＋馬克杯展示）', x: 268, y: 355, rot: 270, w: 120, d: 40, h: 90, color: '#d9c2a0', features: ['outlets', 'edgepull'] },

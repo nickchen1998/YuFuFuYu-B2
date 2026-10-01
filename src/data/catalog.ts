@@ -175,10 +175,11 @@ const seeds: Seed[] = [
   { id: 'bward1', type: 'wardrobe', name: '衣櫃（鋼管＋拉門）', x: 423.75, y: 30, rot: 0, w: 241.5, d: 60, h: 300, color: '#efe9df', features: ['steel', 'sliding', 'noplinth'] },
   // 按摩椅：選零靠牆機型（背後留 5 公分），躺平時往前滑到約 180 公分
   { id: 'massage', type: 'massagechair', name: '按摩椅', x: 469.5, y: 170, rot: 270, w: 80, d: 140, h: 115, color: '#4a4541' },
-  { id: 'bdesk1', type: 'standingdesk', name: '升降桌', x: 514.5, y: 340, rot: 270, w: 120, d: 60, h: 73, color: '#d8c3a5' },
-  { id: 'bdesk2', type: 'standingdesk', name: '升降桌', x: 514.5, y: 460, rot: 270, w: 120, d: 60, h: 73, color: '#d8c3a5' },
-  { id: 'bchair1', type: 'chair', name: '辦公椅', x: 452, y: 340, rot: 90, w: 50, d: 50, h: 100, color: '#5b5f63' },
-  { id: 'bchair2', type: 'chair', name: '辦公椅', x: 452, y: 460, rot: 90, w: 50, d: 50, h: 100, color: '#5b5f63' },
+  // 兩張升降桌並排靠右牆：和按摩椅之間留 50，靠窗那張和窗那面牆之間留 54（不貼牆，放植物、小推車或電扇都可以）
+  { id: 'bdesk1', type: 'standingdesk', name: '升降桌', x: 514.5, y: 320, rot: 270, w: 120, d: 60, h: 73, color: '#d8c3a5' },
+  { id: 'bdesk2', type: 'standingdesk', name: '升降桌', x: 514.5, y: 440, rot: 270, w: 120, d: 60, h: 73, color: '#d8c3a5' },
+  { id: 'bchair1', type: 'chair', name: '辦公椅', x: 452, y: 320, rot: 90, w: 50, d: 50, h: 100, color: '#5b5f63' },
+  { id: 'bchair2', type: 'chair', name: '辦公椅', x: 452, y: 440, rot: 90, w: 50, d: 50, h: 100, color: '#5b5f63' },
   // 椅子背後（靠客廳的輕隔間）：矮櫃放文件、線材、印表機（落地，高 90）；到次臥門前 5 公分為止、避開按摩椅前方。
   // 上方書櫃先拿掉（住戶覺得太高），之後再決定。
   // 最右邊（靠衣櫃那端）是掃地機器人的家：那格不做底板，櫃深加到 45（基座 40＋機器人不凸出），整座不做踢腳；前方淨空 80 以上

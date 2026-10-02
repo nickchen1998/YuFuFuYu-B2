@@ -156,9 +156,7 @@ export const seedInteriors: Record<string, CabinetInterior> = {
   },
 
   // 吸塵器高櫃 48 × 35 × 300（和鞋櫃組成 L 型，做滿到右邊牆壁、頂天）：下門收吸塵器（淨高 124，上緣和鞋櫃齊平），
-  // 中間打通成開放的「髒衣區」（不做門，穿過的衣服透氣）：櫃深只有 35，衣架橫吊放不下，改用前後向的正掛桿，衣架正面朝外；
-  // 掛桿離地約 189（154 公分的人伸手掛得到），桿下淨空約 60，外套、上衣掛著不會拖到底；上面一格開放層放帽子、口罩；
-  // 最上面上櫃（要踩椅子）放換季鞋、鞋盒、雨具
+  // 中門 3 層當一般儲藏（換季鞋、帽子圍巾、備品），最上面上櫃（要踩椅子）放不常用的鞋盒、雨具
   vaccab: {
     faces: [
       {
@@ -166,9 +164,10 @@ export const seedInteriors: Record<string, CabinetInterior> = {
           {
             parts: [
               P('empty', 124.4, 'door', '吸塵器＋充電座（櫃內預留插座）'),
-              P('pullrod', 66, 'open', '髒衣區：穿過的外套・上衣（正掛桿）'),
-              P('shelf', null, 'open', '帽子・口罩・鞋油鞋撐小籃'),
-              P('storage', 70, 'door', '上櫃：換季鞋・靴子・鞋盒・雨具', true),
+              P('shelf', null, 'door', '換季鞋・靴子', true),
+              P('shelf', null, 'door', '帽子・圍巾・手套'),
+              P('shelf', null, 'door', '鞋油・鞋撐・口罩備品'),
+              P('storage', 70, 'door', '上櫃：鞋盒・雨具・不常用的備品', true),
             ],
           },
         ],

@@ -1606,7 +1606,9 @@ input[type='color']::-moz-color-swatch {
   color: #2f6b64;
 }
 .cat-tag[data-cat='建商附'],
-.meta-chip.cat[data-cat='建商附'] {
+.meta-chip.cat[data-cat='建商附'],
+.cat-tag[data-cat='已有'],
+.meta-chip.cat[data-cat='已有'] {
   background: #ecebe7;
   color: #6d675f;
 }

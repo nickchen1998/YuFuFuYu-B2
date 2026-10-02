@@ -164,8 +164,9 @@ const seeds: Seed[] = [
   { id: 'mns2', type: 'nightstand', name: '床頭櫃', x: -269, y: 584.5, rot: 90, w: 30, d: 35, h: 50, color: '#c9a57a' },
   // 投影機：靠窗側床頭櫃上，斜向對準床尾那面牆（投影畫面中心對齊床的中線）
   { id: 'projector', type: 'projector', name: '投影機', x: -269, y: 584.5, rot: 110, w: 19, d: 19, h: 25, elev: 50, color: '#e9e9e6' },
-  // 衣櫃做到頂（300）；內部規劃見 interiors.ts。右端 30 寬窄欄離地約 94～226 做兩面開放的木紋格（正面＋朝半套衛浴門口那側），最下面一格充電
-  { id: 'mward', type: 'wardrobe', name: '衣櫃（薄型 45 深・側邊開放格）', x: -219, y: 282.5, rot: 0, w: 135, d: 45, h: 300, color: '#efe9df', features: ['woodniche', 'sideopen'] },
+  // 衣櫃做到頂（300）；內部規劃見 interiors.ts。右端 30 寬窄欄只有充電格開放（離地約 94～124，正面＋朝半套衛浴門口那側兩面開），
+  // 其他都有門；門片不裝把手（開門那側斜切，上櫃斜切在下緣）
+  { id: 'mward', type: 'wardrobe', name: '衣櫃（薄型 45 深・充電格）', x: -219, y: 282.5, rot: 0, w: 135, d: 45, h: 300, color: '#efe9df', features: ['woodniche', 'sideopen', 'edgepull'] },
   // 門：主臥門、全套浴室門做隱形門（往房間裡開，客廳那面和牆齊平、同色）；
   // 次臥門、半套衛浴拉門用建商原本的門（建商附，不列預算）。門片畫在牆上（跟著門的開關），這裡的項目放規格和估價
   { id: 'door-master', type: 'hiddendoor', name: '主臥門（隱形門）', x: -16, y: 328, rot: 90, w: 80, d: 1.5, h: 210, color: '#f2efea' },
@@ -219,7 +220,7 @@ const seeds: Seed[] = [
   // 左右各約 15 寬開放層板 3 層補齊；離地 110～190（龍頭上方留空間，184 公分照得到頭頂）
   { id: 'mcab1', type: 'mirrorcab', name: '鏡櫃（全套衛浴・左右開放層板）', x: -55, y: 132.5, rot: 180, w: 80, d: 15, h: 80, elev: 110, color: '#f4f3ef', features: ['sideshelves'] },
   // 鏡櫃上方做頂天吊櫃：80 寬和鏡櫃、洗手台切齊，離地 190 到天花板（110 高）、深 25 放得下 12 捲衛生紙和摺好的毛巾；
-  // 白色防水發泡板和鏡櫃同色，對開門不裝把手（開門那側斜切）；154 公分的人要踩小凳子拿，放備品就好
+  // 白色防水發泡板和鏡櫃同色，對開門不裝把手（斜切做在門片下緣）；154 公分的人要踩小凳子拿，放備品就好
   { id: 'mcab1top', type: 'cabinet', name: '鏡櫃上方吊櫃（全套衛浴・頂天）', x: -55, y: 127.5, rot: 180, w: 80, d: 25, h: 110, elev: 190, color: '#f4f3ef', features: ['floating', 'edgepull'] },
   // 主臥半套衛浴（固定設備）：馬桶 + 洗臉盆
   { id: 'toilet2', type: 'toilet', name: '馬桶', x: -216, y: 198.5, rot: 90, w: 40, d: 68, h: 76, color: '#f7f7f5', locked: true },

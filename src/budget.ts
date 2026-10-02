@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { design } from './store'
 import { isPicked, pickKey } from './purchases'
-import { itemCategory, pickCost, pickGroups, shopKey, type PickGroup } from './data/shopping'
+import { itemCategory, pickCost, pickGroups, shopInfo, shopKey, type PickGroup } from './data/shopping'
 import { cabinetEstimate } from './estimate'
 import type { FurnitureItem } from './types'
 
@@ -53,6 +53,8 @@ export function furnitureGroups(list: FurnitureItem[]) {
 export const budget = computed(() => {
   const lines: BudgetLine[] = []
   for (const [root, g] of furnitureGroups(design.furniture)) {
+    // 住戶已經有的（咖啡機、磨豆機…）不計入
+    if (shopInfo(g.first)?.owned) continue
     const cat = budgetCategory(g.first)
     const est = estimateGroup(g.first)
     for (const pg of [...pickGroups(root, g.qty), ...(est ? [est] : [])]) {

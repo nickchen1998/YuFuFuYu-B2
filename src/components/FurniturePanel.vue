@@ -221,7 +221,8 @@ const hasShared = computed(
           </div>
         </div>
       </div>
-      <p v-if="itemSpend" class="detail-spend">
+      <p v-if="info?.owned" class="detail-spend">住戶已經有了，不計入總花費</p>
+      <p v-else-if="itemSpend" class="detail-spend">
         這件已勾選 <b>{{ money(itemSpend) }}</b>
       </p>
 
@@ -329,7 +330,7 @@ const hasShared = computed(
     </div>
 
     <!-- 建議商品 -->
-    <div v-if="info?.picks?.length" class="detail-sec">
+    <div v-if="info?.picks?.length && !info.owned" class="detail-sec">
       <h3>
         <ShoppingBag />建議商品<small v-if="infoQty > 1" class="h3-note">×{{ infoQty }}</small>
       </h3>
@@ -413,6 +414,7 @@ const hasShared = computed(
               {{ fmt(r.it.w) }} × {{ fmt(r.it.d) }} × {{ fmt(r.it.h) }} 公分
               <span v-if="rowSpend(r.it)" class="fl-spend">・{{ money(rowSpend(r.it)) }}</span>
               <span v-else-if="rowBundled(r.it)" class="fl-spend muted-spend">・已含在冷氣組合價</span>
+              <span v-else-if="shopInfo(r.it)?.owned" class="fl-spend muted-spend">・已經有了</span>
             </small>
           </span>
           <em class="cat-tag" :data-cat="itemCategory(r.it)">{{ itemCategory(r.it) }}</em>

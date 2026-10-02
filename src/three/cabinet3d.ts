@@ -521,7 +521,9 @@ function buildFace(fg: G, it: FurnitureItem, face: CabinetFace, fr: CabFrame, D:
       } else {
         const handleRight = piece.leaves === 2 ? k === 0 : piece.hinge === 'l'
         if (edgePull) {
-          box(fronts, 1.6, fh - gap * 2, 0.4, handleRight ? lx1 - 0.8 : lx0 + 0.8, fy0 + gap, zFace + 0.1, bevelM)
+          // 上櫃（門片下緣離地 160 以上）：斜切做在下緣，手往上摸得到；其他門片做在開門那側
+          if ((it.elev ?? 0) + fy0 >= 160) box(fronts, lx1 - lx0, 1.6, 0.4, (lx0 + lx1) / 2, fy0 + gap, zFace + 0.1, bevelM)
+          else box(fronts, 1.6, fh - gap * 2, 0.4, handleRight ? lx1 - 0.8 : lx0 + 0.8, fy0 + gap, zFace + 0.1, bevelM)
           continue
         }
         const hx = handleRight ? lx1 - 3.5 : lx0 + 3.5

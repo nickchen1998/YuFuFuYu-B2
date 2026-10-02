@@ -155,6 +155,18 @@ export const seedInteriors: Record<string, CabinetInterior> = {
     ],
   },
 
+  // 半套衛浴鏡櫃上方頂天吊櫃 92 × 25 × 120（離地 180～300）：中間一片立板（層板跨距不超過 80），左右各三層、各一扇門
+  mcab2top: {
+    faces: [
+      {
+        cols: [
+          { parts: [P('shelf', null, 'door', '備用衛生紙'), P('shelf', null, 'door', '洗臉巾・毛巾備品'), P('shelf', null, 'door', '不常用的備品')] },
+          { parts: [P('shelf', null, 'door', '面紙・棉花棒'), P('shelf', null, 'door', '保養品・牙膏補充包'), P('shelf', null, 'door', '清潔劑・補充包')] },
+        ],
+      },
+    ],
+  },
+
   // 吸塵器高櫃 48 × 35 × 300（和鞋櫃組成 L 型，做滿到右邊牆壁、頂天）：下門收吸塵器（淨高 124，上緣和鞋櫃齊平），
   // 中門 3 層當一般儲藏（換季鞋、帽子圍巾、備品），最上面上櫃（要踩椅子）放不常用的鞋盒、雨具
   vaccab: {

@@ -22,6 +22,8 @@ export const RATES = {
   drawerIn: 2600,
   /** 吊衣桿／前後伸縮衣桿 元/支 */
   rod: 730,
+  /** 開放充電凹槽：換一色木紋板做內襯（背、底、頂、兩側）＋背板開孔讓插座露出來 元/格 */
+  chargeNiche: 1200,
   /** 抽拉褲架 元/組 */
   pantsRack: 3630,
   /** 人造石、石英石檯面（深 60）元/公分 */
@@ -54,7 +56,7 @@ const fmt = (n: number) => n.toLocaleString('en-US')
 export const chi = (cm: number) => Math.max(1, Math.ceil(cm / 30.3 - 0.05))
 
 function counts(it: FurnitureItem) {
-  const c = { drawerOut: 0, drawerIn: 0, rods: 0, pants: 0, pullouts: 0 }
+  const c = { drawerOut: 0, drawerIn: 0, rods: 0, pants: 0, pullouts: 0, charge: 0 }
   for (const face of interiorOf(it).faces)
     for (const col of face.cols)
       for (const p of col.parts) {
@@ -64,6 +66,7 @@ function counts(it: FurnitureItem) {
         } else if (p.kind === 'appliance' && (p.label ?? '').includes('抽拉')) c.pullouts++
         else if (p.kind === 'hang' || p.kind === 'pullrod') c.rods++
         else if (p.kind === 'pants') c.pants++
+        else if (p.kind === 'charge') c.charge++
       }
   return c
 }
@@ -75,10 +78,11 @@ function extrasText(c: ReturnType<typeof counts>) {
   if (c.rods) out.push(`衣桿 ${c.rods} × ${fmt(RATES.rod)}`)
   if (c.pants) out.push(`褲架 ${c.pants} × ${fmt(RATES.pantsRack)}`)
   if (c.pullouts) out.push(`電器抽拉層板 ${c.pullouts} × ${fmt(RATES.drawerOut)}`)
+  if (c.charge) out.push(`充電凹槽木紋內襯＋背板開孔 ${c.charge} × ${fmt(RATES.chargeNiche)}`)
   return out
 }
 const extrasCost = (c: ReturnType<typeof counts>) =>
-  (c.drawerOut + c.pullouts) * RATES.drawerOut + c.drawerIn * RATES.drawerIn + c.rods * RATES.rod + c.pants * RATES.pantsRack
+  (c.drawerOut + c.pullouts) * RATES.drawerOut + c.drawerIn * RATES.drawerIn + c.rods * RATES.rod + c.pants * RATES.pantsRack + c.charge * RATES.chargeNiche
 
 function estPick(name: string, cost: number, detail: string, rec = true): ShopPick {
   const v = Math.round(cost / 10) * 10

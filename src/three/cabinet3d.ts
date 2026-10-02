@@ -102,6 +102,8 @@ const HANGER = '#8f7a63'
 const TRAY = '#efe9df'
 const STEEL = '#b5b8bc'
 const WIRE = '#9ea2a7'
+/** 開放凹槽的淺橡木紋內襯 */
+const OAK = '#d4b48a'
 
 const hasF = (it: FurnitureItem, f: string) => (it.features ?? []).includes(f)
 /** 拉門片數：每片約 80～85 寬 */
@@ -343,6 +345,28 @@ function contents(b: Batch, part: CabinetPart, c: Cell, clothes: boolean, rand: 
           b.box(1.2, 5.5, 1.6, cx + 5.4, y + 1.8, z, pick(MUG))
         }
       }
+      break
+    }
+    case 'charge': {
+      // 充電凹槽：木紋內襯（背、底、頂、兩側），背板右邊露出牆上的 USB＋插座面板，底下兩支手機和耳機盒
+      const L = 0.4
+      b.box(c.w, c.h, L, xc, c.y0, back + L / 2, OAK)
+      b.box(c.w, L, c.D, xc, c.y0, 0, OAK)
+      b.box(c.w, L, c.D, xc, c.y0 + c.h - L, 0, OAK)
+      for (const s of [-1, 1]) b.box(L, c.h, c.D, xc + s * (c.w / 2 - L / 2), c.y0, 0, OAK)
+      const px = c.x0 + c.w - 9
+      const py = c.y0 + Math.max(2, c.h / 2 - 6)
+      const pz = back + L
+      b.box(7, 12, 0.6, px, py, pz + 0.3, '#f4f4f2')
+      b.box(1.4, 0.6, 0.2, px, py + 9, pz + 0.7, '#3a3d42')
+      b.box(0.9, 0.35, 0.2, px, py + 7.6, pz + 0.7, '#3a3d42')
+      for (const s of [-1, 1]) b.box(0.3, 1.2, 0.2, px + s * 0.9, py + 3, pz + 0.7, '#3a3d42')
+      // 充電線從插座垂到手機
+      b.box(0.3, py + 7.6 - (c.y0 + L), 0.3, px - 0.2, c.y0 + L, pz + 1.2, '#e8e8e6')
+      const fy = c.y0 + L
+      b.box(7.4, 0.8, 15, xc - 13, fy, back + 13, '#2b2d31')
+      b.box(7.4, 0.8, 15, xc - 3, fy, back + 13, '#d9d6d0')
+      b.box(4.6, 2.4, 5.4, xc + 6, fy, back + 9, '#f6f6f4')
       break
     }
     case 'robot': {

@@ -21,7 +21,7 @@ export const hasInterior = (it: FurnitureItem) => INTERIOR_TYPES.includes(it.typ
 
 export const partKinds: { id: PartKind; name: string; color: string; hint: string }[] = [
   { id: 'hang', name: '吊衣桿', color: '#dbe5ef', hint: '短衣淨高 90～100、長大衣 130 以上；衣桿最好不要高過 190。櫃子深度要 55 以上。' },
-  { id: 'pullrod', name: '前後拉桿', color: '#dde2f1', hint: '淺櫃（深度不到 55）吊衣服用，拉出來取衣；欄寬要 45 以上。' },
+  { id: 'pullrod', name: '前後拉桿', color: '#dde2f1', hint: '淺櫃（深度不到 55）吊衣服用，衣架正面朝外；欄寬要 42 以上（衣架約 38～40 寬）。' },
   { id: 'shelf', name: '層板', color: '#efe5d3', hint: '摺疊衣物每層 30～35；雜物依物品高度。' },
   { id: 'books', name: '書', color: '#e8dcc6', hint: '一般書每層 25～28、A4 32～35；書櫃深 30、層板跨距不超過 80。' },
   { id: 'drawer', name: '抽屜', color: '#e7dccb', hint: '內衣、襪子 15～18；衣物、文件 20～25。' },
@@ -35,6 +35,12 @@ export const partKinds: { id: PartKind; name: string; color: string; hint: strin
     name: '掃地機器人',
     color: '#dfe7e1',
     hint: '只能放在最下面一格：這格不做底板和踢腳，機器人直接開進去；門片可以往下蓋住基座，下緣離地 12，機器人從門下進出。ECOVACS DEEBOT mini 基座 32 × 40 × 38.5：格寬 55、離地淨高 55 以上、櫃深 45。',
+  },
+  {
+    id: 'charge',
+    name: '充電凹槽',
+    color: '#e8d9c0',
+    hint: '開放凹槽放手機充電：淨高 20～25、離地 80～110 最順手；內襯木紋板，背板開孔讓牆上的 USB 插座露出來（請水電在櫃子背後預留插座）。',
   },
   { id: 'empty', name: '空格', color: '#f4f1ec', hint: '' },
 ]
@@ -358,7 +364,7 @@ export function interiorWarnings(it: FurnitureItem, mirrored = false): string[] 
           if (rod > 195) out.push(`${n}的衣桿離地約 ${Math.round(rod)} 公分，不太好拿（建議 190 以下，或改下拉式衣桿）`)
         }
         if (k === 'hang' && dp.clear < 52) out.push(`${n}：淨深只有 ${Math.round(dp.clear * 10) / 10}，一般衣架橫吊會卡到門，建議改前後拉桿`)
-        if (k === 'pullrod' && c.w < 45) out.push(`${n}：欄寬不到 45，前後拉桿吊的衣服會卡到側板`)
+        if (k === 'pullrod' && c.w < 42) out.push(`${n}：欄寬不到 42，衣架（約 38～40 寬）吊上去會卡到側板`)
         if ((k === 'books' || k === 'shelf') && c.w > 80) out.push(`${n}：層板跨距 ${Math.round(c.w)} 超過 80，放重物久了會彎，建議加立板`)
         if (k === 'pants' && (p.h < 60 || dp.clear < 50)) out.push(`${n}：褲架需要淨高 60、淨深 50 以上`)
         if (k === 'robot') {

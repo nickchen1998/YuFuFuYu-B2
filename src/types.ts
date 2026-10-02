@@ -89,7 +89,20 @@ export interface FurnitureItem {
  * 櫃內格子的用途：hang = 吊衣桿、pullrod = 前後拉桿（淺櫃吊衣）、shelf = 層板、books = 書、
  * drawer = 抽屜、shoe = 鞋子、pants = 褲架、storage = 收納箱（棉被、行李箱）、appliance = 家電、empty = 空格
  */
-export type PartKind = 'hang' | 'pullrod' | 'shelf' | 'books' | 'drawer' | 'shoe' | 'pants' | 'storage' | 'appliance' | 'mugs' | 'robot' | 'empty'
+export type PartKind =
+  | 'hang'
+  | 'pullrod'
+  | 'shelf'
+  | 'books'
+  | 'drawer'
+  | 'shoe'
+  | 'pants'
+  | 'storage'
+  | 'appliance'
+  | 'mugs'
+  | 'robot'
+  | 'charge'
+  | 'empty'
 /** 格子正面：door = 門片、glass = 玻璃門（關著也看得到裡面）、drawer = 抽屜面板（外抽）、open = 開放格 */
 export type FrontKind = 'door' | 'glass' | 'drawer' | 'open'
 

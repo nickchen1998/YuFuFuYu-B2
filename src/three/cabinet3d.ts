@@ -348,13 +348,9 @@ function contents(b: Batch, part: CabinetPart, c: Cell, clothes: boolean, rand: 
       break
     }
     case 'charge': {
-      // 充電凹槽：木紋內襯（背、底、頂、兩側），背板右邊露出牆上的 USB＋插座面板，底下兩支手機和耳機盒
+      // 充電格（木紋內襯在 buildFace 畫）：背板右邊露出牆上的 USB＋插座面板，底下兩支手機、插座前面耳機盒
       const L = 0.4
-      b.box(c.w, c.h, L, xc, c.y0, back + L / 2, OAK)
-      b.box(c.w, L, c.D, xc, c.y0, 0, OAK)
-      b.box(c.w, L, c.D, xc, c.y0 + c.h - L, 0, OAK)
-      for (const s of [-1, 1]) b.box(L, c.h, c.D, xc + s * (c.w / 2 - L / 2), c.y0, 0, OAK)
-      const px = c.x0 + c.w - 9
+      const px = c.x0 + c.w - 7
       const py = c.y0 + Math.max(2, c.h / 2 - 6)
       const pz = back + L
       b.box(7, 12, 0.6, px, py, pz + 0.3, '#f4f4f2')
@@ -364,9 +360,9 @@ function contents(b: Batch, part: CabinetPart, c: Cell, clothes: boolean, rand: 
       // 充電線從插座垂到手機
       b.box(0.3, py + 7.6 - (c.y0 + L), 0.3, px - 0.2, c.y0 + L, pz + 1.2, '#e8e8e6')
       const fy = c.y0 + L
-      b.box(7.4, 0.8, 15, xc - 13, fy, back + 13, '#2b2d31')
-      b.box(7.4, 0.8, 15, xc - 3, fy, back + 13, '#d9d6d0')
-      b.box(4.6, 2.4, 5.4, xc + 6, fy, back + 9, '#f6f6f4')
+      b.box(7.4, 0.8, 15, c.x0 + 5, fy, back + 13, '#2b2d31')
+      if (c.w >= 28) b.box(7.4, 0.8, 15, c.x0 + 13.5, fy, back + 13, '#d9d6d0')
+      b.box(4.6, 2.4, 5.4, px, fy, back + 22, '#f6f6f4')
       break
     }
     case 'robot': {
@@ -436,6 +432,11 @@ function buildFace(fg: G, it: FurnitureItem, face: CabinetFace, fr: CabFrame, D:
   const shelfM = steel ? mat(STEEL, 0.35, 0.7) : body
   const hidden = new Batch()
   const shown = new Batch()
+  const oakM = mat(OAK, 0.6)
+  const last = fl.cols.length - 1
+  // 'woodniche'：開放格內襯淺橡木紋（充電格一律有）；'sideopen'：最右欄的開放格連右側板一起打開（兩面開）
+  const lined = (part: CabinetPart) => part.front === 'open' && (hasF(it, 'woodniche') || part.kind === 'charge')
+  const sideOpen = (ci: number, part: CabinetPart) => hasF(it, 'sideopen') && ci === last && part.front === 'open'
   for (const c of fl.cols) {
     const cx0 = x0 + c.x
     if (c.i > 0 && !steel) box(fg, T, fr.innerH, D, cx0 - T / 2, fr.y0, 0, body)
@@ -447,13 +448,28 @@ function buildFace(fg: G, it: FurnitureItem, face: CabinetFace, fr: CabFrame, D:
         // 鋼管衣櫃：層板改成細的金屬層板
         if (!drawers) {
           if (steel) box(fg, c.w, 1.2, D - 4, cx0 + c.w / 2, py - 1.2, 0, shelfM)
-          else box(fg, c.w, T, D, cx0 + c.w / 2, py - T, 0, body)
+          else {
+            // 兩面開的格子之間，層板伸到側板外緣補齊
+            const sw = c.w + (sideOpen(c.i, prev) && sideOpen(c.i, p.part) ? T : 0)
+            box(fg, sw, T, D, cx0 + sw / 2, py - T, 0, lined(prev) || lined(p.part) ? oakM : body)
+          }
         }
+      }
+      if (lined(p.part)) {
+        const L = 0.4
+        const so = sideOpen(c.i, p.part)
+        const lw = c.w + (so ? T : 0)
+        shown.box(lw, L, D, cx0 + lw / 2, py, 0, OAK)
+        shown.box(lw, L, D, cx0 + lw / 2, py + p.h - L, 0, OAK)
+        shown.box(c.w, p.h, L, cx0 + c.w / 2, py, -D / 2 + L / 2, OAK)
+        shown.box(L, p.h, D, cx0 + L / 2, py, 0, OAK)
+        if (!so) shown.box(L, p.h, D, cx0 + c.w - L / 2, py, 0, OAK)
       }
       const rand = rng(hashStr(`${it.id}:${fi}:${c.i}:${p.i}:${p.part.kind}:${p.part.label ?? ''}`))
       // 掃地機器人格：門片下面有縫，機器人看得到，一律畫出來
       const visible = p.part.front === 'open' || p.part.front === 'glass' || p.part.kind === 'robot'
-      contents(visible ? shown : hidden, p.part, { x0: cx0, w: c.w, y0: py, h: p.h, D }, clothes, rand, steel)
+      // 衣櫃裡的木紋開放格放小東西，不畫摺好的衣服
+      contents(visible ? shown : hidden, p.part, { x0: cx0, w: c.w, y0: py, h: p.h, D }, clothes && !lined(p.part), rand, steel)
     }
   }
   hidden.flush(fg, true)
@@ -577,7 +593,20 @@ export function interiorCabinet(g: G, it: FurnitureItem) {
   } else {
     const cd = d - DOOR
     const cz = -DOOR / 2
-    for (const sx of [-1, 1]) box(g, T, h - base, cd, sx * (w / 2 - T / 2), base, cz, body)
+    // 'sideopen'：最右欄開放格那一段，右側板挖空（兩面開；相鄰的開放格合成一段，中間的層板會伸出來補齊）
+    const holes: [number, number][] = []
+    if (hasF(it, 'sideopen')) {
+      const lc = layoutFace(inter.faces[0], fr.innerW, fr.innerH).cols.at(-1)
+      for (const p of lc?.parts ?? []) {
+        if (p.part.front !== 'open') continue
+        const a = fr.y0 + p.y
+        const prev = holes.at(-1)
+        if (prev && a - prev[1] <= T + 0.1) prev[1] = a + p.h
+        else holes.push([a, a + p.h])
+      }
+    }
+    for (const sx of [-1, 1])
+      for (const [a, b] of spans(base, h, sx > 0 ? holes : [])) box(g, T, b - a, cd, sx * (w / 2 - T / 2), a, cz, body)
     for (const [a, b] of spans(-w / 2 + T, w / 2 - T, bays)) box(g, b - a, T, cd, (a + b) / 2, base, cz, body)
     if (fr.top === 'panel') box(g, w - T * 2, T, cd, 0, h - T, cz, body)
     else if (fr.top === 'stone') box(g, w + 1, STONE, d + 1, 0, h - STONE, 0.5, mat('#dcd8d1', 0.3))

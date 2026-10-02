@@ -164,8 +164,8 @@ const seeds: Seed[] = [
   { id: 'mns2', type: 'nightstand', name: '床頭櫃', x: -269, y: 584.5, rot: 90, w: 30, d: 35, h: 50, color: '#c9a57a' },
   // 投影機：靠窗側床頭櫃上，斜向對準床尾那面牆（投影畫面中心對齊床的中線）
   { id: 'projector', type: 'projector', name: '投影機', x: -269, y: 584.5, rot: 110, w: 19, d: 19, h: 25, elev: 50, color: '#e9e9e6' },
-  // 衣櫃做到頂（300）；內部規劃見 interiors.ts
-  { id: 'mward', type: 'wardrobe', name: '衣櫃（薄型 45 深）', x: -219, y: 282.5, rot: 0, w: 135, d: 45, h: 300, color: '#efe9df' },
+  // 衣櫃做到頂（300）；內部規劃見 interiors.ts。右端 30 寬窄欄離地約 94～226 做兩面開放的木紋格（正面＋朝半套衛浴門口那側），最下面一格充電
+  { id: 'mward', type: 'wardrobe', name: '衣櫃（薄型 45 深・側邊開放格）', x: -219, y: 282.5, rot: 0, w: 135, d: 45, h: 300, color: '#efe9df', features: ['woodniche', 'sideopen'] },
   // 門：主臥門、全套浴室門做隱形門（往房間裡開，客廳那面和牆齊平、同色）；
   // 次臥門、半套衛浴拉門用建商原本的門（建商附，不列預算）。門片畫在牆上（跟著門的開關），這裡的項目放規格和估價
   { id: 'door-master', type: 'hiddendoor', name: '主臥門（隱形門）', x: -16, y: 328, rot: 90, w: 80, d: 1.5, h: 210, color: '#f2efea' },

@@ -207,7 +207,7 @@ const hasShared = computed(
 <template>
   <!-- 家具詳細資料 -->
   <section v-if="selected" ref="detailEl" class="detail">
-    <!-- 固定在上方：返回、名稱、摘要、尺寸規格；下面的內容捲動 -->
+    <!-- 固定在上方：返回、名稱、花費、寬深高（保持精簡，太高會把下面的櫃內格局圖蓋住）；摘要和規格說明跟著下面一起捲動 -->
     <div class="detail-fixed">
       <button class="back-btn" @click="ui.selectedId = null"><ArrowLeft />全部家具</button>
 
@@ -221,7 +221,6 @@ const hasShared = computed(
           </div>
         </div>
       </div>
-      <p v-if="info?.summary" class="detail-summary">{{ info.summary }}</p>
       <p v-if="itemSpend" class="detail-spend">
         這件已勾選 <b>{{ money(itemSpend) }}</b>
       </p>
@@ -243,11 +242,15 @@ const hasShared = computed(
           </div>
         </div>
         <p class="muted tight">單位：公分。</p>
-        <ul v-if="features.length || info?.specs?.length" class="bullets">
-          <li v-for="f in features" :key="f">配備：{{ f }}</li>
-          <li v-for="s in info?.specs ?? []" :key="s">{{ s }}</li>
-        </ul>
       </div>
+    </div>
+
+    <p v-if="info?.summary" class="detail-summary">{{ info.summary }}</p>
+    <div v-if="features.length || info?.specs?.length" class="detail-sec">
+      <ul class="bullets">
+        <li v-for="f in features" :key="f">配備：{{ f }}</li>
+        <li v-for="s in info?.specs ?? []" :key="s">{{ s }}</li>
+      </ul>
     </div>
 
     <!-- 櫃內格局 -->

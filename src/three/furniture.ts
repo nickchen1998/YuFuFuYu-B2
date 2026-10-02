@@ -365,8 +365,8 @@ function vanity(g: G, it: FurnitureItem) {
 }
 
 /**
- * 'sideniche' 浴櫃（柯林斯 ST-80 這類）：壁掛櫃高 60、底下懸空；-x 是門片段，+x 端 26.5 寬的開放格朝馬桶，
- * 正面和側面都拿得到，上下兩層放衛生紙（下層捲筒、上層抽取式）
+ * 'sideniche' 浴櫃（淺木紋發泡板、陶瓷一體盆）：壁掛櫃高 60、底下懸空；-x 是對開門片段（無把手，門片上緣留一條取手溝），
+ * +x 端 26.5 寬的開放格朝馬桶、和櫃體同色，正面和側面都拿得到：上層抽取式面紙、下層捲筒衛生紙和清潔噴瓶
  */
 function vanityNiche(g: G, it: FurnitureItem) {
   const { w, d, h } = it
@@ -379,16 +379,17 @@ function vanityNiche(g: G, it: FurnitureItem) {
   const cx = -w / 2 + bw / 2
   const front = d / 2 - 1
   bx(g, bw, cabH, d - 2, cx, y0, -1, body)
-  bx(g, 0.6, cabH - 2, 0.4, cx, y0 + 1, front + 0.15, line)
-  for (const s of [-1, 1]) bx(g, 1.4, 12, 2, cx + s * 4, y0 + cabH - 20, front + 0.9, METAL())
+  bx(g, 0.6, cabH - 4, 0.4, cx, y0 + 1, front + 0.15, line)
+  bx(g, bw - 1, 1.6, 0.4, cx, y0 + cabH - 2.6, front + 0.15, line)
   const nx = w / 2 - nw / 2
-  const wood = mat('#8a6a4f', 0.6)
-  bx(g, nw, 1.8, d - 2, nx, y0, -1, wood)
-  bx(g, nw, 1.8, d - 2, nx, y0 + cabH / 2 - 0.9, -1, wood)
-  bx(g, nw, cabH, 1.8, nx, y0, -d / 2 + 0.9, wood)
+  bx(g, nw, 1.8, d - 2, nx, y0, -1, body)
+  bx(g, nw, 1.8, d - 2, nx, y0 + cabH / 2 - 0.9, -1, body)
+  bx(g, nw, cabH, 1.8, nx, y0, -d / 2 + 0.9, body)
   const paper = mat('#f7f6f2', 0.85)
-  for (const z of [-12, 0, 12]) cyl(g, 5.5, 5.5, 10, nx, y0 + 1.8, z, paper, 20)
-  for (const z of [-9, 10]) for (const k of [0, 1]) bx(g, 11, 7, 18, nx, y0 + cabH / 2 + 0.9 + k * 7.2, z, paper)
+  for (const z of [-12, 0]) cyl(g, 5.5, 5.5, 10, nx - 4, y0 + 1.8, z, paper, 20)
+  cyl(g, 3, 3, 20, nx + 6, y0 + 1.8, 8, mat('#cfe0e6', 0.3), 16)
+  bx(g, 11, 9, 22, nx - 3, y0 + cabH / 2 + 0.9, 0, mat('#eef1f2', 0.7))
+  cyl(g, 2.2, 2.2, 13, nx + 7.5, y0 + cabH / 2 + 0.9, 10, mat('#e8d9c4', 0.4), 16)
 }
 
 /**

@@ -884,30 +884,6 @@ function wallshelf(g: G, it: FurnitureItem) {
   }
 }
 
-/** 牆面掛桿（IKEA KUNGSFORS 這類）：不鏽鋼細桿＋S 掛勾，掛收納筒、收納盒、拉花杯、刷子、擦布；桿子高度 = h - 2 */
-function wallrail(g: G, it: FurnitureItem) {
-  const { w, d, h } = it
-  const z0 = -d / 2
-  const steel = mat('#c9ccd0', 0.25, 0.85)
-  const railY = h - 2
-  for (const sx of [-1, 1]) bx(g, 1.5, 3, 4, sx * (w / 2 - 1), railY - 1.5, z0 + 2, steel)
-  const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.65, 0.65, w, 12), steel)
-  rod.rotation.z = Math.PI / 2
-  rod.position.set(0, railY, z0 + 4)
-  g.add(rod)
-  const hook = (x: number) => bx(g, 0.4, 5, 0.4, x, railY - 5, z0 + 4.5, steel)
-  hook(-w * 0.38)
-  cyl(g, 6, 6, 24, -w * 0.38, railY - 29, z0 + 6.5, steel, 20)
-  hook(-w * 0.15)
-  bx(g, 24, 24, 12, -w * 0.15, railY - 29, z0 + 6.5, steel)
-  hook(w * 0.12)
-  cyl(g, 4, 4.5, 11, w * 0.12, railY - 18, z0 + 5, steel, 18)
-  hook(w * 0.27)
-  bx(g, 2, 14, 1, w * 0.27, railY - 20, z0 + 4.5, mat('#8a6a4f', 0.6))
-  hook(w * 0.4)
-  bx(g, 14, 20, 0.6, w * 0.4, railY - 25, z0 + 4.5, mat('#e8e2d8', 0.9))
-}
-
 /** 浴巾架（雙桿，鎖牆）：兩支桿子＋掛著的浴巾，正面朝 +z */
 function towelbar(g: G, it: FurnitureItem) {
   const { w, d, h } = it
@@ -1197,7 +1173,6 @@ const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
   hamper,
   towelbar,
   towelring,
-  wallrail,
   person,
   coathooks,
   towerfan,

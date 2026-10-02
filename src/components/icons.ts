@@ -59,7 +59,6 @@ const map: Record<string, Component> = {
   hamper: Archive,
   towelbar: Rows3,
   towelring: Circle,
-  wallrail: Rows3,
   person: PersonStanding,
   coathooks: Shirt,
   towerfan: Fan,

@@ -429,22 +429,6 @@ export const shopping: Record<string, ShopInfo> = {
       '層板在椅子背後約 1.3 公尺，起身不會撞到頭',
     ],
   },
-  pegboard2: {
-    summary:
-      '書房矮櫃印表機那段上方掛一塊 SKÅDIS 洞洞板：小層板放行動電源和充電器，掛勾掛耳機，下面小籃子收線材；寬 36，不會擋到房門口的電燈開關。',
-    specs: ['36 × 56（直放），離地約 135～191', '開關在離地約 120、靠門那邊：洞洞板下緣和側邊都留空，掛的東西不要垂到開關前面'],
-    picks: [
-      {
-        name: 'IKEA SKÅDIS 收納壁板 木質 36 × 56',
-        rec: true,
-        detail: '纖維板、壓克力亮光漆；附牆面安裝桿，上牆螺絲另購；掛勾、層板、小籃子是 SKÅDIS 配件另外買',
-        price: '約 NT$399（2026/10 IKEA，原價 NT$499）',
-        url: 'https://www.ikea.com.tw/zh/products/wall-organisers/boards-and-wall-organisers/skadis-art-00347176',
-        source: 'IKEA',
-      },
-    ],
-    notes: ['和浮動層板一起加夾板補強'],
-  },
   coffeeshelf: {
     summary: '咖啡櫃上方不做櫃子，掛一條 120 白橡木色浮動層板（看不到支架），放咖啡豆、咖啡秤、手沖濾杯和濾紙；',
     specs: [
@@ -2424,7 +2408,7 @@ export const shopping: Record<string, ShopInfo> = {
     specs: [
       '高 105 × 底座 22 × 22、4.73 kg',
       '每台旁邊要有插座',
-      '客廳放電視櫃旁吹向沙發；主臥放床尾角落；次臥放靠衣櫃那張書桌旁、斜吹兩個座位',
+      '客廳放電視櫃旁吹向沙發；主臥放床尾角落；次臥放書櫃和窗戶之間的角落、斜吹兩個座位',
     ],
     picks: [
       {

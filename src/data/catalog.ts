@@ -150,8 +150,9 @@ const seeds: Seed[] = [
   { id: 'fan-living', type: 'towerfan', name: 'Dyson 直立式電扇（客廳）', x: 273, y: 431, rot: 250, w: 22, d: 22, h: 105, color: '#eef0f2' },
   // 主臥這台放窗邊的牆角（床尾那側，另一個窗邊角落是床頭櫃），斜朝床
   { id: 'fan-master', type: 'towerfan', name: 'Dyson 直立式電扇（主臥）', x: -31, y: 583, rot: 235, w: 22, d: 22, h: 105, color: '#eef0f2' },
-  // 次臥這台靠客廳隔間牆、放在靠衣櫃那張書桌旁邊（離衣櫃拉門約 1.1 m），斜朝兩個座位，擺頭兩個人都吹得到
-  { id: 'fan-bed2', type: 'towerfan', name: 'Dyson 直立式電扇（次臥）', x: 318, y: 185, rot: 30, w: 22, d: 22, h: 105, color: '#eef0f2' },
+  // 次臥這台放在書櫃（分戶牆矮櫃）和窗戶那面牆之間的角落（離矮櫃尾端約 60），斜朝兩個座位，擺頭兩個人都吹得到；
+  // 不擋掃地機器人進出，也不在窗戶前面
+  { id: 'fan-bed2', type: 'towerfan', name: 'Dyson 直立式電扇（次臥）', x: 528, y: 538, rot: 210, w: 22, d: 22, h: 105, color: '#eef0f2' },
   // 身高參考：184 與 154 公分的人，站在電視區和冰箱之間，看人和家具的高低比例（不是家具）
   { id: 'person184', type: 'person', name: '身高參考 184 公分', x: 95, y: 315, rot: 0, w: 46, d: 26, h: 184, color: '#5f7488' },
   { id: 'person154', type: 'person', name: '身高參考 154 公分', x: 150, y: 315, rot: 0, w: 38, d: 22, h: 154, color: '#c9a98a' },
@@ -181,7 +182,7 @@ const seeds: Seed[] = [
   // 按摩椅：選零靠牆機型（背後留 5 公分），躺平時往前滑到約 180 公分
   { id: 'massage', type: 'massagechair', name: '按摩椅', x: 469.5, y: 170, rot: 270, w: 80, d: 140, h: 115, color: '#4a4541' },
   // 兩張升降桌並排靠客廳隔間牆（桌面 202～442）：靠門那張的桌尾離房門口的電燈開關（離地 120）約 12 公分，桌子升高也不會撞到；
-  // 桌子上方只留洞洞板、不掛層板（不壓頭，站姿時螢幕也不會卡到）；椅子背後到矮櫃之間走道約 80
+  // 桌子上方不掛層板、洞洞板（不壓頭，站姿時螢幕也不會卡到）；椅子背後到矮櫃之間走道約 80
   { id: 'bdesk1', type: 'standingdesk', name: '升降桌', x: 333, y: 262, rot: 90, w: 120, d: 60, h: 73, color: '#d8c3a5' },
   { id: 'bdesk2', type: 'standingdesk', name: '升降桌', x: 333, y: 382, rot: 90, w: 120, d: 60, h: 73, color: '#d8c3a5' },
   { id: 'bchair1', type: 'chair', name: '辦公椅', x: 395, y: 262, rot: 270, w: 50, d: 50, h: 100, color: '#5b5f63' },
@@ -193,8 +194,6 @@ const seeds: Seed[] = [
   // 矮櫃上方（分戶牆）兩條浮動層板（IKEA LACK 190 × 26，白），上緣離地 125、165，放書、植物、相框；坐在書桌前視訊時就是背後的背景
   { id: 'bshelf1', type: 'wallshelf', name: '浮動層板（書・植物）', x: 531.5, y: 340, rot: 270, w: 190, d: 26, h: 5, elev: 120, color: '#f4f2ee', features: ['books'] },
   { id: 'bshelf2', type: 'wallshelf', name: '浮動層板（展示・相框）', x: 531.5, y: 340, rot: 270, w: 190, d: 26, h: 5, elev: 160, color: '#f4f2ee', features: ['display'] },
-  // 洞洞板留在客廳隔間牆、靠門那張書桌上方（36 × 56，離地 135～191）收線材、耳機，不擋房門口的電燈開關
-  { id: 'pegboard2', type: 'pegboard', name: '洞洞板（線材・耳機）', x: 304, y: 428, rot: 90, w: 36, d: 2, h: 56, elev: 135, color: '#d2b48c', features: ['study'] },
   // 冷氣：窗戶上方、往分戶牆那邊移（右緣離分戶牆約 25），沿長邊往衣櫃方向吹；風從座位右邊經過，不會直吹頭
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 480, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 

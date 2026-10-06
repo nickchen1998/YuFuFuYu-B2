@@ -385,6 +385,48 @@ export const shopping: Record<string, ShopInfo> = {
       },
     ],
   },
+  tvwall: {
+    summary:
+      '只在電視周圍做一片白橡木格柵背板（163 × 106、厚約 5），比電視左右、上面各多出約 20：電視像是嵌在一塊木板上，線都藏在後面，不像直接釘在牆上；其他地方維持白牆，淺木色和電視櫃同一色系，無印風。',
+    specs: [
+      '163 × 106、厚約 5，下緣離地 56（電視櫃上緣 53 再上去一點）、上緣 162；底板 18 mm＋實木貼皮格柵（寬約 2.4、間距 1.2、凸出 3）',
+      '電視（123 × 72，離地 70～142）掛在背板正中間，左右、上面各露出約 20 的木格柵',
+      '電視壁掛：背板後面先做角材或夾板補強，壁掛架鎖穿到補強裡；電視往前 5 公分',
+      '藏線：電視正後方離地約 100 留插座和網路孔，線從背板後面往下走，藏在電視櫃後面',
+    ],
+    picks: [
+      {
+        name: '木作格柵電視背板（實木貼皮白橡木，163 × 106）（估價）',
+        rec: true,
+        detail: '含底板、角材補強、格柵、藏線、木蠟油或霧面透明漆；插座移位另請水電',
+        price: '約 NT$12,000～18,000（2026 行情推算：面積小，主要是木作工資和補強）',
+        category: '系統櫃・訂製',
+        url: 'https://chisun-design.com/wood-tv-wall-guide/',
+        source: '木作電視牆行情',
+      },
+      {
+        name: '木作平板電視背板（白橡木皮平貼，不做格柵）（估價）',
+        detail: '比較省，好擦不卡灰塵；一樣可以補強、藏線',
+        price: '約 NT$9,000～14,000（2026 行情推算）',
+        category: '系統櫃・訂製',
+        url: 'https://www.945.com.tw/life/price?id=206',
+        source: '找師傅',
+      },
+      {
+        name: '岩板電視背板（淺灰或米白薄岩板）（估價）',
+        detail: '石材感、好清潔；比木作重，電視壁掛要鎖穿到後面的牆；163 × 106 約 19 才，岩板起價約 NT$1,200／才',
+        price: '約 NT$30,000～40,000（2026 行情推算，含施工）',
+        category: '系統櫃・訂製',
+        url: 'https://www.pro360.com.tw/price/marble_tv_wall',
+        source: 'PRO360',
+      },
+    ],
+    notes: [
+      '格柵凹縫會積灰塵，用軟毛刷或吸塵器的刷頭清；不想常清就選平板木皮',
+      '施工順序：水電先拉電視插座和線管 → 角材補強 → 底板 → 格柵 → 上漆 → 掛電視',
+      '背板四邊可以倒小圓角或做 45° 收邊，側面看起來比較薄',
+    ],
+  },
   tvstand: {
     summary:
       '實木美腿電視櫃（錐形腳高 18、櫃體高 35）：中間一格開放放網路設備、遊戲機（在電視正下方，好走線、好散熱），左右兩邊門片櫃；落地不用鎖牆，底下可以掃地。',
@@ -2640,7 +2682,7 @@ export function itemCategory(it: FurnitureItem): string {
   if (shopInfo(it)?.owned) return '已有'
   if (it.type === 'vanity' || it.type === 'mirrorcab') return '衛浴'
   if (it.type === 'kitchen' || (it.locked && it.type !== 'acunit')) return '建商附'
-  if (it.type === 'peninsula' || it.type === 'hiddendoor') return '訂製'
+  if (it.type === 'peninsula' || it.type === 'hiddendoor' || it.type === 'tvwall') return '訂製'
   if (hasInterior(it)) return '系統櫃'
   if (it.type === 'projection') return '示意'
   if (APPLIANCES.includes(it.type)) return '家電'

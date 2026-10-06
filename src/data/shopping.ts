@@ -58,13 +58,14 @@ function trackBand(o: { where: string; len: number; lines: number; spots: number
   const chi = Math.ceil(o.len / 30.3 - 0.05)
   const meters = Math.ceil(o.len / 100)
   const band = chi * 550
-  const kit = meters * 630 + o.lines * 880 + o.spots * 785 + 1500 + 1800
+  const kit = meters * 630 + o.lines * 1390 + o.spots * 785 + 1500 + 1800
   const nt = (n: number) => `NT$${n.toLocaleString('en-US')}`
+  const lights = [o.lines ? `${o.lines} 支排燈往牆上打（洗牆）` : '', o.spots ? `${o.spots} 盞投射燈打重點` : ''].filter(Boolean).join('、')
   return {
-    summary: `${o.where}：天花板不全部封，只做一道往下 25 的假樑（底面離地 275），磁吸軌道嵌在假樑底面，掛 ${o.lines} 支廣角排燈當整體照明、${o.spots} 盞投射燈打重點；其他地方維持原始 300 的高度，抬頭只看到一條細細的軌道線，沒有主燈也沒有崁燈。`,
+    summary: `${o.where}：沿牆做一道假樑（深 45、往下 25，底面離地 275），磁吸軌道離牆約 35，${lights}；牆面亮起來、光反射回房間，整個家平均被照亮，抬頭只看到一條細細的軌道線，沒有主燈也沒有崁燈。`,
     specs: [
-      `假樑長約 ${o.len}、往下 25（軌道深約 5.3，要留足深度）；矽酸鈣板＋角材，和天花板同色`,
-      '燈頭：廣角排燈（24W）當整體照明、投射燈打餐桌、櫃子、牆面；黃光 3000K 為主',
+      `假樑長約 ${o.len}、深 45、往下 25（軌道深約 5.3，要留足深度）；矽酸鈣板＋角材，和天花板同色`,
+      '燈頭：可擺角排燈往牆面打（洗牆），軌道離牆約 35，牆面從上到下都亮；黃光 3000K 為主',
       ...(o.specs ?? []),
     ],
     picks: [
@@ -79,14 +80,14 @@ function trackBand(o: { where: string; len: number; lines: number; spots: number
         source: 'PRO360',
       },
       {
-        name: `嵌入式磁吸軌道組：軌道約 ${meters} 米＋廣角排燈 × ${o.lines}＋投射燈 × ${o.spots}＋電源、配線（估價）`,
+        name: `嵌入式磁吸軌道組：軌道約 ${meters} 米${o.lines ? `＋洗牆排燈 × ${o.lines}` : ''}${o.spots ? `＋投射燈 × ${o.spots}` : ''}＋電源、配線（估價）`,
         rec: true,
         detail:
-          '舞光達文西崁入式磁吸軌道約 NT$630／米、24W 廣角排燈約 NT$880／支、投射燈約 NT$785／盞；24V 電源供應器約 NT$1,500、水電拉線接電約 NT$1,800（推估）',
+          '舞光達文西崁入式磁吸軌道約 NT$630／米、可擺角排燈約 NT$1,390／支（可以轉向牆面）、投射燈約 NT$785／盞；24V 電源供應器約 NT$1,500、水電拉線接電約 NT$1,800（推估）',
         price: `約 ${nt(kit)}（2026/10 舞光建議售價＋推估）`,
         cost: kit,
         category: '系統櫃・訂製',
-        url: 'https://www.dancelight.com.tw/tw/product/magnetic-track-light-0004/detail',
+        url: 'https://www.dancelight.com.tw/tw/product/magnetic-track-light-0003/detail',
         source: '舞光',
       },
     ],
@@ -100,38 +101,70 @@ function trackBand(o: { where: string; len: number; lines: number; spots: number
 
 export const shopping: Record<string, ShopInfo> = {
   'clg-living-l': trackBand({
-    where: '客餐廳左側（電視、廚房那面牆）',
+    where: '客餐廳左側（電視、冰箱、廚房那面牆）',
     len: 665,
-    lines: 2,
-    spots: 1,
-    specs: ['順便把客廳冷氣的冷媒管（鞋櫃上方 → 冷氣平台，約 7 米）包在假樑裡', '水槽、爐台上方各一支排燈當廚房工作燈，玄關一盞投射燈'],
-    notes: ['電視正上方不要放燈頭，螢幕才不會反光'],
+    lines: 3,
+    spots: 0,
+    specs: ['順便把客廳冷氣的冷媒管（鞋櫃上方 → 冷氣平台，約 7 米）包在假樑裡', '洗牆燈打電視牆、冰箱那段和廚房牆面，廚房檯面也一起亮'],
+    notes: ['電視牆的洗牆燈從上往下打，螢幕不會有反光點；看電影時可以只關這一支'],
   }),
-  'clg-living-c': trackBand({
-    where: '客餐廳中間（大門前一路到窗邊）',
+  'clg-living-r': trackBand({
+    where: '客餐廳右側（沙發、咖啡櫃那面牆）',
     len: 625,
     lines: 3,
-    spots: 3,
-    specs: ['茶几、沙發前兩支排燈，餐桌正上方一支排燈；投射燈打鞋櫃、咖啡櫃、中島檯面'],
-    notes: ['假樑起點離冷氣出風口約 15，出風不會被擋到'],
-  }),
-  'clg-master': trackBand({
-    where: '主臥（床邊走道上方）',
-    len: 272,
-    lines: 2,
     spots: 1,
-    specs: [
-      '離衣櫃 57，衣櫃最上面的上櫃門打開不會撞到假樑；躺在床上燈在側邊，不會直視',
-      '衣櫃前、床尾走道各一支排燈，投射燈打衣櫃的充電格',
-    ],
+    specs: ['在吸塵器高櫃前面斷開；洗牆燈打沙發牆、咖啡櫃牆、次臥門那段，投射燈斜打餐桌'],
+  }),
+  'clg-living-b': trackBand({
+    where: '客餐廳窗戶那面',
+    len: 198,
+    lines: 1,
+    spots: 0,
+    specs: ['假樑兼窗簾盒；一支 120 排燈洗窗簾，晚上窗簾拉起來是一面亮的布牆'],
+  }),
+  'clg-living-t': trackBand({
+    where: '客餐廳大門上方',
+    len: 95,
+    lines: 0,
+    spots: 1,
+    specs: ['大門到冷氣之間一小段，冷氣管從這裡接到左側假樑；一盞投射燈打玄關地面'],
+  }),
+  'clg-master-t': trackBand({ where: '主臥半套衛浴那面牆（衣櫃右邊到房門）', len: 137, lines: 1, spots: 0 }),
+  'clg-master-l': trackBand({
+    where: '主臥床頭那面牆',
+    len: 238,
+    lines: 2,
+    spots: 0,
+    specs: ['從衣櫃上櫃門打開的範圍外開始；床頭牆亮起來，躺著燈在頭頂後方，不會直視'],
     notes: ['床邊加雙切開關，躺著就能關燈'],
   }),
-  'clg-study': trackBand({
-    where: '次臥（書桌前緣上方）',
-    len: 492,
+  'clg-master-r': trackBand({
+    where: '主臥床尾那面牆（房門、投影那面）',
+    len: 295,
     lines: 2,
-    spots: 2,
-    specs: ['兩張書桌各一支排燈，光從前上方來、螢幕不反光（書桌可以改 4000K 自然光）', '投射燈打衣櫃和背後層板（視訊背景）'],
+    spots: 0,
+    notes: ['看投影時把這兩支關掉，畫面才不會被洗白'],
+  }),
+  'clg-study-l': trackBand({
+    where: '次臥書桌那面牆',
+    len: 492,
+    lines: 3,
+    spots: 0,
+    specs: ['洗牆燈打書桌前面的牆，桌面也一起亮，光從前面來、螢幕不反光（書桌這條可以改 4000K 自然光）'],
+  }),
+  'clg-study-r': trackBand({
+    where: '次臥分戶牆（按摩椅、矮櫃、層板那面）',
+    len: 463,
+    lines: 3,
+    spots: 0,
+    specs: ['層板那段洗亮，視訊時背景清楚'],
+  }),
+  'clg-study-b': trackBand({
+    where: '次臥窗戶那面（冷氣左邊）',
+    len: 92,
+    lines: 1,
+    spots: 0,
+    specs: ['假樑兼窗簾盒；一支 60 排燈洗窗簾'],
   }),
   // ───────────── 系統櫃（2026/09 查詢） ─────────────
   bward1: {

@@ -8,7 +8,7 @@ import { floorPresets } from '../data/materials'
 import { blockingRects, fmt, footprint, rectsOverlap, roomSize, type Rect } from '../geometry'
 import { buildWalls } from './walls'
 import { buildFurniture, furnitureSignature, lampGlow } from './furniture'
-import { LIGHT_COLORS } from '../data/lighting'
+import { LIGHT_COLORS, ROOM_FILL } from '../data/lighting'
 import { hasInterior } from '../cabinet'
 import { floorTexture, loadPlanOverlay, TEX_CM } from './textures'
 import { mat } from './mats'
@@ -68,6 +68,8 @@ export class Viewer {
   private items = new Map<string, ItemEntry>()
   private floors = new Map<string, THREE.Mesh>()
   private ceilings = new THREE.Group()
+  /** 每個房間一盞看不見的補光：白天只在漫遊時開；晚上代表洗牆的反射光，每個模式都開 */
+  private roomLights = new THREE.Group()
   private ceilingMat = new THREE.MeshStandardMaterial({ color: '#fbfaf8', roughness: 0.95, emissive: '#e9e5de', emissiveIntensity: 0.35 })
   private roomLabels = new THREE.Group()
   private overlayMesh: THREE.Mesh | null = null
@@ -145,7 +147,7 @@ export class Viewer {
     this.setupLights()
     this.setupStatic()
     this.applyMirror(false)
-    this.world.add(this.furnitureGroup, this.ceilings, this.roomLabels, this.measureGroup)
+    this.world.add(this.furnitureGroup, this.ceilings, this.roomLights, this.roomLabels, this.measureGroup)
 
     this.rebuildWalls()
     this.syncFurniture()
@@ -232,8 +234,8 @@ export class Viewer {
         // 天花板不畫燈具；只留看不見的光源，漫遊模式才夠亮
         const light = new THREE.PointLight('#fff1dc', 9, 0, 2)
         light.position.set((r.x1 + r.x2) / 2, -30, (r.y1 + r.y2) / 2)
-        light.userData = { kind: 'ceiling', offset: -30 }
-        this.ceilings.add(light)
+        light.userData = { kind: 'ceiling', offset: -30, roomId: r.id }
+        this.roomLights.add(light)
       }
 
       const lb = label(
@@ -244,6 +246,7 @@ export class Viewer {
       this.roomLabels.add(lb)
     }
     this.ceilings.visible = false
+    this.roomLights.visible = false
     this.updateFloors()
 
     // 原始平面圖疊圖
@@ -293,7 +296,7 @@ export class Viewer {
     })
     this.world.add(this.wallsGroup)
     this.collide = blockingRects(H)
-    for (const c of this.ceilings.children) c.position.y = H + ((c.userData.offset as number | undefined) ?? 0)
+    for (const c of [...this.ceilings.children, ...this.roomLights.children]) c.position.y = H + ((c.userData.offset as number | undefined) ?? 0)
     this.applyCeilingItems()
     this.touchShadows()
   }
@@ -372,12 +375,20 @@ export class Viewer {
     this.hemi.color.set(night ? c : new THREE.Color('#ffffff'))
     this.hemi.groundColor.set(night ? '#2a2622' : '#b9ae9f')
     this.scene.background = new THREE.Color(night ? '#1c1d21' : '#efebe5')
-    for (const o of this.ceilings.children) if (o instanceof THREE.PointLight) o.visible = !night
+    // 晚上：每個房間留一盞柔和補光，代表洗牆的光從牆面反射回來（浴室是建商附的燈）
+    this.roomLights.visible = night || this.ui.mode === 'walk'
+    for (const o of this.roomLights.children) {
+      if (!(o instanceof THREE.PointLight)) continue
+      const fill = ROOM_FILL[o.userData.roomId as string] ?? 0
+      o.visible = !night || fill > 0
+      o.intensity = night ? fill : 9
+      o.color.set(night ? c : new THREE.Color('#fff1dc'))
+    }
     this.furnitureGroup.traverse((o) => {
       if (!(o instanceof THREE.SpotLight) || !o.userData.lamp) return
       o.visible = night
       o.color.copy(c)
-      o.intensity = o.userData.lamp === 'line' ? 14 : 26
+      o.intensity = o.userData.lamp === 'wash' ? 16 : 26
     })
     lampGlow.emissive.copy(night ? c : new THREE.Color('#000000'))
     lampGlow.emissiveIntensity = night ? 2.5 : 0
@@ -458,6 +469,7 @@ export class Viewer {
     this.orbit.enabled = mode === 'orbit'
     this.topCtl.enabled = mode === 'top'
     this.ceilings.visible = mode === 'walk'
+    this.roomLights.visible = mode === 'walk' || this.ui.lighting !== 'day'
     this.applyAirflow()
     this.setLabels()
     this.rebuildWalls()

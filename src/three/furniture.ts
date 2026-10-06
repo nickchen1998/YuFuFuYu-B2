@@ -4,7 +4,7 @@ import { mat, glassMat, shadeHex } from './mats'
 import { hashStr } from './textures'
 import { interiorCabinet, peninsulaStorage } from './cabinet3d'
 import { PENINSULA_TOP, peninsulaStorageLen } from '../cabinet'
-import { trackModules } from '../data/lighting'
+import { trackLayout } from '../data/lighting'
 
 // 每個家具都在自己的座標系（公分）建模：
 //   原點 = 平面外框中心、地面；寬沿 x、深沿 z、正面朝 +z
@@ -199,32 +199,36 @@ function coffeetable(g: G, it: FurnitureItem) {
 export const lampGlow = new THREE.MeshStandardMaterial({ color: '#f4f3f0', roughness: 0.4, emissive: '#000000' })
 
 /**
- * 局部天花板（假樑）＋嵌入式磁吸軌道：箱體在 0～h（底面離地 elev），軌道嵌在底面中線，燈頭照 data/lighting.ts 掛上去；
- * 每個燈頭放一盞聚光燈（燈光模擬時才打開）。假樑和燈頭只在漫遊、或牆高「完整」時顯示，從上面看不會擋住房間
+ * 沿牆的假樑＋嵌入式磁吸軌道：箱體在 0～h（底面離地 elev），背面（-z）貼牆；軌道離牆約 35，燈頭照 data/lighting.ts 掛上去。
+ * 洗牆排燈照向背後那面牆離地約 100 的地方，投射燈照向指定的地面；每個燈頭一盞聚光燈（燈光模擬時才打開）。
+ * 假樑和燈頭只在漫遊、或牆高「完整」時顯示，從上面看不會擋住房間
  */
 function ceilingband(g: G, it: FurnitureItem) {
   const { w, d, h } = it
+  const layout = trackLayout[it.id]
+  const z = layout?.z ?? 0
   const shell: THREE.Mesh[] = []
   shell.push(bx(g, w, h, d, 0, 0, 0, mat(it.color, 0.9)))
-  shell.push(bx(g, w - 16, 0.4, 2.8, 0, -0.1, 0, mat('#2c2e31', 0.5)))
+  shell.push(bx(g, w - 10, 0.4, 2.8, 0, -0.1, z, mat('#2c2e31', 0.5)))
   const housing = mat('#e9e9e7', 0.5)
-  for (const m of trackModules[it.id] ?? []) {
-    const line = m.kind === 'line'
-    if (line) {
-      const len = m.len ?? 60
-      shell.push(bx(g, len, 2.2, 2.6, m.at, -2.2, 0, housing), bx(g, len - 1, 0.3, 2, m.at, -2.5, 0, lampGlow))
+  for (const m of layout?.modules ?? []) {
+    const wash = m.kind === 'wash'
+    if (wash) {
+      const len = m.len ?? 90
+      shell.push(bx(g, len, 2.2, 2.6, m.at, -2.2, z, housing), bx(g, len - 1, 0.3, 2, m.at, -2.5, z, lampGlow))
     } else {
-      shell.push(cyl(g, 2.4, 2.4, 9, m.at, -9, 0, housing, 20), cyl(g, 1.9, 1.9, 0.3, m.at, -9.3, 0, lampGlow, 20))
+      shell.push(cyl(g, 2.4, 2.4, 9, m.at, -9, z, housing, 20), cyl(g, 1.9, 1.9, 0.3, m.at, -9.3, z, lampGlow, 20))
     }
-    const lamp = new THREE.SpotLight('#ffffff', 0, 6, line ? 1.05 : 0.42, line ? 0.9 : 0.5, 2)
-    lamp.position.set(m.at, line ? -3 : -10, 0)
-    const [tx, tz] = m.toward ?? [0, 0]
-    lamp.target.position.set(m.at + tx, -it.elev, tz)
+    const lamp = new THREE.SpotLight('#ffffff', 0, 6, wash ? 0.95 : 0.42, wash ? 0.85 : 0.5, 2)
+    lamp.position.set(m.at, wash ? -3 : -10, z)
+    if (wash) lamp.target.position.set(m.at, 100 - it.elev, -d / 2 - 1)
+    else {
+      const [tx, tz] = m.toward ?? [0, 0]
+      lamp.target.position.set(m.at + tx, -it.elev, z + tz)
+    }
     lamp.userData.lamp = m.kind
     lamp.visible = false
-    // 只有廣角排燈算陰影（光會被牆擋住、不會漏到隔壁房間）；投射燈範圍小，不算陰影。
-    // 每盞有陰影的燈要佔一個貼圖單元，很多顯卡上限 16，全部都算會整個畫面變黑
-    lamp.castShadow = line
+    lamp.castShadow = !!m.shadow
     lamp.shadow.mapSize.set(512, 512)
     lamp.shadow.bias = -0.0005
     lamp.shadow.normalBias = 0.02

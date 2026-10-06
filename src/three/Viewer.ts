@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { CSS2DObject, CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js'
-import type { Design, FurnitureItem, ViewMode } from '../types'
+import type { Design, FurnitureItem, ViewMode, WalkPose } from '../types'
 import type { ui as UIState } from '../store'
 import { corridor, planOverlay, rooms, unitBounds, walls } from '../data/house'
 import { floorPresets } from '../data/materials'
@@ -19,6 +19,17 @@ const CM = 0.01
 const EYE = 160
 /** 蹲下時的視線高度 */
 const CROUCH_EYE = 90
+/** 坐下／躺下的位置（平面座標）、視線高度、面向 */
+interface Seat {
+  x: number
+  y: number
+  eye: number
+  yaw: number
+  pitch: number
+  name: string
+}
+/** 桌子類：椅子收在底下時，坐下要先把椅子往後拉 */
+const TABLES = ['table', 'desk', 'standingdesk', 'roundtable', 'peninsula', 'island', 'windowisland', 'coffeetable']
 const CENTER = {
   x: (unitBounds.x1 + unitBounds.x2) / 2,
   y: (unitBounds.y1 + unitBounds.y2) / 2,
@@ -68,7 +79,22 @@ export class Viewer {
 
   private drag: { id: string; dx: number; dy: number } | null = null
   private down: { x: number; y: number; t: number } | null = null
-  private walk = { x: 91, y: 70, yaw: 0, pitch: -0.05, eye: EYE, keys: new Set<string>(), looking: false }
+  private walk = {
+    x: 91,
+    y: 70,
+    yaw: 0,
+    pitch: -0.05,
+    eye: EYE,
+    keys: new Set<string>(),
+    looking: false,
+    /** 坐著、躺著的位置；坐下前站的地方（起身回到這裡） */
+    seat: null as Seat | null,
+    back: null as { x: number; y: number } | null,
+    /** 平順移動到的位置、轉到的方向 */
+    goto: null as { x: number; y: number } | null,
+    aim: null as { yaw: number; pitch: number } | null,
+    nearT: 0,
+  }
   private collide: Rect[] = []
   private raf = 0
   private timer = new THREE.Timer()
@@ -391,7 +417,7 @@ export class Viewer {
     this.clearMeasure()
     if (mode === 'top') this.frameTop()
     if (mode === 'walk') this.walk.keys.clear()
-    else this.ui.crouch = false
+    else this.resetPose()
     this.renderer.domElement.style.cursor = mode === 'walk' ? 'grab' : ''
   }
 
@@ -456,8 +482,118 @@ export class Viewer {
   teleport(roomId: string) {
     const r = rooms.find((x) => x.id === roomId)
     if (!r) return
+    this.resetPose()
     this.walk.x = (r.x1 + r.x2) / 2
     this.walk.y = (r.y1 + r.y2) / 2
+  }
+
+  /** 漫遊的姿勢：蹲下、坐下（附近的椅子、沙發、床邊、馬桶）、躺下（附近的床）；再按一次同一個姿勢就站起來 */
+  setPose(p: WalkPose) {
+    if (p === this.ui.pose) p = 'stand'
+    const w = this.walk
+    if (p === 'sit' || p === 'lie') {
+      const seat = this.findSeat(p)
+      if (!seat) return
+      w.back ??= { x: w.x, y: w.y }
+      w.seat = seat
+      w.goto = { x: seat.x, y: seat.y }
+      w.aim = { yaw: seat.yaw, pitch: seat.pitch }
+    } else {
+      // 站起來（或從坐著改蹲下）：回到坐下前站的位置
+      if (w.back) w.goto = w.back
+      w.back = null
+      w.seat = null
+    }
+    this.ui.pose = p
+  }
+
+  private resetPose() {
+    const w = this.walk
+    w.seat = w.back = w.goto = w.aim = null
+    w.eye = EYE
+    this.ui.pose = 'stand'
+  }
+
+  /** 家具座標：平面點 → 家具本身的 (x, z)（+z = 正面） */
+  private toLocal(it: FurnitureItem, x: number, y: number): [number, number] {
+    const r = (it.rot * Math.PI) / 180
+    const dx = x - it.x
+    const dy = y - it.y
+    return [dx * Math.cos(r) - dy * Math.sin(r), dx * Math.sin(r) + dy * Math.cos(r)]
+  }
+
+  private toPlan(it: FurnitureItem, lx: number, lz: number): [number, number] {
+    const r = (it.rot * Math.PI) / 180
+    return [it.x + lx * Math.cos(r) + lz * Math.sin(r), it.y - lx * Math.sin(r) + lz * Math.cos(r)]
+  }
+
+  /** 平面點在不在桌子底下（椅子收在桌下時） */
+  private underTable(x: number, y: number) {
+    return this.design.furniture.some((t) => {
+      if (!TABLES.includes(t.type)) return false
+      const r = footprint(t)
+      return x > r.x1 - 8 && x < r.x2 + 8 && y > r.y1 - 8 && y < r.y2 + 8
+    })
+  }
+
+  /** 離漫遊位置最近、可以坐（或躺）的地方 */
+  private findSeat(pose: 'sit' | 'lie'): Seat | null {
+    const { x, y } = this.walk
+    const pick = { seat: null as Seat | null, d: Infinity }
+    // (lx, lz) = 坐的位置（家具本身座標）、face = 面向（家具本身座標）、reach = 要走到多近
+    const consider = (it: FurnitureItem, lx: number, lz: number, eye: number, face: [number, number], name: string, pitch = -0.08, dist?: number) => {
+      const [px, py] = this.toPlan(it, lx, lz)
+      const d = dist ?? Math.hypot(px - x, py - y)
+      if (d > (dist === undefined ? 110 : 80) || d >= pick.d) return
+      const r = (it.rot * Math.PI) / 180
+      const dx = face[0] * Math.cos(r) + face[1] * Math.sin(r)
+      const dy = -face[0] * Math.sin(r) + face[1] * Math.cos(r)
+      pick.d = d
+      pick.seat = { x: px, y: py, eye, yaw: Math.atan2(dx, dy * this.sy), pitch, name }
+    }
+    for (const it of this.design.furniture) {
+      const { w, d } = it
+      if (pose === 'lie') {
+        if (it.type !== 'bed') continue
+        // 躺在靠自己那一側的枕頭上，看床尾那面牆（主臥投影的位置）
+        const fp = footprint(it)
+        const gap = Math.hypot(Math.max(fp.x1 - x, 0, x - fp.x2), Math.max(fp.y1 - y, 0, y - fp.y2))
+        const [lx] = this.toLocal(it, x, y)
+        consider(it, w >= 120 ? (Math.sign(lx) || 1) * (w / 4) : 0, -d / 2 + 40, 68, [0, 1], '床上', 0.3, gap)
+        continue
+      }
+      switch (it.type) {
+        case 'chair': {
+          // 椅子收在桌子底下：坐下時先往後拉，直到人離開桌面
+          let lz = -d / 2 + 15
+          for (let k = 0; k < 12 && this.underTable(...this.toPlan(it, 0, lz)); k++) lz -= 5
+          consider(it, 0, lz, 118, [0, 1], it.name)
+          break
+        }
+        case 'sofa': {
+          const inner = w - (w > 100 ? 16 : 12) * 2
+          const n = inner >= 150 ? 3 : inner >= 100 ? 2 : 1
+          for (let i = 0; i < n; i++) consider(it, -inner / 2 + (inner / n) * (i + 0.5), -d / 2 + 40, 113, [0, 1], '沙發')
+          break
+        }
+        case 'massagechair':
+          consider(it, 0, -d / 2 + 50, 112, [0, 1], '按摩椅', 0.05)
+          break
+        case 'toilet':
+          consider(it, 0, d / 2 - 34, 117, [0, 1], '馬桶', -0.15)
+          break
+        case 'bed': {
+          // 坐在離自己最近的床緣，面向床外
+          const [lx, lz] = this.toLocal(it, x, y)
+          const along = THREE.MathUtils.clamp(lz, -d / 2 + 60, d / 2 - 25)
+          consider(it, -w / 2 + 18, along, 120, [-1, 0], '床邊')
+          consider(it, w / 2 - 18, along, 120, [1, 0], '床邊')
+          consider(it, THREE.MathUtils.clamp(lx, -w / 2 + 25, w / 2 - 25), d / 2 - 18, 120, [0, 1], '床邊')
+          break
+        }
+      }
+    }
+    return pick.seat
   }
 
   private resize() {
@@ -512,6 +648,7 @@ export class Viewer {
     this.down = { x: e.clientX, y: e.clientY, t: performance.now() }
     if (this.ui.mode === 'walk') {
       this.walk.looking = true
+      this.walk.aim = null
       this.renderer.domElement.style.cursor = 'grabbing'
       return
     }
@@ -723,8 +860,12 @@ export class Viewer {
     const t = e.target as HTMLElement
     if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA')) return
     if (this.ui.mode === 'walk') {
-      // C：蹲下／站起來（Cmd/Ctrl + C 留給複製）
-      if (e.code === 'KeyC' && !e.repeat && !e.metaKey && !e.ctrlKey) this.ui.crouch = !this.ui.crouch
+      // C 蹲下、X 坐下、Z 躺下，再按一次站起來（Cmd/Ctrl + C、Z、X 留給複製、復原、剪下）
+      if (!e.repeat && !e.metaKey && !e.ctrlKey) {
+        if (e.code === 'KeyC') this.setPose('crouch')
+        else if (e.code === 'KeyX') this.setPose('sit')
+        else if (e.code === 'KeyZ') this.setPose('lie')
+      }
       this.walk.keys.add(e.code)
       if (e.code.startsWith('Arrow') || e.code === 'Space') e.preventDefault()
       return
@@ -786,9 +927,15 @@ export class Viewer {
     const s = (k.has('KeyD') ? 1 : 0) - (k.has('KeyA') ? 1 : 0)
     const turn = (k.has('ArrowLeft') ? 1 : 0) - (k.has('ArrowRight') ? 1 : 0)
     this.walk.yaw += turn * dt * 1.8
+    if ((f || s) && (this.ui.pose === 'sit' || this.ui.pose === 'lie')) {
+      // 坐著、躺著按方向鍵：先起身，回到坐下前站的位置再走
+      this.setPose('stand')
+      if (this.walk.goto) Object.assign(this.walk, this.walk.goto)
+    }
     if (f || s) {
+      this.walk.goto = null
       // 蹲著走慢一點
-      const speed = (this.ui.crouch ? 70 : k.has('ShiftLeft') || k.has('ShiftRight') ? 260 : 140) * dt
+      const speed = (this.ui.pose === 'crouch' ? 70 : k.has('ShiftLeft') || k.has('ShiftRight') ? 260 : 140) * dt
       const yaw = this.walk.yaw
       // 3D 世界中：前方 = (sin yaw, cos yaw)，右方 = (-cos yaw, sin yaw)；平面 y = 世界 z × sy
       const mx = (Math.sin(yaw) * f - Math.cos(yaw) * s) * speed
@@ -796,10 +943,32 @@ export class Viewer {
       if (!this.blocked(this.walk.x + mx, this.walk.y)) this.walk.x += mx
       if (!this.blocked(this.walk.x, this.walk.y + my)) this.walk.y += my
     }
-    // 蹲下、站起來：視線高度約 0.25 秒平順移到目標
-    const target = this.ui.crouch ? CROUCH_EYE : EYE
-    this.walk.eye += (target - this.walk.eye) * Math.min(1, dt * 12)
-    const { x, y, yaw, pitch, eye } = this.walk
+    // 蹲下、坐下、躺下、站起來：位置、方向、視線高度約 0.3 秒平順移到目標
+    const w = this.walk
+    const ease = Math.min(1, dt * 10)
+    if (w.goto) {
+      w.x += (w.goto.x - w.x) * ease
+      w.y += (w.goto.y - w.y) * ease
+      if (Math.hypot(w.goto.x - w.x, w.goto.y - w.y) < 0.5) w.goto = null
+    }
+    if (w.aim) {
+      const dYaw = ((((w.aim.yaw - w.yaw + Math.PI) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) - Math.PI
+      w.yaw += dYaw * ease
+      w.pitch += (w.aim.pitch - w.pitch) * ease
+      if (Math.abs(dYaw) < 0.002 && Math.abs(w.aim.pitch - w.pitch) < 0.002) w.aim = null
+    }
+    const pose = this.ui.pose
+    const target = pose === 'crouch' ? CROUCH_EYE : (pose === 'sit' || pose === 'lie') && w.seat ? w.seat.eye : EYE
+    w.eye += (target - w.eye) * Math.min(1, dt * 12)
+    // 附近可以坐、躺的地方（每 0.2 秒看一次，給底部按鈕用）
+    if ((w.nearT -= dt) <= 0) {
+      w.nearT = 0.2
+      const sit = this.findSeat('sit')?.name ?? null
+      const lie = this.findSeat('lie') ? '床上' : null
+      if (this.ui.near.sit !== sit) this.ui.near.sit = sit
+      if (this.ui.near.lie !== lie) this.ui.near.lie = lie
+    }
+    const { x, y, yaw, pitch, eye } = w
     this.walkCam.position.set(x * CM, eye * CM, y * CM * this.sy)
     const dir = new THREE.Vector3(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch))
     this.walkCam.lookAt(this.walkCam.position.clone().add(dir))

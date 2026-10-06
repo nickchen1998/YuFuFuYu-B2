@@ -1,5 +1,5 @@
 import { reactive, watch } from 'vue'
-import type { Design, FurnitureItem, Tool, ViewMode } from './types'
+import type { Design, FurnitureItem, Tool, ViewMode, WalkPose } from './types'
 import { CEILING_DEFAULT, rooms } from './data/house'
 import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
@@ -369,8 +369,10 @@ export const ui = reactive({
   openAllCabinets: false,
   /** 身高參考人形 */
   showPeople: false,
-  /** 漫遊時蹲下（視線從 160 降到 90，看下櫃、桌子底下） */
-  crouch: false,
+  /** 漫遊的姿勢（蹲下看下櫃、坐在沙發床邊、躺在床上） */
+  pose: 'stand' as WalkPose,
+  /** 漫遊時附近可以坐、躺的地方（底部按鈕顯示「坐沙發」、「躺下」） */
+  near: { sit: null as string | null, lie: null as string | null },
   snap: 5,
   selectedId: null as string | null,
   paintColor: '#a7bac9',

@@ -152,4 +152,6 @@ export interface Design {
 }
 
 export type ViewMode = 'orbit' | 'top' | 'walk'
+/** 室內漫遊的姿勢：站、蹲、坐（椅子、沙發、床邊、馬桶）、躺（床上） */
+export type WalkPose = 'stand' | 'crouch' | 'sit' | 'lie'
 export type Tool = 'select' | 'move' | 'paint' | 'measure'

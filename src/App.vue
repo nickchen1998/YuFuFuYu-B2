@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch, type Component } from 'vue'
 import {
   Box, Check, DoorOpen, Footprints, House, Info, Layers, Map as MapIcon, MapPin,
-  ArrowDownToLine, MousePointer2, Move, PaintRoller, Palette, PersonStanding, Ruler, SlidersHorizontal, Sofa, Tag,
+  Armchair, ArrowDownToLine, BedDouble, MousePointer2, Move, PaintRoller, Palette, PersonStanding, Ruler, SlidersHorizontal, Sofa, Tag,
 } from '@lucide/vue'
 import { Viewer } from './three/Viewer'
 import { design, ui } from './store'
@@ -40,8 +40,18 @@ const wallCutOn = computed(() => ui.wallCut < design.ceilingHeight)
 
 /** 底部操作提示：k = 按鍵／動作、t = 說明 */
 const hint = computed<{ k?: string; t: string }[]>(() => {
-  if (ui.mode === 'walk')
-    return [{ k: 'W A S D', t: '走動' }, { k: '拖曳', t: '轉頭' }, { k: 'Shift', t: '走快一點' }, { k: 'C', t: ui.crouch ? '站起來' : '蹲下' }]
+  if (ui.mode === 'walk') {
+    if (ui.pose === 'sit' || ui.pose === 'lie')
+      return [{ k: '拖曳', t: '轉頭看看' }, { k: ui.pose === 'sit' ? 'X' : 'Z', t: '站起來' }, { k: 'W A S D', t: '起身走動' }]
+    return [
+      { k: 'W A S D', t: '走動' },
+      { k: '拖曳', t: '轉頭' },
+      { k: 'Shift', t: '走快一點' },
+      { k: 'C', t: ui.pose === 'crouch' ? '站起來' : '蹲下' },
+      { k: 'X', t: '坐下' },
+      { k: 'Z', t: '躺下' },
+    ]
+  }
   if (ui.tool === 'paint') return [{ k: '點牆面', t: '刷上目前顏色' }, { k: 'Alt + 點', t: '恢復原色' }, { t: '顏色在「空間材質」挑選' }]
   if (ui.tool === 'measure') return [{ k: '點兩下', t: '量距離' }, { t: '會吸附牆面、自動拉直' }, { k: 'Esc', t: '清除' }]
   if (ui.tool === 'move') {
@@ -221,8 +231,26 @@ onBeforeUnmount(() => {
     <!-- 底部：操作提示、量尺結果、漫遊瞬移 -->
     <footer class="hud">
       <div v-if="ui.mode === 'walk'" class="teleport glass">
-        <button class="chip" :class="{ on: ui.crouch }" title="蹲下看下櫃、桌子底下（C）" @click="ui.crouch = !ui.crouch">
-          <ArrowDownToLine />{{ ui.crouch ? '站起來' : '蹲下' }}
+        <button class="chip" :class="{ on: ui.pose === 'crouch' }" title="蹲下看下櫃、桌子底下（C）" @click="viewerRef.current?.setPose('crouch')">
+          <ArrowDownToLine />{{ ui.pose === 'crouch' ? '站起來' : '蹲下' }}
+        </button>
+        <button
+          class="chip"
+          :class="{ on: ui.pose === 'sit' }"
+          :disabled="ui.pose !== 'sit' && !ui.near.sit"
+          title="走到椅子、沙發、床或馬桶旁邊就可以坐下（X）"
+          @click="viewerRef.current?.setPose('sit')"
+        >
+          <Armchair />{{ ui.pose === 'sit' ? '站起來' : ui.near.sit ? `坐${ui.near.sit}` : '坐下' }}
+        </button>
+        <button
+          class="chip"
+          :class="{ on: ui.pose === 'lie' }"
+          :disabled="ui.pose !== 'lie' && !ui.near.lie"
+          title="走到床旁邊就可以躺下（Z）"
+          @click="viewerRef.current?.setPose('lie')"
+        >
+          <BedDouble />{{ ui.pose === 'lie' ? '起床' : '躺下' }}
         </button>
         <span class="teleport-label"><MapPin />前往</span>
         <button v-for="r in walkRooms" :key="r.id" class="chip" @click="viewerRef.current?.teleport(r.id)">

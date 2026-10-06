@@ -5,7 +5,7 @@ import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 109
+const REV = 110
 /**
  * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
  * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
@@ -242,12 +242,9 @@ const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   [106, ['pegboard2']],
   // rev 107：主臥衣櫃充電格上面一格也改開放（兩面開）
   [107, ['mward'], ['interior']],
-  // rev 108：電視後面加白橡木格柵電視牆（兩扇隱形門中間），電視、電視櫃往前 5 公分
-  [108, ['tvwall']],
-  [108, ['tv', 'tvstand'], ['x']],
-  // rev 109：電視牆改成只在電視周圍的格柵背板（163 × 106），電視櫃回到貼牆
-  [109, ['tvwall'], ['w', 'h', 'elev', 'name']],
-  [109, ['tvstand'], ['x']],
+  // rev 110：拿掉電視背板（108～109 加過），電視、電視櫃回到貼牆
+  [110, ['tvwall']],
+  [110, ['tv', 'tvstand'], ['x']],
   [25, ['shoe', 'sofa', 'coffeebar', 'rug', 'coffee', 'tvstand', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'mbed', 'mns1', 'mns2', 'mward', 'bward1', 'scab', 'vanity', 'vanity2'], ['color']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */

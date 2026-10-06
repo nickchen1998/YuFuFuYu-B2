@@ -194,28 +194,6 @@ function coffeetable(g: G, it: FurnitureItem) {
   for (const sx of [-1, 1]) for (const sz of [-1, 1]) bx(g, 4, h - 4, 4, sx * (w / 2 - 4), 0, sz * (d / 2 - 4), mat(shadeHex(it.color, 0.6), 0.6))
 }
 
-/**
- * 電視牆（木作）：背面（-z）貼牆，頂天立地。預設是底板＋直向白橡木格柵（凹縫看起來比較深）；
- * 'stone' 時改成整面岩板（一片約 120 寬，畫出接縫）
- */
-function tvwall(g: G, it: FurnitureItem) {
-  const { w, d, h } = it
-  if (has(it, 'stone')) {
-    bx(g, w, h, d, 0, 0, 0, mat(it.color, 0.25))
-    const n = Math.max(1, Math.round(w / 120))
-    for (let i = 1; i < n; i++) bx(g, 0.3, h, 0.2, -w / 2 + (w / n) * i, 0, d / 2 + 0.05, mat(shadeHex(it.color, 0.7), 0.4))
-    return
-  }
-  const back = 1.8
-  bx(g, w, h, back, 0, 0, -d / 2 + back / 2, mat(shadeHex(it.color, 0.72), 0.7))
-  const sw = 2.4
-  const gap = 1.2
-  const n = Math.floor((w + gap) / (sw + gap))
-  const x0 = -(n * (sw + gap) - gap) / 2
-  const slat = mat(it.color, 0.6)
-  for (let i = 0; i < n; i++) bx(g, sw, h, d - back, x0 + i * (sw + gap) + sw / 2, 0, back / 2, slat)
-}
-
 function tv(g: G, it: FurnitureItem) {
   const { w, h } = it
   if (has(it, 'wallmount')) {
@@ -1144,7 +1122,6 @@ function plainBox(g: G, it: FurnitureItem) {
 }
 
 const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
-  tvwall,
   bed,
   // 有櫃內規劃的櫃子
   wardrobe: interiorCabinet,

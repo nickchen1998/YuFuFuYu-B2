@@ -112,14 +112,10 @@ const seeds: Seed[] = [
   { id: 'frother', type: 'frother', name: '奶泡機', x: 276, y: 370, rot: 270, w: 10.4, d: 10.4, h: 19, elev: 90, color: '#3a3a3d' },
   // 圓形小茶几（直徑 70、高 42，白橡木），離沙發約 38、離電視櫃約 50
   { id: 'coffee', type: 'coffeetable', name: '圓形小茶几', x: 125, y: 185, rot: 90, w: 70, d: 70, h: 42, color: '#c9a57a', features: ['round'] },
-  // 電視背板：只在電視周圍做一片白橡木格柵（163 × 106、厚 5），比電視左右、上面各多出約 20，
-  // 下緣離地 56（電視櫃上緣 53 再上去一點），其他地方維持白牆；電視掛在格柵上（裡面先做角材補強），
-  // 電源、訊號線藏在格柵後面往下走到電視櫃後面
-  { id: 'tvwall', type: 'tvwall', name: '電視背板（白橡木格柵）', x: 2.5, y: 185, rot: 90, w: 163, d: 5, h: 106, elev: 56, color: '#d4b48a' },
   // 電視櫃：實木美腿（錐形腳高 18，掃地機器人進得去），櫃體高 35，上緣 53 到壁掛電視下緣留 17
   { id: 'tvstand', type: 'tvstand', name: '電視櫃（美腿）', x: 20, y: 185, rot: 90, w: 180, d: 40, h: 53, color: '#d9c2a0', features: ['prettylegs', 'edgepull'] },
-  // 電視壁掛在格柵背板上：下緣離地 70（坐在沙發上視線約在畫面中心），下方保留電視櫃
-  { id: 'tv', type: 'tv', name: '電視 55吋（壁掛）', x: 8, y: 185, rot: 90, w: 123, d: 6, h: 72, elev: 70, color: '#1b1b1d', features: ['wallmount'] },
+  // 電視壁掛：下緣離地 70（坐在沙發上視線約在畫面中心），下方保留電視櫃
+  { id: 'tv', type: 'tv', name: '電視 55吋（壁掛）', x: 3, y: 185, rot: 90, w: 123, d: 6, h: 72, elev: 70, color: '#1b1b1d', features: ['wallmount'] },
   // 冰箱：六門、製冰室獨立（國際牌 NR-F552YT 等，65 × 69.9 × 185），背面貼牆、上方沒有櫃子
   { id: 'fridge', type: 'fridge', name: '冰箱（六門）', x: 35, y: 414, rot: 90, w: 65, d: 70, h: 185, color: '#d4d8dc', features: ['sixdoor'] },
   // 訂製中島餐桌（半島型，一件式）：一端靠窗下的牆，檯面連續高 76（壓在窗台 80 下）。

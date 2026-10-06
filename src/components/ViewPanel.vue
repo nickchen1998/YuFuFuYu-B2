@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AirVent, DoorClosed, DoorOpen, Keyboard, Layers, LayoutPanelTop, Magnet, Map as MapIcon, PersonStanding, Tag } from '@lucide/vue'
+import { AirVent, DoorClosed, DoorOpen, Keyboard, Layers, LayoutPanelTop, Lightbulb, Magnet, Map as MapIcon, PersonStanding, Tag } from '@lucide/vue'
 import { design, ui } from '../store'
 
 const cuts = [
@@ -8,7 +8,14 @@ const cuts = [
   { label: '90', value: () => 90 },
 ]
 
+const lightings = [
+  { id: 'day', label: '自然光' },
+  { id: 'warm', label: '黃光 3000K' },
+  { id: 'white', label: '白光 6000K' },
+] as const
+
 const keys: { k: string[]; t: string }[] = [
+  { k: ['L'], t: '燈光：自然光 → 黃光 → 白光' },
   { k: ['V'], t: '選取工具' },
   { k: ['M'], t: '移動工具' },
   { k: ['R'], t: '旋轉 90°（Shift 反向）' },
@@ -38,6 +45,16 @@ const keys: { k: string[]; t: string }[] = [
       </button>
     </div>
     <p class="muted">把牆切矮一點，從上面看比較好擺家具；室內漫遊時一律顯示完整牆高。</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h3><Lightbulb />燈光模擬</h3></div>
+    <div class="seg full sm">
+      <button v-for="l in lightings" :key="l.id" :class="{ on: ui.lighting === l.id }" @click="ui.lighting = l.id">
+        {{ l.label }}
+      </button>
+    </div>
+    <p class="muted">黃光、白光是晚上只開天花板軌道燈的樣子，光會被牆和家具擋住；室內漫遊看最準，牆高切到「完整」也看得到假樑和燈。</p>
   </section>
 
   <section class="section">

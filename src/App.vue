@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch, type Component } from 'vue'
 import {
   Box, Check, DoorOpen, Footprints, House, Info, Layers, Map as MapIcon, MapPin,
-  Armchair, ArrowDownToLine, BedDouble, MousePointer2, Move, PaintRoller, Palette, PersonStanding, Ruler, SlidersHorizontal, Sofa, Tag,
+  Armchair, ArrowDownToLine, BedDouble, Lightbulb, MousePointer2, Move, PaintRoller, Palette, PersonStanding, Ruler, SlidersHorizontal, Sofa, Tag,
 } from '@lucide/vue'
 import { Viewer } from './three/Viewer'
 import { design, ui } from './store'
@@ -38,6 +38,12 @@ const walkRooms = rooms.filter((r) => r.id !== 'ac')
 
 const wallCutOn = computed(() => ui.wallCut < design.ceilingHeight)
 
+/** 燈光模擬：自然光 → 黃光 → 白光 */
+const lightingName = { day: '自然光', warm: '黃光', white: '白光' } as const
+function cycleLighting() {
+  ui.lighting = ui.lighting === 'day' ? 'warm' : ui.lighting === 'warm' ? 'white' : 'day'
+}
+
 /** 底部操作提示：k = 按鍵／動作、t = 說明 */
 const hint = computed<{ k?: string; t: string }[]>(() => {
   if (ui.mode === 'walk') {
@@ -50,6 +56,7 @@ const hint = computed<{ k?: string; t: string }[]>(() => {
       { k: 'C', t: ui.pose === 'crouch' ? '站起來' : '蹲下' },
       { k: 'X', t: '坐下' },
       { k: 'Z', t: '躺下' },
+      { k: 'L', t: '燈光' },
     ]
   }
   if (ui.tool === 'paint') return [{ k: '點牆面', t: '刷上目前顏色' }, { k: 'Alt + 點', t: '恢復原色' }, { t: '顏色在「空間材質」挑選' }]
@@ -134,6 +141,7 @@ onMounted(() => {
   watch(() => ui.showAirflow, () => v.applyAirflow())
   watch(() => [ui.cabinetOpen, ui.openAllCabinets], () => v.applyInterior())
   watch(() => ui.showPeople, () => v.applyPeople())
+  watch(() => ui.lighting, () => v.applyLighting())
 })
 
 onBeforeUnmount(() => {
@@ -231,6 +239,9 @@ onBeforeUnmount(() => {
     <!-- 底部：操作提示、量尺結果、漫遊瞬移 -->
     <footer class="hud">
       <div v-if="ui.mode === 'walk'" class="teleport glass">
+        <button class="chip" :class="{ on: ui.lighting !== 'day' }" title="燈光模擬：自然光 → 黃光 → 白光（L）" @click="cycleLighting">
+          <Lightbulb />{{ lightingName[ui.lighting] }}
+        </button>
         <button class="chip" :class="{ on: ui.pose === 'crouch' }" title="蹲下看下櫃、桌子底下（C）" @click="viewerRef.current?.setPose('crouch')">
           <ArrowDownToLine />{{ ui.pose === 'crouch' ? '站起來' : '蹲下' }}
         </button>

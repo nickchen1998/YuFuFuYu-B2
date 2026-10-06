@@ -53,7 +53,86 @@ const alias: Record<string, string> = {
   ac2: 'ac1',
 }
 
+/** 燈光方案 B（無主燈、不用崁燈）：一道假樑＋嵌入式磁吸軌道的選購資料；len = 假樑長度、lines／spots = 排燈、投射燈數量 */
+function trackBand(o: { where: string; len: number; lines: number; spots: number; specs?: string[]; notes?: string[] }): ShopInfo {
+  const chi = Math.ceil(o.len / 30.3 - 0.05)
+  const meters = Math.ceil(o.len / 100)
+  const band = chi * 550
+  const kit = meters * 630 + o.lines * 880 + o.spots * 785 + 1500 + 1800
+  const nt = (n: number) => `NT$${n.toLocaleString('en-US')}`
+  return {
+    summary: `${o.where}：天花板不全部封，只做一道往下 25 的假樑（底面離地 275），磁吸軌道嵌在假樑底面，掛 ${o.lines} 支廣角排燈當整體照明、${o.spots} 盞投射燈打重點；其他地方維持原始 300 的高度，抬頭只看到一條細細的軌道線，沒有主燈也沒有崁燈。`,
+    specs: [
+      `假樑長約 ${o.len}、往下 25（軌道深約 5.3，要留足深度）；矽酸鈣板＋角材，和天花板同色`,
+      '燈頭：廣角排燈（24W）當整體照明、投射燈打餐桌、櫃子、牆面；黃光 3000K 為主',
+      ...(o.specs ?? []),
+    ],
+    picks: [
+      {
+        name: `木作假樑（約 ${chi} 尺）＋軌道開槽、批土油漆（估價）`,
+        rec: true,
+        detail: '矽酸鈣板＋角材，含軌道開槽和收邊；間接天花板行情 NT$450～650／台尺，取中間 550',
+        price: `約 ${nt(band)}（2026 行情推算）`,
+        cost: band,
+        category: '系統櫃・訂製',
+        url: 'https://www.pro360.com.tw/price/ceiling_design',
+        source: 'PRO360',
+      },
+      {
+        name: `嵌入式磁吸軌道組：軌道約 ${meters} 米＋廣角排燈 × ${o.lines}＋投射燈 × ${o.spots}＋電源、配線（估價）`,
+        rec: true,
+        detail:
+          '舞光達文西崁入式磁吸軌道約 NT$630／米、24W 廣角排燈約 NT$880／支、投射燈約 NT$785／盞；24V 電源供應器約 NT$1,500、水電拉線接電約 NT$1,800（推估）',
+        price: `約 ${nt(kit)}（2026/10 舞光建議售價＋推估）`,
+        cost: kit,
+        category: '系統櫃・訂製',
+        url: 'https://www.dancelight.com.tw/tw/product/magnetic-track-light-0004/detail',
+        source: '舞光',
+      },
+    ],
+    notes: [
+      '想要黃光、白光都能切（一段黃一段白）：要選可以調色溫的磁吸燈頭（段切或 App 調色的款式）；舞光達文西每支燈頭是單一色溫（黃光、自然光、白光選一種），下單前確認',
+      '燈頭可以隨時加、換位置、改角度，以後換家具也能重新打光；電源供應器藏在假樑裡，要留維修孔',
+      ...(o.notes ?? []),
+    ],
+  }
+}
+
 export const shopping: Record<string, ShopInfo> = {
+  'clg-living-l': trackBand({
+    where: '客餐廳左側（電視、廚房那面牆）',
+    len: 665,
+    lines: 2,
+    spots: 1,
+    specs: ['順便把客廳冷氣的冷媒管（鞋櫃上方 → 冷氣平台，約 7 米）包在假樑裡', '水槽、爐台上方各一支排燈當廚房工作燈，玄關一盞投射燈'],
+    notes: ['電視正上方不要放燈頭，螢幕才不會反光'],
+  }),
+  'clg-living-c': trackBand({
+    where: '客餐廳中間（大門前一路到窗邊）',
+    len: 625,
+    lines: 3,
+    spots: 3,
+    specs: ['茶几、沙發前兩支排燈，餐桌正上方一支排燈；投射燈打鞋櫃、咖啡櫃、中島檯面'],
+    notes: ['假樑起點離冷氣出風口約 15，出風不會被擋到'],
+  }),
+  'clg-master': trackBand({
+    where: '主臥（床邊走道上方）',
+    len: 272,
+    lines: 2,
+    spots: 1,
+    specs: [
+      '離衣櫃 57，衣櫃最上面的上櫃門打開不會撞到假樑；躺在床上燈在側邊，不會直視',
+      '衣櫃前、床尾走道各一支排燈，投射燈打衣櫃的充電格',
+    ],
+    notes: ['床邊加雙切開關，躺著就能關燈'],
+  }),
+  'clg-study': trackBand({
+    where: '次臥（書桌前緣上方）',
+    len: 492,
+    lines: 2,
+    spots: 2,
+    specs: ['兩張書桌各一支排燈，光從前上方來、螢幕不反光（書桌可以改 4000K 自然光）', '投射燈打衣櫃和背後層板（視訊背景）'],
+  }),
   // ───────────── 系統櫃（2026/09 查詢） ─────────────
   bward1: {
     summary:
@@ -2640,7 +2719,7 @@ export function itemCategory(it: FurnitureItem): string {
   if (shopInfo(it)?.owned) return '已有'
   if (it.type === 'vanity' || it.type === 'mirrorcab') return '衛浴'
   if (it.type === 'kitchen' || (it.locked && it.type !== 'acunit')) return '建商附'
-  if (it.type === 'peninsula' || it.type === 'hiddendoor') return '訂製'
+  if (it.type === 'peninsula' || it.type === 'hiddendoor' || it.type === 'ceilingband') return '訂製'
   if (hasInterior(it)) return '系統櫃'
   if (it.type === 'projection') return '示意'
   if (APPLIANCES.includes(it.type)) return '家電'

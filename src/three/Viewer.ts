@@ -1,13 +1,14 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { CSS2DObject, CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js'
-import type { Design, FurnitureItem, ViewMode, WalkPose } from '../types'
+import type { Design, FurnitureItem, Lighting, ViewMode, WalkPose } from '../types'
 import type { ui as UIState } from '../store'
 import { corridor, planOverlay, rooms, unitBounds, walls } from '../data/house'
 import { floorPresets } from '../data/materials'
 import { blockingRects, fmt, footprint, rectsOverlap, roomSize, type Rect } from '../geometry'
 import { buildWalls } from './walls'
-import { buildFurniture, furnitureSignature } from './furniture'
+import { buildFurniture, furnitureSignature, lampGlow } from './furniture'
+import { LIGHT_COLORS } from '../data/lighting'
 import { hasInterior } from '../cabinet'
 import { floorTexture, loadPlanOverlay, TEX_CM } from './textures'
 import { mat } from './mats'
@@ -50,6 +51,7 @@ function label(html: string, cls: string) {
 export class Viewer {
   private renderer: THREE.WebGLRenderer
   private sun = new THREE.DirectionalLight('#fff4e5', 2.4)
+  private hemi = new THREE.HemisphereLight('#ffffff', '#b9ae9f', 1.6)
   private labelRenderer: CSS2DRenderer
   private scene = new THREE.Scene()
   private world = new THREE.Group()
@@ -167,8 +169,7 @@ export class Viewer {
   // ───────────────────────── 場景 ─────────────────────────
 
   private setupLights() {
-    const hemi = new THREE.HemisphereLight('#ffffff', '#b9ae9f', 1.6)
-    this.scene.add(hemi)
+    this.scene.add(this.hemi)
     const sun = this.sun
     sun.castShadow = true
     sun.shadow.mapSize.set(2048, 2048)
@@ -293,6 +294,8 @@ export class Viewer {
     this.world.add(this.wallsGroup)
     this.collide = blockingRects(H)
     for (const c of this.ceilings.children) c.position.y = H + ((c.userData.offset as number | undefined) ?? 0)
+    this.applyCeilingItems()
+    this.touchShadows()
   }
 
   // ───────────────────────── 家具 ─────────────────────────
@@ -325,6 +328,7 @@ export class Viewer {
     this.applyAirflow()
     this.applyPeople()
     this.updateSelection()
+    this.applyLighting()
   }
 
   /** 身高參考人形：可以隱藏 */
@@ -334,6 +338,7 @@ export class Viewer {
       const entry = this.items.get(it.id)
       if (entry) entry.obj.visible = this.ui.showPeople
     }
+    this.touchShadows()
     if (!this.ui.showPeople && this.selected()?.type === 'person') this.ui.selectedId = null
   }
 
@@ -348,6 +353,49 @@ export class Viewer {
         else if (o.userData.interior) o.visible = open
       })
     }
+    this.touchShadows()
+  }
+
+  // ───────────────────────── 燈光模擬 ─────────────────────────
+
+  /**
+   * 燈光模擬：自然光（白天），或晚上開天花板軌道燈（黃光 3000K／白光 6000K）。
+   * 晚上關掉太陽、天空光降到很暗（當作牆面反射的一點點光），每個燈頭的聚光燈打開、會被牆和家具擋住（有陰影）；
+   * 晚上的陰影只在東西變動時重算，走動、轉頭都不用重算
+   */
+  applyLighting() {
+    const mode: Lighting = this.ui.lighting
+    const night = mode !== 'day'
+    const c = new THREE.Color(mode === 'white' ? LIGHT_COLORS.white : LIGHT_COLORS.warm)
+    this.sun.visible = !night
+    this.hemi.intensity = night ? 0.32 : 1.6
+    this.hemi.color.set(night ? c : new THREE.Color('#ffffff'))
+    this.hemi.groundColor.set(night ? '#2a2622' : '#b9ae9f')
+    this.scene.background = new THREE.Color(night ? '#1c1d21' : '#efebe5')
+    for (const o of this.ceilings.children) if (o instanceof THREE.PointLight) o.visible = !night
+    this.furnitureGroup.traverse((o) => {
+      if (!(o instanceof THREE.SpotLight) || !o.userData.lamp) return
+      o.visible = night
+      o.color.copy(c)
+      o.intensity = o.userData.lamp === 'line' ? 14 : 26
+    })
+    lampGlow.emissive.copy(night ? c : new THREE.Color('#000000'))
+    lampGlow.emissiveIntensity = night ? 2.5 : 0
+    this.renderer.shadowMap.autoUpdate = !night
+    this.touchShadows()
+    this.applyCeilingItems()
+  }
+
+  /** 假樑、燈頭（天花板上的東西）：漫遊、或牆高「完整」才顯示，從上面看不會擋住房間；燈光本身一直都在 */
+  private applyCeilingItems() {
+    const show = this.ui.mode === 'walk' || (this.ui.mode === 'orbit' && this.ui.wallCut >= this.design.ceilingHeight)
+    this.furnitureGroup.traverse((o) => {
+      if (o.userData.ceilingMesh) o.visible = show
+    })
+  }
+
+  private touchShadows() {
+    this.renderer.shadowMap.needsUpdate = true
   }
 
   private disposeItem(entry: ItemEntry) {
@@ -418,6 +466,8 @@ export class Viewer {
     if (mode === 'top') this.frameTop()
     if (mode === 'walk') this.walk.keys.clear()
     else this.resetPose()
+    this.applyCeilingItems()
+    this.touchShadows()
     this.renderer.domElement.style.cursor = mode === 'walk' ? 'grab' : ''
   }
 
@@ -445,6 +495,7 @@ export class Viewer {
     const c = new THREE.Vector3(CENTER.x * CM, 0, CENTER.y * CM * this.sy)
     this.sun.position.set(c.x - 4, 9, c.z + 6)
     this.sun.target.position.copy(c)
+    this.touchShadows()
     // 漫遊回到大門口、面向屋內
     this.walk.x = 91
     this.walk.y = 70
@@ -859,6 +910,12 @@ export class Viewer {
   private onKeyDown = (e: KeyboardEvent) => {
     const t = e.target as HTMLElement
     if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA')) return
+    // L：燈光模擬 自然光 → 黃光 → 白光
+    if (e.code === 'KeyL' && !e.repeat && !e.metaKey && !e.ctrlKey) {
+      const order: Lighting[] = ['day', 'warm', 'white']
+      this.ui.lighting = order[(order.indexOf(this.ui.lighting) + 1) % order.length]
+      return
+    }
     if (this.ui.mode === 'walk') {
       // C 蹲下、X 坐下、Z 躺下，再按一次站起來（Cmd/Ctrl + C、Z、X 留給複製、復原、剪下）
       if (!e.repeat && !e.metaKey && !e.ctrlKey) {

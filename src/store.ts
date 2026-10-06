@@ -1,11 +1,11 @@
 import { reactive, watch } from 'vue'
-import type { Design, FurnitureItem, Tool, ViewMode, WalkPose } from './types'
+import type { Design, FurnitureItem, Lighting, Tool, ViewMode, WalkPose } from './types'
 import { CEILING_DEFAULT, rooms } from './data/house'
 import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 110
+const REV = 111
 /**
  * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
  * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
@@ -245,6 +245,8 @@ const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   // rev 110：拿掉電視背板（108～109 加過），電視、電視櫃回到貼牆
   [110, ['tvwall']],
   [110, ['tv', 'tvstand'], ['x']],
+  // rev 111：燈光方案 B：四道假樑＋嵌入式磁吸軌道
+  [111, ['clg-living-l', 'clg-living-c', 'clg-master', 'clg-study']],
   [25, ['shoe', 'sofa', 'coffeebar', 'rug', 'coffee', 'tvstand', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'mbed', 'mns1', 'mns2', 'mward', 'bward1', 'scab', 'vanity', 'vanity2'], ['color']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */
@@ -380,6 +382,8 @@ export const ui = reactive({
   openAllCabinets: false,
   /** 身高參考人形 */
   showPeople: false,
+  /** 燈光模擬：自然光（白天）、黃光、白光（晚上只開天花板軌道燈） */
+  lighting: 'day' as Lighting,
   /** 漫遊的姿勢（蹲下看下櫃、坐在沙發床邊、躺在床上） */
   pose: 'stand' as WalkPose,
   /** 漫遊時附近可以坐、躺的地方（底部按鈕顯示「坐沙發」、「躺下」） */

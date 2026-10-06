@@ -223,7 +223,7 @@ export const seedInteriors: Record<string, CabinetInterior> = {
     ],
   },
 
-  // 次臥書房：椅子背後的矮櫃 250 × 45 × 90（文件、線材、印表機、掃地機器人），避開按摩椅前方
+  // 次臥書房：椅子背後、靠分戶牆的矮櫃 250 × 45 × 90（文件、線材、印表機、掃地機器人），緊接在按摩椅旁邊
   scab: {
     faces: [
       {

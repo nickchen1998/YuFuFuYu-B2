@@ -150,8 +150,8 @@ const seeds: Seed[] = [
   { id: 'fan-living', type: 'towerfan', name: 'Dyson 直立式電扇（客廳）', x: 273, y: 431, rot: 250, w: 22, d: 22, h: 105, color: '#eef0f2' },
   // 主臥這台放窗邊的牆角（床尾那側，另一個窗邊角落是床頭櫃），斜朝床
   { id: 'fan-master', type: 'towerfan', name: 'Dyson 直立式電扇（主臥）', x: -31, y: 583, rot: 235, w: 22, d: 22, h: 105, color: '#eef0f2' },
-  // 次臥這台靠牆放在書房矮櫃靠衣櫃那一端（離衣櫃拉門約 1.2 m），斜朝升降桌和按摩椅中間，擺頭兩邊都吹得到
-  { id: 'fan-bed2', type: 'towerfan', name: 'Dyson 直立式電扇（次臥）', x: 320, y: 198, rot: 60, w: 22, d: 22, h: 105, color: '#eef0f2' },
+  // 次臥這台靠客廳隔間牆、放在靠衣櫃那張書桌旁邊（離衣櫃拉門約 1.1 m），斜朝兩個座位，擺頭兩個人都吹得到
+  { id: 'fan-bed2', type: 'towerfan', name: 'Dyson 直立式電扇（次臥）', x: 318, y: 185, rot: 30, w: 22, d: 22, h: 105, color: '#eef0f2' },
   // 身高參考：184 與 154 公分的人，站在電視區和冰箱之間，看人和家具的高低比例（不是家具）
   { id: 'person184', type: 'person', name: '身高參考 184 公分', x: 95, y: 315, rot: 0, w: 46, d: 26, h: 184, color: '#5f7488' },
   { id: 'person154', type: 'person', name: '身高參考 154 公分', x: 150, y: 315, rot: 0, w: 38, d: 22, h: 154, color: '#c9a98a' },
@@ -174,29 +174,29 @@ const seeds: Seed[] = [
   // 冷氣：窗戶上方（窗外就是冷氣平台，管線最短）；導風板往上調，避免直吹床
   { id: 'ac-master', type: 'acindoor', name: '冷氣（主臥）', x: -130, y: 587, rot: 180, w: 85, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
-  // 次臥（書房＋主要衣櫃＋按摩椅）：衣櫃整排貼上牆；按摩椅靠分戶牆、面向房內；兩張升降桌並排靠分戶牆
+  // 次臥（書房＋主要衣櫃＋按摩椅）：衣櫃整排貼上牆；按摩椅靠分戶牆、面向房內；兩張升降桌並排靠客廳那面隔間牆
+  // （面牆坐，房門和窗戶都在左手邊：不背門、門不正對桌子，光從左邊來）
   // 次臥主衣櫃：不鏽鋼色鋼管收納（不用木板、合成板）＋整面落地頂天拉門（鋁框霧面玻璃，上吊軌道），前方不用留開門空間
   { id: 'bward1', type: 'wardrobe', name: '衣櫃（鋼管＋拉門）', x: 423.75, y: 30, rot: 0, w: 241.5, d: 60, h: 300, color: '#efe9df', features: ['steel', 'sliding', 'noplinth'] },
   // 按摩椅：選零靠牆機型（背後留 5 公分），躺平時往前滑到約 180 公分
   { id: 'massage', type: 'massagechair', name: '按摩椅', x: 469.5, y: 170, rot: 270, w: 80, d: 140, h: 115, color: '#4a4541' },
-  // 兩張升降桌並排靠右牆：和按摩椅之間留 50，靠窗那張和窗那面牆之間留 54（不貼牆，放植物、小推車或電扇都可以）
-  { id: 'bdesk1', type: 'standingdesk', name: '升降桌', x: 514.5, y: 320, rot: 270, w: 120, d: 60, h: 73, color: '#d8c3a5' },
-  { id: 'bdesk2', type: 'standingdesk', name: '升降桌', x: 514.5, y: 440, rot: 270, w: 120, d: 60, h: 73, color: '#d8c3a5' },
-  { id: 'bchair1', type: 'chair', name: '辦公椅', x: 452, y: 320, rot: 90, w: 50, d: 50, h: 100, color: '#5b5f63' },
-  { id: 'bchair2', type: 'chair', name: '辦公椅', x: 452, y: 440, rot: 90, w: 50, d: 50, h: 100, color: '#5b5f63' },
-  // 椅子背後（靠客廳的輕隔間）：矮櫃放文件、線材、印表機（落地，高 90）；到次臥門前 5 公分為止、避開按摩椅前方。
-  // 上方書櫃先拿掉（住戶覺得太高），之後再決定。
-  // 最右邊（靠衣櫃那端）是掃地機器人的家：那格不做底板，櫃深加到 45（基座 40＋機器人不凸出），整座不做踢腳；前方淨空 80 以上
+  // 兩張升降桌並排靠客廳隔間牆（桌面 202～442）：靠門那張的桌尾離房門口的電燈開關（離地 120）約 12 公分，桌子升高也不會撞到；
+  // 桌子上方只留洞洞板、不掛層板（不壓頭，站姿時螢幕也不會卡到）；椅子背後到矮櫃之間走道約 80
+  { id: 'bdesk1', type: 'standingdesk', name: '升降桌', x: 333, y: 262, rot: 90, w: 120, d: 60, h: 73, color: '#d8c3a5' },
+  { id: 'bdesk2', type: 'standingdesk', name: '升降桌', x: 333, y: 382, rot: 90, w: 120, d: 60, h: 73, color: '#d8c3a5' },
+  { id: 'bchair1', type: 'chair', name: '辦公椅', x: 395, y: 262, rot: 270, w: 50, d: 50, h: 100, color: '#5b5f63' },
+  { id: 'bchair2', type: 'chair', name: '辦公椅', x: 395, y: 382, rot: 270, w: 50, d: 50, h: 100, color: '#5b5f63' },
   { id: 'door-bed2', type: 'hiddendoor', name: '次臥門（建商附）', x: 304, y: 510, rot: 90, w: 80, d: 1.5, h: 210, color: '#f2efea', locked: true },
-  // 書房矮櫃上方的牆（輕隔間，加夾板補強）：衣櫃那端兩條浮動層板（IKEA LACK 190 × 26，白），上緣離地 125、165，
-  // 放書、植物、相框，也是視訊時的背景；印表機那段上方一塊 SKÅDIS 洞洞板（36 × 56，離地 135～191）收線材、耳機，
-  // 不擋到房門口的電燈開關（離地約 120）
-  { id: 'bshelf1', type: 'wallshelf', name: '浮動層板（書・植物）', x: 316, y: 310, rot: 90, w: 190, d: 26, h: 5, elev: 120, color: '#f4f2ee', features: ['books'] },
-  { id: 'bshelf2', type: 'wallshelf', name: '浮動層板（展示・相框）', x: 316, y: 310, rot: 90, w: 190, d: 26, h: 5, elev: 160, color: '#f4f2ee', features: ['display'] },
+  // 椅子背後（分戶牆）：矮櫃放文件、線材、印表機（落地，高 90），緊接在按摩椅旁邊（留 5 公分）；
+  // 最右邊（靠窗那端）是掃地機器人的家：那格不做底板，櫃深 45（基座 40＋機器人不凸出），整座不做踢腳；前方淨空約 80
+  { id: 'scab', type: 'cabinet', name: '書房矮櫃（文件・印表機・掃地機器人）', x: 522, y: 340, rot: 270, w: 250, d: 45, h: 90, color: '#d9c2a0', features: ['noplinth', 'edgepull'] },
+  // 矮櫃上方（分戶牆）兩條浮動層板（IKEA LACK 190 × 26，白），上緣離地 125、165，放書、植物、相框；坐在書桌前視訊時就是背後的背景
+  { id: 'bshelf1', type: 'wallshelf', name: '浮動層板（書・植物）', x: 531.5, y: 340, rot: 270, w: 190, d: 26, h: 5, elev: 120, color: '#f4f2ee', features: ['books'] },
+  { id: 'bshelf2', type: 'wallshelf', name: '浮動層板（展示・相框）', x: 531.5, y: 340, rot: 270, w: 190, d: 26, h: 5, elev: 160, color: '#f4f2ee', features: ['display'] },
+  // 洞洞板留在客廳隔間牆、靠門那張書桌上方（36 × 56，離地 135～191）收線材、耳機，不擋房門口的電燈開關
   { id: 'pegboard2', type: 'pegboard', name: '洞洞板（線材・耳機）', x: 304, y: 428, rot: 90, w: 36, d: 2, h: 56, elev: 135, color: '#d2b48c', features: ['study'] },
-  { id: 'scab', type: 'cabinet', name: '書房矮櫃（文件・印表機・掃地機器人）', x: 325.5, y: 340, rot: 90, w: 250, d: 45, h: 90, color: '#d9c2a0', features: ['noplinth', 'edgepull'] },
-  // 冷氣：窗戶上方，沿長邊往衣櫃方向吹，風從桌子側邊經過
-  { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 395, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
+  // 冷氣：窗戶上方、往分戶牆那邊移（右緣離分戶牆約 25），沿長邊往衣櫃方向吹；風從座位右邊經過，不會直吹頭
+  { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 480, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
   // 工作陽台：洗衣機、乾衣機並排靠柱子那側（不堆疊），整組推到次臥窗下那面牆，離女兒牆遠、不易淋雨；門朝陽台內
   { id: 'washer', type: 'washer', name: '洗衣機', x: 459, y: 600, rot: 270, w: 60, d: 65, h: 100, color: '#eef0f2' },

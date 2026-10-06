@@ -17,6 +17,8 @@ type UI = typeof UIState
 
 const CM = 0.01
 const EYE = 160
+/** 蹲下時的視線高度 */
+const CROUCH_EYE = 90
 const CENTER = {
   x: (unitBounds.x1 + unitBounds.x2) / 2,
   y: (unitBounds.y1 + unitBounds.y2) / 2,
@@ -66,7 +68,7 @@ export class Viewer {
 
   private drag: { id: string; dx: number; dy: number } | null = null
   private down: { x: number; y: number; t: number } | null = null
-  private walk = { x: 91, y: 70, yaw: 0, pitch: -0.05, keys: new Set<string>(), looking: false }
+  private walk = { x: 91, y: 70, yaw: 0, pitch: -0.05, eye: EYE, keys: new Set<string>(), looking: false }
   private collide: Rect[] = []
   private raf = 0
   private timer = new THREE.Timer()
@@ -389,6 +391,7 @@ export class Viewer {
     this.clearMeasure()
     if (mode === 'top') this.frameTop()
     if (mode === 'walk') this.walk.keys.clear()
+    else this.ui.crouch = false
     this.renderer.domElement.style.cursor = mode === 'walk' ? 'grab' : ''
   }
 
@@ -720,6 +723,8 @@ export class Viewer {
     const t = e.target as HTMLElement
     if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA')) return
     if (this.ui.mode === 'walk') {
+      // C：蹲下／站起來（Cmd/Ctrl + C 留給複製）
+      if (e.code === 'KeyC' && !e.repeat && !e.metaKey && !e.ctrlKey) this.ui.crouch = !this.ui.crouch
       this.walk.keys.add(e.code)
       if (e.code.startsWith('Arrow') || e.code === 'Space') e.preventDefault()
       return
@@ -782,7 +787,8 @@ export class Viewer {
     const turn = (k.has('ArrowLeft') ? 1 : 0) - (k.has('ArrowRight') ? 1 : 0)
     this.walk.yaw += turn * dt * 1.8
     if (f || s) {
-      const speed = (k.has('ShiftLeft') || k.has('ShiftRight') ? 260 : 140) * dt
+      // 蹲著走慢一點
+      const speed = (this.ui.crouch ? 70 : k.has('ShiftLeft') || k.has('ShiftRight') ? 260 : 140) * dt
       const yaw = this.walk.yaw
       // 3D 世界中：前方 = (sin yaw, cos yaw)，右方 = (-cos yaw, sin yaw)；平面 y = 世界 z × sy
       const mx = (Math.sin(yaw) * f - Math.cos(yaw) * s) * speed
@@ -790,8 +796,11 @@ export class Viewer {
       if (!this.blocked(this.walk.x + mx, this.walk.y)) this.walk.x += mx
       if (!this.blocked(this.walk.x, this.walk.y + my)) this.walk.y += my
     }
-    const { x, y, yaw, pitch } = this.walk
-    this.walkCam.position.set(x * CM, EYE * CM, y * CM * this.sy)
+    // 蹲下、站起來：視線高度約 0.25 秒平順移到目標
+    const target = this.ui.crouch ? CROUCH_EYE : EYE
+    this.walk.eye += (target - this.walk.eye) * Math.min(1, dt * 12)
+    const { x, y, yaw, pitch, eye } = this.walk
+    this.walkCam.position.set(x * CM, eye * CM, y * CM * this.sy)
     const dir = new THREE.Vector3(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch))
     this.walkCam.lookAt(this.walkCam.position.clone().add(dir))
   }

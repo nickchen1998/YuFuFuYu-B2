@@ -367,6 +367,8 @@ export const ui = reactive({
   openAllCabinets: false,
   /** 身高參考人形 */
   showPeople: false,
+  /** 漫遊時蹲下（視線從 160 降到 90，看下櫃、桌子底下） */
+  crouch: false,
   snap: 5,
   selectedId: null as string | null,
   paintColor: '#a7bac9',

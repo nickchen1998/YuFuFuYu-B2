@@ -197,11 +197,12 @@ const seeds: Seed[] = [
   // 冷氣：窗戶上方、往分戶牆那邊移（右緣離分戶牆約 25），沿長邊往衣櫃方向吹；風從座位右邊經過，不會直吹頭
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 480, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
-  // 燈光（方案一：每間一盞主燈＋明裝軌道，不做假樑、天花板維持原始 300）：
-  // 客餐廳、主臥、次臥各一盞調光調色吸頂燈（遙控切黃光、白光）；客餐廳一條明裝磁吸軌道從玄關到餐桌打重點，
-  // 次臥書桌上方一條 2 米短軌道當工作燈（燈頭位置見 data/lighting.ts）
-  { id: 'light-living', type: 'ceilinglight', name: '客餐廳主燈（調光調色吸頂燈）', x: 120, y: 300, rot: 0, w: 60, d: 60, h: 10, elev: 290, color: '#f4f3f0' },
-  { id: 'track-living', type: 'surfacetrack', name: '客餐廳明裝磁吸軌道（約 5 米）', x: 215, y: 310, rot: 90, w: 500, d: 3, h: 3, elev: 297, color: '#ecebe8' },
+  // 燈光（方案一：主燈＋明裝軌道，不做假樑、天花板維持原始 300；燈頭位置見 data/lighting.ts）：
+  // 客廳不裝主燈，兩條明裝磁吸軌道各離電視牆、沙發牆 50，排燈往牆上打，牆亮起來整個客廳就平均；
+  // 吸頂燈移到廚房、餐廳那頭（檯面和中島之間上方）；主臥、次臥各一盞調光調色吸頂燈，次臥書桌上方一條 2 米短軌道
+  { id: 'light-living', type: 'ceilinglight', name: '廚房餐廳主燈（調光調色吸頂燈）', x: 120, y: 560, rot: 0, w: 50, d: 50, h: 10, elev: 290, color: '#f4f3f0' },
+  { id: 'track-living-l', type: 'surfacetrack', name: '客廳明裝磁吸軌道（電視牆那側）', x: 50, y: 220, rot: 90, w: 360, d: 3, h: 3, elev: 297, color: '#ecebe8' },
+  { id: 'track-living-r', type: 'surfacetrack', name: '客廳明裝磁吸軌道（沙發牆那側）', x: 238, y: 235, rot: 270, w: 370, d: 3, h: 3, elev: 297, color: '#ecebe8' },
   { id: 'light-master', type: 'ceilinglight', name: '主臥主燈（調光調色吸頂燈）', x: -150.75, y: 430, rot: 0, w: 50, d: 50, h: 10, elev: 290, color: '#f4f3f0' },
   { id: 'light-study', type: 'ceilinglight', name: '次臥主燈（調光調色吸頂燈）', x: 424, y: 300, rot: 0, w: 50, d: 50, h: 10, elev: 290, color: '#f4f3f0' },
   { id: 'track-study', type: 'surfacetrack', name: '次臥書桌明裝磁吸軌道（2 米）', x: 380, y: 322, rot: 90, w: 200, d: 3, h: 3, elev: 297, color: '#ecebe8' },

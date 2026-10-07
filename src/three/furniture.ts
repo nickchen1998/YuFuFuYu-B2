@@ -234,7 +234,7 @@ function ceilinglight(g: G, it: FurnitureItem) {
 
 /**
  * 明裝磁吸軌道：直接鎖在天花板（不做假樑），燈頭照 data/lighting.ts 掛上去；
- * 投射燈照向指定的地面、排燈往下照，每個燈頭一盞聚光燈（燈光模擬時才打開）
+ * 投射燈照向指定的地面、排燈往下照或往牆上打（洗牆），每個燈頭一盞聚光燈（燈光模擬時才打開）
  */
 function surfacetrack(g: G, it: FurnitureItem) {
   const { w, h } = it
@@ -251,7 +251,7 @@ function surfacetrack(g: G, it: FurnitureItem) {
     const lamp = new THREE.SpotLight('#ffffff', 0, 7, line ? 0.6 : 0.42, line ? 0.7 : 0.5, 2)
     lamp.position.set(m.at, line ? -3 : -10, 0)
     const [tx, tz] = m.toward ?? [0, 0]
-    lamp.target.position.set(m.at + tx, -it.elev, tz)
+    lamp.target.position.set(m.at + tx, (m.height ?? 0) - it.elev, tz)
     lamp.userData.lamp = m.kind
     lamp.visible = false
     lamp.castShadow = !!m.shadow

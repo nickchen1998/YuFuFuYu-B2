@@ -5,7 +5,7 @@ import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 113
+const REV = 114
 /**
  * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
  * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
@@ -251,6 +251,9 @@ const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   [112, ['clg-living-l', 'clg-living-c', 'clg-master', 'clg-study', 'clg-living-r', 'clg-living-b', 'clg-living-t', 'clg-master-t', 'clg-master-l', 'clg-master-r', 'clg-study-l', 'clg-study-r', 'clg-study-b']],
   // rev 113：燈光改方案一：拿掉沿牆假樑，改成每間一盞吸頂燈＋明裝軌道
   [113, ['clg-living-l', 'clg-living-r', 'clg-living-b', 'clg-living-t', 'clg-master-t', 'clg-master-l', 'clg-master-r', 'clg-study-l', 'clg-study-r', 'clg-study-b', 'light-living', 'track-living', 'light-master', 'light-study', 'track-study']],
+  // rev 114：客廳改兩條明裝軌道洗牆（電視牆、沙發牆那側），吸頂燈移到廚房餐廳那頭
+  [114, ['track-living', 'track-living-l', 'track-living-r']],
+  [114, ['light-living'], ['x', 'y', 'w', 'd', 'name']],
   [25, ['shoe', 'sofa', 'coffeebar', 'rug', 'coffee', 'tvstand', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'mbed', 'mns1', 'mns2', 'mward', 'bward1', 'scab', 'vanity', 'vanity2'], ['color']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */

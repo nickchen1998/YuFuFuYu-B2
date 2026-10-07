@@ -217,14 +217,17 @@ function lampShadow(lamp: THREE.SpotLight | THREE.PointLight, far: number) {
 
 /**
  * 吸頂燈（主燈，調光調色）：扁圓燈體貼在天花板下、乳白燈罩；燈光模擬時燈罩發亮，
- * 燈罩下方一盞點光源（有陰影，光不會穿牆漏到隔壁房間）
+ * 燈罩往下一盞 75° 的廣角光（有陰影，光不會穿牆漏到隔壁房間）；吸頂燈的光幾乎都往下，天花板只靠反射光，
+ * 用點光源的話離天花板太近，燈旁邊的天花板會亮成一圈白
  */
 function ceilinglight(g: G, it: FurnitureItem) {
   const { w, h } = it
   const r = w / 2
   ceilingParts([cyl(g, r, r, h * 0.4, 0, h * 0.6, 0, mat(it.color, 0.6), 48), cyl(g, r - 1, r - 5, h * 0.6, 0, 0, 0, lampGlow, 48)])
-  const lamp = new THREE.PointLight('#ffffff', 0, 8, 2)
-  lamp.position.set(0, -6, 0)
+  const lamp = new THREE.SpotLight('#ffffff', 0, 8, (75 * Math.PI) / 180, 0.8, 2)
+  lamp.position.set(0, -2, 0)
+  lamp.target.position.set(0, -it.elev, 0)
+  g.add(lamp.target)
   lamp.userData.lamp = 'main'
   lamp.visible = false
   lamp.castShadow = true

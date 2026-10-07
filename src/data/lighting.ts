@@ -25,8 +25,9 @@ export interface TrackModule {
 const WB = (at: number, label: string, len = 90): TrackModule => ({ at, len, beam: 50, toward: [0, -50], height: 170, wash: true, label })
 
 export const trackLayout: Record<string, TrackModule[]> = {
-  // 客廳靠電視牆那條（離牆 50、約 3.6 米）：四支 90 燈條頭尾相接，洗電視牆到主臥門那段
-  'track-living-l': [WB(135, '電視牆'), WB(45, '電視牆'), WB(-45, '電視牆'), WB(-135, '主臥門那段牆')],
+  // 客廳靠電視牆那條（離牆 50、約 4.5 米，從大門那面牆前 10 公分到冰箱過去）：五支 90 燈條頭尾相接，
+  // 洗玄關（浴室門那段）、電視牆、主臥門、冰箱那段，玄關和冰箱、主臥門中間都不會暗
+  'track-living-l': [WB(180, '玄關（浴室門那段）'), WB(90, '電視牆'), WB(0, '電視牆'), WB(-90, '主臥門那段牆'), WB(-180, '冰箱那段牆')],
   // 客廳靠沙發牆那條（離牆 50、約 3.7 米）：四支 90 燈條頭尾相接，洗沙發牆到咖啡櫃那段
   'track-living-r': [WB(-140, '沙發牆'), WB(-50, '沙發牆'), WB(40, '沙發牆'), WB(130, '咖啡櫃那段牆')],
   // 次臥：書桌上方兩支 60 燈條，往書桌那側翻，各照一張書桌

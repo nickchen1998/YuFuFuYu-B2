@@ -4,7 +4,7 @@ import { mat, glassMat, shadeHex } from './mats'
 import { hashStr } from './textures'
 import { interiorCabinet, peninsulaStorage } from './cabinet3d'
 import { PENINSULA_TOP, peninsulaStorageLen } from '../cabinet'
-import { trackLayout } from '../data/lighting'
+import { trackLayout, type TrackModule } from '../data/lighting'
 
 // 每個家具都在自己的座標系（公分）建模：
 //   原點 = 平面外框中心、地面；寬沿 x、深沿 z、正面朝 +z
@@ -234,44 +234,69 @@ function ceilinglight(g: G, it: FurnitureItem) {
 
 /**
  * 明裝磁吸軌道：直接鎖在天花板（不做假樑），燈頭照 data/lighting.ts 掛上去。
- * 燈頭是筒型燈罩的投射燈，轉向照的那一點（地面、或洗牆時牆上的高度）；每個燈頭一盞聚光燈（燈光模擬時才打開）
+ * 直條式燈條往兩側翻（朝牆或朝房間），拆成每 30 公分一盞小聚光燈，打出來是一條連續的光；
+ * 圓形燈罩投射燈轉向照的那一點。洗牆的燈在牆上再放一片朝房間的柔光面，代替 3D 算不出的反射光
  */
 function surfacetrack(g: G, it: FurnitureItem) {
   const { w, h } = it
   const parts: THREE.Mesh[] = [bx(g, w, h, 2.8, 0, 0, 0, mat(it.color, 0.5))]
   const housing = mat('#e9e9e7', 0.5)
   const down = new THREE.Vector3(0, -1, 0)
-  for (const m of trackLayout[it.id] ?? []) {
-    const [tx, tz] = m.toward ?? [0, 0]
-    const pivot = new THREE.Vector3(m.at, -2.5, 0)
-    const target = new THREE.Vector3(m.at + tx, (m.height ?? 0) - it.elev, tz)
-    const dir = target.clone().sub(pivot).normalize()
-    // 燈頭：軌道下方一小段轉接座，下面是往目標轉的筒型燈罩（開口那一面發亮）
-    parts.push(cyl(g, 1.2, 1.2, 2.5, m.at, -2.5, 0, housing, 12))
-    const head = new THREE.Group()
-    head.position.copy(pivot)
-    head.quaternion.setFromUnitVectors(down, dir)
-    const shade = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 3.2, 11, 24), housing)
-    shade.position.y = -5.5
-    const lens = new THREE.Mesh(new THREE.CylinderGeometry(2.8, 2.8, 0.3, 24), lampGlow)
-    lens.position.y = -11.1
-    head.add(shade, lens)
-    g.add(head)
-    parts.push(shade, lens)
+  const addLamp = (pos: THREE.Vector3, target: THREE.Vector3, m: TrackModule, kind: string) => {
     // 洗牆燈：光束邊緣完全柔化、只照到牆前一點點（不算陰影也不會穿牆漏到隔壁）
-    const lamp = new THREE.SpotLight('#ffffff', 0, m.wash ? 3.4 : 7, ((m.beam ?? 24) * Math.PI) / 180, m.wash ? 1 : 0.6, 2)
-    lamp.position.copy(pivot.clone().addScaledVector(dir, 12))
+    const lamp = new THREE.SpotLight('#ffffff', 0, m.wash ? 3.4 : 7, ((m.beam ?? (m.len ? 50 : 24)) * Math.PI) / 180, m.len ? 1 : 0.6, 2)
+    lamp.position.copy(pos)
     lamp.target.position.copy(target)
-    lamp.userData.lamp = m.wash ? 'wash' : 'spot'
+    lamp.userData.lamp = kind
     lamp.visible = false
     lamp.castShadow = !!m.shadow
     lampShadow(lamp, 7)
     g.add(lamp, lamp.target)
+  }
+  for (const m of trackLayout[it.id] ?? []) {
+    const [tx, tz] = m.toward ?? [0, 0]
+    const pivot = new THREE.Vector3(m.at, -2.5, 0)
+    const target = new THREE.Vector3(m.at + tx, (m.height ?? 0) - it.elev, tz)
+    if (m.len) {
+      // 燈條：只繞軌道方向翻轉，朝目標那一側
+      const len = m.len
+      const dir = new THREE.Vector3(0, target.y - pivot.y, target.z - pivot.z).normalize()
+      const head = new THREE.Group()
+      head.position.copy(pivot)
+      head.quaternion.setFromUnitVectors(down, dir)
+      const body = new THREE.Mesh(new THREE.BoxGeometry(len, 3.2, 3.2), housing)
+      body.position.y = -1.6
+      const glow = new THREE.Mesh(new THREE.BoxGeometry(len - 1, 0.3, 2.4), lampGlow)
+      glow.position.y = -3.3
+      head.add(body, glow)
+      g.add(head)
+      parts.push(body, glow)
+      const n = Math.max(2, Math.round(len / 30))
+      for (let i = 0; i < n; i++) {
+        const x = m.at - len / 2 + ((i + 0.5) * len) / n
+        addLamp(new THREE.Vector3(x, pivot.y, 0).addScaledVector(dir, 4), new THREE.Vector3(x, target.y, target.z), m, m.wash ? 'wash' : 'desk')
+      }
+    } else {
+      const dir = target.clone().sub(pivot).normalize()
+      // 投射燈：軌道下方一小段轉接座，下面是往目標轉的筒型燈罩（開口那一面發亮）
+      parts.push(cyl(g, 1.2, 1.2, 2.5, m.at, -2.5, 0, housing, 12))
+      const head = new THREE.Group()
+      head.position.copy(pivot)
+      head.quaternion.setFromUnitVectors(down, dir)
+      const shade = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 3.2, 11, 24), housing)
+      shade.position.y = -5.5
+      const lens = new THREE.Mesh(new THREE.CylinderGeometry(2.8, 2.8, 0.3, 24), lampGlow)
+      lens.position.y = -11.1
+      head.add(shade, lens)
+      g.add(head)
+      parts.push(shade, lens)
+      addLamp(pivot.clone().addScaledVector(dir, 12), target, m, 'spot')
+    }
     if (m.wash) {
-      // 牆面反射：在被照亮的那段牆上放一片朝房間的柔光面（只往前發光，不會穿牆），代替 3D 算不出的反射光
+      // 牆面反射：在被照亮的那段牆上放一片朝房間的柔光面（只往前發光，不會穿牆）
       const H = 230
       const back = new THREE.Vector3(pivot.x - target.x, 0, pivot.z - target.z).normalize()
-      const panel = new THREE.RectAreaLight('#ffffff', 0, m.panel ?? 65, H)
+      const panel = new THREE.RectAreaLight('#ffffff', 0, m.len ?? 65, H)
       panel.position.set(target.x, H / 2 - it.elev, target.z).addScaledVector(back, 1.5)
       panel.rotation.y = Math.atan2(-back.x, -back.z)
       panel.userData.lamp = 'bounce'

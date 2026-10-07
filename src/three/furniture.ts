@@ -233,26 +233,35 @@ function ceilinglight(g: G, it: FurnitureItem) {
 }
 
 /**
- * 明裝磁吸軌道：直接鎖在天花板（不做假樑），燈頭照 data/lighting.ts 掛上去；
- * 投射燈照向指定的地面、排燈往下照或往牆上打（洗牆），每個燈頭一盞聚光燈（燈光模擬時才打開）
+ * 明裝磁吸軌道：直接鎖在天花板（不做假樑），燈頭照 data/lighting.ts 掛上去。
+ * 燈頭是筒型燈罩的投射燈，轉向照的那一點（地面、或洗牆時牆上的高度）；每個燈頭一盞聚光燈（燈光模擬時才打開）
  */
 function surfacetrack(g: G, it: FurnitureItem) {
   const { w, h } = it
   const parts: THREE.Mesh[] = [bx(g, w, h, 2.8, 0, 0, 0, mat(it.color, 0.5))]
   const housing = mat('#e9e9e7', 0.5)
+  const down = new THREE.Vector3(0, -1, 0)
   for (const m of trackLayout[it.id] ?? []) {
-    const line = m.kind === 'line'
-    if (line) {
-      const len = m.len ?? 60
-      parts.push(bx(g, len, 2.2, 2.6, m.at, -2.2, 0, housing), bx(g, len - 1, 0.3, 2, m.at, -2.5, 0, lampGlow))
-    } else {
-      parts.push(cyl(g, 2.4, 2.4, 9, m.at, -9, 0, housing, 20), cyl(g, 1.9, 1.9, 0.3, m.at, -9.3, 0, lampGlow, 20))
-    }
-    const lamp = new THREE.SpotLight('#ffffff', 0, 7, line ? 0.6 : 0.42, line ? 0.7 : 0.5, 2)
-    lamp.position.set(m.at, line ? -3 : -10, 0)
     const [tx, tz] = m.toward ?? [0, 0]
-    lamp.target.position.set(m.at + tx, (m.height ?? 0) - it.elev, tz)
-    lamp.userData.lamp = m.kind
+    const pivot = new THREE.Vector3(m.at, -2.5, 0)
+    const target = new THREE.Vector3(m.at + tx, (m.height ?? 0) - it.elev, tz)
+    const dir = target.clone().sub(pivot).normalize()
+    // 燈頭：軌道下方一小段轉接座，下面是往目標轉的筒型燈罩（開口那一面發亮）
+    parts.push(cyl(g, 1.2, 1.2, 2.5, m.at, -2.5, 0, housing, 12))
+    const head = new THREE.Group()
+    head.position.copy(pivot)
+    head.quaternion.setFromUnitVectors(down, dir)
+    const shade = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 3.2, 11, 24), housing)
+    shade.position.y = -5.5
+    const lens = new THREE.Mesh(new THREE.CylinderGeometry(2.8, 2.8, 0.3, 24), lampGlow)
+    lens.position.y = -11.1
+    head.add(shade, lens)
+    g.add(head)
+    parts.push(shade, lens)
+    const lamp = new THREE.SpotLight('#ffffff', 0, 7, (((m.beam ?? 24) * Math.PI) / 180), m.beam ? 0.7 : 0.5, 2)
+    lamp.position.copy(pivot.clone().addScaledVector(dir, 12))
+    lamp.target.position.copy(target)
+    lamp.userData.lamp = m.beam && m.beam > 30 ? 'wide' : 'spot'
     lamp.visible = false
     lamp.castShadow = !!m.shadow
     lampShadow(lamp, 7)

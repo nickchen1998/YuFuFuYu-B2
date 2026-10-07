@@ -198,7 +198,7 @@ const seeds: Seed[] = [
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 480, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
   // 燈光（方案一：主燈＋明裝軌道，不做假樑、天花板維持原始 300；燈頭位置見 data/lighting.ts）：
-  // 客廳不裝主燈，兩條明裝磁吸軌道各離電視牆、沙發牆 50，排燈往牆上打，牆亮起來整個客廳就平均；
+  // 客廳不裝主燈，兩條明裝磁吸軌道各離電視牆、沙發牆 50，廣角投射燈（筒型燈罩）往牆上打，牆亮起來整個客廳就平均；
   // 吸頂燈移到廚房、餐廳那頭（檯面和中島之間上方）；主臥、次臥各一盞調光調色吸頂燈，次臥書桌上方一條 2 米短軌道
   { id: 'light-living', type: 'ceilinglight', name: '廚房餐廳主燈（調光調色吸頂燈）', x: 120, y: 560, rot: 0, w: 50, d: 50, h: 10, elev: 290, color: '#f4f3f0' },
   { id: 'track-living-l', type: 'surfacetrack', name: '客廳明裝磁吸軌道（電視牆那側）', x: 50, y: 220, rot: 90, w: 360, d: 3, h: 3, elev: 297, color: '#ecebe8' },

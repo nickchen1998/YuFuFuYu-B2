@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { CSS2DObject, CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js'
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js'
 import type { Design, FurnitureItem, Lighting, ViewMode, WalkPose } from '../types'
 import type { ui as UIState } from '../store'
 import { corridor, planOverlay, rooms, unitBounds, walls } from '../data/house'
@@ -171,6 +172,8 @@ export class Viewer {
   // ───────────────────────── 場景 ─────────────────────────
 
   private setupLights() {
+    // 牆面反射的柔光面（RectAreaLight）要先載入查表
+    RectAreaLightUniformsLib.init()
     this.scene.add(this.hemi)
     const sun = this.sun
     sun.castShadow = true

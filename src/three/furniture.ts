@@ -258,14 +258,26 @@ function surfacetrack(g: G, it: FurnitureItem) {
     head.add(shade, lens)
     g.add(head)
     parts.push(shade, lens)
-    const lamp = new THREE.SpotLight('#ffffff', 0, 7, (((m.beam ?? 24) * Math.PI) / 180), m.beam ? 0.7 : 0.5, 2)
+    // 洗牆燈：光束邊緣完全柔化、只照到牆前一點點（不算陰影也不會穿牆漏到隔壁）
+    const lamp = new THREE.SpotLight('#ffffff', 0, m.wash ? 3.4 : 7, ((m.beam ?? 24) * Math.PI) / 180, m.wash ? 1 : 0.6, 2)
     lamp.position.copy(pivot.clone().addScaledVector(dir, 12))
     lamp.target.position.copy(target)
-    lamp.userData.lamp = m.beam && m.beam > 30 ? 'wide' : 'spot'
+    lamp.userData.lamp = m.wash ? 'wash' : 'spot'
     lamp.visible = false
     lamp.castShadow = !!m.shadow
     lampShadow(lamp, 7)
     g.add(lamp, lamp.target)
+    if (m.wash) {
+      // 牆面反射：在被照亮的那段牆上放一片朝房間的柔光面（只往前發光，不會穿牆），代替 3D 算不出的反射光
+      const H = 230
+      const back = new THREE.Vector3(pivot.x - target.x, 0, pivot.z - target.z).normalize()
+      const panel = new THREE.RectAreaLight('#ffffff', 0, m.panel ?? 65, H)
+      panel.position.set(target.x, H / 2 - it.elev, target.z).addScaledVector(back, 1.5)
+      panel.rotation.y = Math.atan2(-back.x, -back.z)
+      panel.userData.lamp = 'bounce'
+      panel.visible = false
+      g.add(panel)
+    }
   }
   ceilingParts(parts)
 }

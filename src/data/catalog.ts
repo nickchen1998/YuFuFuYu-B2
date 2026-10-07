@@ -99,6 +99,8 @@ const seeds: Seed[] = [
   { id: 'vacuum', type: 'vacuum', name: '吸塵器（收在櫃內）', x: 264, y: 17, rot: 0, w: 30, d: 25, h: 115, elev: 1.8, color: '#8a5cc2' },
   // 洞洞板：只在鞋櫃上方（右邊是吸塵器高櫃），IKEA SKÅDIS 76 × 56 一片橫放，離地 150～206（鑰匙、口罩掛在順手的高度）
   { id: 'pegboard', type: 'pegboard', name: '洞洞板', x: 200, y: 1, rot: 0, w: 76, d: 2, h: 56, elev: 150, color: '#f4f1ea' },
+  // 鞋櫃上方的感應層板燈：鎖在洞洞板下緣（離地約 148）、往下照鞋櫃檯面，開門走進來自動亮；磁吸充電款不用拉電線
+  { id: 'entry-ledbar', type: 'ledbar', name: '玄關感應層板燈（鞋櫃上方）', x: 200, y: 2, rot: 0, w: 60, d: 2.5, h: 1.5, elev: 148, color: '#f2f2f0' },
   { id: 'sofa', type: 'sofa', name: '三人沙發', x: 243, y: 185, rot: 270, w: 210, d: 90, h: 80, color: '#cfc4b2' },
   // 咖啡櫃（零食櫃）：沙發旁、與冰箱斜對面；90 公分高的矮櫃，檯面上方牆面兩組雙連插座
   { id: 'coffeebar', type: 'coffeebar', name: '咖啡櫃（零食櫃＋馬克杯展示）', x: 268, y: 355, rot: 270, w: 120, d: 40, h: 90, color: '#d9c2a0', features: ['outlets', 'edgepull'] },

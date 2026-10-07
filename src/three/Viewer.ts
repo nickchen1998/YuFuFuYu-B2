@@ -8,7 +8,7 @@ import { floorPresets } from '../data/materials'
 import { blockingRects, fmt, footprint, rectsOverlap, roomSize, type Rect } from '../geometry'
 import { buildWalls } from './walls'
 import { buildFurniture, furnitureSignature, lampGlow } from './furniture'
-import { LAMP_POWER, LIGHT_COLORS, ROOM_FILL } from '../data/lighting'
+import { EXTRA_FILL, LAMP_POWER, LIGHT_COLORS, ROOM_FILL } from '../data/lighting'
 import { hasInterior } from '../cabinet'
 import { floorTexture, loadPlanOverlay, TEX_CM } from './textures'
 import { mat } from './mats'
@@ -245,6 +245,13 @@ export class Viewer {
       lb.position.set((r.x1 + r.x2) / 2, 2, (r.y1 + r.y2) / 2)
       this.roomLabels.add(lb)
     }
+    // 晚上的額外補光（長房間離中間遠的那頭）：白天不開
+    for (const f of EXTRA_FILL) {
+      const light = new THREE.PointLight('#fff1dc', 0, 0, 2)
+      light.position.set(f.x, -30, f.y)
+      light.userData = { kind: 'ceiling', offset: -30, fill: f.power }
+      this.roomLights.add(light)
+    }
     this.ceilings.visible = false
     this.roomLights.visible = false
     this.updateFloors()
@@ -379,8 +386,9 @@ export class Viewer {
     this.roomLights.visible = night || this.ui.mode === 'walk'
     for (const o of this.roomLights.children) {
       if (!(o instanceof THREE.PointLight)) continue
-      const fill = ROOM_FILL[o.userData.roomId as string] ?? 0
-      o.visible = !night || fill > 0
+      const extra = o.userData.fill as number | undefined
+      const fill = extra ?? ROOM_FILL[o.userData.roomId as string] ?? 0
+      o.visible = night ? fill > 0 : extra === undefined
       o.intensity = night ? fill : 9
       o.color.set(night ? c : new THREE.Color('#fff1dc'))
     }

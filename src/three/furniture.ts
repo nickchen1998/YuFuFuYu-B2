@@ -270,6 +270,20 @@ function surfacetrack(g: G, it: FurnitureItem) {
   ceilingParts(parts)
 }
 
+/** 感應層板燈（鎖在櫃子或洞洞板下緣）：細長燈條、下方發光；燈光模擬時往下照一片柔光 */
+function ledbar(g: G, it: FurnitureItem) {
+  const { w, d, h } = it
+  bx(g, w, h, d, 0, 0, 0, mat(it.color, 0.4))
+  const glow = bx(g, w - 1, 0.2, d - 0.6, 0, -0.2, 0, lampGlow)
+  glow.castShadow = false
+  const lamp = new THREE.SpotLight('#ffffff', 0, 2.5, 1.2, 0.9, 2)
+  lamp.position.set(0, -1, 0)
+  lamp.target.position.set(0, -it.elev, d / 2 + 20)
+  lamp.userData.lamp = 'bar'
+  lamp.visible = false
+  g.add(lamp, lamp.target)
+}
+
 function tv(g: G, it: FurnitureItem) {
   const { w, h } = it
   if (has(it, 'wallmount')) {
@@ -1198,6 +1212,7 @@ function plainBox(g: G, it: FurnitureItem) {
 }
 
 const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
+  ledbar,
   ceilinglight,
   surfacetrack,
   bed,

@@ -51,121 +51,96 @@ const alias: Record<string, string> = {
   bchair2: 'bchair1',
   mns2: 'mns1',
   ac2: 'ac1',
-}
-
-/** 燈光方案 B（無主燈、不用崁燈）：一道假樑＋嵌入式磁吸軌道的選購資料；len = 假樑長度、lines／spots = 排燈、投射燈數量 */
-function trackBand(o: { where: string; len: number; lines: number; spots: number; specs?: string[]; notes?: string[] }): ShopInfo {
-  const chi = Math.ceil(o.len / 30.3 - 0.05)
-  const meters = Math.ceil(o.len / 100)
-  const band = chi * 550
-  const kit = meters * 630 + o.lines * 1390 + o.spots * 785 + 1500 + 1800
-  const nt = (n: number) => `NT$${n.toLocaleString('en-US')}`
-  const lights = [o.lines ? `${o.lines} 支排燈往牆上打（洗牆）` : '', o.spots ? `${o.spots} 盞投射燈打重點` : ''].filter(Boolean).join('、')
-  return {
-    summary: `${o.where}：沿牆做一道假樑（深 45、往下 25，底面離地 275），磁吸軌道離牆約 35，${lights}；牆面亮起來、光反射回房間，整個家平均被照亮，抬頭只看到一條細細的軌道線，沒有主燈也沒有崁燈。`,
-    specs: [
-      `假樑長約 ${o.len}、深 45、往下 25（軌道深約 5.3，要留足深度）；矽酸鈣板＋角材，和天花板同色`,
-      '燈頭：可擺角排燈往牆面打（洗牆），軌道離牆約 35，牆面從上到下都亮；黃光 3000K 為主',
-      ...(o.specs ?? []),
-    ],
-    picks: [
-      {
-        name: `木作假樑（約 ${chi} 尺）＋軌道開槽、批土油漆（估價）`,
-        rec: true,
-        detail: '矽酸鈣板＋角材，含軌道開槽和收邊；間接天花板行情 NT$450～650／台尺，取中間 550',
-        price: `約 ${nt(band)}（2026 行情推算）`,
-        cost: band,
-        category: '系統櫃・訂製',
-        url: 'https://www.pro360.com.tw/price/ceiling_design',
-        source: 'PRO360',
-      },
-      {
-        name: `嵌入式磁吸軌道組：軌道約 ${meters} 米${o.lines ? `＋洗牆排燈 × ${o.lines}` : ''}${o.spots ? `＋投射燈 × ${o.spots}` : ''}＋電源、配線（估價）`,
-        rec: true,
-        detail:
-          '舞光達文西崁入式磁吸軌道約 NT$630／米、可擺角排燈約 NT$1,390／支（可以轉向牆面）、投射燈約 NT$785／盞；24V 電源供應器約 NT$1,500、水電拉線接電約 NT$1,800（推估）',
-        price: `約 ${nt(kit)}（2026/10 舞光建議售價＋推估）`,
-        cost: kit,
-        category: '系統櫃・訂製',
-        url: 'https://www.dancelight.com.tw/tw/product/magnetic-track-light-0003/detail',
-        source: '舞光',
-      },
-    ],
-    notes: [
-      '想要黃光、白光都能切（一段黃一段白）：要選可以調色溫的磁吸燈頭（段切或 App 調色的款式）；舞光達文西每支燈頭是單一色溫（黃光、自然光、白光選一種），下單前確認',
-      '燈頭可以隨時加、換位置、改角度，以後換家具也能重新打光；電源供應器藏在假樑裡，要留維修孔',
-      ...(o.notes ?? []),
-    ],
-  }
+  'light-study': 'light-master',
 }
 
 export const shopping: Record<string, ShopInfo> = {
-  'clg-living-l': trackBand({
-    where: '客餐廳左側（電視、冰箱、廚房那面牆）',
-    len: 665,
-    lines: 3,
-    spots: 0,
-    specs: ['順便把客廳冷氣的冷媒管（鞋櫃上方 → 冷氣平台，約 7 米）包在假樑裡', '洗牆燈打電視牆、冰箱那段和廚房牆面，廚房檯面也一起亮'],
-    notes: ['電視牆的洗牆燈從上往下打，螢幕不會有反光點；看電影時可以只關這一支'],
-  }),
-  'clg-living-r': trackBand({
-    where: '客餐廳右側（沙發、咖啡櫃那面牆）',
-    len: 625,
-    lines: 3,
-    spots: 1,
-    specs: ['在吸塵器高櫃前面斷開；洗牆燈打沙發牆、咖啡櫃牆、次臥門那段，投射燈斜打餐桌'],
-  }),
-  'clg-living-b': trackBand({
-    where: '客餐廳窗戶那面',
-    len: 198,
-    lines: 1,
-    spots: 0,
-    specs: ['假樑兼窗簾盒；一支 120 排燈洗窗簾，晚上窗簾拉起來是一面亮的布牆'],
-  }),
-  'clg-living-t': trackBand({
-    where: '客餐廳大門上方',
-    len: 95,
-    lines: 0,
-    spots: 1,
-    specs: ['大門到冷氣之間一小段，冷氣管從這裡接到左側假樑；一盞投射燈打玄關地面'],
-  }),
-  'clg-master-t': trackBand({ where: '主臥半套衛浴那面牆（衣櫃右邊到房門）', len: 137, lines: 1, spots: 0 }),
-  'clg-master-l': trackBand({
-    where: '主臥床頭那面牆',
-    len: 238,
-    lines: 2,
-    spots: 0,
-    specs: ['從衣櫃上櫃門打開的範圍外開始；床頭牆亮起來，躺著燈在頭頂後方，不會直視'],
-    notes: ['床邊加雙切開關，躺著就能關燈'],
-  }),
-  'clg-master-r': trackBand({
-    where: '主臥床尾那面牆（房門、投影那面）',
-    len: 295,
-    lines: 2,
-    spots: 0,
-    notes: ['看投影時把這兩支關掉，畫面才不會被洗白'],
-  }),
-  'clg-study-l': trackBand({
-    where: '次臥書桌那面牆',
-    len: 492,
-    lines: 3,
-    spots: 0,
-    specs: ['洗牆燈打書桌前面的牆，桌面也一起亮，光從前面來、螢幕不反光（書桌這條可以改 4000K 自然光）'],
-  }),
-  'clg-study-r': trackBand({
-    where: '次臥分戶牆（按摩椅、矮櫃、層板那面）',
-    len: 463,
-    lines: 3,
-    spots: 0,
-    specs: ['層板那段洗亮，視訊時背景清楚'],
-  }),
-  'clg-study-b': trackBand({
-    where: '次臥窗戶那面（冷氣左邊）',
-    len: 92,
-    lines: 1,
-    spots: 0,
-    specs: ['假樑兼窗簾盒；一支 60 排燈洗窗簾'],
-  }),
+  'light-living': {
+    summary:
+      '客餐廳主燈：一盞調光調色吸頂燈，裝在客廳和餐廳中間（天花板原本的出線盒附近），遙控就能切黃光、白光、調亮度；餐桌、玄關、咖啡櫃的重點光交給旁邊那條軌道。',
+    specs: ['客餐廳約 5.8 坪：選 6～8 坪的機型（約 36～42 W），一盞就夠整體照明', '調光調色（黃光 3000K 到白光 6000K），遙控、壁切都能開'],
+    picks: [
+      {
+        name: '國際牌 Panasonic LED 經典調光調色吸頂燈 36.6W（LGC61101A09，6～8 坪）',
+        rec: true,
+        detail: '日本製；遙控調光調色、夜燈；素面白色燈罩，和天花板融在一起',
+        price: '約 NT$7,990（2026/10 網路通路）',
+        url: 'https://www.decorlight.com.tw/products_detail/Panasonic%E5%9C%8B%E9%9A%9B%E7%89%8CLED%E7%B6%93%E5%85%B8%E5%8F%AF%E8%AA%BF%E5%85%89%E8%AA%BF%E8%89%B2%E5%90%B8%E9%A0%82%E7%87%88',
+        source: '迪可照明',
+      },
+      {
+        name: '無印良品 木框 LED 調光吸頂燈',
+        detail: '淺木框、無印風；適用約 4～5 坪，客餐廳偏暗，要搭配軌道燈',
+        price: '約 NT$5,500（2026/10 樂天）',
+        url: 'https://www.rakuten.com.tw/search/%E7%84%A1%E5%8D%B0%E8%89%AF%E5%93%81%E5%90%B8%E9%A0%82%E7%87%88/',
+        source: '樂天',
+      },
+    ],
+    notes: ['裝在客廳和餐廳中間，兩邊都照得到；吃飯時可以只開餐桌那盞投射燈，氣氛比較好'],
+  },
+  'light-master': {
+    summary: '臥室主燈：主臥、次臥各一盞調光調色吸頂燈（3～5 坪款），裝在房間正中間，遙控切黃光、白光；睡前調暗、切黃光。',
+    specs: ['主臥約 2.8 坪、次臥約 4 坪：選 3～5 坪的機型（約 32 W）', '調光調色（黃光 3000K 到白光 6000K），有夜燈模式'],
+    picks: [
+      {
+        name: '國際牌 Panasonic LED 經典調光調色吸頂燈 31.7W（LGC31202A09，3～5 坪）',
+        rec: true,
+        detail: '日本製；遙控調光調色、夜燈、睡眠定時',
+        price: '約 NT$4,590／盞（2026/10 網路通路）',
+        url: 'https://www.decorlight.com.tw/products_detail/Panasonic%E5%9C%8B%E9%9A%9B%E7%89%8CLED%E7%B6%93%E5%85%B8%E5%8F%AF%E8%AA%BF%E5%85%89%E8%AA%BF%E8%89%B2%E5%90%B8%E9%A0%82%E7%87%88',
+        source: '迪可照明',
+      },
+      {
+        name: '無印良品 木框 LED 調光吸頂燈',
+        detail: '淺木框、無印風，臥室剛好',
+        price: '約 NT$5,500／盞（2026/10 樂天）',
+        url: 'https://www.rakuten.com.tw/search/%E7%84%A1%E5%8D%B0%E8%89%AF%E5%93%81%E5%90%B8%E9%A0%82%E7%87%88/',
+        source: '樂天',
+      },
+    ],
+    notes: ['主臥的燈在床的正上方：躺著會直視燈罩，睡前調暗就好；床邊加雙切開關，躺著就能關燈'],
+  },
+  'track-living': {
+    summary:
+      '客餐廳一條明裝磁吸軌道，直接鎖在天花板（不做假樑、軌道露出來），從玄關到餐桌約 5 米；掛 5 盞投射燈打玄關、茶几、咖啡櫃、餐桌、廚房檯面，主燈管整體亮度、軌道管重點。',
+    specs: [
+      '軌道約 5 米，白色，和天花板同色比較不明顯',
+      '電從主燈旁的出線盒拉一小段明管接到軌道頭；軌道電源供應器放在軌道末端或吸頂燈旁',
+      '燈頭可以隨時加、換位置、改角度',
+    ],
+    picks: [
+      {
+        name: '明裝磁吸軌道組：軌道約 5 米＋投射燈 × 5＋電源、配線（估價）',
+        rec: true,
+        detail:
+          'Formosa 超薄磁吸軌道 2 米明裝款約 NT$990／支（特力屋）× 3、舞光達文西磁吸投射燈約 NT$785／盞；24V 電源供應器約 NT$1,500、水電拉線接電約 NT$2,000（推估）',
+        price: '約 NT$10,395（2026/10 特力屋、舞光＋推估）',
+        cost: 10395,
+        url: 'https://www.trplus.com.tw/TLW_Lighting/c/EC_20000337',
+        source: '特力屋',
+      },
+    ],
+    notes: [
+      '想要黃光、白光都能切：投射燈也要選可以調色溫的款式；不然主燈切白光、投射燈維持黃光也很常見（重點光暖一點比較好看）',
+      '電視正上方、正前方不要打燈，螢幕才不會反光',
+    ],
+  },
+  'track-study': {
+    summary: '次臥書桌上方一條 2 米明裝磁吸軌道，兩支排燈各照一張書桌，當工作燈；整體亮度交給房間中間的吸頂燈。',
+    specs: ['軌道 2 米，裝在書桌前緣上方（光從前上方來，螢幕不反光）', '排燈可以選 4000K 自然光，看書、打字比較不累'],
+    picks: [
+      {
+        name: '明裝磁吸軌道組：軌道 2 米＋排燈 × 2＋電源、配線（估價）',
+        rec: true,
+        detail:
+          'Formosa 超薄磁吸軌道 2 米明裝款約 NT$990、舞光達文西 12W 廣角排燈約 NT$550／支；24V 電源供應器約 NT$1,500、水電拉線約 NT$1,500（推估）',
+        price: '約 NT$5,090（2026/10 特力屋、舞光＋推估）',
+        cost: 5090,
+        url: 'https://www.dancelight.com.tw/tw/product/track-light/magnetic-track',
+        source: '舞光',
+      },
+    ],
+  },
   // ───────────── 系統櫃（2026/09 查詢） ─────────────
   bward1: {
     summary:
@@ -964,6 +939,7 @@ export const shopping: Record<string, ShopInfo> = {
       '寬度最有餘裕的是三菱重工（87）；國際牌 89 幾乎佔滿 90，側邊出管要先跟師傅確認',
       '冷媒管 7 m：部分通路的基本安裝只含 5 m，超過的 2 分 4 分管每米約 NT$550',
       '如果建商已經預埋冷媒管，要確認管徑是 2 分 4 分，而且接得到室外機平台',
+      '不做天花板：冷媒管沿牆和天花板的轉角走，外面套白色裝飾管槽（和牆同色），約 7 米；或請冷氣師傅評估有沒有更短的路線',
     ],
     related: [
       {
@@ -2744,6 +2720,8 @@ const APPLIANCES = [
   'airfryer',
   'microwave',
   'projector',
+  'ceilinglight',
+  'surfacetrack',
 ]
 
 /** 分類：系統櫃（訂做）、訂製、家電、衛浴（自己買的洗臉盆）、建商附、家具 */
@@ -2752,7 +2730,7 @@ export function itemCategory(it: FurnitureItem): string {
   if (shopInfo(it)?.owned) return '已有'
   if (it.type === 'vanity' || it.type === 'mirrorcab') return '衛浴'
   if (it.type === 'kitchen' || (it.locked && it.type !== 'acunit')) return '建商附'
-  if (it.type === 'peninsula' || it.type === 'hiddendoor' || it.type === 'ceilingband') return '訂製'
+  if (it.type === 'peninsula' || it.type === 'hiddendoor') return '訂製'
   if (hasInterior(it)) return '系統櫃'
   if (it.type === 'projection') return '示意'
   if (APPLIANCES.includes(it.type)) return '家電'

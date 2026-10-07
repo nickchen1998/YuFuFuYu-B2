@@ -197,23 +197,14 @@ const seeds: Seed[] = [
   // 冷氣：窗戶上方、往分戶牆那邊移（右緣離分戶牆約 25），沿長邊往衣櫃方向吹；風從座位右邊經過，不會直吹頭
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 480, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
-  // 燈光（方案 B：無主燈、不用崁燈）：沿著牆四周做假樑（深 45、往下 25，底面離地 275），嵌入式磁吸軌道離牆約 35，
-  // 燈往牆上打（洗牆），牆面亮、光反射回房間，整個家平均被照亮；房間中間維持原始 300 高。燈頭位置見 data/lighting.ts。
-  // 假樑背面貼牆、正面朝房間；遇到頂天的櫃子、冷氣就斷開，衣櫃上櫃門打開的範圍也避開
-  // 客餐廳：左側沿電視、廚房那面牆（包客廳冷氣管）、右側沿沙發、咖啡櫃那面牆（避開吸塵器高櫃）、窗戶那面（窗簾盒上方）、
-  // 大門上方一小段（冷氣管從冷氣接到左側假樑）
-  { id: 'clg-living-l', type: 'ceilingband', name: '客餐廳假樑＋軌道（電視、廚房那面牆）', x: 22.5, y: 332.5, rot: 90, w: 665, d: 45, h: 25, elev: 275, color: '#f3f1ec' },
-  { id: 'clg-living-r', type: 'ceilingband', name: '客餐廳假樑＋軌道（沙發、咖啡櫃那面牆）', x: 265.5, y: 352.5, rot: 270, w: 625, d: 45, h: 25, elev: 275, color: '#f3f1ec' },
-  { id: 'clg-living-b', type: 'ceilingband', name: '客餐廳假樑＋軌道（窗戶那面）', x: 144, y: 642.5, rot: 180, w: 198, d: 45, h: 25, elev: 275, color: '#f3f1ec' },
-  { id: 'clg-living-t', type: 'ceilingband', name: '客餐廳假樑＋軌道（大門上方）', x: 92.5, y: 22.5, rot: 0, w: 95, d: 45, h: 25, elev: 275, color: '#f3f1ec' },
-  // 主臥：半套衛浴那面牆（衣櫃右邊到房門）、床頭牆（避開衣櫃上櫃門）、床尾牆（房門、投影那面）；窗戶那面有冷氣，不做
-  { id: 'clg-master-t', type: 'ceilingband', name: '主臥假樑＋軌道（衛浴門那面牆）', x: -83.25, y: 282.5, rot: 0, w: 136.5, d: 45, h: 25, elev: 275, color: '#f3f1ec' },
-  { id: 'clg-master-l', type: 'ceilingband', name: '主臥假樑＋軌道（床頭牆）', x: -264, y: 480.75, rot: 90, w: 237.5, d: 45, h: 25, elev: 275, color: '#f3f1ec' },
-  { id: 'clg-master-r', type: 'ceilingband', name: '主臥假樑＋軌道（床尾牆）', x: -37.5, y: 452.25, rot: 270, w: 294.5, d: 45, h: 25, elev: 275, color: '#f3f1ec' },
-  // 次臥：書桌那面牆、分戶牆（層板、矮櫃）、窗戶那面（冷氣左邊）；衣櫃那面頂天，不做
-  { id: 'clg-study-l', type: 'ceilingband', name: '次臥假樑＋軌道（書桌那面牆）', x: 325.5, y: 308, rot: 90, w: 492, d: 45, h: 25, elev: 275, color: '#f3f1ec' },
-  { id: 'clg-study-r', type: 'ceilingband', name: '次臥假樑＋軌道（分戶牆）', x: 522, y: 293.5, rot: 270, w: 463, d: 45, h: 25, elev: 275, color: '#f3f1ec' },
-  { id: 'clg-study-b', type: 'ceilingband', name: '次臥假樑＋軌道（窗戶那面）', x: 394, y: 531.5, rot: 180, w: 92, d: 45, h: 25, elev: 275, color: '#f3f1ec' },
+  // 燈光（方案一：每間一盞主燈＋明裝軌道，不做假樑、天花板維持原始 300）：
+  // 客餐廳、主臥、次臥各一盞調光調色吸頂燈（遙控切黃光、白光）；客餐廳一條明裝磁吸軌道從玄關到餐桌打重點，
+  // 次臥書桌上方一條 2 米短軌道當工作燈（燈頭位置見 data/lighting.ts）
+  { id: 'light-living', type: 'ceilinglight', name: '客餐廳主燈（調光調色吸頂燈）', x: 120, y: 300, rot: 0, w: 60, d: 60, h: 10, elev: 290, color: '#f4f3f0' },
+  { id: 'track-living', type: 'surfacetrack', name: '客餐廳明裝磁吸軌道（約 5 米）', x: 215, y: 310, rot: 90, w: 500, d: 3, h: 3, elev: 297, color: '#ecebe8' },
+  { id: 'light-master', type: 'ceilinglight', name: '主臥主燈（調光調色吸頂燈）', x: -150.75, y: 430, rot: 0, w: 50, d: 50, h: 10, elev: 290, color: '#f4f3f0' },
+  { id: 'light-study', type: 'ceilinglight', name: '次臥主燈（調光調色吸頂燈）', x: 424, y: 300, rot: 0, w: 50, d: 50, h: 10, elev: 290, color: '#f4f3f0' },
+  { id: 'track-study', type: 'surfacetrack', name: '次臥書桌明裝磁吸軌道（2 米）', x: 380, y: 322, rot: 90, w: 200, d: 3, h: 3, elev: 297, color: '#ecebe8' },
 
   // 工作陽台：洗衣機、乾衣機並排靠柱子那側（不堆疊），整組推到次臥窗下那面牆，離女兒牆遠、不易淋雨；門朝陽台內
   { id: 'washer', type: 'washer', name: '洗衣機', x: 459, y: 600, rot: 270, w: 60, d: 65, h: 100, color: '#eef0f2' },

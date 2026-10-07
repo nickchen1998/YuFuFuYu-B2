@@ -8,7 +8,7 @@ import { floorPresets } from '../data/materials'
 import { blockingRects, fmt, footprint, rectsOverlap, roomSize, type Rect } from '../geometry'
 import { buildWalls } from './walls'
 import { buildFurniture, furnitureSignature, lampGlow } from './furniture'
-import { LIGHT_COLORS, ROOM_FILL } from '../data/lighting'
+import { LAMP_POWER, LIGHT_COLORS, ROOM_FILL } from '../data/lighting'
 import { hasInterior } from '../cabinet'
 import { floorTexture, loadPlanOverlay, TEX_CM } from './textures'
 import { mat } from './mats'
@@ -362,8 +362,8 @@ export class Viewer {
   // ───────────────────────── 燈光模擬 ─────────────────────────
 
   /**
-   * 燈光模擬：自然光（白天），或晚上開天花板軌道燈（黃光 3000K／白光 6000K）。
-   * 晚上關掉太陽、天空光降到很暗（當作牆面反射的一點點光），每個燈頭的聚光燈打開、會被牆和家具擋住（有陰影）；
+   * 燈光模擬：自然光（白天），或晚上開燈（主燈＋軌道燈；黃光 3000K／白光 6000K）。
+   * 晚上關掉太陽、天空光降到很暗（當作牆面反射的一點點光），主燈和軌道燈打開，主燈和寬光束的排燈會被牆和家具擋住（有陰影）；
    * 晚上的陰影只在東西變動時重算，走動、轉頭都不用重算
    */
   applyLighting() {
@@ -385,10 +385,10 @@ export class Viewer {
       o.color.set(night ? c : new THREE.Color('#fff1dc'))
     }
     this.furnitureGroup.traverse((o) => {
-      if (!(o instanceof THREE.SpotLight) || !o.userData.lamp) return
+      if (!(o instanceof THREE.Light) || !o.userData.lamp) return
       o.visible = night
       o.color.copy(c)
-      o.intensity = o.userData.lamp === 'wash' ? 16 : 26
+      o.intensity = LAMP_POWER[o.userData.lamp as string] ?? 20
     })
     lampGlow.emissive.copy(night ? c : new THREE.Color('#000000'))
     lampGlow.emissiveIntensity = night ? 2.5 : 0

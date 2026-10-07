@@ -198,48 +198,67 @@ function coffeetable(g: G, it: FurnitureItem) {
 /** 燈頭的發光面：燈光模擬時由 Viewer 改成燈的顏色並發亮，白天是一般白色燈罩 */
 export const lampGlow = new THREE.MeshStandardMaterial({ color: '#f4f3f0', roughness: 0.4, emissive: '#000000' })
 
+/** 天花板上的燈具零件：只在漫遊、或牆高「完整」時顯示，從上面看不會擋住房間；不擋光 */
+function ceilingParts(parts: THREE.Mesh[]) {
+  for (const p of parts) {
+    p.castShadow = false
+    p.userData.ceilingMesh = true
+  }
+}
+
+/** 燈光模擬用的光源：白天關著，Viewer 依燈光模式開燈、換顏色 */
+function lampShadow(lamp: THREE.SpotLight | THREE.PointLight, far: number) {
+  lamp.shadow.mapSize.set(512, 512)
+  lamp.shadow.bias = -0.0008
+  lamp.shadow.normalBias = 0.03
+  lamp.shadow.camera.near = 0.05
+  lamp.shadow.camera.far = far
+}
+
 /**
- * 沿牆的假樑＋嵌入式磁吸軌道：箱體在 0～h（底面離地 elev），背面（-z）貼牆；軌道離牆約 35，燈頭照 data/lighting.ts 掛上去。
- * 洗牆排燈照向背後那面牆離地約 100 的地方，投射燈照向指定的地面；每個燈頭一盞聚光燈（燈光模擬時才打開）。
- * 假樑和燈頭只在漫遊、或牆高「完整」時顯示，從上面看不會擋住房間
+ * 吸頂燈（主燈，調光調色）：扁圓燈體貼在天花板下、乳白燈罩；燈光模擬時燈罩發亮，
+ * 燈罩下方一盞點光源（有陰影，光不會穿牆漏到隔壁房間）
  */
-function ceilingband(g: G, it: FurnitureItem) {
-  const { w, d, h } = it
-  const layout = trackLayout[it.id]
-  const z = layout?.z ?? 0
-  const shell: THREE.Mesh[] = []
-  shell.push(bx(g, w, h, d, 0, 0, 0, mat(it.color, 0.9)))
-  shell.push(bx(g, w - 10, 0.4, 2.8, 0, -0.1, z, mat('#2c2e31', 0.5)))
+function ceilinglight(g: G, it: FurnitureItem) {
+  const { w, h } = it
+  const r = w / 2
+  ceilingParts([cyl(g, r, r, h * 0.4, 0, h * 0.6, 0, mat(it.color, 0.6), 48), cyl(g, r - 1, r - 5, h * 0.6, 0, 0, 0, lampGlow, 48)])
+  const lamp = new THREE.PointLight('#ffffff', 0, 8, 2)
+  lamp.position.set(0, -6, 0)
+  lamp.userData.lamp = 'main'
+  lamp.visible = false
+  lamp.castShadow = true
+  lampShadow(lamp, 8)
+  g.add(lamp)
+}
+
+/**
+ * 明裝磁吸軌道：直接鎖在天花板（不做假樑），燈頭照 data/lighting.ts 掛上去；
+ * 投射燈照向指定的地面、排燈往下照，每個燈頭一盞聚光燈（燈光模擬時才打開）
+ */
+function surfacetrack(g: G, it: FurnitureItem) {
+  const { w, h } = it
+  const parts: THREE.Mesh[] = [bx(g, w, h, 2.8, 0, 0, 0, mat(it.color, 0.5))]
   const housing = mat('#e9e9e7', 0.5)
-  for (const m of layout?.modules ?? []) {
-    const wash = m.kind === 'wash'
-    if (wash) {
-      const len = m.len ?? 90
-      shell.push(bx(g, len, 2.2, 2.6, m.at, -2.2, z, housing), bx(g, len - 1, 0.3, 2, m.at, -2.5, z, lampGlow))
+  for (const m of trackLayout[it.id] ?? []) {
+    const line = m.kind === 'line'
+    if (line) {
+      const len = m.len ?? 60
+      parts.push(bx(g, len, 2.2, 2.6, m.at, -2.2, 0, housing), bx(g, len - 1, 0.3, 2, m.at, -2.5, 0, lampGlow))
     } else {
-      shell.push(cyl(g, 2.4, 2.4, 9, m.at, -9, z, housing, 20), cyl(g, 1.9, 1.9, 0.3, m.at, -9.3, z, lampGlow, 20))
+      parts.push(cyl(g, 2.4, 2.4, 9, m.at, -9, 0, housing, 20), cyl(g, 1.9, 1.9, 0.3, m.at, -9.3, 0, lampGlow, 20))
     }
-    const lamp = new THREE.SpotLight('#ffffff', 0, 6, wash ? 0.95 : 0.42, wash ? 0.85 : 0.5, 2)
-    lamp.position.set(m.at, wash ? -3 : -10, z)
-    if (wash) lamp.target.position.set(m.at, 100 - it.elev, -d / 2 - 1)
-    else {
-      const [tx, tz] = m.toward ?? [0, 0]
-      lamp.target.position.set(m.at + tx, -it.elev, z + tz)
-    }
+    const lamp = new THREE.SpotLight('#ffffff', 0, 7, line ? 0.6 : 0.42, line ? 0.7 : 0.5, 2)
+    lamp.position.set(m.at, line ? -3 : -10, 0)
+    const [tx, tz] = m.toward ?? [0, 0]
+    lamp.target.position.set(m.at + tx, -it.elev, tz)
     lamp.userData.lamp = m.kind
     lamp.visible = false
     lamp.castShadow = !!m.shadow
-    lamp.shadow.mapSize.set(512, 512)
-    lamp.shadow.bias = -0.0005
-    lamp.shadow.normalBias = 0.02
-    lamp.shadow.camera.near = 0.05
-    lamp.shadow.camera.far = 6
+    lampShadow(lamp, 7)
     g.add(lamp, lamp.target)
   }
-  for (const s of shell) {
-    s.castShadow = false
-    s.userData.ceilingMesh = true
-  }
+  ceilingParts(parts)
 }
 
 function tv(g: G, it: FurnitureItem) {
@@ -1170,7 +1189,8 @@ function plainBox(g: G, it: FurnitureItem) {
 }
 
 const builders: Record<string, (g: G, it: FurnitureItem) => void> = {
-  ceilingband,
+  ceilinglight,
+  surfacetrack,
   bed,
   // 有櫃內規劃的櫃子
   wardrobe: interiorCabinet,

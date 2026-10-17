@@ -5,7 +5,7 @@ import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 116
+const REV = 118
 /**
  * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
  * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
@@ -258,6 +258,10 @@ const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   [115, ['entry-ledbar']],
   // rev 116：電視牆那條軌道加長到 4.5 米（五支燈條，從大門那面牆前到冰箱過去）
   [116, ['track-living-l'], ['y', 'w']],
+  // rev 117：兩間臥室也改無主燈：拿掉吸頂燈和書桌短軌道，改成沿牆的明裝軌道洗牆
+  [117, ['light-master', 'light-study', 'track-study', 'track-master-l', 'track-master-r', 'track-master-w', 'track-study-l', 'track-study-r']],
+  // rev 118：主臥衣櫃兩格開放格中間的層板改成小平台（長、寬各一半）
+  [118, ['mward'], ['interior']],
   [25, ['shoe', 'sofa', 'coffeebar', 'rug', 'coffee', 'tvstand', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'mbed', 'mns1', 'mns2', 'mward', 'bward1', 'scab', 'vanity', 'vanity2'], ['color']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */

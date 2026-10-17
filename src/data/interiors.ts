@@ -105,7 +105,8 @@ export const seedInteriors: Record<string, CabinetInterior> = {
               P('shelf', 40, 'door', '吹風機・離子夾'),
               P('shelf', 40.4, 'door', '保養品・乳液備品'),
               P('charge', 30, 'open', '充電格：手機・耳機（背板露出 USB-C＋插座）'),
-              P('shelf', 30, 'open', '眼鏡・護手霜・睡前小物'),
+              // 和充電格之間的層板做成小平台（長、寬各一半，靠背板和左側），兩格連成一個大開口
+              { ...P('shelf', 30, 'open', '眼鏡・護手霜・睡前小物（小平台）'), ledge: true },
               P('books', null, 'door', '睡前看的書'),
               P('shelf', null, 'door', '香氛・備用小物'),
               P('storage', 70, 'door', '上櫃：薄毯・備用枕套', true, true),

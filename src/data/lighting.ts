@@ -1,7 +1,7 @@
-// 燈光（方案一：主燈＋明裝軌道，不做假樑）：
-//   主燈：廚房餐廳、主臥、次臥各一盞調光調色吸頂燈（type: 'ceilinglight'），遙控切黃光、白光；
-//   軌道：明裝磁吸軌道直接鎖在天花板（type: 'surfacetrack'）：客廳兩條各離電視牆、沙發牆 50，直條燈條頭尾相接往牆上打（洗牆）；
-//         次臥書桌上方一條短的當工作燈。
+// 燈光（無主燈＋明裝軌道，不做假樑）：
+//   廚房餐廳一盞調光調色吸頂燈（type: 'ceilinglight'）；其他空間都不裝主燈，
+//   明裝磁吸軌道直接鎖在天花板（type: 'surfacetrack'），離牆約 50，直條燈條頭尾相接往牆上打（洗牆），牆亮起來整個房間就平均：
+//   客廳電視牆、沙發牆各一條；主臥床頭牆、床尾牆、衣櫃前各一條；次臥書桌那面牆、分戶牆各一條。
 // 軌道上的燈頭位置用軌道本身的座標：at = 沿長邊離中心多遠（+x）、toward = 照到地面的位置（相對燈頭 [沿長邊, 往正面]）
 //   len = 直條式燈條（可擺角，只往兩側翻）；不填 len = 圓形燈罩投射燈；wash = 洗牆（模擬牆面反射）；
 //   height = 照到的那一點離地多高（不填 = 地面，洗牆時填牆上的高度）
@@ -21,8 +21,16 @@ export interface TrackModule {
   label?: string
 }
 
-/** 洗牆燈條：90 公分可擺角燈條，朝背後那面牆、打在離地約 170；一支接一支排，整面牆一條連續的光 */
-const WB = (at: number, label: string, len = 90): TrackModule => ({ at, len, beam: 50, toward: [0, -50], height: 170, wash: true, label })
+/** 洗牆燈條：可擺角燈條（預設 90 公分），朝背後那面牆（預設離 50）、打在離地約 170；一支接一支排，整面牆一條連續的光 */
+const WB = (at: number, label: string, len = 90, toWall = 50, height = 170): TrackModule => ({
+  at,
+  len,
+  beam: 50,
+  toward: [0, -toWall],
+  height,
+  wash: true,
+  label,
+})
 
 export const trackLayout: Record<string, TrackModule[]> = {
   // 客廳靠電視牆那條（離牆 50、約 4.5 米，從大門那面牆前 10 公分到冰箱過去）：五支 90 燈條頭尾相接，
@@ -30,19 +38,24 @@ export const trackLayout: Record<string, TrackModule[]> = {
   'track-living-l': [WB(180, '玄關（浴室門那段）'), WB(90, '電視牆'), WB(0, '電視牆'), WB(-90, '主臥門那段牆'), WB(-180, '冰箱那段牆')],
   // 客廳靠沙發牆那條（離牆 50、約 3.7 米）：四支 90 燈條頭尾相接，洗沙發牆到咖啡櫃那段
   'track-living-r': [WB(-140, '沙發牆'), WB(-50, '沙發牆'), WB(40, '沙發牆'), WB(130, '咖啡櫃那段牆')],
-  // 次臥：書桌上方兩支 60 燈條，往書桌那側翻，各照一張書桌
-  'track-study': [
-    { at: 60, len: 60, beam: 45, toward: [0, -47], shadow: true, label: '書桌（靠衣櫃）' },
-    { at: -60, len: 60, beam: 45, toward: [0, -47], shadow: true, label: '書桌（靠門）' },
-  ],
+  // 主臥床頭牆（離牆 50、從衣櫃上櫃門打開的範圍外開始）：三支 70 燈條，床頭牆亮起來，躺著燈在頭頂後方
+  'track-master-l': [WB(70, '床頭牆', 70), WB(0, '床頭牆', 70), WB(-70, '床頭牆', 70)],
+  // 主臥床尾牆（房門、投影那面）：四支 80 燈條；看投影時關掉
+  'track-master-r': [WB(-120, '房門那段', 80), WB(-40, '床尾牆', 80), WB(40, '床尾牆', 80), WB(120, '床尾牆', 80)],
+  // 主臥衣櫃前（離衣櫃 60，避開上櫃門打開的範圍）：兩支 60 燈條洗衣櫃門和充電格，換衣服看得清楚
+  'track-master-w': [WB(-30, '衣櫃', 60, 60, 150), WB(30, '衣櫃', 60, 60, 150)],
+  // 次臥書桌那面牆（客廳隔間）：五支 90 燈條，光打在螢幕上方的牆上、也照亮桌面
+  'track-study-l': [WB(180, '靠衣櫃那段'), WB(90, '書桌（靠衣櫃）'), WB(0, '書桌（靠衣櫃）'), WB(-90, '書桌（靠門）'), WB(-180, '靠門那段')],
+  // 次臥分戶牆（按摩椅、矮櫃、層板）：五支 90 燈條，層板那段就是視訊背景
+  'track-study-r': [WB(-180, '按摩椅'), WB(-90, '按摩椅、矮櫃'), WB(0, '層板（視訊背景）'), WB(90, '層板（視訊背景）'), WB(180, '矮櫃靠窗那段')],
 }
 
 /** 燈光模擬的色溫：黃光約 3000K、白光約 6000K（畫面上的顏色是近似值） */
 export const LIGHT_COLORS = { warm: '#ffc58a', white: '#f3f6ff' }
 
-/** 燈光模擬的亮度（燈條拆成每 30 公分一個小光源，數字是每個小光源）：
+/** 燈光模擬的亮度（每支燈條用兩個小光源，數字是每個小光源）：
  *  main = 吸頂燈、spot = 投射燈、wash = 洗牆燈條、desk = 書桌燈條、bounce = 牆面反射的柔光面、bar = 感應層板燈 */
-export const LAMP_POWER: Record<string, number> = { main: 32, spot: 24, wash: 2.5, desk: 8, bounce: 0.08, bar: 4 }
+export const LAMP_POWER: Record<string, number> = { main: 32, spot: 24, wash: 3.75, desk: 8, bounce: 0.08, bar: 4 }
 
 /** 晚上每個房間的「反射光」：燈光打到牆面、天花板再反射回房間（3D 算不出反射，用一盞柔和的補光代替）；浴室是建商附的燈 */
 export const ROOM_FILL: Record<string, number> = { living: 1.5, master: 2, bed2: 2, bath: 5, wc: 5 }

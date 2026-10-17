@@ -199,15 +199,18 @@ const seeds: Seed[] = [
   // 冷氣：窗戶上方、往分戶牆那邊移（右緣離分戶牆約 25），沿長邊往衣櫃方向吹；風從座位右邊經過，不會直吹頭
   { id: 'ac-study', type: 'acindoor', name: '冷氣（次臥）', x: 480, y: 541.5, rot: 180, w: 80, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
 
-  // 燈光（方案一：主燈＋明裝軌道，不做假樑、天花板維持原始 300；燈頭位置見 data/lighting.ts）：
-  // 客廳不裝主燈，兩條明裝磁吸軌道各離電視牆、沙發牆 50，廣角投射燈（筒型燈罩）往牆上打，牆亮起來整個客廳就平均；
-  // 吸頂燈移到廚房、餐廳那頭（檯面和中島之間上方）；主臥、次臥各一盞調光調色吸頂燈，次臥書桌上方一條 2 米短軌道
+  // 燈光（無主燈＋明裝軌道，不做假樑、天花板維持原始 300；燈頭位置見 data/lighting.ts）：
+  // 只有廚房餐廳那頭一盞吸頂燈；客廳、主臥、次臥都用明裝磁吸軌道離牆約 50、燈條往牆上打（洗牆），牆亮起來整個房間就平均
   { id: 'light-living', type: 'ceilinglight', name: '廚房餐廳主燈（調光調色吸頂燈）', x: 120, y: 560, rot: 0, w: 50, d: 50, h: 10, elev: 290, color: '#f4f3f0' },
   { id: 'track-living-l', type: 'surfacetrack', name: '客廳明裝磁吸軌道（電視牆那側）', x: 50, y: 235, rot: 90, w: 450, d: 3, h: 3, elev: 297, color: '#ecebe8' },
   { id: 'track-living-r', type: 'surfacetrack', name: '客廳明裝磁吸軌道（沙發牆那側）', x: 238, y: 235, rot: 270, w: 370, d: 3, h: 3, elev: 297, color: '#ecebe8' },
-  { id: 'light-master', type: 'ceilinglight', name: '主臥主燈（調光調色吸頂燈）', x: -150.75, y: 430, rot: 0, w: 50, d: 50, h: 10, elev: 290, color: '#f4f3f0' },
-  { id: 'light-study', type: 'ceilinglight', name: '次臥主燈（調光調色吸頂燈）', x: 424, y: 300, rot: 0, w: 50, d: 50, h: 10, elev: 290, color: '#f4f3f0' },
-  { id: 'track-study', type: 'surfacetrack', name: '次臥書桌明裝磁吸軌道（2 米）', x: 380, y: 322, rot: 90, w: 200, d: 3, h: 3, elev: 297, color: '#ecebe8' },
+  // 主臥：床頭牆、床尾牆（房門、投影那面）各一條，衣櫃前一條短的（離衣櫃 60，避開上櫃門打開的範圍，用 L 接頭接到床頭那條）
+  { id: 'track-master-l', type: 'surfacetrack', name: '主臥明裝磁吸軌道（床頭牆）', x: -236.5, y: 485, rot: 90, w: 210, d: 3, h: 3, elev: 297, color: '#ecebe8' },
+  { id: 'track-master-r', type: 'surfacetrack', name: '主臥明裝磁吸軌道（床尾牆）', x: -65, y: 430, rot: 270, w: 320, d: 3, h: 3, elev: 297, color: '#ecebe8' },
+  { id: 'track-master-w', type: 'surfacetrack', name: '主臥明裝磁吸軌道（衣櫃前）', x: -220, y: 365, rot: 0, w: 120, d: 3, h: 3, elev: 297, color: '#ecebe8' },
+  // 次臥：書桌那面牆、分戶牆各一條（從衣櫃拉門前到窗邊，分戶牆那條停在冷氣前）
+  { id: 'track-study-l', type: 'surfacetrack', name: '次臥明裝磁吸軌道（書桌那面牆）', x: 353, y: 310, rot: 90, w: 480, d: 3, h: 3, elev: 297, color: '#ecebe8' },
+  { id: 'track-study-r', type: 'surfacetrack', name: '次臥明裝磁吸軌道（分戶牆）', x: 494.5, y: 295, rot: 270, w: 450, d: 3, h: 3, elev: 297, color: '#ecebe8' },
 
   // 工作陽台：洗衣機、乾衣機並排靠柱子那側（不堆疊），整組推到次臥窗下那面牆，離女兒牆遠、不易淋雨；門朝陽台內
   { id: 'washer', type: 'washer', name: '洗衣機', x: 459, y: 600, rot: 270, w: 60, d: 65, h: 100, color: '#eef0f2' },

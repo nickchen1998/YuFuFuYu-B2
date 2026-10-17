@@ -449,9 +449,15 @@ function buildFace(fg: G, it: FurnitureItem, face: CabinetFace, fr: CabFrame, D:
         if (!drawers) {
           if (steel) box(fg, c.w, 1.2, D - 4, cx0 + c.w / 2, py - 1.2, 0, shelfM)
           else {
-            // 兩面開的格子之間，層板伸到側板外緣補齊
-            const sw = c.w + (sideOpen(c.i, prev) && sideOpen(c.i, p.part) ? T : 0)
-            box(fg, sw, T, D, cx0 + sw / 2, py - T, 0, lined(prev) || lined(p.part) ? oakM : body)
+            const shelfM2 = lined(prev) || lined(p.part) ? oakM : body
+            if (p.part.ledge) {
+              // 小平台：長、寬各一半，靠背板和左側板
+              box(fg, c.w / 2, T, D / 2, cx0 + c.w / 4, py - T, -D / 4, shelfM2)
+            } else {
+              // 兩面開的格子之間，層板伸到側板外緣補齊
+              const sw = c.w + (sideOpen(c.i, prev) && sideOpen(c.i, p.part) ? T : 0)
+              box(fg, sw, T, D, cx0 + sw / 2, py - T, 0, shelfM2)
+            }
           }
         }
       }
@@ -459,8 +465,11 @@ function buildFace(fg: G, it: FurnitureItem, face: CabinetFace, fr: CabFrame, D:
         const L = 0.4
         const so = sideOpen(c.i, p.part)
         const lw = c.w + (so ? T : 0)
-        shown.box(lw, L, D, cx0 + lw / 2, py, 0, OAK)
-        shown.box(lw, L, D, cx0 + lw / 2, py + p.h - L, 0, OAK)
+        // 底面、頂面的內襯：碰到小平台的那一面只貼小平台那一塊
+        if (p.part.ledge) shown.box(c.w / 2, L, D / 2, cx0 + c.w / 4, py, -D / 4, OAK)
+        else shown.box(lw, L, D, cx0 + lw / 2, py, 0, OAK)
+        if (c.parts[p.i + 1]?.part.ledge) shown.box(c.w / 2, L, D / 2, cx0 + c.w / 4, py + p.h - L, -D / 4, OAK)
+        else shown.box(lw, L, D, cx0 + lw / 2, py + p.h - L, 0, OAK)
         shown.box(c.w, p.h, L, cx0 + c.w / 2, py, -D / 2 + L / 2, OAK)
         shown.box(L, p.h, D, cx0 + L / 2, py, 0, OAK)
         if (!so) shown.box(L, p.h, D, cx0 + c.w - L / 2, py, 0, OAK)
@@ -468,8 +477,14 @@ function buildFace(fg: G, it: FurnitureItem, face: CabinetFace, fr: CabFrame, D:
       const rand = rng(hashStr(`${it.id}:${fi}:${c.i}:${p.i}:${p.part.kind}:${p.part.label ?? ''}`))
       // 掃地機器人格：門片下面有縫，機器人看得到，一律畫出來
       const visible = p.part.front === 'open' || p.part.front === 'glass' || p.part.kind === 'robot'
-      // 衣櫃裡的木紋開放格放小東西，不畫摺好的衣服
-      contents(visible ? shown : hidden, p.part, { x0: cx0, w: c.w, y0: py, h: p.h, D }, clothes && !lined(p.part), rand, steel)
+      if (p.part.ledge) {
+        // 小平台上放眼鏡盒、護手霜
+        shown.box(12, 4, 5, cx0 + c.w / 4, py, -D / 2 + 4, '#3b3b3e')
+        shown.jar(2.3, 6, cx0 + c.w / 4, py, -D / 2 + 13, '#e8d9c4')
+      } else {
+        // 衣櫃裡的木紋開放格放小東西，不畫摺好的衣服
+        contents(visible ? shown : hidden, p.part, { x0: cx0, w: c.w, y0: py, h: p.h, D }, clothes && !lined(p.part), rand, steel)
+      }
     }
   }
   hidden.flush(fg, true)

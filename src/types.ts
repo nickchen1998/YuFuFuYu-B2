@@ -117,6 +117,8 @@ export interface CabinetPart {
   split?: boolean
   /** 單開門：欄寬超過雙開門的門檻也只做一扇 */
   single?: boolean
+  /** 這一格底下的層板做成小平台：長、寬各一半，靠背板和左側板（兩格開放格連成一個大開口） */
+  ledge?: boolean
 }
 
 export interface CabinetColumn {

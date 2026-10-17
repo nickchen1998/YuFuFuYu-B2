@@ -237,8 +237,8 @@ function ceilinglight(g: G, it: FurnitureItem) {
 
 /**
  * 明裝磁吸軌道：直接鎖在天花板（不做假樑），燈頭照 data/lighting.ts 掛上去。
- * 直條式燈條往兩側翻（朝牆或朝房間），拆成每 30 公分一盞小聚光燈，打出來是一條連續的光；
- * 圓形燈罩投射燈轉向照的那一點。洗牆的燈在牆上再放一片朝房間的柔光面，代替 3D 算不出的反射光
+ * 直條式燈條往兩側翻（朝牆或朝房間），每支用兩盞小聚光燈（光束邊緣完全柔化），打出來是一條連續的光；
+ * 圓形燈罩投射燈轉向照的那一點。洗牆的那段牆上再放一片朝房間的柔光面（整條軌道一片），代替 3D 算不出的反射光
  */
 function surfacetrack(g: G, it: FurnitureItem) {
   const { w, h } = it
@@ -274,7 +274,7 @@ function surfacetrack(g: G, it: FurnitureItem) {
       head.add(body, glow)
       g.add(head)
       parts.push(body, glow)
-      const n = Math.max(2, Math.round(len / 30))
+      const n = 2
       for (let i = 0; i < n; i++) {
         const x = m.at - len / 2 + ((i + 0.5) * len) / n
         addLamp(new THREE.Vector3(x, pivot.y, 0).addScaledVector(dir, 4), new THREE.Vector3(x, target.y, target.z), m, m.wash ? 'wash' : 'desk')
@@ -295,17 +295,22 @@ function surfacetrack(g: G, it: FurnitureItem) {
       parts.push(shade, lens)
       addLamp(pivot.clone().addScaledVector(dir, 12), target, m, 'spot')
     }
-    if (m.wash) {
-      // 牆面反射：在被照亮的那段牆上放一片朝房間的柔光面（只往前發光，不會穿牆）
-      const H = 230
-      const back = new THREE.Vector3(pivot.x - target.x, 0, pivot.z - target.z).normalize()
-      const panel = new THREE.RectAreaLight('#ffffff', 0, m.len ?? 65, H)
-      panel.position.set(target.x, H / 2 - it.elev, target.z).addScaledVector(back, 1.5)
-      panel.rotation.y = Math.atan2(-back.x, -back.z)
-      panel.userData.lamp = 'bounce'
-      panel.visible = false
-      g.add(panel)
-    }
+  }
+  // 牆面反射：整條軌道洗牆的那段牆上放一片朝房間的柔光面（只往前發光，不會穿牆）
+  const washes = (trackLayout[it.id] ?? []).filter((m) => m.wash)
+  if (washes.length) {
+    const m0 = washes[0]
+    const [, tz] = m0.toward ?? [0, 0]
+    const x0 = Math.min(...washes.map((m) => m.at - (m.len ?? 65) / 2))
+    const x1 = Math.max(...washes.map((m) => m.at + (m.len ?? 65) / 2))
+    const H = 230
+    const back = new THREE.Vector3(0, 0, -Math.sign(tz || -1))
+    const panel = new THREE.RectAreaLight('#ffffff', 0, x1 - x0, H)
+    panel.position.set((x0 + x1) / 2, H / 2 - it.elev, tz).addScaledVector(back, 1.5)
+    panel.rotation.y = Math.atan2(-back.x, -back.z)
+    panel.userData.lamp = 'bounce'
+    panel.visible = false
+    g.add(panel)
   }
   ceilingParts(parts)
 }

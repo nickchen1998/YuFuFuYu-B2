@@ -65,9 +65,9 @@ export const catalog: CatalogEntry[] = [
   // 其他
   { type: 'cabinet', name: '鞋櫃', category: '其他', w: 120, d: 35, h: 110, color: '#ece6dc' },
   { type: 'cabinet', name: '收納櫃', category: '其他', w: 80, d: 40, h: 90, color: '#ece6dc' },
-  { type: 'washer', name: '洗衣機', category: '其他', w: 60, d: 65, h: 100, color: '#eef0f2' },
-  // 參考 LG WR-100VW 10kg 熱泵乾衣機：寬 60 × 高 85 × 深 66（開門 90° 時深 111.5）
-  { type: 'dryer', name: '乾衣機 10kg（LG／國際牌）', category: '其他', w: 60, d: 66, h: 85, color: '#f1f2f0' },
+  { type: 'washer', name: '洗衣機', category: '其他', w: 60, d: 66, h: 85, color: '#eef0f2' },
+  // 參考國際牌 NH-VS100HP-B 10kg 熱泵乾衣機：寬 59.6 × 高 84.5 × 深 66.7
+  { type: 'dryer', name: '乾衣機 10kg（國際牌）', category: '其他', w: 60, d: 67, h: 85, color: '#f1f2f0' },
   { type: 'vacuum', name: '直立式吸塵器', category: '其他', w: 30, d: 25, h: 115, color: '#8a5cc2' },
   { type: 'pegboard', name: '洞洞板', category: '其他', w: 120, d: 2, h: 100, elev: 130, color: '#f4f1ea' },
   { type: 'acindoor', name: '冷氣室內機', category: '其他', w: 85, d: 25, h: 30, elev: 250, color: '#f4f4f2' },
@@ -213,9 +213,9 @@ const seeds: Seed[] = [
   { id: 'track-study-r', type: 'surfacetrack', name: '次臥明裝磁吸軌道（分戶牆）', x: 494.5, y: 295, rot: 270, w: 450, d: 3, h: 3, elev: 297, color: '#ecebe8' },
 
   // 工作陽台：洗衣機、乾衣機並排靠柱子那側（不堆疊），整組推到次臥窗下那面牆，離女兒牆遠、不易淋雨；門朝陽台內
-  { id: 'washer', type: 'washer', name: '洗衣機', x: 459, y: 600, rot: 270, w: 60, d: 65, h: 100, color: '#eef0f2' },
-  // 乾衣機：參考 LG WR-100VW（60 × 85 × 66，110V）或國際牌 NH-VS100HP（約 59.6 × 84.5 × 66.7）
-  { id: 'dryer', type: 'dryer', name: '乾衣機 10kg', x: 458.5, y: 665.5, rot: 270, w: 60, d: 66, h: 85, color: '#f1f2f0' },
+  { id: 'washer', type: 'washer', name: '洗衣機（國際牌 12kg 滾筒）', x: 458.5, y: 600, rot: 270, w: 60, d: 66, h: 85, color: '#eef0f2' },
+  // 洗衣機、乾衣機都選國際牌同系列（NA-VS120RW-B 12kg、NH-VS100HP-B 10kg 熱泵，約 59.6 × 84.5 × 66～66.7，110V）
+  { id: 'dryer', type: 'dryer', name: '乾衣機 10kg（國際牌）', x: 458, y: 665.5, rot: 270, w: 60, d: 67, h: 85, color: '#f1f2f0' },
 
   // 全套衛浴（固定設備）：淋浴間 + 馬桶 + 洗手台
   { id: 'shower', type: 'shower', name: '淋浴間', x: -239.25, y: 70, rot: 0, w: 94.5, d: 140, h: 200, color: '#e8e8e6', locked: true },

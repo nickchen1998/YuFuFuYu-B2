@@ -148,7 +148,7 @@ export const shopping: Record<string, ShopInfo> = {
   },
   'track-study-r': {
     summary:
-      '次臥分戶牆（按摩椅、矮櫃、層板）一條明裝磁吸軌道（離牆 50、約 4.5 米），五支 90 公分可擺角燈條往牆上打，層板那段就是視訊背景。',
+      '次臥分戶牆（矮櫃、層板）一條明裝磁吸軌道（離牆 50、約 4.5 米），五支 90 公分可擺角燈條往牆上打，層板那段就是視訊背景。',
     specs: ['軌道約 4.5 米（2 米 × 2＋1 米），停在冷氣前面不擋出風'],
     picks: [
       {
@@ -649,7 +649,7 @@ export const shopping: Record<string, ShopInfo> = {
     ],
     notes: [
       '櫃身分 2 桶（例如 125＋125）比較好搬運安裝，檯面再用一片蓋過',
-      '靠分戶牆：頂部用 L 片鎖牆，防止往前傾；一端緊接按摩椅（留 5 公分，按摩椅往前滑時不會刮到）',
+      '靠分戶牆：頂部用 L 片鎖牆，防止往前傾',
       '前方到椅背約 80，掃地機器人進出、拉抽屜都夠',
       '文件門片櫃層板可調；A4 檔案夾需深 32～35 cm',
       '掃地機器人的家：寬 58（基座兩側各留約 13）、離地淨高約 56（基座 38.5，水箱往上拿要約 16）；那一格不做底板，整座不做踢腳，櫃深 45 機器人停好不會凸出',
@@ -2003,46 +2003,6 @@ export const shopping: Record<string, ShopInfo> = {
       '床墊一張＋床架一張各勾一個；台規雙人加大 182 × 188，Sealy 台灣 183 × 190、IKEA 180 × 200，床墊和床架要同一規格',
       '後掀床床尾要能站人操作；下單時告知床墊厚度與重量，好配對應的氣壓棒',
       'ASSARI 床架的外尺寸在賣場圖片上，下單前請跟賣家確認',
-    ],
-  },
-  massage: {
-    summary: '選前滑式零靠牆機種；OSIM 大天王直立 122、躺平 179，最貼合 80 × 140（躺平 180）的預留。',
-    specs: ['佔地 80 W × 140 D（直立）', '零靠牆前滑，躺平長約 180 以內', '椅側要有 110V 插座'],
-    picks: [
-      {
-        name: 'OSIM 大天王 uDeluxe Max OS-8210',
-        rec: true,
-        detail: '直立 74 × 122、後仰 179、81 kg；零重力（零牆距請到門市確認）',
-        price: '約 NT$72,888（2026/09 PChome）',
-        url: 'https://24h.pchome.com.tw/prod/DMAD6Q-A900FOSC9',
-        source: 'PChome',
-      },
-      {
-        name: 'tokuyo 花美椅 2 All-in TC-696',
-        detail: '正座 77 × 143（比預留深 3 cm）、躺平 173、76 kg；零靠牆、台灣製',
-        price: '約 NT$76,900（2026/09 PChome）',
-        url: 'https://24h.pchome.com.tw/prod/DMADFP-A900JTAIY',
-        source: 'PChome',
-      },
-      {
-        name: 'JHT i芯深捏臀感按摩椅 K-323',
-        detail: '直立 74 × 135、平躺 168、71 kg；離牆 5 cm 自動前滑',
-        price: '約 NT$32,600（2026/09 PChome）',
-        url: 'https://24h.pchome.com.tw/prod/DMADC2-A900HALLF',
-        source: 'PChome',
-      },
-    ],
-    search: ['OSIM OS-8210', 'tokuyo TC-696', 'JHT K-323'],
-    vendors: [
-      {
-        name: 'tokuyo 客服',
-        detail: '詢問 TC-696 門市試坐與實際離牆距離',
-        phone: '0800-369963',
-      },
-    ],
-    notes: [
-      'OSIM 旗艦 uLove 3（OS-8218）後仰 185、建議後方留 10，超過預留（約 NT$169,800）',
-      '躺平時前方要淨空到約 180；機身 70～105 kg，先量次臥門寬，地板加保護墊',
     ],
   },
   bdesk1: {

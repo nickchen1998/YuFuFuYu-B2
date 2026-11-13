@@ -951,7 +951,7 @@ export const shopping: Record<string, ShopInfo> = {
       '鍋蓋、烤盤：中島廚房側最下面的抽屜（就在爐台正對面，轉身就拿到），抽屜裡放直立鍋蓋架',
       '不常用又重的（鑄鐵鍋、火鍋鍋、大湯鍋）：中島走道側右下門片櫃，重的放低處',
       '吊櫃（150～230）只放輕的、不常用的：蒸籠、備用鍋、便當盒',
-      '水槽下櫃：左門是分類垃圾桶，右半放清潔劑、菜瓜布備品（不要放鍋，水管會滴水）',
+      '水槽下櫃：放清潔劑、菜瓜布備品（不要放鍋，水管會滴水）；垃圾桶另外處理，不做在櫃內',
     ],
     notes: [
       '不沾鍋塗層、鑄鐵鍋、木柄鍋不要進洗碗機；不鏽鋼湯鍋、雪平鍋可以',
@@ -1061,7 +1061,6 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: '大金 FTHF20ZVLT（接 2MXP50ZVLT）',
-        rec: true,
         detail: '寬 77 × 高 28.5 × 深 24.2，左右各約 4 cm；和 FTHF30 一起接時約 2.0 kW',
         price: '一對二組合（FTHF20＋FTHF30）約 NT$59,800（2026/09 玉明，含 10 m 基本安裝）',
         url: 'https://www.3uo.tw/ecommerce/2MXP50ZVLT_2030/',
@@ -1069,6 +1068,7 @@ export const shopping: Record<string, ShopInfo> = {
       },
       {
         name: '國際牌 CS-UJ22BA2（接 CU-2J52FHA2）',
+        rec: true,
         detail: '寬 79.8 × 高 29.5 × 深 24.1，左右各約 2.6 cm；2.2 kW，有 nanoe X',
         price: '一對二組合（UJ22＋UJ28）約 NT$53,800（2026/09 克拉家電，含標準安裝）',
         url: 'https://www.kela.com.tw/product/6066--Panasonic%E5%9C%8B%E9%9A%9B%E3%80%90CU-2J52FHA2-CS-UJ22BA2-CS-UJ28BA2%E3%80%91%E4%B8%80%E5%B0%8D%E4%BA%8C%E8%AE%8A%E9%A0%BB%E5%88%86%E9%9B%A2%E5%BC%8F%E5%86%B7%E6%B0%A3(%E5%86%B7%E6%9A%96%E5%9E%8B)(%E5%90%AB%E6%A8%99%E6%BA%96%E5%AE%89%E8%A3%9D)',
@@ -1076,7 +1076,7 @@ export const shopping: Record<string, ShopInfo> = {
       },
     ],
     search: ['2MXP50ZVLT FTHF20ZVLT', 'CU-2J52FHA2 CS-UJ22BA2'],
-    notes: ['價格是整組一對二（主臥＋次臥）的價錢，不要重複計算', '一對二的兩台室內機要同一種模式運轉（不能一間冷氣、一間暖氣）'],
+    notes: ['價格是整組一對二（主臥＋次臥）的價錢，不要重複計算', '選國際牌：室外機 CU-2J52FHA2 寬 86 × 高 66.6，比平台每格（寬 85 × 高 60）大，下單前要先量平台淨寬、淨高', '一對二的兩台室內機要同一種模式運轉（不能一間冷氣、一間暖氣）'],
   },
   'ac-study': {
     summary: '次臥 4.05 坪，兩個人加上電腦會發熱，建議 2.8～3.0 kW（5 坪級）；室內機寬度 80 以下是最緊的位置。',
@@ -1084,7 +1084,6 @@ export const shopping: Record<string, ShopInfo> = {
     picks: [
       {
         name: '大金 FTHF30ZVLT（接 2MXP50ZVLT）',
-        rec: true,
         detail: '寬 77 × 高 28.5 × 深 24.2，左右各約 1.5 cm；和 FTHF20 一起接時約 3.0 kW',
         price: '含在一對二組合價裡（見主臥冷氣）',
         cost: 0,
@@ -1094,6 +1093,7 @@ export const shopping: Record<string, ShopInfo> = {
       },
       {
         name: '國際牌 CS-UJ28BA2（接 CU-2J52FHA2）',
+        rec: true,
         detail: '寬 79.8，預留 80 幾乎沒有餘裕，建議放寬到 85 以上；2.8 kW',
         price: '含在一對二組合價裡（見主臥冷氣）',
         cost: 0,
@@ -1105,18 +1105,26 @@ export const shopping: Record<string, ShopInfo> = {
     search: ['2MXP50ZVLT FTHF30ZVLT', 'CU-2J52FHA2 CS-UJ28BA2'],
     notes: [
       '如果這間西曬或整天開電腦，3.6 kW 會更穩，但加起來會超過一對二的額定能力，要改配置',
-      '尺寸上大金 77 cm 最適合這個 80 cm 的位置',
+      '跟著主臥選國際牌（同一台一對二室外機）：室內機寬 79.8，預留的 80 幾乎沒有餘裕，安裝前請師傅現場量；尺寸上大金 77 cm 比較寬鬆',
       '室內機移到窗戶上方靠分戶牆那段（右緣離分戶牆約 25），風順著長邊吹、從書桌座位右邊經過；冷媒管出口跟著移，請冷氣師傅現場確認走管',
     ],
   },
   ac1: {
     summary:
-      '室外機先當作建商沒送、自己買：冷氣是「室內機＋室外機」成組賣，兩台室外機的錢已經含在冷氣組合價裡（A 台在客餐廳冷氣、B 台在主臥冷氣的一對二組合），這裡不重複計算。首選大金 2MXP50ZVLT（一對二，體積最小）搭配三菱重工 DXC50ZST2-W（1 對 1），兩台都放得進平台。',
+      '室外機先當作建商沒送、自己買：冷氣是「室內機＋室外機」成組賣，兩台室外機的錢已經含在冷氣組合價裡（A 台在客餐廳冷氣、B 台在主臥冷氣的一對二組合），這裡不重複計算。目前選國際牌 CU-2J52FHA2（一對二，接主臥、次臥）搭配三菱重工 DXC50ZST2-W（1 對 1）；國際牌一對二室外機寬 86 × 高 66.6，比平台每格大，要先量平台淨寬、淨高，放不下就改回大金 2MXP50ZVLT（體積最小）。',
     specs: ['平台每格約寬 85 × 深 32 × 高 60', '兩台室外機各拉一條 220V 專用迴路', '一對二每間房各自有冷媒管（2 分／3 分）和排水管'],
     picks: [
       {
-        name: 'B 台：大金 2MXP50ZVLT（一對二）',
+        name: 'B 台：國際牌 CU-2J52FHA2（一對二）',
         rec: true,
+        detail: '寬 86 × 高 66.6，比平台每格（寬 85 × 高 60）大，下單前要先量平台淨寬、淨高；接主臥 CS-UJ22BA2、次臥 CS-UJ28BA2',
+        price: '一對二組合約 NT$53,800（2026/09 克拉家電，含標準安裝）',
+        cost: 0,
+        costNote: '室外機含在室內機的價錢裡（見客餐廳、主臥冷氣）',
+        source: '克拉家電',
+      },
+      {
+        name: 'B 台：大金 2MXP50ZVLT（一對二）',
         detail: '寬 67.5 × 高 55 × 深 28.4，放得進平台；額定 5.0 kW，一級能效，年耗電約 1,024 度',
         price: '組合約 NT$59,800～71,000（2026/09 玉明／PChome，含基本安裝）',
         cost: 0,
@@ -1781,62 +1789,6 @@ export const shopping: Record<string, ShopInfo> = {
       },
     ],
     notes: ['半套廁所沒有淋浴，不太會起霧，選不除霧的就好'],
-  },
-  kbin: {
-    summary:
-      '廚房地板沒有空位（走道 65、冰箱旁只剩 5.5 公分、另一邊是主臥門），所以把分類垃圾桶裝進水槽下櫃：開門就滑出來，不佔地板，洗完菜轉身就丟。',
-    specs: [
-      '水槽下櫃靠冰箱那扇門（門寬約 42），桶子寬 25、深 48、高 40',
-      '前桶 15 L 一般垃圾：套新北 14 L 專用袋（43～45 × 62～65）；後桶 15 L 資源回收',
-      '避開水槽正下方的存水彎，和右邊洗碗機的進排水管',
-    ],
-    picks: [
-      {
-        name: 'Hailo Tandem AS 15/15 門板連動抽拉垃圾桶（Häfele 502.70.252）',
-        rec: true,
-        detail: '2 × 15 L 前後排、25.1 × 48.2 × 40；裝在 30 公分以上的門片下櫃，開門桶子就跟著全拉出來，雙手拿東西也能用；安裝費另外詢價',
-        price: '約 NT$10,350（2026/09 Better Choice，不含安裝）',
-        url: 'https://betterchoice.com.tw/products/hailo-tandem-30l-3666101',
-        source: 'Better Choice',
-      },
-      {
-        name: 'IKEA HÅLLBAR 分類垃圾桶組合 外拉式 22 L × 2',
-        detail: '框 26.5 × 45 × 31.5，要開門再用手拉；兩組並排要約 53 寬，要確認存水彎和洗碗機水管讓不讓得出位置；容量較大、最便宜',
-        price: '約 NT$1,249／組，2 組 NT$2,498（2026/09 IKEA；線上庫存不穩）',
-        cost: 2498,
-        url: 'https://www.ikea.com.tw/zh/products/kitchen-accessories/kitchen-interior-organisers/hallbar-spr-89308826',
-        source: 'IKEA',
-      },
-      {
-        name: 'NITORI 分類垃圾桶 雙層 55L（落地型，放陽台門邊）',
-        detail: '27 × 33.5 × 85.5；上 32 L 掀蓋、下 23 L 往前傾倒；下層套 25 L、上層套 33 L 專用袋；廚房放不下，要放的話只能放陽台',
-        price: '約 NT$1,490（2026/09 NITORI）',
-        url: 'https://www.nitori-net.tw/product/8453066',
-        source: 'NITORI',
-      },
-    ],
-    notes: [
-      '新北市廚餘要另外分：瀝乾後倒進垃圾車的廚餘桶（2026 年起生熟不用分）；骨頭、硬殼、生肉內臟算一般垃圾；分錯可罰 1,200～6,000',
-      '回收只有 15 L：每次回收日清；紙箱、大量寶特瓶可以先放陽台（陽台門就在中島走道旁）',
-      '裝之前先打開水槽下櫃量：存水彎位置、內深要有 48.2 以上；安裝可以請廚具或系統櫃師傅順便裝',
-    ],
-    related: [
-      {
-        title: '廚餘桶（新北市規定要分）',
-        info: {
-          summary: '水槽邊放一個有密封蓋、內附瀝水桶的小廚餘桶，每天倒；夏天也可以先冰冷凍庫。',
-          picks: [
-            {
-              name: '樂扣樂扣 密封防臭雙把手廚餘回收桶 3L',
-              detail: '21.5 × 21.5 × 21.7；扣環密封蓋、內附瀝水桶',
-              price: '約 NT$599（2026/09 PChome）',
-              url: 'https://24h.pchome.com.tw/prod/DEBMF0-A900ICM43',
-              source: 'PChome',
-            },
-          ],
-        },
-      },
-    ],
   },
   grinder: {
     owned: true,
@@ -2559,7 +2511,7 @@ export const shopping: Record<string, ShopInfo> = {
   // Dyson 直立式電扇（三個房間共用一組資料，2026/09 查詢）
   'fan-bed2': {
     owned: true,
-    summary: '次臥（書房）這台用家裡已經有的 Dyson，不計入花費；放在書櫃和窗戶之間的角落，斜吹兩個座位。',
+    summary: '次臥（書房）這台用家裡已經有的 Dyson，不計入花費；客廳、主臥原本各規劃一台，先不買；放在書櫃和窗戶之間的角落，斜吹兩個座位。',
     specs: ['旁邊要有插座'],
   },
   'fan-living': {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
-import {
+import { ChevronDown,
   ArrowLeft,
   Calculator,
   ChevronRight,
@@ -41,6 +41,9 @@ import ShopVendors from './ShopVendors.vue'
 // 點進去看尺寸規格、櫃內格局、板材、建議商品與廠商。
 
 const fmt = (n: number) => String(Math.round(n * 10) / 10)
+
+/** 總花費卡片：窄螢幕預設收成一列，把位置讓給家具清單 */
+const budgetOpen = ref(!window.matchMedia('(max-width: 900px)').matches)
 
 const selected = computed(() => design.furniture.find((f) => f.id === ui.selectedId))
 const roomName = (x: number, y: number) => roomAt(x, y)?.name ?? '室外'
@@ -372,11 +375,13 @@ const hasShared = computed(
   <!-- 家具清單 -->
   <div v-else class="fl">
     <!-- 預算 -->
-    <section class="budget">
-      <div class="budget-head">
-        <span>目前總花費</span>
-        <small>預估</small>
-      </div>
+    <section class="budget" :class="{ folded: !budgetOpen }">
+      <button class="budget-head" :aria-expanded="budgetOpen" @click="budgetOpen = !budgetOpen">
+        <span>目前總花費<small>預估</small></span>
+        <b v-if="!budgetOpen" class="budget-mini">{{ money(budget.total) }}</b>
+        <ChevronDown class="budget-chev" />
+      </button>
+      <template v-if="budgetOpen">
       <b class="budget-total">{{ money(budget.total) }}</b>
       <div v-if="budget.byCat.length" class="budget-cats">
         <div v-for="c in budget.byCat" :key="c.name">
@@ -401,6 +406,7 @@ const hasShared = computed(
           <b>{{ l.total == null ? '—' : l.total === 0 ? '不另計' : money(l.total) }}</b>
         </button>
       </div>
+      </template>
     </section>
 
     <section v-for="g in grouped" :key="g.room" class="fl-room">

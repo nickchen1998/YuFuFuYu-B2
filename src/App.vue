@@ -14,6 +14,7 @@ import ViewPanel from './components/ViewPanel.vue'
 import WalkMap from './components/WalkMap.vue'
 import WalkStick from './components/WalkStick.vue'
 import Welcome from './components/Welcome.vue'
+import IslandSheet from './components/IslandSheet.vue'
 import type { Tool, ViewMode } from './types'
 
 const host = ref<HTMLElement>()
@@ -36,6 +37,9 @@ const panels = [
   { id: 'rooms', name: '空間材質', icon: Palette },
   { id: 'view', name: '顯示', icon: SlidersHorizontal },
 ] as const
+
+/** 開著施工分解圖的那件家具 */
+const sheetItem = computed(() => design.furniture.find((f) => f.id === ui.sheetId && f.type === 'peninsula'))
 
 const wallCutOn = computed(() => ui.wallCut < design.ceilingHeight)
 
@@ -317,6 +321,8 @@ onBeforeUnmount(() => {
     </footer>
 
     <Welcome />
+
+    <IslandSheet v-if="sheetItem" :item="sheetItem" @close="ui.sheetId = null" />
 
     <Transition name="toast">
       <div v-if="toast" class="toast"><Check />{{ toast }}</div>

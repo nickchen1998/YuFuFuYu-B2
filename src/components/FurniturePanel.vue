@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
-import { ChevronDown,
+import { Layers3, ChevronDown,
   ArrowLeft,
   Calculator,
   ChevronRight,
@@ -224,6 +224,9 @@ const hasShared = computed(
           </div>
         </div>
       </div>
+      <button v-if="selected.type === 'peninsula'" class="btn block sheet-btn" @click="ui.sheetId = selected.id">
+        <Layers3 />看施工分解圖（3D・2D・元件規格）
+      </button>
       <p v-if="info?.owned" class="detail-spend">住戶已經有了，不計入總花費</p>
       <p v-else-if="itemSpend" class="detail-spend">
         這件已勾選 <b>{{ money(itemSpend) }}</b>

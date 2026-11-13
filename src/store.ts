@@ -415,6 +415,8 @@ export const ui = reactive({
   walkPos: { x: 91, y: 70, yaw: 0 },
   /** 右側（手機是底部）面板有沒有打開 */
   panelOpen: true,
+  /** 開著施工分解圖的家具 id（目前只有訂製中島餐桌） */
+  sheetId: null as string | null,
   snap: 5,
   selectedId: null as string | null,
   paintColor: '#a7bac9',

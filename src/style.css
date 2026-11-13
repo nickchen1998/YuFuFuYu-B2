@@ -806,6 +806,81 @@ input[type='color']::-moz-color-swatch {
   touch-action: none;
 }
 
+/* 第一次進站的說明卡 */
+.welcome {
+  position: absolute;
+  top: 50%;
+  left: calc((100% - var(--side)) / 2);
+  transform: translate(-50%, -50%);
+  z-index: 25;
+  width: min(380px, calc(100% - var(--side) - var(--gap) * 2));
+  max-height: calc(100% - var(--sheet) - var(--gap) * 2);
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-pop);
+}
+.welcome h2 {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: 19px;
+  letter-spacing: 0.04em;
+}
+.welcome > p {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.welcome ul {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 0;
+  list-style: none;
+}
+.welcome li {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.welcome li > span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+.welcome li b {
+  display: block;
+  font-size: 13.5px;
+}
+.welcome li small {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+.welcome-go {
+  width: 100%;
+  height: 40px;
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: #fff;
+  font-weight: 600;
+}
+.welcome-go:hover {
+  background: #000;
+}
+@media (max-width: 900px) and (orientation: portrait) {
+  .welcome {
+    top: calc((100% - var(--sheet)) / 2);
+  }
+}
+
 /* 左側工具列 */
 .rail {
   position: absolute;
@@ -2231,13 +2306,39 @@ input[type='color']::-moz-color-swatch {
   background: linear-gradient(180deg, #fff6ef, #fffdfa);
   border: 1px solid #f0d9cb;
 }
+.budget.folded {
+  padding: 10px 16px;
+}
 .budget-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 28px;
   font-size: 14px;
   font-weight: 600;
   color: var(--ink-2);
+  text-align: left;
+}
+.budget-head > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+.budget-mini {
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.budget-chev {
+  --ico: 16px;
+  color: var(--ink-3);
+  transition: transform 0.15s;
+}
+.budget:not(.folded) .budget-chev {
+  transform: rotate(180deg);
 }
 .budget-head small {
   padding: 1px 8px;

@@ -13,6 +13,7 @@ import RoomsPanel from './components/RoomsPanel.vue'
 import ViewPanel from './components/ViewPanel.vue'
 import WalkMap from './components/WalkMap.vue'
 import WalkStick from './components/WalkStick.vue'
+import Welcome from './components/Welcome.vue'
 import type { Tool, ViewMode } from './types'
 
 const host = ref<HTMLElement>()
@@ -50,6 +51,7 @@ const hint = computed<{ k?: string; t: string }[]>(() => {
     if (ui.pose === 'sit' || ui.pose === 'lie')
       return [{ k: '拖曳', t: '轉頭看看' }, { k: ui.pose === 'sit' ? 'X' : 'Z', t: '站起來' }, { k: 'W A S D', t: '起身走動' }]
     return [
+      { k: '點地板', t: '走過去' },
       { k: 'W A S D', t: '走動' },
       { k: '拖曳', t: '轉頭' },
       { k: 'Shift', t: '走快一點' },
@@ -89,7 +91,7 @@ watch(
         ui.panelOpen = false
         autoClosed = true
       }
-      if (touch.matches) flash('左下搖桿走動・拖曳畫面轉頭')
+      if (touch.matches) flash('點地板或用搖桿走動・拖曳轉頭')
     } else if (autoClosed) {
       ui.panelOpen = true
       autoClosed = false
@@ -313,6 +315,8 @@ onBeforeUnmount(() => {
         <div v-if="ui.measure" class="measure-pill"><Ruler />{{ ui.measure }}</div>
       </div>
     </footer>
+
+    <Welcome />
 
     <Transition name="toast">
       <div v-if="toast" class="toast"><Check />{{ toast }}</div>

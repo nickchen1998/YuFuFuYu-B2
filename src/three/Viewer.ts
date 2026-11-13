@@ -98,6 +98,9 @@ export class Viewer {
     ly: 0,
     /** 觸控搖桿：前後、左右各 -1 ~ 1 */
     stick: { f: 0, s: 0 },
+    /** 點地板要走過去的位置；卡住多久了（撞牆走不到就放棄） */
+    dest: null as { x: number; y: number } | null,
+    stuck: 0,
     /** 坐著、躺著的位置；坐下前站的地方（起身回到這裡） */
     seat: null as Seat | null,
     back: null as { x: number; y: number } | null,
@@ -107,6 +110,11 @@ export class Viewer {
     nearT: 0,
   }
   private collide: Rect[] = []
+  /** 點地板前進的目標記號 */
+  private destMark = new THREE.Mesh(
+    new THREE.RingGeometry(9, 13, 40),
+    new THREE.MeshBasicMaterial({ color: 0xd9793f, transparent: true, opacity: 0.85, side: THREE.DoubleSide, depthWrite: false }),
+  )
   private raf = 0
   private timer = new THREE.Timer()
   private ro: ResizeObserver
@@ -155,6 +163,10 @@ export class Viewer {
     this.setupStatic()
     this.applyMirror(false)
     this.world.add(this.furnitureGroup, this.ceilings, this.roomLights, this.roomLabels, this.measureGroup)
+    this.destMark.rotation.x = -Math.PI / 2
+    this.destMark.position.y = 1.5
+    this.destMark.visible = false
+    this.world.add(this.destMark)
 
     this.rebuildWalls()
     this.syncFurniture()
@@ -579,6 +591,31 @@ export class Viewer {
     return true
   }
 
+  /** 漫遊時點一下地板：走過去（點到家具、牆就不動；坐著、躺著先不理會） */
+  private walkToClick(e: PointerEvent) {
+    if (this.ui.pose === 'sit' || this.ui.pose === 'lie') return
+    const h = this.hit(e)
+    if (!h) return
+    const floors = [...this.floors.values()]
+    let onFloor = false
+    for (let n: THREE.Object3D | null = h.object; n; n = n.parent) if (floors.includes(n as never)) onFloor = true
+    if (!onFloor) return
+    const x = h.point.x / CM
+    const y = (h.point.z / CM) * this.sy
+    const r = roomAt(x, y)
+    if (!r || r.id === 'ac') return
+    this.walk.goto = null
+    this.walk.dest = { x, y }
+    this.walk.stuck = 0
+    this.destMark.position.set(x, 1.5, y)
+    this.destMark.visible = true
+  }
+
+  private clearDest() {
+    this.walk.dest = null
+    this.destMark.visible = false
+  }
+
   /** 觸控搖桿：f = 前後、s = 左右，各 -1 ~ 1 */
   setStick(f: number, s: number) {
     this.walk.stick.f = f
@@ -608,6 +645,7 @@ export class Viewer {
   private resetPose() {
     const w = this.walk
     w.seat = w.back = w.goto = w.aim = null
+    this.clearDest()
     w.eye = EYE
     this.ui.pose = 'stand'
   }
@@ -824,6 +862,7 @@ export class Viewer {
       this.walk.looking = false
       this.walk.lookId = -1
       this.renderer.domElement.style.cursor = 'grab'
+      if (wasClick) this.walkToClick(e)
       return
     }
     if (this.drag) {
@@ -1047,7 +1086,27 @@ export class Viewer {
       this.setPose('stand')
       if (this.walk.goto) Object.assign(this.walk, this.walk.goto)
     }
+    if (this.walk.dest && !f && !s) {
+      // 點地板前進：朝目標直走，撞到牆沿著牆滑；到了或卡住就停
+      const d = this.walk.dest
+      const dx = d.x - this.walk.x
+      const dy = d.y - this.walk.y
+      const dist = Math.hypot(dx, dy)
+      const step = Math.min(dist, (this.ui.pose === 'crouch' ? 90 : 220) * dt)
+      const px = this.walk.x
+      const py = this.walk.y
+      if (dist > 0.01) {
+        const mx = (dx / dist) * step
+        const my = (dy / dist) * step
+        if (!this.blocked(px + mx, py)) this.walk.x += mx
+        if (!this.blocked(this.walk.x, py + my)) this.walk.y += my
+      }
+      const moved = Math.hypot(this.walk.x - px, this.walk.y - py)
+      this.walk.stuck = moved < step * 0.2 ? this.walk.stuck + dt : 0
+      if (dist < 6 || this.walk.stuck > 0.25) this.clearDest()
+    }
     if (f || s) {
+      this.clearDest()
       this.walk.goto = null
       // 蹲著走慢一點
       const speed = (this.ui.pose === 'crouch' ? 70 : k.has('ShiftLeft') || k.has('ShiftRight') ? 260 : 140) * dt

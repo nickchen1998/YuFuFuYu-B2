@@ -405,6 +405,10 @@ export const ui = reactive({
   pose: 'stand' as WalkPose,
   /** 漫遊時附近可以坐、躺的地方（底部按鈕顯示「坐沙發」、「躺下」） */
   near: { sit: null as string | null, lie: null as string | null },
+  /** 漫遊目前站的位置、面向（小地圖用） */
+  walkPos: { x: 91, y: 70, yaw: 0 },
+  /** 右側（手機是底部）面板有沒有打開 */
+  panelOpen: true,
   snap: 5,
   selectedId: null as string | null,
   paintColor: '#a7bac9',

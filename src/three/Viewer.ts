@@ -6,7 +6,7 @@ import type { Design, FurnitureItem, Lighting, ViewMode, WalkPose } from '../typ
 import type { ui as UIState } from '../store'
 import { corridor, planOverlay, rooms, unitBounds, walls } from '../data/house'
 import { floorPresets } from '../data/materials'
-import { blockingRects, fmt, footprint, rectsOverlap, roomSize, type Rect } from '../geometry'
+import { blockingRects, fmt, footprint, rectsOverlap, roomAt, roomSize, type Rect } from '../geometry'
 import { buildWalls } from './walls'
 import { buildFurniture, furnitureSignature, lampGlow } from './furniture'
 import { EXTRA_FILL, LAMP_POWER, LIGHT_COLORS, ROOM_FILL } from '../data/lighting'
@@ -92,6 +92,12 @@ export class Viewer {
     eye: EYE,
     keys: new Set<string>(),
     looking: false,
+    /** 轉頭中的那根手指（觸控同時可以一手搖桿、一手轉頭） */
+    lookId: -1,
+    lx: 0,
+    ly: 0,
+    /** 觸控搖桿：前後、左右各 -1 ~ 1 */
+    stick: { f: 0, s: 0 },
     /** 坐著、躺著的位置；坐下前站的地方（起身回到這裡） */
     seat: null as Seat | null,
     back: null as { x: number; y: number } | null,
@@ -487,6 +493,8 @@ export class Viewer {
     this.updateSelection()
     this.clearMeasure()
     if (mode === 'top') this.frameTop()
+    this.walk.stick.f = this.walk.stick.s = 0
+    this.walk.looking = false
     if (mode === 'walk') this.walk.keys.clear()
     else this.resetPose()
     this.applyCeilingItems()
@@ -559,6 +567,22 @@ export class Viewer {
     this.resetPose()
     this.walk.x = (r.x1 + r.x2) / 2
     this.walk.y = (r.y1 + r.y2) / 2
+  }
+
+  /** 小地圖點一下：直接走到那個位置（點在牆上或屋外就不動） */
+  walkTo(x: number, y: number) {
+    const r = roomAt(x, y)
+    if (!r || r.id === 'ac' || this.blocked(x, y)) return false
+    this.resetPose()
+    this.walk.x = x
+    this.walk.y = y
+    return true
+  }
+
+  /** 觸控搖桿：f = 前後、s = 左右，各 -1 ~ 1 */
+  setStick(f: number, s: number) {
+    this.walk.stick.f = f
+    this.walk.stick.s = s
   }
 
   /** 漫遊的姿勢：蹲下、坐下（附近的椅子、沙發、床邊、馬桶）、躺下（附近的床）；再按一次同一個姿勢就站起來 */
@@ -722,6 +746,9 @@ export class Viewer {
     this.down = { x: e.clientX, y: e.clientY, t: performance.now() }
     if (this.ui.mode === 'walk') {
       this.walk.looking = true
+      this.walk.lookId = e.pointerId
+      this.walk.lx = e.clientX
+      this.walk.ly = e.clientY
       this.walk.aim = null
       this.renderer.domElement.style.cursor = 'grabbing'
       return
@@ -742,9 +769,14 @@ export class Viewer {
 
   private onPointerMove = (e: PointerEvent) => {
     if (this.ui.mode === 'walk') {
-      if (this.walk.looking) {
-        this.walk.yaw -= e.movementX * 0.0045
-        this.walk.pitch = THREE.MathUtils.clamp(this.walk.pitch - e.movementY * 0.0045, -1.3, 1.3)
+      if (this.walk.looking && e.pointerId === this.walk.lookId) {
+        // 不用 movementX：iOS Safari 的觸控事件不會給
+        const dx = e.clientX - this.walk.lx
+        const dy = e.clientY - this.walk.ly
+        this.walk.lx = e.clientX
+        this.walk.ly = e.clientY
+        this.walk.yaw -= dx * 0.0045
+        this.walk.pitch = THREE.MathUtils.clamp(this.walk.pitch - dy * 0.0045, -1.3, 1.3)
       }
       return
     }
@@ -788,7 +820,9 @@ export class Viewer {
     const wasClick = this.down && Math.hypot(e.clientX - this.down.x, e.clientY - this.down.y) < 5
     this.down = null
     if (this.ui.mode === 'walk') {
+      if (e.pointerId !== this.walk.lookId) return
       this.walk.looking = false
+      this.walk.lookId = -1
       this.renderer.domElement.style.cursor = 'grab'
       return
     }
@@ -1003,8 +1037,9 @@ export class Viewer {
 
   private stepWalk(dt: number) {
     const k = this.walk.keys
-    const f = (k.has('KeyW') || k.has('ArrowUp') ? 1 : 0) - (k.has('KeyS') || k.has('ArrowDown') ? 1 : 0)
-    const s = (k.has('KeyD') ? 1 : 0) - (k.has('KeyA') ? 1 : 0)
+    const st = this.walk.stick
+    const f = (k.has('KeyW') || k.has('ArrowUp') ? 1 : 0) - (k.has('KeyS') || k.has('ArrowDown') ? 1 : 0) + st.f
+    const s = (k.has('KeyD') ? 1 : 0) - (k.has('KeyA') ? 1 : 0) + st.s
     const turn = (k.has('ArrowLeft') ? 1 : 0) - (k.has('ArrowRight') ? 1 : 0)
     this.walk.yaw += turn * dt * 1.8
     if ((f || s) && (this.ui.pose === 'sit' || this.ui.pose === 'lie')) {
@@ -1049,6 +1084,13 @@ export class Viewer {
       if (this.ui.near.lie !== lie) this.ui.near.lie = lie
     }
     const { x, y, yaw, pitch, eye } = w
+    // 小地圖上的位置、方向（有變才寫，避免每一幀都觸發畫面更新）
+    const wp = this.ui.walkPos
+    if (Math.abs(wp.x - x) > 0.5 || Math.abs(wp.y - y) > 0.5 || Math.abs(wp.yaw - yaw) > 0.01) {
+      wp.x = x
+      wp.y = y
+      wp.yaw = yaw
+    }
     this.walkCam.position.set(x * CM, eye * CM, y * CM * this.sy)
     const dir = new THREE.Vector3(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch))
     this.walkCam.lookAt(this.walkCam.position.clone().add(dir))

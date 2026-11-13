@@ -25,6 +25,9 @@
   --shadow-pop: 0 18px 48px rgba(38, 34, 30, 0.18), 0 2px 6px rgba(38, 34, 30, 0.08);
   --gap: 14px;
   --inspector-w: 390px;
+  /* 面板佔掉的空間：--side = 右側寬度、--sheet = 底部高度（窄螢幕）；收起時都是 0 */
+  --side: calc(var(--inspector-w) + var(--gap) * 2);
+  --sheet: 0px;
   --font: 'Noto Sans TC', -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
   --font-display: 'Noto Serif TC', 'Songti TC', 'PMingLiU', serif;
   font-family: var(--font);
@@ -452,7 +455,8 @@ input[type='color']::-moz-color-swatch {
 .viewport {
   position: absolute;
   inset: 0;
-  right: calc(var(--inspector-w) + var(--gap) * 2);
+  right: var(--side);
+  bottom: var(--sheet);
   /* 3D 標籤的 z-index 只在畫布裡比較，不會蓋到面板 */
   isolation: isolate;
 }
@@ -462,7 +466,7 @@ input[type='color']::-moz-color-swatch {
   position: absolute;
   top: var(--gap);
   left: var(--gap);
-  right: calc(var(--inspector-w) + var(--gap) * 2);
+  right: var(--side);
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: start;
@@ -639,6 +643,169 @@ input[type='color']::-moz-color-swatch {
   color: var(--ink-3);
 }
 
+.panel-toggle {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 46px;
+  padding: 0 14px;
+  border-radius: 14px;
+  color: var(--ink-2);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.15s;
+  --ico: 18px;
+}
+.panel-toggle:hover {
+  color: var(--ink);
+}
+.panel-closed .panel-toggle {
+  color: var(--accent-ink);
+}
+
+/* 漫遊小地圖：藍圖風格，和暖色室內畫面分得開 */
+.walkmap,
+.walkmap-open {
+  position: absolute;
+  top: calc(var(--gap) + 58px);
+  right: calc(var(--side) + var(--gap));
+  z-index: 5;
+}
+.walkmap {
+  width: 248px;
+  padding: 8px 8px 0;
+  border-radius: var(--radius-lg);
+  background: rgba(28, 44, 68, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: var(--shadow-pop);
+}
+.walkmap > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: crosshair;
+  touch-action: none;
+}
+.wm-room {
+  fill: rgba(255, 255, 255, 0.07);
+  transition: fill 0.2s;
+}
+.wm-room.outdoor {
+  fill: rgba(255, 255, 255, 0.03);
+}
+.wm-room.on {
+  fill: rgba(242, 180, 143, 0.2);
+}
+.wm-room.off {
+  cursor: not-allowed;
+}
+.wm-furn {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 3;
+  pointer-events: none;
+}
+.wm-wall {
+  fill: rgba(255, 255, 255, 0.82);
+  pointer-events: none;
+}
+.wm-name {
+  fill: rgba(255, 255, 255, 0.62);
+  font-size: 40px;
+  font-weight: 500;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: rgba(28, 44, 68, 0.85);
+  stroke-width: 8px;
+}
+.wm-name.on {
+  fill: #fff;
+}
+.wm-here {
+  fill: #f2a36f;
+  stroke: #fff;
+  stroke-width: 6;
+  pointer-events: none;
+}
+.walkmap-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+  padding-left: 4px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.walkmap-foot button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  --ico: 14px;
+}
+.walkmap-foot button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+.walkmap-open {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  color: var(--ink-2);
+}
+
+/* 觸控搖桿：只在觸控裝置出現 */
+.stick {
+  display: none;
+  position: absolute;
+  left: calc(var(--gap) + 10px);
+  bottom: calc(var(--sheet) + var(--gap) + 56px);
+  z-index: 5;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: rgba(38, 34, 30, 0.28);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.stick i {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow);
+  transition: transform 0.12s;
+}
+.stick.on i {
+  transition: none;
+  background: #fff;
+}
+@media (pointer: coarse) {
+  .stick {
+    display: block;
+  }
+}
+
+.viewport canvas {
+  touch-action: none;
+}
+
 /* 左側工具列 */
 .rail {
   position: absolute;
@@ -694,7 +861,7 @@ input[type='color']::-moz-color-swatch {
 .hud {
   position: absolute;
   left: var(--gap);
-  right: calc(var(--inspector-w) + var(--gap) * 2);
+  right: var(--side);
   bottom: var(--gap);
   z-index: 5;
   display: flex;
@@ -772,7 +939,7 @@ input[type='color']::-moz-color-swatch {
 .toast {
   position: absolute;
   top: 80px;
-  left: calc((100% - var(--inspector-w) - var(--gap) * 2) / 2);
+  left: calc((100% - var(--side)) / 2);
   transform: translateX(-50%);
   z-index: 30;
   display: inline-flex;
@@ -1336,17 +1503,20 @@ input[type='color']::-moz-color-swatch {
 
 @media (max-width: 900px) {
   :root {
-    --inspector-w: 0px;
     --gap: 10px;
+    --side: 0px;
     --sheet: 44%;
   }
-  .viewport {
-    right: 0;
-    bottom: var(--sheet);
-  }
   .topbar {
-    right: var(--gap);
+    right: calc(var(--side) + var(--gap));
     grid-template-columns: 1fr auto;
+  }
+  .panel-toggle {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .panel-toggle span {
+    display: none;
   }
   .brand-text,
   .brand .vr {
@@ -1380,7 +1550,7 @@ input[type='color']::-moz-color-swatch {
   .rail {
     top: auto;
     bottom: calc(var(--sheet) + var(--gap));
-    left: 50%;
+    left: calc((100% - var(--side)) / 2);
     transform: translateX(-50%);
     flex-direction: row;
     padding: 4px;
@@ -1400,8 +1570,10 @@ input[type='color']::-moz-color-swatch {
     display: none;
   }
   .hud {
-    right: 0;
     bottom: calc(var(--sheet) + var(--gap) + 58px);
+  }
+  .walking .hud {
+    bottom: calc(var(--sheet) + var(--gap));
   }
   .hint {
     display: none;
@@ -1412,7 +1584,13 @@ input[type='color']::-moz-color-swatch {
     right: var(--gap);
     bottom: var(--gap);
     width: auto;
-    height: calc(var(--sheet) - var(--gap) * 2);
+    height: calc(var(--sheet) - var(--gap));
+  }
+  .walkmap {
+    width: 156px;
+  }
+  .wm-name {
+    font-size: 52px;
   }
   .toast {
     left: 50%;
@@ -1427,6 +1605,43 @@ input[type='color']::-moz-color-swatch {
   .room-label b {
     font-size: 11px;
   }
+}
+
+/* 手機橫放：面板放右邊，不要把矮矮的畫面再切一半 */
+@media (max-width: 900px) and (orientation: landscape) {
+  :root {
+    --side: min(46%, 380px);
+    --sheet: 0px;
+  }
+  .inspector {
+    top: var(--gap);
+    left: auto;
+    width: calc(var(--side) - var(--gap));
+    height: auto;
+  }
+  .view-switch {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+  .topbar {
+    grid-template-columns: 1fr auto auto;
+  }
+  .panel-toggle {
+    grid-column: 3;
+  }
+  .walkmap {
+    width: 132px;
+  }
+  .wm-name {
+    font-size: 58px;
+  }
+}
+
+/* 面板收起：整個畫面都給 3D（放在各斷點後面，才蓋得過去） */
+.app.panel-closed {
+  --side: 0px;
+  --sheet: 0px;
 }
 
 /* 未選取時的提示 */

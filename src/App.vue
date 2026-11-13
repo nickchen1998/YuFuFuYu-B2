@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch, type Component } from 'vue'
 import {
-  Box, Check, DoorOpen, Footprints, House, Info, Layers, Map as MapIcon, MapPin,
+  Box, Check, DoorOpen, Footprints, House, Info, Layers, Map as MapIcon, PanelRightClose, PanelRightOpen,
   Armchair, ArrowDownToLine, BedDouble, Lightbulb, MousePointer2, Move, PaintRoller, Palette, PersonStanding, Ruler, SlidersHorizontal, Sofa, Tag,
 } from '@lucide/vue'
 import { Viewer } from './three/Viewer'
 import { design, ui } from './store'
 import { viewerRef } from './viewerRef'
 import { redo, undo } from './history'
-import { rooms } from './data/house'
 import FurniturePanel from './components/FurniturePanel.vue'
 import RoomsPanel from './components/RoomsPanel.vue'
 import ViewPanel from './components/ViewPanel.vue'
+import WalkMap from './components/WalkMap.vue'
+import WalkStick from './components/WalkStick.vue'
 import type { Tool, ViewMode } from './types'
 
 const host = ref<HTMLElement>()
@@ -34,7 +35,6 @@ const panels = [
   { id: 'rooms', name: '空間材質', icon: Palette },
   { id: 'view', name: '顯示', icon: SlidersHorizontal },
 ] as const
-const walkRooms = rooms.filter((r) => r.id !== 'ac')
 
 const wallCutOn = computed(() => ui.wallCut < design.ceilingHeight)
 
@@ -57,6 +57,7 @@ const hint = computed<{ k?: string; t: string }[]>(() => {
       { k: 'X', t: '坐下' },
       { k: 'Z', t: '躺下' },
       { k: 'L', t: '燈光' },
+      { k: '點小地圖', t: '前往' },
     ]
   }
   if (ui.tool === 'paint') return [{ k: '點牆面', t: '刷上目前顏色' }, { k: 'Alt + 點', t: '恢復原色' }, { t: '顏色在「空間材質」挑選' }]
@@ -74,6 +75,30 @@ function flash(msg: string) {
   toast.value = msg
   clearTimeout(toastTimer)
   toastTimer = window.setTimeout(() => (toast.value = ''), 2200)
+}
+
+/** 窄螢幕進漫遊：自動收起面板，把畫面讓給室內；離開漫遊再打開 */
+const narrow = window.matchMedia('(max-width: 900px)')
+const touch = window.matchMedia('(pointer: coarse)')
+let autoClosed = false
+watch(
+  () => ui.mode,
+  (m) => {
+    if (m === 'walk') {
+      if (narrow.matches && ui.panelOpen) {
+        ui.panelOpen = false
+        autoClosed = true
+      }
+      if (touch.matches) flash('左下搖桿走動・拖曳畫面轉頭')
+    } else if (autoClosed) {
+      ui.panelOpen = true
+      autoClosed = false
+    }
+  },
+)
+function togglePanel() {
+  ui.panelOpen = !ui.panelOpen
+  autoClosed = false
 }
 
 function setMirrored(v: boolean) {
@@ -152,7 +177,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="app">
+  <div class="app" :class="{ 'panel-closed': !ui.panelOpen, walking: ui.mode === 'walk' }">
     <div ref="host" class="viewport"></div>
 
     <!-- 頂部：品牌與戶別／視角／歷史紀錄 -->
@@ -182,7 +207,22 @@ onBeforeUnmount(() => {
         </div>
       </div>
 
+      <button
+        class="panel-toggle glass"
+        :aria-expanded="ui.panelOpen"
+        :title="ui.panelOpen ? '收起清單面板，畫面變大' : '打開清單面板'"
+        @click="togglePanel"
+      >
+        <component :is="ui.panelOpen ? PanelRightClose : PanelRightOpen" />
+        <span>{{ ui.panelOpen ? '收起面板' : '清單・設定' }}</span>
+      </button>
     </header>
+
+    <!-- 漫遊：小地圖（點一下前往）、觸控搖桿 -->
+    <template v-if="ui.mode === 'walk'">
+      <WalkMap />
+      <WalkStick />
+    </template>
 
     <!-- 左側工具列 -->
     <nav v-if="ui.mode !== 'walk'" class="rail glass">
@@ -263,10 +303,6 @@ onBeforeUnmount(() => {
         >
           <BedDouble />{{ ui.pose === 'lie' ? '起床' : '躺下' }}
         </button>
-        <span class="teleport-label"><MapPin />前往</span>
-        <button v-for="r in walkRooms" :key="r.id" class="chip" @click="viewerRef.current?.teleport(r.id)">
-          {{ r.name }}
-        </button>
       </div>
       <div class="hud-row">
         <div class="hint">
@@ -283,7 +319,7 @@ onBeforeUnmount(() => {
     </Transition>
 
     <!-- 右側檢視器 -->
-    <aside class="inspector">
+    <aside v-show="ui.panelOpen" class="inspector">
       <nav class="inspector-tabs">
         <div class="seg full">
           <button v-for="p in panels" :key="p.id" :class="{ on: ui.panel === p.id }" @click="ui.panel = p.id">

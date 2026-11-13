@@ -5,7 +5,7 @@ import { defaultFurniture } from './data/catalog'
 import { clone } from './cabinet'
 
 const KEY = 'my-house-b2-design-v2'
-const REV = 119
+const REV = 120
 /**
  * 各版本只替換指定的家具（換成新的預設），其他家具保留使用者的調整。
  * 有列欄位時只更新那些欄位（位置等其他調整保留；使用者刪掉的不會加回來）。
@@ -264,6 +264,10 @@ const FURNITURE_PATCHES: [number, string[], (keyof FurnitureItem)[]?][] = [
   [118, ['mward'], ['interior']],
   // rev 119：洗衣機、乾衣機改國際牌的尺寸
   [119, ['washer', 'dryer'], ['x', 'd', 'h', 'name']],
+  // rev 120：水槽下櫃的抽拉垃圾桶拿掉（住戶另外處理）
+  [120, ['kbin']],
+  // rev 120：客廳、主臥的 Dyson 先不買，拿掉（次臥那台是家裡已有的，保留）
+  [120, ['fan-living', 'fan-master']],
   [25, ['shoe', 'sofa', 'coffeebar', 'rug', 'coffee', 'tvstand', 'dining', 'dchair1', 'dchair2', 'dchair3', 'dchair4', 'mbed', 'mns1', 'mns2', 'mward', 'bward1', 'scab', 'vanity', 'vanity2'], ['color']],
 ]
 /** 家具預設配置的版本：舊存檔低於這個版本時，家具換成新配置（舊的另存備份） */

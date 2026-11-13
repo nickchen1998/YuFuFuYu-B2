@@ -137,9 +137,6 @@ const seeds: Seed[] = [
   // 電子鍋（象印 NS-LBF05 23 × 30 × 19）：平常收在中島廚房側、微波爐旁的抽拉層板上（離地約 47.5）；
   // 上蓋往上掀要約 40 cm，格子裡打不開，煮飯時整台拿到正上方靠窗的檯面、插平面插座
   { id: 'ecooker', type: 'ecooker', name: '電子鍋（抽拉層板收納）', x: 154.4, y: 644.4, rot: 270, w: 23, d: 30, h: 19, elev: 47.5, color: '#e7e3dc' },
-  // 分類垃圾桶：裝在水槽下櫃靠冰箱那扇門後面（Hailo Tandem AS 15/15，寬 25 × 深 48 × 高 40），開門桶子就跟著滑出來；
-  // 前面 15 L 一般垃圾（套 14 L 專用袋）、後面 15 L 回收；避開水槽正下方的存水彎和右邊洗碗機的水管
-  { id: 'kbin', type: 'pullbin', name: '分類垃圾桶（水槽下櫃・抽拉）', x: 34, y: 467, rot: 90, w: 25, d: 48, h: 40, elev: 10, color: '#4a4d52' },
   {
     id: 'kitchen', type: 'kitchen', name: '一字型廚具', x: 30, y: 558.5, rot: 90, w: 213, d: 60, h: 85,
     color: '#f1eee8', locked: true, features: ['dishdryer', 'dishwasher'],
@@ -147,11 +144,7 @@ const seeds: Seed[] = [
   // 外套掛勾：進門右手邊、沙發旁 45 公分寬的牆（輕隔間，加夾板補強）一排三個九宏 RD0481 可收折掛勾（白）：
   // 收起來只凸出 1.2 公分，按一下才翻開；離地約 165、間距 13
   { id: 'coathooks', type: 'coathooks', name: '外套掛勾（可收折 × 3）', x: 287.4, y: 57.5, rot: 270, w: 28.4, d: 1.2, h: 7.3, elev: 161, color: '#f2f2f0', features: ['minihooks'] },
-  // Dyson 直立式涼風扇（Purifier Cool TP11，高 105、底座 22）：三個房間各一台
-  // 客廳這台靠牆放在咖啡櫃靠餐廳那一側（沙發那側只剩 5 公分），斜朝客廳、出風避開咖啡櫃；離次臥門約 28 公分
-  { id: 'fan-living', type: 'towerfan', name: 'Dyson 直立式電扇（客廳）', x: 273, y: 431, rot: 250, w: 22, d: 22, h: 105, color: '#eef0f2' },
-  // 主臥這台放窗邊的牆角（床尾那側，另一個窗邊角落是床頭櫃），斜朝床
-  { id: 'fan-master', type: 'towerfan', name: 'Dyson 直立式電扇（主臥）', x: -31, y: 583, rot: 235, w: 22, d: 22, h: 105, color: '#eef0f2' },
+  // Dyson 直立式涼風扇（高 105、底座 22）：客廳、主臥那兩台先不買（rev 120），只留次臥家裡已經有的那台
   // 次臥這台放在書櫃（分戶牆矮櫃）和窗戶那面牆之間的角落（離矮櫃尾端約 60），斜朝兩個座位，擺頭兩個人都吹得到；
   // 不擋掃地機器人進出，也不在窗戶前面
   { id: 'fan-bed2', type: 'towerfan', name: 'Dyson 直立式電扇（次臥）', x: 528, y: 538, rot: 210, w: 22, d: 22, h: 105, color: '#eef0f2' },
